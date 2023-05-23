@@ -1,0 +1,50 @@
+[
+   
+    {
+      "name": "Home",
+      "path": "/",
+      "logo": "/images/gray-home.svg",
+      "bluelogo": "/images/home.svg",
+      "whitelogo": "/images/white-home.png"
+    },
+    {
+      "name": "College",
+      "path": "/college",
+      "logo": "/images/college-gray.svg",
+      "bluelogo": "/images/college.svg",
+      "whitelogo": "/images/college-white.png"
+    },
+   
+  
+    {
+      "name": "Courses",
+      "path": "/courses",
+      "logo": "/images/course-gray.svg",
+      "bluelogo": "/images/course-blue.svg",
+      "whitelogo": "/images/courses-white.png"
+    },
+    {
+      "name": "Exams",
+      "path": "/exams",
+      "logo": "/images/exam-gray.svg",
+      "bluelogo": "/images/exam-blue.svg",
+      "whitelogo": "/images/white-exams.png"
+    },
+   
+    {
+      "name": "Corporate",
+      "path": "/corporate",
+      "logo": "/images/corporate-gray.svg",
+      "bluelogo": "/images/corporate-blue.svg",
+      "whitelogo": "/images/white-corporate.png"
+    },
+    {
+      "name": "Organization",
+      "path": "/organisation",
+      "logo": "/images/company-profile-gray.svg",
+      "bluelogo": "/images/company-profile-blue.svg",
+      "whitelogo": "/images/company-profile-white.png"
+    }
+   
+  ]
+  

@@ -1,0 +1,245 @@
+import { useRouter } from "next/router";
+import React, { useEffect, useMemo } from "react";
+import { Col, Container, Row } from "react-bootstrap";
+import { Field, Form } from "react-final-form";
+import { FieldArray } from "react-final-form-arrays";
+import { useDispatch, useSelector } from "react-redux";
+import arrayMutators from "final-form-arrays";
+import {
+  createNewIndustry,
+  editIndustry,
+  getIndustryById,
+  getlistSector,
+} from "../../../redux/actions/organisation/addsector";
+import { toast } from "react-toastify";
+
+const NewIndusty = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+
+  const { Id } = router.query;
+
+  const getIndustryList = useSelector(
+    (state) => state?.sectorData?.industryBylist
+  );
+
+  // for getting all sector list
+  useEffect(() => {
+    dispatch(getlistSector());
+  }, []);
+
+  const getSectorList = useSelector((state) => state?.sectorData?.sectorlist);
+
+  const handleSubmit = (values) => {
+    let UpdateIndustry = {};
+
+    if (!Id) {
+      let obj = values?.industryData?.map((item) => ({
+        ...item,
+        sectorId: Number(values?.sectorId),
+      }));
+
+      // creating/adding new industry action
+      dispatch(
+        createNewIndustry({
+          industryData: obj,
+        })
+      ).then((res) => {
+        if (res?.payload?.data?.success) {
+          const status = res?.payload?.data?.data?.org[0]?.status;
+          if (status == "duplicate") {
+            toast.error(`Industry is ${status}`, {autoClose:1000});
+          } else {
+            router.push("/admin/organisation", {autoClose: 1000});
+            toast.success("Industry added successfuly", {autoClose: 1000});
+          }
+        }
+      });
+    } else {
+      UpdateIndustry = {
+        industryData: [
+          {
+            id: Id,
+            name: values?.industryData[0]?.name,
+            sectorId: values?.industryData[0]?.id,
+          },
+        ],
+      };
+
+      dispatch(editIndustry(UpdateIndustry)).then((res) => {
+        if (res?.payload?.data?.success) {
+          router.push("/admin/organisation");
+          toast.success("Updated", { autoClose: 1000 });
+        } else {
+          toast.error("error", { autoClose: 1000 });
+        }
+      });
+    }
+  };
+
+  const handleInit = () => {
+    let initialValue = {};
+    if (Id) {
+      initialValue = {
+        industryData: [
+          {
+            sectorId: getIndustryList[0]?.Sector?.id,
+            name: getIndustryList[0]?.name,
+          },
+        ],
+      };
+    } else {
+      initialValue = {
+        industryData: [{ sectorId: "", name: "" }],
+      };
+    }
+
+    return initialValue;
+  };
+
+  useEffect(() => {
+    if (Id) {
+      dispatch(getIndustryById({ id: Number(Id) }));
+    }
+  }, [Id]);
+
+  return (
+    <>
+      <Row className="my-3 padding_top">
+        <Col>
+          <h3 className="fw-bold">New Industry</h3>
+          <hr></hr>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col>
+          <Form
+            onSubmit={handleSubmit}
+            mutators={{
+              ...arrayMutators,
+            }}
+            // validate={validate}
+            initialValues={useMemo(() => handleInit())}
+            render={({ handleSubmit, values }) => (
+              <form onSubmit={handleSubmit}>
+                <Row>
+                  <Col lg={12}>
+                    <label className="signup_form_label">New Sector</label>
+                    <Field name="sectorId">
+                      {({ input, meta }) => (
+                        <>
+                          <select
+                            {...input}
+                            className="form-control signup_form_input"
+                            disabled={router.query.Id ? true : false}
+                          >
+                            {router.query.Id ? (
+                              <option>
+                                {getIndustryList[0]?.Sector?.name}
+                              </option>
+                            ) : (
+                              <option>Select sector</option>
+                            )}
+                            {getSectorList &&
+                              getSectorList?.map((item) => (
+                                <option key={item.id} value={item.id}>
+                                  {item.name}
+                                </option>
+                              ))}
+                            *
+                          </select>
+                          {meta.error && meta.touched && (
+                            <span>{meta.error}</span>
+                          )}
+                        </>
+                      )}
+                    </Field>
+                    <div className="text-end">
+                      <img
+                        className="select_down_icon"
+                        src="/images/down.png"
+                      />
+                    </div>
+                  </Col>
+                </Row>
+
+                <div>
+                  <Col lg={12}>
+                    <label className="signup_form_label">New Industry</label>
+                  </Col>
+                  <FieldArray name="industryData">
+                    {({ fields }) => (
+                      <>
+                        {fields.map((name, index) => (
+                          <Row>
+                            <Col lg={12} md={12}>
+                              <div className="add_main_stream_btn_input margin_bottom">
+                                <Field name={`${name}.name`}>
+                                  {({ input, meta }) => (
+                                    <div className="w-100">
+                                      <input
+                                        {...input}
+                                        type="text"
+                                        className="form-control signup_form_input"
+                                        placeholder="Enter industry"
+                                      />
+                                      {meta.error && meta.touched && (
+                                        <span>{meta.error}</span>
+                                      )}
+                                    </div>
+                                  )}
+                                </Field>
+                                <div className="d-flex mt-2 ">
+                                  {!router.query.Id && (
+                                    <div
+                                      type="button"
+                                      className="add_remove_btn"
+                                      onClick={() => fields.push({ name: "" })}
+                                    >
+                                      <img
+                                        className="add_remove_icon"
+                                        src="/images/plus.png"
+                                      />
+                                    </div>
+                                  )}
+                                  {fields.length > 1 ? (
+                                    <div
+                                      className="add_remove_btn"
+                                      type="button"
+                                      onClick={() => fields.remove(index)}
+                                    >
+                                      <img
+                                        className="add_remove_icon"
+                                        src="/images/minus.png"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <></>
+                                  )}
+                                </div>
+                              </div>
+                            </Col>
+                          </Row>
+                        ))}
+                      </>
+                    )}
+                  </FieldArray>
+                </div>
+                <Row>
+                  <Col className="text-center">
+                    <button className="admin_signup_btn  mt-3" type="submit">
+                      {router.query.Id ? "Update" : "submit"}
+                    </button>
+                  </Col>
+                </Row>
+              </form>
+            )}
+          />
+        </Col>
+      </Row>
+    </>
+  );
+};
+
+export default NewIndusty;
