@@ -160,6 +160,45 @@ const organisationPendingRequestList = async function (req) {
   return result;
 };
 
+
+const organisationSectorDelete = async function (req) {
+  const result = await organisationDbContext.organisationSectorDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+
+const organisationIndustryDelete = async function (req) {
+  const result = await organisationDbContext.organisationIndustryDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+const organisationBusinessDelete = async function (req) {
+  const result = await organisationDbContext.organisationBusinessDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+const organisationcompanyLevelDelete = async function (req) {
+  const result = await organisationDbContext.organisationcompanyLevelDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+
 module.exports = {
   addSector,
   sectorList,
@@ -180,7 +219,10 @@ module.exports = {
   updateOrganisationPost,
   addOrganisationLinksData,
   organisationLinkApproval,
-  organisationPendingRequestList
-
+  organisationPendingRequestList,
+  organisationSectorDelete,
+  organisationIndustryDelete,
+  organisationBusinessDelete,
+  organisationcompanyLevelDelete
 
 };

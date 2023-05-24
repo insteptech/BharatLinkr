@@ -865,12 +865,6 @@ const allExamList = async (req) => {
 };
 
 
-
-
-
-
-
-
 module.exports = {
   addExam,
   examList,
