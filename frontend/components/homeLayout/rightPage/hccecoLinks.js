@@ -234,17 +234,17 @@ const HccecoLinks = () => {
                     </div>
                     <div className="center_chat_box">
                       <div className="message_text_start_div">
-                        <h6 className="message_text message_text_start">
+                        <h5 className="message_text message_text_start">
                           {showScreen?.userDetail}
-                        </h6>
+                        </h5>
                       </div>
                       {inputarr.map((item, ind) => {
                         return (
                           <>
                             <div className="message_text_end_div">
-                              <h6 key={ind} className="message_text message_text_end">
+                              <h5 key={ind} className="message_text message_text_end">
                                 {item.name}
-                              </h6>
+                              </h5>
                             </div>
                           </>
                         );
