@@ -76,6 +76,9 @@ module.exports = {
       otp: {
         type: Sequelize.INTEGER,
       },
+      ExpiresAt: {
+        type: Sequelize.DATE,
+      },
       collegeWebsite: {
         type: Sequelize.STRING,
       },
