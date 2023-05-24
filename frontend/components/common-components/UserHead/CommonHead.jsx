@@ -73,7 +73,7 @@ export default function CommonHead() {
   const [activeIndex, setActiveIndex] = useState("");
   const [modalShow, setModalShow] = useState();
   const [slectedValue, setSlectedValue] = useState(null);
-  const [userDetails, setUserDetails] = useState(null)
+  const [userDetails, setUserDetails] = useState(null);
   const router = useRouter();
 
   // notification---------------------------start----------------
@@ -90,26 +90,25 @@ export default function CommonHead() {
   const handleMobileClose = () => setMobileScreen(false);
   const handleMobileShow = () => setMobileScreen(true);
   // mobile-sidbar---------------------------end------------------
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const getuserDetails = () => {
-    let { userId } = getTokenDecode()
+    let { userId } = getTokenDecode();
     if (userId) {
-      dispatch(getUserDetails(Number(userId)))
+      dispatch(getUserDetails(Number(userId)));
     }
-  }
+  };
 
-
-  const [isToken, setIstoken] = useState(null)
+  const [isToken, setIstoken] = useState(null);
 
   useEffect(() => {
     const storedActiveIndex = localStorage.getItem("activeIndex");
-    let tokkn = localStorage.getItem('token')
-    setIstoken(tokkn?true:false)
+    let tokkn = localStorage.getItem("token");
+    setIstoken(tokkn ? true : false);
     if (storedActiveIndex !== null) {
       setActiveIndex(parseInt(storedActiveIndex));
     }
-    getuserDetails()
+    getuserDetails();
   }, []);
   const handleActive = (id, path) => {
     localStorage.setItem("activeIndex", id.toString());
@@ -271,7 +270,7 @@ export default function CommonHead() {
                 </Offcanvas>
               </div>
 
-              {isToken &&
+              {isToken && (
                 <Form.Select
                   className="form_select"
                   placeholder="Forms"
@@ -300,7 +299,7 @@ export default function CommonHead() {
                     Resume Submit
                   </option>
                 </Form.Select>
-              }
+              )}
 
               {!isToken && (
                 <Button
@@ -329,7 +328,11 @@ export default function CommonHead() {
                       onClick={() => router.push("/editprofile")}
                       className="header_profile mobile_admin_menu_profile"
                       // src="/images/profile1.png"
-                      src={`${apibasePath}documents/userProfile/${data?.profilePhoto}`}
+                      src={
+                        data?.profilePhoto
+                          ? `${apibasePath}documents/userProfile/${data?.profilePhoto}`
+                          : "/images/dammy.svg"
+                      }
                       alt="profile pic"
                     />
                   </OverlayTrigger>
@@ -348,7 +351,6 @@ export default function CommonHead() {
                   </DropdownButton>
                 </div>
               )}
-
             </div>
 
             <div className="notification_btn_row">
