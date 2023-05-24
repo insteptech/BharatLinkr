@@ -85,6 +85,15 @@ router.delete('/collegePostsDelete/:id', collegeController.collegePostDelete);
 router.post('/collegePendingRequestList', collegeController.collegePendingRequestList);
 
 
+router.delete('/collegeAssociateCourselDelete', collegeController.collegeAssociateCourseDelete);
+router.delete('/collegeAgencyDelete', collegeController.collegeAgencyDelete);
+router.delete('/collegeStreamDelete', collegeController.collegeStreamsDelete);
+router.delete('/collegeFAQDelete', collegeController.collegeFAQDelete);
+
+
+
+
+
 
 
 module.exports = router;

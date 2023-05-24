@@ -301,6 +301,7 @@ const examList = async (req) => {
         {
           model: examFAQ,
           required: false,
+          where:{deleted:false},
           as: 'FAQ',
         }
       ],
@@ -361,6 +362,19 @@ const examDelete = async (req) => {
     await examSyllabus.update({ deleted: true }, {
       where: { examId: examdel.id },
     });
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const examFAQDelete = async (req) => {
+  try {
+    const examdel = await examFAQ.findOne({
+      where: { examId: req.body.examId,id:req.body.id },
+    });
+    await examdel.update({ deleted: true });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -713,11 +727,12 @@ const examByStreamCourse = async (req) => {
     //       required: false,
     //       as: 'Syllabus',
     //     },
-    //     {
-    //       model: examFAQ,
-    //       required: false,
-    //       as: 'FAQ',
-    //     },
+        // {
+        //   model: examFAQ,
+        //   required: false,
+        //     where:{deleted:false}
+        //   as: 'FAQ',
+        // },
      
 
     //   ],
@@ -863,5 +878,6 @@ module.exports = {
   updateExam,
   examByStreamCourse,
   allExamList,
+  examFAQDelete
 
 };

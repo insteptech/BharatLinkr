@@ -43,6 +43,15 @@ const allExamList = async function (req) {
   return result;
 };
 
+const examFAQDelete = async function (req) {
+  const result = await examDbContext.examFAQDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
 module.exports = {
   addExam,
   examList,
@@ -50,4 +59,5 @@ module.exports = {
   updateExam,
   examByStreamCourse,
   allExamList,
+  examFAQDelete
 };

@@ -189,6 +189,15 @@ const corporateAddLikesAndViews = async function (req) {
 }
 
 
+const mockTestQuestionDelete = async function (req) {
+  const result = await corporateDbContext.mockTestQuestionDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
 
 
 
@@ -214,7 +223,6 @@ module.exports = {
   addUserAnswers,
   userScoreList,
   userScoreCountList,
-  corporateAddLikesAndViews
-
-
+  corporateAddLikesAndViews,
+  mockTestQuestionDelete
 };

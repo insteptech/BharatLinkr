@@ -244,7 +244,7 @@ const collegeList = async (req) => {
         {
           model: collegeLinksData,
           required: false,
-          where:{approval:true},
+          where: { approval: true },
           as: 'Followers',
         },
         {
@@ -287,6 +287,7 @@ const collegeList = async (req) => {
         {
           model: collegeAgency,
           required: false,
+          where: { deleted: false },
           as: 'CollegeAgency',
           include: [
             {
@@ -306,6 +307,7 @@ const collegeList = async (req) => {
         {
           model: collegeAssociateCourse,
           required: false,
+          where: { deleted: false },
           as: 'AssociateCourse',
           include: [
             {
@@ -360,6 +362,7 @@ const collegeList = async (req) => {
             {
               model: collegeAssociateStream,
               required: false,
+              where: { deleted: false },
               as: 'CourseAssociateStream',
               include: [
                 {
@@ -414,6 +417,7 @@ const collegeList = async (req) => {
         {
           model: collegeFAQ,
           required: false,
+          where: { deleted: false },
           as: 'FAQ',
         },
 
@@ -475,6 +479,71 @@ const collegeDelete = async (req) => {
     await collegeFAQ.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
+
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const collegeAssociateCourseDelete = async (req) => {
+  try {
+
+    let ascourse = await collegeAssociateCourse.findOne({
+      where: { id: req.body.id, collegeId: req.body.collegeId },
+    });
+    await ascourse.update({ deleted: true }, { where: { id: ascourse.id } });
+    await collegeAssociateStream.update({ deleted: true }, { where: { collegeAssociateId: ascourse.id } });
+
+
+
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const collegeAgencyDelete = async (req) => {
+  try {
+
+    let agency = await collegeAgency.findOne({
+      where: { id: req.body.id, collegeId: req.body.collegeId },
+    });
+    await agency.update({ deleted: true }, { where: { id: agency.id } });
+
+
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const collegeStreamsDelete = async (req) => {
+  try {
+
+    let agency = await collegeAssociateStream.findOne({
+      where: { id: req.body.id },
+    });
+    await agency.update({ deleted: true }, { where: { id: agency.id } });
+
+
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const collegeFAQDelete = async (req) => {
+  try {
+
+    let faq = await collegeFAQ.findOne({
+      where: { id: req.body.id, collegeId: req.body.collegeId },
+    });
+    await faq.update({ deleted: true }, { where: { id: faq.id } });
+
 
     return { success: true };
   } catch (error) {
@@ -664,7 +733,6 @@ const updateCollege = async (req) => {
   }
 };
 
-
 // this api for college courses
 const collegeCourseList = async (req) => {
   try {
@@ -799,7 +867,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeLinksData,
             required: false,
-            where:{approval:true},
+            where: { approval: true },
             as: 'Followers',
           },
           {
@@ -811,6 +879,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeAssociateCourse,
             required: false,
+            where: { deleted: false },
             as: 'AssociateCourse',
             include: [
 
@@ -818,6 +887,7 @@ const allCollegeList = async (req) => {
               {
                 model: collegeAssociateStream,
                 required: false,
+                where: { deleted: false },
                 as: 'CourseAssociateStream',
                 include: [
                   {
@@ -931,6 +1001,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeAgency,
             required: false,
+            where: { deleted: false },
             as: 'CollegeAgency',
             include: [
               {
@@ -975,6 +1046,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeFAQ,
             required: false,
+            where: { deleted: false },
             as: 'FAQ',
           },
 
@@ -986,7 +1058,7 @@ const allCollegeList = async (req) => {
         order: [['id', 'ASC']],
       });
     }
-////////////////else part ///////////////////
+    ////////////////else part ///////////////////
     else {
       result = await college.findAndCountAll({
 
@@ -999,7 +1071,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeLinksData,
             required: false,
-            where:{approval:true},
+            where: { approval: true },
             as: 'Followers',
           },
           {
@@ -1011,6 +1083,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeAssociateCourse,
             required: false,
+            where: { deleted: false },
             as: 'AssociateCourse',
             include: [
 
@@ -1018,6 +1091,7 @@ const allCollegeList = async (req) => {
               {
                 model: collegeAssociateStream,
                 required: false,
+                where: { deleted: false },
                 as: 'CourseAssociateStream',
                 include: [
                   {
@@ -1131,6 +1205,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeAgency,
             required: false,
+            where: { deleted: false },
             as: 'CollegeAgency',
             include: [
               {
@@ -1175,6 +1250,7 @@ const allCollegeList = async (req) => {
           {
             model: collegeFAQ,
             required: false,
+            where: { deleted: false },
             as: 'FAQ',
           },
 
@@ -1235,7 +1311,6 @@ const statusList = async (req) => {
   }
 };
 
-
 const collegeAddLikesAndViews = async (req) => {
   try {
     let result;
@@ -1263,7 +1338,7 @@ const collegeAddLikesAndViews = async (req) => {
       const likeUser = await listOfUsersLikes.findOne({
         where: { userId: req.body.userId, categoryId: req.body.collegeId, categoryTypes: 'college' }
       })
-      if (likeUser && !req.body.update=="share" || req.body.update == "dislikes") {
+      if (likeUser && !req.body.update == "share" || req.body.update == "dislikes") {
         await listOfUsersLikes.destroy({ where: { categoryTypes: 'college', userId: req.body.userId, categoryId: req.body.collegeId, } })
       } else {
         let userObj = {
@@ -1271,7 +1346,7 @@ const collegeAddLikesAndViews = async (req) => {
           categoryId: obj.collegeId,
           categoryTypes: 'college'
         };
-        if(req.body.update== "likes"){
+        if (req.body.update == "likes") {
 
           await listOfUsersLikes.create(userObj)
         }
@@ -1306,8 +1381,6 @@ const collegeAddLikesAndViews = async (req) => {
     throw new Error(error);
   }
 };
-
-
 
 const addCollegeLinksData = async (req) => {
   try {
@@ -1404,8 +1477,6 @@ const addCollegePosts = async (req) => {
   }
 };
 
-
-
 const updateCollegePost = async (req) => {
   try {
 
@@ -1438,8 +1509,6 @@ const updateCollegePost = async (req) => {
   }
 };
 
-
-
 const collegePostList = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
@@ -1469,8 +1538,6 @@ const collegePostList = async (req) => {
   }
 };
 
-
-
 const collegePostDelete = async (req) => {
   try {
     const collg = await collegePosts.findOne({
@@ -1489,28 +1556,28 @@ const collegePendingRequestList = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
     const size = req.body.pageSize ? req.body.pageSize : 10;
-    let whrCondition = { deleted: false,approval:false  };
+    let whrCondition = { deleted: false, approval: false };
 
     if (req.body.id) {
-      whrCondition = { id: req.body.id, deleted: false,approval:false  }
+      whrCondition = { id: req.body.id, deleted: false, approval: false }
     }
 
-    
+
     if (req.body.collegeId) {
-      whrCondition = { collegeId: req.body.collegeId, deleted: false,approval:false  }
+      whrCondition = { collegeId: req.body.collegeId, deleted: false, approval: false }
     }
 
     const result = await collegeLinksData.findAndCountAll({
       where: whrCondition,
-      include:[
-        
-          {
-            model: User,
-            required: false,
-            as: 'Users',
-  
-          }
-        
+      include: [
+
+        {
+          model: User,
+          required: false,
+          as: 'Users',
+
+        }
+
       ],
 
       offset: (pageNo - 1) * size,
@@ -1540,6 +1607,10 @@ module.exports = {
   updateCollegePost,
   collegePostList,
   collegePostDelete,
-  collegePendingRequestList
+  collegePendingRequestList,
+  collegeAssociateCourseDelete,
+  collegeAgencyDelete,
+  collegeStreamsDelete,
+  collegeFAQDelete
 
 };

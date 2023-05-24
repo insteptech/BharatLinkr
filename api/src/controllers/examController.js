@@ -69,6 +69,17 @@ const allExamList = async function (req, res) {
     });
 };
 
+const examFAQDelete = async function (req, res) {
+  await examManager
+    .examFAQDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
 
 module.exports = {
     addExam,
@@ -76,5 +87,6 @@ module.exports = {
     examDelete,
     updateExam,
     examByStreamCourse,
-    allExamList
+    allExamList,
+    examFAQDelete
 };

@@ -40,5 +40,8 @@ router.post(
 router.post('/examByStreamCourse', examController.examByStreamCourse);
 router.post('/allExamList', examController.allExamList);
 
+router.delete('/examFAQDelete', examController.examFAQDelete);
+
+
 
 module.exports = router;

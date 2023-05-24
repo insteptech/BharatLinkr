@@ -261,6 +261,17 @@ const corporateAddLikesAndViews = async function (req, res) {
 };
 
 
+const mockTestQuestionDelete = async function (req, res) {
+  await corporateManager
+    .mockTestQuestionDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
 
 
 module.exports = {
@@ -285,6 +296,7 @@ module.exports = {
     addUserAnswers,
     userScoreList,
     userScoreCountList,
-    corporateAddLikesAndViews
+    corporateAddLikesAndViews,
+    mockTestQuestionDelete
 
 };

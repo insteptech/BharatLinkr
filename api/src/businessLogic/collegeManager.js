@@ -115,6 +115,28 @@ const collegePendingRequestList = async function (req) {
   return result;
 };
 
+const collegeAssociateCourseDelete = async function (req) {
+  const result = await collegeDbContext.collegeAssociateCourseDelete(req);
+  return result;
+};
+
+const collegeAgencyDelete = async function (req) {
+  const result = await collegeDbContext.collegeAgencyDelete(req);
+  return result;
+};
+
+const collegeStreamsDelete = async function (req) {
+  const result = await collegeDbContext.collegeStreamsDelete(req);
+  return result;
+};
+
+const collegeFAQDelete = async function (req) {
+  const result = await collegeDbContext.collegeFAQDelete(req);
+  return result;
+};
+
+
+
 
 module.exports = {
   addCollege,
@@ -131,5 +153,9 @@ module.exports = {
   updateCollegePost,
   collegePostList,
   collegePostDelete,
-  collegePendingRequestList
+  collegePendingRequestList,
+  collegeAssociateCourseDelete,
+  collegeAgencyDelete,
+  collegeStreamsDelete,
+  collegeFAQDelete
 };

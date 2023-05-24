@@ -751,6 +751,7 @@ const mockTestList = async (req) => {
         {
           model: mockTestFAQAnswer,
           required: false,
+          where:{deleted:false},
           as: 'Answerss',
         }
 
@@ -790,6 +791,7 @@ const mockTestList = async (req) => {
         {
           model: mockTestFAQ,
           required: false,
+          where:{deleted:false},
           as: 'Questions',
           include: includes
         },
@@ -827,16 +829,29 @@ const mockTestDelete = async (req) => {
     const mockans = await mockTestFAQAnswer.findOne({
       where: { questionId: mockques.id }
     })
-
-
-
-
     await mock.update({ deleted: true });
     await mockques.update({ deleted: true });
     await mockans.update({ deleted: true });
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 
+const mockTestQuestionDelete = async (req) => {
+  try {
 
+    const mockques = await mockTestFAQ.findOne({
+      where: { mockTestId: req.body.mockTestId,id:req.body.id, }
+    })
+
+    const mockans = await mockTestFAQAnswer.findOne({
+      where: { questionId: mockques.id }
+    })
+   
+    await mockques.update({ deleted: true });
+    await mockans.update({ deleted: true });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1273,7 +1288,8 @@ module.exports = {
   addUserAnswers,
   userScoreList,
   userScoreCountList,
-  corporateAddLikesAndViews
+  corporateAddLikesAndViews,
+  mockTestQuestionDelete
 
 
 };

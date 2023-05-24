@@ -170,6 +170,49 @@ const collegePendingRequestList = async function (req, res) {
 };
 
 
+const collegeAssociateCourseDelete = async function (req, res) {
+  await collegeManager
+    .collegeAssociateCourseDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const collegeAgencyDelete = async function (req, res) {
+  await collegeManager
+    .collegeAgencyDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const collegeStreamsDelete = async function (req, res) {
+  await collegeManager
+    .collegeStreamsDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const collegeFAQDelete = async function (req, res) {
+  await collegeManager
+    .collegeFAQDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 
 
@@ -188,5 +231,9 @@ module.exports = {
   updateCollegePost,
   collegePostList,
   collegePostDelete,
-  collegePendingRequestList
+  collegePendingRequestList,
+  collegeAssociateCourseDelete,
+  collegeAgencyDelete,
+  collegeStreamsDelete,
+  collegeFAQDelete
 };

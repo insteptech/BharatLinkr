@@ -127,6 +127,8 @@ router.post('/userScore', corporateController.userScoreList);
 router.post('/userScoreCount', corporateController.userScoreCountList);
 
 router.post('/corporateLikesCount', corporateController.corporateAddLikesAndViews);
+router.delete('/mockTestQuestionDelete', corporateController.mockTestQuestionDelete);
+
 
 
 
