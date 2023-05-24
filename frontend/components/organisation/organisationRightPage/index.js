@@ -154,29 +154,55 @@ function OrganisationRightPage({ dataValue, setDataValue }, props) {
             </div>
           </Col>
 
-          <Col xs={6} lg={2} className="ps-0">
-            <div className="company_jobs_select margin_bottom">
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => setDataValue(e.target.value)}
-              >
-                {dropData &&
-                  dropData?.map((steps, stepsIndex) => {
-                    return (
-                      <>
-                        <option
-                          active={true}
-                          key={stepsIndex}
-                          value={stepsIndex}
-                        >
-                          {steps.page}
-                        </option>
-                      </>
-                    );
-                  })}
-              </Form.Select>
-            </div>
-          </Col>
+          {dataValue == 1 ? (
+            <Col xs={6} lg={7} className="ps-0 profession_drop_col">
+              <div className="company_jobs_select margin_bottom w-50">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setDataValue(e.target.value)}
+                >
+                  {dropData &&
+                    dropData?.map((steps, stepsIndex) => {
+                      return (
+                        <>
+                          <option
+                            active={true}
+                            key={stepsIndex}
+                            value={stepsIndex}
+                          >
+                            {steps.page}
+                          </option>
+                        </>
+                      );
+                    })}
+                </Form.Select>
+              </div>
+            </Col>
+          ) : (
+            <Col xs={6} lg={2} className="ps-0">
+              <div className="company_jobs_select margin_bottom">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setDataValue(e.target.value)}
+                >
+                  {dropData &&
+                    dropData?.map((steps, stepsIndex) => {
+                      return (
+                        <>
+                          <option
+                            active={true}
+                            key={stepsIndex}
+                            value={stepsIndex}
+                          >
+                            {steps.page}
+                          </option>
+                        </>
+                      );
+                    })}
+                </Form.Select>
+              </div>
+            </Col>
+          )}
           <Col
             xs={12}
             lg={5}
