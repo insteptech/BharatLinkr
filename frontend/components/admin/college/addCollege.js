@@ -40,36 +40,16 @@ const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
 function CreateCollege() {
   const dispatch = useDispatch();
   const [dataValue, setDataValue] = useState(0);
-
-  const cityList = useSelector(
-    (State) => State.cityList?.cityList?.data?.result
-  );
-  const stateList = useSelector(
-    (State) => State.stateList?.stateList?.data?.data?.rows
-  );
-  const masterFilterData = useSelector(
-    (state) => state?.allMasterFilterList?.masterfilterlist?.data?.data
-  );
-  const mainStreamlist = useSelector(
-    (state) => state?.mainStreamList?.mainStreamValue?.data?.data?.rows
-  );
-
   const [colstreamdata, setColstreamdata] = useState();
-  // const subStreamlist = useSelector(
-  //   (state) => state?.subStreamList?.subStreamValue?.data?.data?.rows
-  // );
-  // const colStreamList = useSelector(
-  //   (state) => state?.colStreamList?.colStreamSlice?.data?.data?.rows
-  // );
 
-  const substreamSelectVal = useSelector(
-    (state) => state?.subStreamList?.subStreamDetails?.data?.data?.rows
-  );
-
-  const colstreamSelectVal = useSelector(
-    (state) => state?.colStreamList?.colstreamDetails?.data?.data?.rows
-  );
-
+  const cityList = useSelector((State) => State.cityList?.cityList?.data?.result);
+  const stateList = useSelector((State) => State.stateList?.stateList?.data?.data?.rows);
+  const masterFilterData = useSelector((state) => state?.allMasterFilterList?.masterfilterlist?.data?.data);
+  const mainStreamlist = useSelector((state) => state?.mainStreamList?.mainStreamValue?.data?.data?.rows);
+  const substreamSelectVal = useSelector((state) => state?.subStreamList?.subStreamDetails?.data?.data?.rows);
+  const examList = useSelector((state) => state?.examList?.examlist?.data?.data?.rows);
+  const colstreamSelectVal = useSelector((state) => state?.colStreamList?.colstreamDetails?.data?.data?.rows);
+  
   const handleMainstreamselect = (e) => {
     let selectvalue = e.target.value;
     dispatch(getSubstreamData({ mainStreamId: selectvalue }));
@@ -84,63 +64,88 @@ function CreateCollege() {
     setColstreamdata(e.target.value)
   }
 
-  const examList = useSelector(
-    (state) => state?.examList?.examlist?.data?.data?.rows
-  );
 
   const [FileState, setFileState] = useState([]);
 
-  const handleSubmit = (values) => {
-    const collegeCMS = {
-      collegeAbouts: [
-        {
-          aboutIntro: "dddddddddddddddddddd",
-        },
-      ],
-      collegeAdmissions: [
-        {
-          admissionIntro: "dsfsdfsd",
-        },
-      ],
-      distanceEducation: [
-        {
-          basicInfo: "dfsdfdffgfd",
-        },
-      ],
-      scholarShip: [
-        {
-          scholarShipIntro: "ewew",
-        },
-      ],
-      placements: [
-        {
-          placeMentIntro: "fdsdfgdf",
-        },
-      ],
-      faq: [
-        {
-          uniqueId: 444,
-          question: "hfgfgfgfg",
-          answer: "dfdf",
-        },
-        {
-          uniqueId: 333,
-          question: "11111",
-          answer: "dfdf",
-        },
-      ],
-    };
+  // const handleSubmit = (values) => {
+  //   values.collegeStreams.map((item) => {
+  //     let x = [];
+  //     values.courseFee.map((name) => {
+  //       x.push({
+  //         ...item,
+  //         ...name,
+  //       });
+  //     });
+  //     values.collegeStreams = x;
+  //   });
 
-    values.collegeStreams.map((item) => {
-      let x = [];
-      values.courseFee.map((name) => {
-        x.push({
-          ...item,
-          ...name,
+  //   let formData = new FormData();
+  //   if (values.college[0].collegeLogo) {
+  //     formData.append("collegeImageFile", values.college[0].collegeLogo);
+  //   }
+  //   if (values.college[0].collegeImage) {
+  //     formData.append("collegeLogoFile", values.college[0].collegeImage);
+  //   }
+  //   if (dataValue == 0) {
+  //     setDataValue(1);
+  //   } else if (dataValue === 1) {
+  //     setDataValue(2);
+  //   } else if (dataValue === 2) {
+  //     if (FileState && FileState.length > 0) {
+  //       values.faq.map((item, index) => {
+  //         let x = FileState[index].name.split("_")[0];
+  //         item.uniqueId = x;
+  //       });
+  //       for (let i = 0; i < FileState.length; i++) {
+  //         formData.append("imageFile", FileState[i]);
+  //       }
+  //     }
+
+  //     delete values.college[0].collegeLogo;
+  //     delete values.college[0].collegeImage;
+  //     const tempvalues = { ...values };
+
+  //     const data = { payload: [tempvalues] };
+
+  //     formData.append("collegeData", JSON.stringify(data));
+
+  //     dispatch(addCollege(formData)).then((res) => {
+  //       if (res?.payload?.data?.success) {
+  //         Router.push("/admin/colleges");
+  //         toast.success("College added");
+  //       } else {
+  //         toast.error("Error");
+  //       }
+  //     });
+  //   }
+  // };
+
+  const handleSubmit = (values) => {
+    if (Id) {
+      
+    } else {
+      if (dataValue == 0) {
+        setDataValue(1);
+      } else if (dataValue === 1) {
+        setDataValue(2);
+      } else if (dataValue === 2) { 
+        let data = { payload: [] }
+        
+        values.collegeStreams.map((item) => {
+          let x = [];
+          values.courseFee.map((name) => {
+            x.push({
+              ...item,
+              ...name,
+            });
+          });
+          values.collegeStreams = x;
         });
-      });
-      values.collegeStreams = x;
-    });
+
+        
+      }
+    }
+
 
     let formData = new FormData();
     if (values.college[0].collegeLogo) {
@@ -149,7 +154,6 @@ function CreateCollege() {
     if (values.college[0].collegeImage) {
       formData.append("collegeLogoFile", values.college[0].collegeImage);
     }
-
     if (dataValue == 0) {
       setDataValue(1);
     } else if (dataValue === 1) {
