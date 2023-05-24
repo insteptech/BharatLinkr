@@ -233,6 +233,51 @@ const organisationPendingRequestList = async function (req, res) {
 };
 
 
+const organisationSectorDelete = async function (req, res) {
+  await organisationManager
+    .organisationSectorDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
+const organisationIndustryDelete = async function (req, res) {
+  await organisationManager
+    .organisationIndustryDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationBusinessDelete = async function (req, res) {
+  await organisationManager
+    .organisationBusinessDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
+const organisationcompanyLevelDelete = async function (req, res) {
+  await organisationManager
+    .organisationcompanyLevelDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 module.exports = {
   addSector,
@@ -254,6 +299,10 @@ module.exports = {
   organisationPostDelete,
   addOrganisationLinksData,
   organisationLinkApproval,
-  organisationPendingRequestList
+  organisationPendingRequestList,
+  organisationSectorDelete,
+  organisationIndustryDelete,
+  organisationBusinessDelete,
+  organisationcompanyLevelDelete
 
 };
