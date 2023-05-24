@@ -5,27 +5,23 @@ import { Field, Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../redux/actions/auth";
 import { toast } from "react-toastify";
- 
+
 import { apibasePath } from "../../config";
- 
+
 import { useEffect } from "react";
 import { getToken } from "../utils";
 import { useRouter } from "next/router";
- 
 
 const EditProfile = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const router = useRouter();
 
-  const userDetials = useSelector((detais) => detais?.loginUser?.userDetails)
+  const userDetials = useSelector((detais) => detais?.loginUser?.userDetails);
   useEffect(() => {
-    if (!getToken() && router.pathname.includes('editprofile')) {
-      router.push('/'); // redirect to the home page when user not logged in
+    if (!getToken() && router.pathname.includes("editprofile")) {
+      router.push("/"); // redirect to the home page when user not logged in
     }
-
- 
   }, [dispatch]);
- 
 
   const onSubmit = (values) => {
     const payload = {
@@ -38,19 +34,17 @@ const EditProfile = () => {
       Expirence: values.Expirence,
       Accomplishments: values.Accomplishments,
       education: values.education,
-      Summary: values.Summary
-    }
+      Summary: values.Summary,
+    };
 
     const formData = new FormData();
-    formData.append('profileData', JSON.stringify(payload));
+    formData.append("profileData", JSON.stringify(payload));
     if (values > 0) {
       dispatch(getUsers(formData)).then((res) => {
-        if (res.payload?.success === true
-        ) {
-          toast.success("Profile updated successfully!")
+        if (res.payload?.success === true) {
+          toast.success("Profile updated successfully!");
         }
-      })
-
+      });
     }
   };
   return (
@@ -59,25 +53,24 @@ const EditProfile = () => {
         onSubmit={onSubmit}
         // keepDirtyOnReinitialize
         initialValues={
-
-          userDetials ? userDetials && {
-            name: userDetials.name,
-            area: userDetials.areaOfExpertise,
-            Designation: userDetials.designation,
-            Email: userDetials.email,
-            number: userDetials.mobileNumber,
-            Expirence: userDetials.totalExperience,
-            Accomplishments: userDetials.accomplishments,
-            education: userDetials.highestEducation,
-            Summary: userDetials.summary
-
-          } : ""
+          userDetials
+            ? userDetials && {
+                name: userDetials.name,
+                area: userDetials.areaOfExpertise,
+                Designation: userDetials.designation,
+                Email: userDetials.email,
+                number: userDetials.mobileNumber,
+                Expirence: userDetials.totalExperience,
+                Accomplishments: userDetials.accomplishments,
+                education: userDetials.highestEducation,
+                Summary: userDetials.summary,
+              }
+            : ""
         }
         render={({ handleSubmit }) => {
           return (
             <form onSubmit={handleSubmit}>
               <Container>
-
                 <Row>
                   <Col lg={12} className="text-center edit_profile_h2">
                     <h2>Edit Profile</h2>
@@ -87,8 +80,17 @@ const EditProfile = () => {
                       <Image
                         height={1000}
                         width={1000}
-                        className="img-fluid user_profile_cover_img"
-                        src={`${apibasePath}documents/userProfile/${userDetials?.coverPhoto}`}
+                        className={
+                          userDetials?.coverPhoto
+                            ? "img-fluid user_profile_cover_img"
+                            : "user_profile_cover_img_dammy"
+                        }
+                        // src={`${apibasePath}documents/userProfile/${userDetials?.coverPhoto}`}
+                        src={
+                          userDetials?.coverPhoto
+                            ? `${apibasePath}documents/userProfile/${userDetials?.coverPhoto}`
+                            : "/images/dammy-cover-1.svg"
+                        }
                       />
                       <div className="profile_hero_edit_icon_row">
                         <div className="profile_hero_img_col">
@@ -96,7 +98,12 @@ const EditProfile = () => {
                             height={200}
                             width={200}
                             className="profile_hero_img"
-                            src={`${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`}
+                            // src={`${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`}
+                            src={
+                              userDetials?.profilePhoto
+                                ? `${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`
+                                : "/images/dammy.svg"
+                            }
                           />
                           <div className="profile_pen_bg logo_pen">
                             <img className="pen" src="/images/pen.png" />
@@ -113,7 +120,7 @@ const EditProfile = () => {
                 </Row>
                 <div className="p-4">
                   <Row>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
                         <label className="signup_form_label">Name </label>
                         <Field name="name">
@@ -135,9 +142,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Designation </label>
+                        <label className="signup_form_label">
+                          Designation{" "}
+                        </label>
                         <Field name="Designation">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -157,7 +166,7 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
                         <label className="signup_form_label">Email </label>
                         <Field name="Email">
@@ -179,7 +188,7 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
                         <label className="signup_form_label">Password </label>
                         <Field name="Password">
@@ -201,9 +210,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Mobile Number </label>
+                        <label className="signup_form_label">
+                          Mobile Number{" "}
+                        </label>
                         <Field name="number">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -223,9 +234,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Area of Expertise </label>
+                        <label className="signup_form_label">
+                          Area of Expertise{" "}
+                        </label>
                         <Field name="area">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -245,9 +258,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Highest Education </label>
+                        <label className="signup_form_label">
+                          Highest Education{" "}
+                        </label>
                         <Field name="education">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -267,9 +282,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Accomplishments </label>
+                        <label className="signup_form_label">
+                          Accomplishments{" "}
+                        </label>
                         <Field name="Accomplishments">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -289,9 +306,11 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="6" md="12" >
+                    <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Total Expirence </label>
+                        <label className="signup_form_label">
+                          Total Expirence{" "}
+                        </label>
                         <Field name="Expirence">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -311,7 +330,7 @@ const EditProfile = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col Col lg="12" md="12" >
+                    <Col Col lg="12" md="12">
                       <div>
                         <label className="signup_form_label">Summary </label>
                         <Field name="Summary">
@@ -321,7 +340,6 @@ const EditProfile = () => {
                                 {...input}
                                 type="text"
                                 className="form-control signup_form_input summary_input margin_bottom"
-
                                 placeholder="Enter Summary"
                               />
 
@@ -338,16 +356,19 @@ const EditProfile = () => {
                   </Row>
                   <Row>
                     <Col lg={12} className="text-center">
-                      <Button className="admin_signup_btn me-4" type="btn">Save Changes</Button>
-                      <Button className="admin_signup_btn" type="btn">Account Activate</Button>
+                      <Button className="admin_signup_btn me-4" type="btn">
+                        Save Changes
+                      </Button>
+                      <Button className="admin_signup_btn" type="btn">
+                        Account Activate
+                      </Button>
                     </Col>
                   </Row>
                 </div>
               </Container>
             </form>
-          )
+          );
         }}
-
       />
     </>
   );
