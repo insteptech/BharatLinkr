@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { login } from "../../redux/actions/auth";
 import DisclaimerModal from "../modals/disclaimermodal";
 import SignupModal from "../modals/signupmodal";
+import ForgotPasswordPage from "../admin/forgotPassword";
 function LoginPage() {
   const [modalShow, setModalShow] = useState(false);
   const handleHide = () => {
@@ -39,6 +40,9 @@ function LoginPage() {
     //   toast.success("logined");
     // }
   };
+  const handleForget = () => {
+    router.push('/forget');
+  }
   return (
     <>
       <>
@@ -79,7 +83,7 @@ function LoginPage() {
                         setLoginData({ ...loginData, password: e.target.value })
                       }
                     />
-                    <div className="forgot_row">
+                    <div className="forgot_row" onClick={handleForget}>
                       <p className="login_paira mobile_font_14 under_line">Forgot Password?</p>
                     </div>
                     <div className="text-center">
@@ -88,6 +92,7 @@ function LoginPage() {
                         className="btn login_btn"
                         onClick={handleLogin}
                       >
+
                         Login
                       </button>
                     </div>

@@ -472,6 +472,7 @@ const organisationList = async (req) => {
 
           model: organisationSector,
           required: false,
+          where:{deleted:false},
           as: 'orgSector',
 
           include: [
@@ -486,6 +487,7 @@ const organisationList = async (req) => {
         {
           model: organisationIndustry,
           required: false,
+          where:{deleted:false},
           as: 'orgIndustry',
           include: [{
             model: industry,
@@ -496,11 +498,13 @@ const organisationList = async (req) => {
         {
           model: organisationNatureOfBusiness,
           required: false,
+          where:{deleted:false},
           as: 'BusinessNature'
         },
         {
           model: organisationCompanyLevel,
           required: false,
+          where:{deleted:false},
           as: 'CompanyLevel'
         },
         {
@@ -980,7 +984,59 @@ const organisationPendingRequestList = async (req) => {
 };
 
 
+//these api for indiviual delete for sector, industry, businessnature, levelCompany
+const organisationSectorDelete = async (req) => {
+  try {
+    const collg = await organisationSector.findOne({
+      where: { organisationId:req.body.organisationId, id:req.body.id},
+    });
 
+    await collg.update({ deleted: true },{where:{id:collg.id}});
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const organisationIndustryDelete = async (req) => {
+  try {
+    const collg = await organisationIndustry.findOne({
+      where: { organisationId:req.body.organisationId, id:req.body.id},
+    });
+
+    await collg.update({ deleted: true },{where:{id:collg.id}});
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const organisationBusinessDelete = async (req) => {
+  try {
+    const collg = await organisationNatureOfBusiness.findOne({
+      where: { organisationId:req.body.organisationId, id:req.body.id},
+    });
+
+    await collg.update({ deleted: true },{where:{id:collg.id}});
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const organisationcompanyLevelDelete = async (req) => {
+  try {
+    const collg = await organisationCompanyLevel.findOne({
+      where: { organisationId:req.body.organisationId, id:req.body.id},
+    });
+
+    await collg.update({ deleted: true },{where:{id:collg.id}});
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+////////////////////////////////////////////////////////////////////////////////////
 
 module.exports = {
   addSector,
@@ -1002,5 +1058,9 @@ module.exports = {
   organisationPostDelete,
   addOrganisationLinksData,
   organisationLinkApproval,
-  organisationPendingRequestList
+  organisationPendingRequestList,
+  organisationSectorDelete,
+  organisationIndustryDelete,
+  organisationBusinessDelete,
+  organisationcompanyLevelDelete
 };
