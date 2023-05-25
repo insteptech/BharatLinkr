@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { apibasePath } from "../../../config";
 import Image from "next/image";
 import CollegeShareModal from "../../modals/collegesharemodal";
-import { CollegeLikes } from "../../../redux/actions/college/college";
-import { getTokenDecode, isUserLogined } from "../../utils";
-import { getUsersList } from "../../../redux/actions/auth";
+import { CollegeLikes, CollegeLikesList, getColleges } from "../../../redux/actions/college/college";
+import { getTokenDecode } from "../../utils";
+
 import { toast } from "react-toastify";
 
 export const cardData = [
@@ -95,86 +95,52 @@ export const cardData = [
 ];
 
 const CollegeCard = ({ item, index }, props) => {
+
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
+  const [update, setUpdate] = useState(false);
+  const [pagination, setPagination] = useState({
+    pageNo: 1,
+    pageSize: 10,
+  });
   const dispatch = useDispatch();
-  const user = getTokenDecode();
-  const usersData = useSelector(
-    (state) => state?.signUp?.UsersList?.data?.data?.rows
-  );
+  const likesList = useSelector(state => state?.collegelist?.collegeListLikes?.rows)
+
 
   const handleHide = () => {
     setModalShow(false);
   };
 
-  useEffect(() => {
-    dispatch(getUsersList({ id: user?.userId }))
-  }, []);
-
-  // console.log(item, "qweqweqw1212");
-  // const router = useRouter();
-
-
-  // const handleLikes = (item) => {
-  //   console.log(item, "adfsfsdfdsfds")
-  //   const collegeId = item.id
-  //   dispatch(CollegeLikes({
-  //     "collegeId": collegeId,
-  //     "update": "likes"
-  //   }))
-
-  // }
-  const handleLikes = (item) => {
+  const handleLikes = (itemId, values) => {
     if (getTokenDecode()) {
-      if (item) {
-        const findCollege =
-          usersData &&
-          usersData?.find((wlist) => wlist?.collegeId === item?.id);
-        if (findCollege && findCollege?.id) {
-          // dispatch(deleteWishList(findCollege?.id))
-        } else {
-          if (getTokenDecode()) {
-            dispatch(
-              CollegeLikes({
-                collegeId: item?.id,
-                update: "likes",
-              })
-            );
-          }
+      dispatch(CollegeLikes({
+        collegeId: itemId,
+        update: values,
+        userId: getTokenDecode()?.userId
+      })).then((res) => {
+        if (res?.payload?.status === 200 && res.payload.data?.success === true) {
+          dispatch(CollegeLikesList(getTokenDecode()?.userId))
+          dispatch(getColleges(pagination))
         }
-      }
+      })
     } else {
-      toast.info("Please login to Like to colleges");
+      setModalShow(true);
     }
   };
-  const activeColor = (id) => {
-    if (id && isUserLogined()) {
-      const findActiveCollege = usersData?.find(
-        (wlist) => wlist?.collegeId === id
-      );
-      return findActiveCollege ? "#e52929" : "#746565";
-    } else {
-      return "#746565";
+
+
+
+
+  const isliked = likesList?.filter((i) => {
+
+    if (item.id === i.categoryId) {
+      return true
     }
-  };
+  })
+
   return (
     <>
-      {/* <Row xs={1} sm={2} md={3} className="g-3"> */}
-      {/* <Col> */}
       <Card className="user_college_card" key={index}>
-        {/* <Card.Img
-                    className="college_card_img"
-                    variant="top"
-                    // src={
-                    //   item.collegeImg
-                    //     ? item.collegeImg
-                    //     : "/images/no-image.png"
-                    // }
-                    // src={`${apibasePath}documents/college/${item?.collegeLogo}`}
-                    // onClick={() => router.push("/college/collegeDetails")}
-                  /> */}
-        {/* <BootImage src={`${apibasePath}documents/college/${item?.collegeLogo}`} className="college_card_img"></BootImage> */}
-
         <div className="image_box">
           <Image
             height={92}
@@ -183,7 +149,7 @@ const CollegeCard = ({ item, index }, props) => {
             alt=""
             onClick={() => router.push(`/college/collegeDetails/${item?.id}`)}
             src={`${apibasePath}documents/college/${item?.collegeLogo}`}
-            // src="images/blue-book.png"
+          // src="images/blue-book.png"
           />
         </div>
 
@@ -266,20 +232,27 @@ const CollegeCard = ({ item, index }, props) => {
                 <Col xs={3} className="text-center  p-2 pe-0">
                   <div
                     className="media_icon_num_pair right_border"
-                    onClick={() => handleLikes(item)}
+                    onClick={() => {
+                      if (isliked?.length > 0) {
+                        handleLikes(item?.id, "dislikes")
+                      } else {
+                        handleLikes(item?.id, "likes")
+                      }
+                    }}
                   >
 
-                   
 
                     <Image
                       width={20}
                       height={20}
-
                       className="media_icons"
-                      src="/images/border-like.svg"
+                      src={isliked?.length > 0 ? "/images/blue-like.png" : "/images/border-like.svg"}
                     />
+
                     <h6 className="course_detail_name ">
-                      {item.like ? item.like : "00"}
+                      {item.CountLikesShare
+                        ? item.CountLikesShare[0]?.likes
+                        : "00"}
                     </h6>
                   </div>
                 </Col>
@@ -306,7 +279,10 @@ const CollegeCard = ({ item, index }, props) => {
                       onClick={() => setModalShow(true)}
                     />
                     <h6 className="course_detail_name ">
-                      {item.share ? item.share : "00"}
+                      {item.CountLikesShare
+                        ? item.CountLikesShare[0]?.share
+
+                        : "00"}
                     </h6>
                   </div>
                 </Col>
@@ -336,8 +312,7 @@ const CollegeCard = ({ item, index }, props) => {
           </Row>
         </Card.Body>
       </Card>
-      {/* </Col> */}
-      {/* </Row> */}
+
       <CollegeShareModal show={modalShow} onHide={() => handleHide()} />
     </>
   );
