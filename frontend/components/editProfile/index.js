@@ -70,16 +70,16 @@ const EditProfile = () => {
         render={({ handleSubmit }) => {
           return (
             <form onSubmit={handleSubmit}>
-              <Container>
+              <Container className="result_container_padding">
                 <Row>
-                  <Col lg={12} className="text-center edit_profile_h2">
-                    <h2>Edit Profile</h2>
+                  <Col lg={12} className="text-center">
+                    <h2 className="edit_profile_h2">Edit Profile</h2>
                   </Col>
                   <Col lg={12} className="text-center">
                     <div className="user_profile_cover_div">
                       <Image
                         height={1000}
-                        width={1000}
+                        width={100}
                         className={
                           userDetials?.coverPhoto
                             ? "img-fluid user_profile_cover_img"
@@ -340,7 +340,7 @@ const EditProfile = () => {
                                 {...input}
                                 type="text"
                                 className="form-control signup_form_input summary_input margin_bottom"
-                                placeholder="Enter Summary"
+                                placeholder="Enter Summary..."
                               />
 
                               {meta.touched && meta.error && (
