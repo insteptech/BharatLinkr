@@ -93,10 +93,10 @@ router.post(
   router.post( '/addOrganisationLinksData',  organisationController.addOrganisationLinksData);
   router.post( '/linksApproval',  organisationController.organisationLinkApproval);
   router.post( '/organisationPendingRequestList',  organisationController.organisationPendingRequestList);
-  router.delete( '/orgaissationSectorDelete',  organisationController.organisationSectorDelete);
-  router.delete( '/orgaissationIndustryDelete',  organisationController.organisationIndustryDelete);
-  router.delete( '/orgaissationBuisnessDelete',  organisationController.organisationBusinessDelete);
-  router.delete( '/orgaissationCompanyLevelDelete',  organisationController.organisationcompanyLevelDelete);
+  router.post( '/orgaissationSectorDelete',  organisationController.organisationSectorDelete);
+  router.post( '/orgaissationIndustryDelete',  organisationController.organisationIndustryDelete);
+  router.post( '/orgaissationBuisnessDelete',  organisationController.organisationBusinessDelete);
+  router.post( '/orgaissationCompanyLevelDelete',  organisationController.organisationcompanyLevelDelete);
 
 
 
