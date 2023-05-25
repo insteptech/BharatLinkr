@@ -56,8 +56,6 @@ const ShortTricks = () => {
     }
   }
 
-  console.log(alreadyViewed)
-
   const handleViews = (id) => {
     if (isloggedin) {
       if (!alreadyViewed.includes(id)) {
