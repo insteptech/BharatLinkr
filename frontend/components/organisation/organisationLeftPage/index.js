@@ -968,7 +968,6 @@ function OrganisationLeftPage({ dataValue }, props) {
             {/*Checkbox */}
             <div className="box_data">
               {companyAge?.map((item) => {
-                console.log(item ,"dfgdfgd21323123")
                 return (
                   <>
                     <div className="check_input_label_div">
