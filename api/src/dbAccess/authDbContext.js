@@ -432,7 +432,7 @@ const updateUserPassword = async (req) => {
 
   try{
   const loggedUser = await User.findOne({
-    where:{id:req.body.id}
+    where:{email:req.body.email}
   });
 console.log(loggedUser,'9898989')
   const hashedPassword = await bcrypt.hash(req.body.password,12);
