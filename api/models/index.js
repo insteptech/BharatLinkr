@@ -62,6 +62,10 @@ db.exam.hasMany(db.examRegistration, { as: "Registration", foreignKey: 'examId' 
 db.exam.hasMany(db.examReservation, { as: "Reservation", foreignKey: 'examId' });
 db.exam.hasMany(db.examSyllabus, { as: "Syllabus", foreignKey: 'examId' });
 db.exam.hasMany(db.examFAQ, { as: "FAQ", foreignKey: 'examId' });
+db.exam.hasMany(db.collegeAssociateCourse, { as: "AssociateCourse", foreignKey: 'chooseExamAcceptedId' });
+db.collegeAssociateCourse.belongsTo(db.college, { as: "College", foreignKey: 'collegeId' });
+
+
 db.course.belongsTo(db.mainStream, { as: "MainStream", foreignKey: 'mainStreamId' });
 db.course.belongsTo(db.masterFilter, { as: "CourseType", foreignKey: 'courseTypeId' });
 db.course.belongsTo(db.masterFilter, { as: "CourseCategory", foreignKey: 'courseCategoryId' });

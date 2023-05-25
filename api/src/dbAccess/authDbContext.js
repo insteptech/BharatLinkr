@@ -440,7 +440,7 @@ console.log(loggedUser,'9898989')
   const updateUser = await User.update(
     
       {password: hashedPassword},
-   { where: {id: req.body.id}} ,
+   { where: {email: req.body.email}} ,
   );
   if(updateUser){
     message="Password Change Succesfully"
