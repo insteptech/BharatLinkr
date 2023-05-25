@@ -7,7 +7,7 @@ const { Op } = require('sequelize');
 
 const { exam, course, examAbout, examAdmitCard, examCentres, examRegistration, examImportantDates, examReservation,
   examEligibility, examPattern, examSyllabus, examPreparationTips, examCounselling, examParticipatingColleges,
-  examFAQ, sequelize, masterFilter, mainStream, college,collegeAssociateCourse } = require('../../models');
+  examFAQ, sequelize, masterFilter, mainStream, college, collegeAssociateCourse } = require('../../models');
 
 const writeFiles = async ({ examLogoFile, imageFile }) => {
   const baseDir = path.join(__dirname, '../../');
@@ -198,7 +198,7 @@ const examList = async (req) => {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
     const size = req.body.pageSize ? req.body.pageSize : 10;
     let whrCondition = { deleted: false };
-   
+
     if (req.body.search) {
       const obj = {
         examName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('examName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
@@ -212,6 +212,20 @@ const examList = async (req) => {
     const result = await exam.findAndCountAll({
       where: whrCondition,
       include: [
+        {
+          model: collegeAssociateCourse,
+          required: false,
+          as: 'AssociateCourse',
+             include: [
+        {
+          model: college,
+          required: false,
+          as: 'College',
+          attributes:['id','collegeName']
+        }
+      
+      ]
+    },
         {
           model: mainStream,
           required: false,
@@ -301,7 +315,7 @@ const examList = async (req) => {
         {
           model: examFAQ,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'FAQ',
         }
       ],
@@ -309,6 +323,14 @@ const examList = async (req) => {
       limit: size,
       distinct: true,
     });
+
+
+    result["rows"] = result["rows"].map((row) => {
+      row = row.toJSON();
+      row["CollegeCount"] = row["AssociateCourse"].length;
+      return row;
+    });
+
     return { data: result, success: true };
   } catch (error) {
     throw new Error(error);
@@ -372,7 +394,7 @@ const examDelete = async (req) => {
 const examFAQDelete = async (req) => {
   try {
     const examdel = await examFAQ.findOne({
-      where: { examId: req.body.examId,id:req.body.id },
+      where: { examId: req.body.examId, id: req.body.id },
     });
     await examdel.update({ deleted: true });
     return { success: true };
@@ -391,7 +413,7 @@ const updateExam = async (req) => {
 
 
 
-   
+
     const exm = await exam.findOne({
       where: {
         examName: Sequelize.where(
@@ -595,7 +617,7 @@ const updateExam = async (req) => {
   }
 };
 
-///////below api needs to fix please be patient//////// its need time (examBystreamCourse)
+/////this api for filters of exams and college count /////////
 const examByStreamCourse = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
@@ -604,165 +626,169 @@ const examByStreamCourse = async (req) => {
     let wherecond = { deleted: false };
 
 
+    let result;
+    if (req.body.mainStreamId) {
+      whrCondition = { mainStreamId: req.body.mainStreamId }
+    }
+    if (req.body.entranceExamId) {
+      wherecond = { ['$courses.entranceExamId$']: req.body.entranceExamId }
+    }
+    let applicationMode;
+    if (req.body.applicationModeId) {
+      applicationMode = {
+        applicationModeId: req.body.applicationModeId,
+      };
+    }
 
-    // if (req.body.mainStreamId) {
-    //   whrCondition = { mainStreamId: req.body.mainStreamId }
-    // }
-    // if (req.body.entranceExamId) {
-    //   wherecond = { ['$courses.entranceExamId$']: req.body.entranceExamId }
-    //   // querys = true
-    // }
-    // let applicationMode;
-    // if (req.body.applicationModeId) {
-    //   applicationMode = {
-    //     applicationModeId: req.body.applicationModeId,
-    //   };
-    // }
+    let examMode;
+    if (req.body.examModeId) {
+      examMode = {
+        examModeId: req.body.examModeId,
+      };
+    }
+    let examType;
+    if (req.body.examTypeId) {
+      examType = {
+        examTypeId: req.body.examTypeId,
+      };
+    }
 
-    // let examMode;
-    // if (req.body.examModeId) {
-    //   examMode = {
-    //     examModeId: req.body.examModeId,
-    //   };
-    // }
-    // let examType;
-    // if (req.body.examTypeId) {
-    //   examType = {
-    //     examTypeId: req.body.examTypeId,
-    //   };
-    // }
+     result = await exam.findAndCountAll({
+      where: { [Op.and]: [whrCondition, examMode, applicationMode, examType, wherecond] },
+      subQuery: false,
+      include: [
+        {
+          model: collegeAssociateCourse,
+          required: false,
+          as: 'AssociateCourse',
+             include: [
+        {
+          model: college,
+          required: false,
+          as: 'College',
+          attributes:['id','collegeName']
+        }
+      ]
 
-    // const result = await exam.findAndCountAll({
-    //   where: { [Op.and]: [whrCondition, examMode, applicationMode, examType, wherecond] },
-    //   subQuery: false,
-    //   include: [
-    //     {
-    //       model: mainStream,
-    //       required: false,
-    //       as: 'MainStream',
+        },
+        {
+          model: mainStream,
+          required: false,
+          as: 'MainStream',
 
-    //     },
-    //     {
-    //       model: course,
-    //       required: false,
-    //       as: 'courses',
-    //     },
-    //     {
-    //       model: masterFilter,
-    //       required: false,
-    //       as: 'CourseType',
-    //     },
-    //     {
-    //       model: masterFilter,
-    //       required: false,
-    //       as: 'ExamType',
-    //     },
-    //     {
-    //       model: masterFilter,
-    //       required: false,
-    //       as: 'ExamMode',
-    //     },
-    //     {
-    //       model: masterFilter,
-    //       required: false,
-    //       as: 'ApplicationMode',
-    //     },
-    //     {
-    //       model: examAbout,
-    //       required: false,
-    //       as: 'ExamAbout',
-    //     },
-    //     {
-    //       model: examAdmitCard,
-    //       required: false,
-    //       as: 'AdmitCard',
-    //     },
-    //     {
-    //       model: examCentres,
-    //       required: false,
-    //       as: 'Centres',
-    //     },
-    //     {
-    //       model: examCounselling,
-    //       required: false,
-    //       as: 'Counselling',
-    //     },
-    //     {
-    //       model: examEligibility,
-    //       required: false,
-    //       as: 'Eligibility',
-    //     },
-    //     {
-    //       model: examImportantDates,
-    //       required: false,
-    //       as: 'ImportantDates',
-    //     },
-    //     {
-    //       model: examParticipatingColleges,
-    //       required: false,
-    //       as: 'ParticipatingCollege',
-    //     },
-    //     {
-    //       model: examPattern,
-    //       required: false,
-    //       as: 'Pattern',
-    //     },
-    //     {
-    //       model: examPreparationTips,
-    //       required: false,
-    //       as: 'PreparationTips',
-    //     },
-    //     {
-    //       model: examRegistration,
-    //       required: false,
-    //       as: 'Registration',
-    //     },
-    //     {
-    //       model: examReservation,
-    //       required: false,
-    //       as: 'Reservation',
-    //     },
-    //     {
-    //       model: examSyllabus,
-    //       required: false,
-    //       as: 'Syllabus',
-    //     },
-        // {
-        //   model: examFAQ,
-        //   required: false,
-        //     where:{deleted:false}
-        //   as: 'FAQ',
-        // },
-     
-
-    //   ],
-    //   offset: (pageNo - 1) * size,
-    //   limit: size,
-    //   distinct: true,
-    //   order: [['id', 'ASC']]
-    // });
-  
-  //   const collegeCountss = await collegeAssociateCourse.findAll({
-  //     attributes: [[Sequelize.fn('count', Sequelize.col('chooseExamAcceptedId')), 'CollegeCounts']],
-  //  include:[
-  //   {
-  //     model:college,
-  //     required:false,
-  //     as:'college'
-  //   }
-  //  ],
-  //     group: [
-  //      'chooseExamAcceptedId','college.id'
-        
-  //      ]
-  //   });
+        },
+        {
+          model: course,
+          required: false,
+          as: 'courses',
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'CourseType',
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'ExamType',
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'ExamMode',
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'ApplicationMode',
+        },
+        {
+          model: examAbout,
+          required: false,
+          as: 'ExamAbout',
+        },
+        {
+          model: examAdmitCard,
+          required: false,
+          as: 'AdmitCard',
+        },
+        {
+          model: examCentres,
+          required: false,
+          as: 'Centres',
+        },
+        {
+          model: examCounselling,
+          required: false,
+          as: 'Counselling',
+        },
+        {
+          model: examEligibility,
+          required: false,
+          as: 'Eligibility',
+        },
+        {
+          model: examImportantDates,
+          required: false,
+          as: 'ImportantDates',
+        },
+        {
+          model: examParticipatingColleges,
+          required: false,
+          as: 'ParticipatingCollege',
+        },
+        {
+          model: examPattern,
+          required: false,
+          as: 'Pattern',
+        },
+        {
+          model: examPreparationTips,
+          required: false,
+          as: 'PreparationTips',
+        },
+        {
+          model: examRegistration,
+          required: false,
+          as: 'Registration',
+        },
+        {
+          model: examReservation,
+          required: false,
+          as: 'Reservation',
+        },
+        {
+          model: examSyllabus,
+          required: false,
+          as: 'Syllabus',
+        },
+        {
+          model: examFAQ,
+          required: false,
+          where: { deleted: false },
+          as: 'FAQ',
+        },
 
 
-////// This Api needs to fix please do not touch /////////
+      ],
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+      order: [['id', 'ASC']]
+    });
 
-    return { data: collegeCountss, success: true };
+    result["rows"] = result["rows"].map((row) => {
+      row = row.toJSON();
+      row["CollegeCount"] = row["AssociateCourse"].length;
+      return row;
+    });
+
+
+
+
+
+    return { data:result, success: true };
   } catch (error) {
-    console.log(error,'98989898')
     throw new Error(error);
   }
 };
@@ -817,6 +843,19 @@ const allExamList = async (req) => {
       subQuery: false,
       include: [
         {
+          model: collegeAssociateCourse,
+          required: false,
+          as: 'AssociateCourse',
+             include: [
+        {
+          model: college,
+          required: false,
+          as: 'College',
+          attributes:['id','collegeName']
+        }
+      ]
+    },
+        {
           model: mainStream,
           required: false,
           as: 'MainStream',
@@ -856,6 +895,12 @@ const allExamList = async (req) => {
       limit: size,
       distinct: true,
       order: [['id', 'ASC']],
+    });
+
+    result["rows"] = result["rows"].map((row) => {
+      row = row.toJSON();
+      row["CollegeCount"] = row["AssociateCourse"].length;
+      return row;
     });
 
     return { data: result, success: true };
