@@ -618,15 +618,7 @@ const updateCollege = async (req) => {
         }
       };
 
-      // if (collegeData.collegeAgencies) {
-      //   if (collegeData.collegeAgencies.id) {
-      //     await collegeAgency.update(collegeData.collegeAgencies, { where: { id: collegeData.collegeAgencies.id }, returning: true })
-      //   } else {
-      //     collegeData.collegeAgencies['collegeId'] = collegeData.id;
-      //     await collegeAgency.create(collegeData.collegeAgencies)
-      //   }
-      // };
-
+  
       await Promise.all(
         collegeData.collegeAgencies.map(async (agencyItem) => {
           let faqCollege;
