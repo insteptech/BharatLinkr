@@ -281,10 +281,10 @@ optgroup {
   margin: 2.8125rem 0;
   transition: all 0.5s;
 }
-.login_btn:hover{
+.login_btn:hover {
   background: var(--admin-bg) !important;
   color: var(--admin-btn-bg) !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .main_admin_login_bg {
   background: var(--admin-body-bg);
@@ -341,46 +341,45 @@ optgroup {
 }
 
 /* -------------------------forgot-start---------------------------------- */
-.forgot_page{
+.forgot_page {
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow-y: hidden;
-  
 }
-.remember_row{
+.remember_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
 }
-.sign_text{
+.sign_text {
   font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: #6ea3ff;
-    cursor: pointer;
-    text-decoration: underline ;
-    transition: all 0.4s;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: #6ea3ff;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.4s;
 }
-.sign_text:hover{
-  text-decoration: none ;
+.sign_text:hover {
+  text-decoration: none;
   transform: scale(1.1);
 }
-.forgot_form{
+.forgot_form {
   padding: 40px;
-  max-width: 29.625rem; 
+  max-width: 29.625rem;
   background: #ffffff;
   box-shadow: 0rem 0.4375rem 1.125rem rgba(0, 0, 0, 0.121569);
   border-radius: 20px;
 }
-.error_text{
+.error_text {
   font-size: 12px;
   margin-left: 5px;
 }
-.main_forgot_bg{
+.main_forgot_bg {
 }
 /* -------------------------forgot-end---------------------------------- */
 
@@ -1779,7 +1778,7 @@ input::-webkit-inner-spin-button {
     font-size: 14px !important;
     margin-top: 15px;
   }
-  .m_top_f_p{
+  .m_top_f_p {
     margin-top: 20px;
   }
   .header_search_input {
@@ -1918,19 +1917,19 @@ input::-webkit-inner-spin-button {
   .post_bar {
     padding: 5px 8px !important;
   }
-  .forgot_form{
+  .forgot_form {
     width: 90%;
     padding: 30px 20px;
   }
- 
-  .forgot_submit_btn_div{
+
+  .forgot_submit_btn_div {
     text-align: center;
     margin-top: 10px;
   }
-  .forgot_submit_btn{
-margin-bottom: 20px !important;
+  .forgot_submit_btn {
+    margin-bottom: 20px !important;
   }
-  .login_input{
+  .login_input {
     padding: 10px 20px;
   }
 }
@@ -2720,7 +2719,7 @@ margin-bottom: 20px !important;
 .view_and_apply_btn {
   font-size: 18px;
   font-weight: 600;
-  color: #FFA500;
+  color: #ffa500;
   background: rgba(238, 234, 243, 0.666);
   padding: 5px 20px;
   cursor: pointer;
@@ -2742,7 +2741,7 @@ margin-bottom: 20px !important;
   white-space: nowrap;
 }
 .view_and_apply_btn:hover {
-  color: #FFA500;
+  color: #ffa500;
   border-radius: 20px;
   background: transparent;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
@@ -2808,7 +2807,7 @@ margin-bottom: 20px !important;
 .job_title_row {
   margin-top: 24px;
 }
-.company_card_img{
+.company_card_img {
   background: var(--admin-body-bg);
 }
 
@@ -2927,7 +2926,7 @@ margin-bottom: 20px !important;
   transition: all 0.2s ease-in-out;
   /* box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.141176); */
 }
-.chat_box_close_btn:hover{
+.chat_box_close_btn:hover {
   transform: scale(1.2) rotate(180deg);
 }
 .blue_bg {

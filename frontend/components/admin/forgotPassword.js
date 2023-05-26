@@ -72,7 +72,7 @@ function ForgotPasswordPage() {
   };
   return (
     <>
- <div className="login_bg">
+      <div className="login_bg">
         <div className="container-fluid">
           <div className="row">
             <div className="col-lg-6 col-md-12 col-12 mobile_padding">
@@ -88,131 +88,113 @@ function ForgotPasswordPage() {
 
             <div className="col-lg-6 col-md-12 col-12 mobile_padding">
               <div className="login_right_col">
-              <Form
-              onSubmit={onSubmit}
-              validate={formValidate}
-              render={({ handleSubmit, values }) => (
-                <form
-                  onSubmit={handleSubmit}
-                  className=" login_form"
-                >
-                  {formStep === 0 && (
-                    <Field name="email">
-                      {({ input, meta }) => (
-                        <div className="form-group m_top_f_p">
-                          <label className="signup_form_label">Email</label>
-                          <input
-                            {...input}
-                            type="text"
-                            placeholder="Email"
-                            className="login_input mt-0"
-                          />
-                          {meta.touched && meta.error && (
-                            <span className=" text-danger alert-danger error_text">
-                              {meta.error}
-                            </span>
+                <Form
+                  onSubmit={onSubmit}
+                  validate={formValidate}
+                  render={({ handleSubmit, values }) => (
+                    <form onSubmit={handleSubmit} className=" login_form">
+                      {formStep === 0 || formStep === 1 ? (
+                        <Field name="email">
+                          {({ input, meta }) => (
+                            <div className="form-group m_top_f_p">
+                              <label className="signup_form_label">Email</label>
+                              <input
+                                {...input}
+                                type="text"
+                                placeholder="Email"
+                                className={
+                                  (meta.touched && meta.error) || formStep === 0
+                                    ? "login_input mt-0"
+                                    : "login_input margin_bottom  mt-0"
+                                }
+                              />
+                              {meta.touched && meta.error && (
+                                <span className=" text-danger alert-danger error_text">
+                                  {meta.error}
+                                </span>
+                              )}
+                            </div>
                           )}
-                        </div>
+                        </Field>
+                      ) : (
+                        ""
                       )}
-                    </Field>
+                      {formStep === 1 && (
+                        <>
+                          <Field name="password">
+                            {({ input, meta }) => (
+                              <div className="form-group">
+                                <label className="signup_form_label">
+                                  Password
+                                </label>
+                                <input
+                                  {...input}
+                                  type="password"
+                                  placeholder="Enter your password"
+                                  className={
+                                    meta.touched && meta.error
+                                      ? "login_input mt-0"
+                                      : "login_input margin_bottom  mt-0"
+                                  }
+                                />
+                                {meta.touched && meta.error && (
+                                  <span className=" text-danger alert-danger error_text">
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                          <Field name="conformPassword">
+                            {({ input, meta }) => (
+                              <div className="form-group">
+                                <label className="signup_form_label">
+                                  Conform Password
+                                </label>
+                                <input
+                                  {...input}
+                                  type="password"
+                                  placeholder="Conform Password"
+                                  className="login_input  mt-0"
+                                />
+                                {meta.touched && meta.error && (
+                                  <span className=" text-danger  alert-danger error_text">
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        </>
+                      )}
+                      <div className="forgot_submit_btn_div">
+                        <button
+                          type="submit"
+                          className="btn login_btn forgot_submit_btn"
+                        >
+                          SUBMIT
+                        </button>
+                      </div>
+                      <div className="remember_row d-flex ">
+                        <p className="login_paira mb-0 mobile_font_14">
+                          You Remember Password?
+                        </p>{" "}
+                        <p
+                          className="sign_text mb-0"
+                          onClick={() => router.back()}
+                        >
+                          {" "}
+                          Sign In{" "}
+                        </p>
+                      </div>
+                    </form>
                   )}
-                  {formStep === 1 && (
-                    <>
-                      <Field name="email">
-                        {({ input, meta }) => (
-                          <div className="form-group m_top_f_p">
-                            <label className="signup_form_label">Email</label>
-                            <input
-                              {...input}
-                              type="text"
-                              placeholder="Email"
-                              // className="login_input margin_bottom mt-0"
-                              className={` ${
-                                meta.touched && meta.error
-                                  ? "login_input mt-0"
-                                  : "login_input margin_bottom mt-0"
-                              }`}
-                            />
-                            {meta.touched && meta.error && (
-                              <span className=" text-danger alert-danger error_text">
-                                {meta.error}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Field name="password">
-                        {({ input, meta }) => (
-                          <div className="form-group">
-                            <label className="signup_form_label">
-                              Password
-                            </label>
-                            <input
-                              {...input}
-                              type="password"
-                              placeholder="Enter your password"
-                              className={
-                                meta.touched && meta.error
-                                  ? "login_input mt-0"
-                                  : "login_input margin_bottom  mt-0"
-                              }
-                            />
-                            {meta.touched && meta.error && (
-                              <span className=" text-danger alert-danger error_text">
-                                {meta.error}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                      <Field name="conformPassword">
-                        {({ input, meta }) => (
-                          <div className="form-group">
-                            <label className="signup_form_label">
-                              Conform Password
-                            </label>
-                            <input
-                              {...input}
-                              type="password"
-                              placeholder="Conform Password"
-                              className="login_input  mt-0"
-                            />
-                            {meta.touched && meta.error && (
-                              <span className=" text-danger  alert-danger error_text">
-                                {meta.error}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </Field>
-                    </>
-                  )}
-                  <div className="forgot_submit_btn_div">
-                    <button
-                      type="submit"
-                      className="btn login_btn forgot_submit_btn"
-                    >
-                      SUBMIT
-                    </button>
-                  </div>
-                  <div className="remember_row d-flex ">
-                    <p className="login_paira mb-0 mobile_font_14">
-                      You Remember Password?
-                    </p>{" "}
-                    <p className="sign_text mb-0" onClick={() => router.back()}>
-                      {" "}
-                      Sign In{" "}
-                    </p>
-                  </div>
-                </form>
-              )}
-            />
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-
 
       {/* <div className="main_admin_login_bg main_forgot_bg">
         <Container>
