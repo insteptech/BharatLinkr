@@ -1068,7 +1068,7 @@ const addMockTestLikesAndViews = async (req) => {
   }
 };
 
-
+// no use till find
 const addScore = async (req) => {
   try {
 
@@ -1222,7 +1222,7 @@ const userScoreList = async (req) => {
 };
 
 
-
+//for score count correct answer, wrong answer, skipped questions
 const userScoreCountList = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;

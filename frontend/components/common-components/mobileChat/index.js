@@ -350,7 +350,7 @@ const MobileChat = () => {
                         return (
                           <div
                             key={index}
-                            className="suggested_card mt-3 mx-auto"
+                            className="suggested_card link_card mt-3 mx-auto"
                           >
                             <Row>
                               <Col xs={2}>

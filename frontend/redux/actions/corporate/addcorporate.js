@@ -50,11 +50,21 @@ export const updateCorporate = createAsyncThunk(
       .catch((err) => err);
   }
 );
-export const corpotateLikes = createAsyncThunk(
-  "corpotateLikes/ccorporate/corporateLikesCount",
+export const corporateLikes = createAsyncThunk(
+  "corpotateLikes/corporate/corporateLikesCount",
   async (data) => {
     return apiRequest
       .post("corporate/corporateLikesCount", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+
+export const corporatelikesList = createAsyncThunk(
+  "corporatelikesList/auth/userLikesList",
+  async (id) => {
+    return apiRequest
+      .post("auth/userLikesList", {id:id, categoryTypes:"corporate"})
       .then((res) => res)
       .catch((err) => err);
   }

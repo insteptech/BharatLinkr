@@ -66,6 +66,7 @@ const StoryCard = () => {
                         {item.count > 5 ? `+5` : `${item.count}`}
                       </h6>
                     </div>
+                    <p className="story_bottom_name ">{item.Name}</p>
                   </>
                 ) : (
                   <>
@@ -79,6 +80,7 @@ const StoryCard = () => {
                       </h2>
                     </label>
                     <input type="file" id="actual-btn" hidden />
+                    <p className="story_bottom_name post_title">{item.title}</p>
                   </>
                 )}
               </Card.Body>

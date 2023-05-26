@@ -618,14 +618,37 @@ const updateCollege = async (req) => {
         }
       };
 
-      if (collegeData.collegeAgencies) {
-        if (collegeData.collegeAgencies.id) {
-          await collegeAgency.update(collegeData.collegeAgencies, { where: { id: collegeData.collegeAgencies.id }, returning: true })
-        } else {
-          collegeData.collegeAgencies['collegeId'] = collegeData.id;
-          await collegeAgency.create(collegeData.collegeAgencies)
-        }
-      };
+  
+      await Promise.all(
+        collegeData.collegeAgencies.map(async (agencyItem) => {
+          let faqCollege;
+          if (cllg && cllg.collegeFAQ) {
+            await Promise.all(
+
+              cllg.collegeAgency.map(async (item3) => {
+                faqCollege = await collegeAgency.findOne({ where: { id: item3.id } })
+
+              })
+            )
+          }
+          await writeFiles(req.files);
+
+       
+          if (agencyItem.id) {
+            await collegeAgency.update(agencyItem, { where: { id: agencyItem.id }, returning: true })
+          } else {
+
+            agencyItem['collegeId'] = collegeData.id;
+            await collegeAgency.create(agencyItem)
+          }
+        })
+      )
+
+
+
+
+
+///////////////////////////////////////////
       if (collegeData.collegeStreams) {
         if (collegeData.collegeStreams.id) {
           await collegeAssociateStream.update(collegeData.collegeStreams, { where: { id: collegeData.collegeStreams.id }, returning: true })

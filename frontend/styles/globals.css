@@ -194,6 +194,10 @@ optgroup {
   padding: 9.6875rem 0 4.4375rem 5.6875rem;
 }
 .login_right_col {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  height: 100vh;
   padding: 5.9375rem 1.875rem;
 }
 .login_img {
@@ -215,7 +219,7 @@ optgroup {
 }
 .login_form {
   max-width: 29.625rem;
-  max-height: 35.3125rem;
+  /* max-height: 35.3125rem; */
   background: #ffffff;
   box-shadow: 0rem 0.4375rem 1.125rem rgba(0, 0, 0, 0.121569);
   padding: 4.375rem 2.875rem;
@@ -275,6 +279,12 @@ optgroup {
   line-height: 1.6875rem;
   color: #ffffff !important;
   margin: 2.8125rem 0;
+  transition: all 0.5s;
+}
+.login_btn:hover {
+  background: var(--admin-bg) !important;
+  color: var(--admin-btn-bg) !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .main_admin_login_bg {
   background: var(--admin-body-bg);
@@ -329,6 +339,49 @@ optgroup {
   transform: scale(1.2);
   color: #4712ce;
 }
+
+/* -------------------------forgot-start---------------------------------- */
+.forgot_page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: hidden;
+}
+.remember_row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+}
+.sign_text {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: #6ea3ff;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.4s;
+}
+.sign_text:hover {
+  text-decoration: none;
+  transform: scale(1.1);
+}
+.forgot_form {
+  padding: 40px;
+  max-width: 29.625rem;
+  background: #ffffff;
+  box-shadow: 0rem 0.4375rem 1.125rem rgba(0, 0, 0, 0.121569);
+  border-radius: 20px;
+}
+.error_text {
+  font-size: 12px;
+  margin-left: 5px;
+}
+.main_forgot_bg {
+}
+/* -------------------------forgot-end---------------------------------- */
 
 /* ----------------------------------login-end----------------------------------- */
 /* ------------------------master-form css start-------------------------- */
@@ -412,21 +465,21 @@ optgroup {
   margin-right: 1.75rem;
   margin-top: -5.3125rem;
 }
-.cant_find_div{
+.cant_find_div {
   margin-top: 45px;
 }
-.cant_find{
-font-weight: 600;
-font-size: 18px;
-color: #463196;
+.cant_find {
+  font-weight: 600;
+  font-size: 18px;
+  color: #463196;
 }
-.basic_heading{
-font-weight: 700;
-font-size: 30px;
-text-decoration-line: underline;
-color: #463196;
-margin-bottom: 40px;
-margin-top: 10px;
+.basic_heading {
+  font-weight: 700;
+  font-size: 30px;
+  text-decoration-line: underline;
+  color: #463196;
+  margin-bottom: 40px;
+  margin-top: 10px;
 }
 .select_down_icon_second {
   width: 0.9375rem;
@@ -1042,6 +1095,7 @@ input::-webkit-inner-spin-button {
     padding: 5rem 2.5rem;
   }
   .login_right_col {
+    height: auto;
     padding: 5rem 2.5rem;
   }
   .login_form {
@@ -1077,7 +1131,6 @@ input::-webkit-inner-spin-button {
   .story_photo {
     width: 120px !important;
     height: 110px !important;
-   
   }
   .user_post_card_body {
     /* box-shadow: 0rem 0.375rem 0.4063rem rgba(70, 49, 150, 0.109804); */
@@ -1165,7 +1218,7 @@ input::-webkit-inner-spin-button {
   .p_c_card_fees_value {
     margin-bottom: 0;
   }
-  .m_m_bottom{
+  .m_m_bottom {
     margin-bottom: 20px;
   }
 }
@@ -1199,7 +1252,7 @@ input::-webkit-inner-spin-button {
     font-size: 16px;
     color: #fff;
   }
-  .result_container_padding{
+  .result_container_padding {
     padding: 12px !important;
   }
   .container {
@@ -1356,11 +1409,11 @@ input::-webkit-inner-spin-button {
     margin-bottom: 5rem;
     font-size: 0.9375rem;
   } */
- .mobile_item_center{
-  display: flex;
-  align-items: center;
-  justify-content: center !important;
- }
+  .mobile_item_center {
+    display: flex;
+    align-items: center;
+    justify-content: center !important;
+  }
   .admin_signup_btn {
     width: auto;
     padding: 0.625rem 1.25rem;
@@ -1418,6 +1471,7 @@ input::-webkit-inner-spin-button {
     background: var(--admin-btn-bg);
   }
   .login_right_col {
+    height: auto;
     padding: 0 0.625rem !important;
   }
   .college_master_search {
@@ -1641,7 +1695,7 @@ input::-webkit-inner-spin-button {
     border-top: 0.0313rem solid #aaa9ac65;
     border-bottom: 0.0313rem solid #aaa9ac65;
   }
-  .icon_text{
+  .icon_text {
     text-align: center;
     border-right: 0.0313rem solid #aaa9ac65;
   }
@@ -1675,32 +1729,35 @@ input::-webkit-inner-spin-button {
     border-top: 0.0313rem solid #aaa9ac65;
     border-bottom: 0.0313rem solid #aaa9ac65;
   }
-  .org_card_top_row{
+  .org_card_top_row {
     height: auto !important;
   }
-  .top_input form{
+  .top_input form {
     margin-bottom: 10px !important;
   }
- .job_title_col{
-  border-top: 0.0313rem solid #aaa9ac65;
-  border-bottom: 0.0313rem solid #aaa9ac65;
-  padding-top: 10px;
-  margin: 12px 0;
- }
- .job_title_row{
-  margin: 0 !important;
- }
- .cant_find_div{
-  margin-top: 0;
-  margin-bottom: 20px;
- }
- .basic_heading{
-  text-align: center;
- }
- .review_submit_btn{
-  margin: 0;
-  margin-top: 10px;
- }
+  .job_title_col {
+    border-top: 0.0313rem solid #aaa9ac65;
+    border-bottom: 0.0313rem solid #aaa9ac65;
+    padding-top: 10px;
+    margin: 12px 0;
+  }
+  .job_title_row {
+    margin: 0 !important;
+  }
+  .cant_find_div {
+    margin-top: 0;
+    margin-bottom: 20px;
+  }
+  .basic_heading {
+    text-align: center;
+  }
+  .review_submit_btn {
+    margin: 0;
+    margin-top: 10px;
+  }
+  .story_bottom_name {
+    display: block !important;
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -1720,6 +1777,9 @@ input::-webkit-inner-spin-button {
     padding: 6px 20px !important;
     font-size: 14px !important;
     margin-top: 15px;
+  }
+  .m_top_f_p {
+    margin-top: 20px;
   }
   .header_search_input {
     min-width: 12.5rem;
@@ -1742,6 +1802,7 @@ input::-webkit-inner-spin-button {
     padding: 0 0.625rem !important;
   }
   .login_right_col {
+    height: auto;
     padding: 2.5rem 0.625rem;
   }
   .login_left_col {
@@ -1787,19 +1848,20 @@ input::-webkit-inner-spin-button {
     /* height: 100px !important; */
   }
   .story_photo {
-    width: 80px !important;
-    height: 80px !important;
+    width: 75px !important;
+    height: 75px !important;
     background-position: center !important;
     background-size: cover !important;
-    border-radius: 100px !important;
+    border-radius: 26px !important;
     padding: 2px;
     border: 2px solid var(--admin-btn-bg);
   }
+
   .user_post_card_btn {
     width: 18px !important;
     height: 18px !important;
     /* margin: 0 !important; */
-    margin-top: 25px !important;
+    margin-top: 22px !important;
   }
   .user_post_card_title {
     font-size: 10px !important;
@@ -1852,8 +1914,23 @@ input::-webkit-inner-spin-button {
   .result_card {
     padding: 15px 40px !important;
   }
-  .post_bar{
+  .post_bar {
     padding: 5px 8px !important;
+  }
+  .forgot_form {
+    width: 90%;
+    padding: 30px 20px;
+  }
+
+  .forgot_submit_btn_div {
+    text-align: center;
+    margin-top: 10px;
+  }
+  .forgot_submit_btn {
+    margin-bottom: 20px !important;
+  }
+  .login_input {
+    padding: 10px 20px;
   }
 }
 
@@ -2199,6 +2276,17 @@ input::-webkit-inner-spin-button {
   border-top-left-radius: 0.3125rem;
   object-fit: cover;
 }
+.user_profile_cover_img_dammy {
+  width: 100%;
+  max-height: 17.5rem;
+  background-position: center;
+  background-size: contain;
+  border-top-right-radius: 0.3125rem;
+  border-top-left-radius: 0.3125rem;
+  object-fit: contain;
+  background: var(--admin-body-bg);
+  padding: 100px;
+}
 .profile_pen_bg {
   background: #ffffff;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(0, 0, 0, 0.160784);
@@ -2224,14 +2312,14 @@ input::-webkit-inner-spin-button {
   text-align: start;
   position: relative;
 }
-.logo_pen{
+.logo_pen {
   position: absolute;
   top: 62%;
   left: 25%;
   width: 32px;
   height: 32px;
 }
-.pen{
+.pen {
   width: 13px;
 }
 .profile_hero_img {
@@ -2314,7 +2402,7 @@ input::-webkit-inner-spin-button {
 
 /* ------------------------post bar start------------ */
 .post_bar {
-  padding: 0.625rem 1.25rem ;
+  padding: 0.625rem 1.25rem;
   margin: 1rem 0;
   background: #ffffff;
   border: 0.0625rem solid #c8c1df;
@@ -2329,11 +2417,11 @@ input::-webkit-inner-spin-button {
 .post_bar .accordion-button::after {
   display: none;
 }
-.quick_link_acc_div .accordion-button::after{
+.quick_link_acc_div .accordion-button::after {
   display: block;
   margin-top: -15px;
 }
-.quick_link_acc_div{
+.quick_link_acc_div {
   padding: 20px 0 !important;
 }
 .acc_bar {
@@ -2366,7 +2454,7 @@ input::-webkit-inner-spin-button {
 }
 .pdf_title:hover {
   background: var(--admin-bg);
-} 
+}
 .modal_heading {
   color: #463196;
   font-size: 20px;
@@ -2505,13 +2593,16 @@ input::-webkit-inner-spin-button {
   padding: 1.25rem;
 }
 .suggested_card {
-  /* max-width: 15rem; */
+  /* max-width: 340px; */
   background: #ffffff;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(0, 0, 0, 0.0588235);
   border-radius: 0.3125rem;
   padding: 0.625rem 1.25rem;
   position: relative;
   /* margin-left: 1.25rem; */
+}
+.link_card {
+  max-width: 320px;
 }
 .suggested_card_profile {
   width: 1.9375rem;
@@ -2628,19 +2719,19 @@ input::-webkit-inner-spin-button {
 .view_and_apply_btn {
   font-size: 18px;
   font-weight: 600;
-  color: var(--admin-btn-bg);
+  color: #ffa500;
   background: rgba(238, 234, 243, 0.666);
   padding: 5px 20px;
   cursor: pointer;
   border: 0;
   border-radius: 0;
   white-space: nowrap;
+  transition: border-radius 0.9s;
 }
 .mobile_search_tab {
   font-size: 18px;
   font-weight: 600;
   color: var(--admin-bg);
-  /* background: rgba(238, 234, 243, 0.666); */
   border-bottom: 0.0625rem solid #bebebe !important;
   border-top: 2px solid transparent !important;
   padding: 5px 20px;
@@ -2650,8 +2741,9 @@ input::-webkit-inner-spin-button {
   white-space: nowrap;
 }
 .view_and_apply_btn:hover {
-  color: var(--admin-btn-bg);
-  background: var(--admin-bg);
+  color: #ffa500;
+  border-radius: 20px;
+  background: transparent;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .view_and_apply_btn:active {
@@ -2669,6 +2761,7 @@ input::-webkit-inner-spin-button {
 }
 
 .blue_right_arrow {
+  margin-left: 8px;
   max-width: 17px;
   max-height: 20px;
 }
@@ -2711,8 +2804,11 @@ input::-webkit-inner-spin-button {
 .profession_link:hover {
   color: #4712ce !important;
 }
-.job_title_row{
+.job_title_row {
   margin-top: 24px;
+}
+.company_card_img {
+  background: var(--admin-body-bg);
 }
 
 /* ------------------------company-card-end------------ */
@@ -2774,10 +2870,11 @@ input::-webkit-inner-spin-button {
   height: 28.125rem;
   background: #ffffff;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(70, 49, 150, 0.160784);
-  position: sticky;
-  bottom: 0%;
-  right: 0%;
+  position: absolute;
+  bottom: 8%;
+  right: 100%;
   border-radius: 0.3125rem;
+  z-index: 9;
 }
 .mobile_chat_box {
   width: 100%;
@@ -2826,7 +2923,11 @@ input::-webkit-inner-spin-button {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease-in-out;
   /* box-shadow: 0rem 0.125rem 0.25rem rgba(0, 0, 0, 0.141176); */
+}
+.chat_box_close_btn:hover {
+  transform: scale(1.2) rotate(180deg);
 }
 .blue_bg {
   background: transparent;
@@ -2844,6 +2945,7 @@ input::-webkit-inner-spin-button {
   padding: 5px 20px !important;
 }
 .chat_box_footer {
+  width: 100%;
   background: #f5f5f5;
   box-shadow: 0rem 0.125rem 0.3125rem rgba(0, 0, 0, 0.129412);
   display: flex;
@@ -2854,14 +2956,14 @@ input::-webkit-inner-spin-button {
 }
 .mobile_chat_footer {
   border-radius: 0;
-  /* position: fixed;
-  bottom: 0;
-  left: 0; */
+  /* position: fixed; */
+  /* bottom: 0; */
+  /* left: 0; */
 }
 .center_chat_box {
   padding: 1.25rem;
-  /* height: 72vh; */
-  overflow: scroll;
+  height: 55vh;
+  overflow: auto;
   overflow-x: hidden;
 }
 .down_arrow {
@@ -2945,11 +3047,11 @@ input::-webkit-inner-spin-button {
   margin-top: 2.5rem;
   max-width: 1.875rem;
 }
-.plus_btn_box{
+.plus_btn_box {
   box-shadow: 0px 6px 6.5px rgba(70, 49, 150, 0.109804);
   cursor: pointer;
 }
-.plus_btn_box:hover{
+.plus_btn_box:hover {
   border: 0.0625rem solid #c8c1df;
 }
 .user_post_card_title {
@@ -2968,9 +3070,20 @@ input::-webkit-inner-spin-button {
   background-size: cover;
   border-radius: 5px;
   margin: 5px;
-  /* object-fit: cover !important; */
+  object-fit: cover;
 }
-
+.story_bottom_name {
+  font-size: 9px;
+  font-weight: 600;
+  max-width: 60px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: none;
+}
+.post_title {
+  max-width: 100%;
+}
 .story_image_cover_content {
   position: absolute;
   top: 0;
@@ -3003,6 +3116,7 @@ input::-webkit-inner-spin-button {
   align-items: center;
   justify-content: center;
 }
+
 /* ---------------------------------user-center-page-card-end--------------------------- */
 .user_tabs_active {
   background: var(--admin-bg);
@@ -3061,6 +3175,11 @@ input::-webkit-inner-spin-button {
   width: 100%;
   margin: 0;
   height: 41px;
+}
+.profession_drop_col {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
 }
 .company_jobs_select .form-select:focus {
   box-shadow: none;
@@ -3318,7 +3437,7 @@ img {
   padding: 10px 20px;
   cursor: pointer;
 }
-.image_box{
+.image_box {
   overflow: hidden;
 }
 .college_card_img {
@@ -3328,10 +3447,10 @@ img {
   background-position: center;
   background-size: cover;
   object-fit: cover;
-  cursor: pointer; 
+  cursor: pointer;
   transition: 0.5s all ease-in-out;
 }
-.college_card_img:hover{
+.college_card_img:hover {
   transform: scale(1.5);
 }
 .user_college_card_row {
@@ -3599,12 +3718,12 @@ img {
   font-size: 0.75rem;
 }
 .corporate_card_text {
-  max-width: 85%;  
+  max-width: 85%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.border_none{
+.border_none {
   border: 0;
 }
 .corporate_master_heading {
@@ -4364,7 +4483,7 @@ img {
 }
 .p_c_card_fees_value {
   font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 0.75rem;
   line-height: 1.125rem;
   color: #0f0c1a;
@@ -5167,10 +5286,10 @@ a:hover {
   cursor: pointer;
   /* text-decoration: underline; */
 }
-.right .card_mid h6:hover{
+.right .card_mid h6:hover {
   text-decoration: none;
 }
-.green_text{
+.green_text {
   margin: 0;
   padding: 0;
   color: #1ba643;
