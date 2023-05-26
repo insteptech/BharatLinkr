@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import OtpInput from "react-otp-input";
@@ -24,22 +24,6 @@ function SignUpPage() {
   let otpCall = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  // const SelectOptions = [
-  //   { values: "student", label: "Student" },
-  //   { values: "college", label: "College" },
-  //   { values: "Corporate", label: "Corporate" },
-  // ];
-
-  // const stateOptions = [
-  //   { values: "punjab", label: "Punjab" },
-  //   { values: "haryana", label: "Haryana" },
-  //   { values: "up", label: "Uttar Pradesh" },
-  //   { values: "delhi", label: "Delhi" },
-  // ];
-
-  // const initialValues = {
-  //   userType: usertype,
-  // };
 
   useEffect(() => {
     dispatch(getState());
@@ -95,6 +79,7 @@ function SignUpPage() {
   const stateList = useSelector(
     (item) => item?.stateList?.stateList?.data?.data?.rows
   );
+
 
   // const fields = [
   //   [
@@ -423,7 +408,10 @@ function SignUpPage() {
 
   const handleSubmit = (values) => {
     setMobileNum(values.mobileNumber);
-    setDataValue(1);
+    if (values != 0) {
+
+      setDataValue(1);
+    }
     const dataFomrs = new FormData();
     if (values.profilePhoto) {
       dataFomrs.append("profile", values?.profilePhoto);
@@ -436,38 +424,32 @@ function SignUpPage() {
     dispatch(getUsers(dataFomrs));
   };
 
-  const handleinitVal = () => {
-    // if (usertype == "organization") {
-    //   return initialValuesOrganization;
-    // }
-    if (usertype !== "College") {
-      return initialValuesStudent;
-    }
-    if (usertype == "College") {
-      return initialValuesCollege;
-    }
-    if (usertype == "organization") {
-      return initialValuesOrganization;
-    }
-  };
+  const memoizedInitialValue = (e) => {
+    if (e && Object.keys(e).length > 0) {
+      return e;
+    } else {
 
-  // const initialValues = {
-  //   name: "",
-  //   designation: "",
-  //   email: "",
-  //   mobileNumber: "",
-  //   state: "",
-  //   school: "",
-  //   highestEducation: "",
-  //   summary: "",
-  //   expertiseArea: "",
-  //   accomplishment: "",
-  //   totalExperience: "",
-  //   proiflePhoto: "",
-  //   coverPhoto: "",
-  //   password: "",
-  //   confirmPassword: "",
-  // };
+
+      if (usertype !== "College") {
+        return initialValuesStudent;
+      }
+      if (usertype === "College") {
+        return initialValuesCollege;
+      }
+      if (usertype === "organization") {
+        return initialValuesOrganization;
+      }
+
+      // const initialFieldValues = Object.keys(initialValuesStudent).reduce((acc, key) => {
+      //   acc[key] = initialValuesStudent[key];
+      //   return acc;
+      // }, {});
+
+      // return initialFieldValues;
+    }
+  }
+
+
   let r;
   return (
     <>
@@ -487,9 +469,8 @@ function SignUpPage() {
               FormSteps.map((steps, stepsIndex) => (
                 <li className="nav-item form_tabs" key={stepsIndex}>
                   <a
-                    className={`nav-link btn_tabs admin_tabs_name ${
-                      dataValue === stepsIndex && "head-active"
-                    }`}
+                    className={`nav-link btn_tabs admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                      }`}
                     active={true}
                     onClick={() => setDataValue(stepsIndex)}
                   >
@@ -531,1571 +512,1562 @@ function SignUpPage() {
               </>
             )}
 
-            {dataValue === 0 && (
-              <Form
-                onSubmit={handleSubmit}
-                // mutators={{
-                //   ...arrayMutators
-                // }}
-                keepDirtyOnReinitialize
-                validate={validate}
-                initialValues={handleinitVal}
-                render={({ handleSubmit, values }) => (
-                  <form onSubmit={handleSubmit}>
-                    <>
-                      <Row>
-                        <Col lg={6} md={12}>
-                          <label className="signup_form_label">
-                            Select User Type
-                          </label>
-                          <Field name="userType">
-                            {({ input, meta }) => (
-                              <>
-                                {meta.touched && meta.error && (
-                                  <span className="text-danger">
-                                    {meta.error}
-                                  </span>
-                                )}
-                                <select
-                                  {...input}
-                                  className="form-control select-style signup_form_input"
-                                >
-                                  <option value="">--Select Usertype--</option>
-                                  <option>Student</option>
-                                  <option>College</option>
-                                  <option>Organization</option>
-                                </select>
-                                <div className="text-end">
-                                  <img
-                                    className="select_down_icon"
-                                    src="/images/down.png"
+            <Form
+              onSubmit={handleSubmit}
+              // mutators={{
+              //   ...arrayMutators
+              // }}
+              keepDirtyOnReinitialize
+              validate={validate}
+              initialValues={(e) => memoizedInitialValue(e)}
+              render={({ handleSubmit, values }) => dataValue === 0 && (
+                <form onSubmit={handleSubmit}>
+                  <>
+                    <Row>
+                      <Col lg={6} md={12}>
+                        <label className="signup_form_label">
+                          Select User Type
+                        </label>
+                        <Field name="userType">
+                          {({ input, meta }) => (
+                            <>
+                              {meta.touched && meta.error && (
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
+                              )}
+                              <select
+                                {...input}
+                                className="form-control select-style signup_form_input"
+                              >
+                                <option value="">--Select Usertype--</option>
+                                <option>Student</option>
+                                <option>College</option>
+                                <option>Organization</option>
+                              </select>
+                              <div className="text-end">
+                                <img
+                                  className="select_down_icon"
+                                  src="/images/down.png"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </Field>
+                      </Col>
+                      {values.userType == "" && (
+                        <>
+                          <Col md={12} lg={6}>
+                            <Field name="name">
+                              {({ input, meta }) => (
+                                <div>
+                                  <label className="signup_form_label">
+                                    Name
+                                  </label>
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Full Name"
                                   />
+                                  {meta.error && meta.touched && (
+                                    <span className="text-danger">
+                                      {meta.error}
+                                    </span>
+                                  )}
                                 </div>
-                              </>
-                            )}
-                          </Field>
-                        </Col>
-                        {values.userType == "" && (
-                          <>
-                            <Col md={12} lg={6}>
-                              <Field name="name">
-                                {({ input, meta }) => (
-                                  <div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="designation">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
                                     <label className="signup_form_label">
-                                      Name
+                                      Designation
                                     </label>
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Full Name"
-                                    />
                                     {meta.error && meta.touched && (
-                                      <span className="text-danger">
+                                      <span className="text-danger required_msg">
                                         {meta.error}
                                       </span>
                                     )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="designation">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Designation
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Designation"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Designation"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="email">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Email
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="email">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Email
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="email"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Your Email"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="email"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Your Email"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="mobileNumber">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Mobile Number
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="mobileNumber">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Mobile Number
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="number"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Mobile No."
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="number"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Mobile No."
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="state">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      State
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="state">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        State
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input "
-                                    >
-                                      <option value="">Choose State</option>
-                                      {stateList &&
-                                        stateList?.map((item) => {
-                                          return (
-                                            <option
-                                              key={item.id}
-                                              value={item?.countryId}
-                                            >
-                                              {item?.state}{" "}
-                                            </option>
-                                          );
-                                        })}
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input "
+                                  >
+                                    <option value="">Choose State</option>
+                                    {stateList &&
+                                      stateList?.map((item) => {
+                                        return (
+                                          <option
+                                            key={item.id}
+                                            value={item?.countryId}
+                                          >
+                                            {item?.state}{" "}
+                                          </option>
+                                        );
+                                      })}
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="school">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        School/College/Company
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
+                                    />
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="school">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      School/College/Company
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
 
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="School/College/Company"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="School/College/Company"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="highestEducation">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Highest Education
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="highestEducation">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Highest Education
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter your Highest Qualification"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter your Highest Qualification"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={12}>
+                            <Field name="summary">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Summary
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={12}>
-                              <Field name="summary">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Summary
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Summary"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Summary"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="expertise">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Area of Expertise
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="expertise">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Area of Expertise
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Expertise area in comma separated value"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Expertise area in comma separated value"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="accomplishments">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Accomplishments
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="accomplishments">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Accomplishments
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Accomplishments in comma separated value"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Accomplishments in comma separated value"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="experience">
+                              {({ input, meta }) => (
+                                <div>
+                                  <label className="signup_form_label">
+                                    Total Experience
+                                  </label>
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter your total experience"
+                                  />
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}></Col>
+                          <Col md={12} lg={6}>
+                            <Field name="profilePhoto">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Profile Photo
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="experience">
-                                {({ input, meta }) => (
-                                  <div>
+
+                                  <input
+                                    {...input}
+                                    type="file"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Choose File"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span>{meta.error}</span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="coverPhoto">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Cover Photo
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="file"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Choose File"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="password">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="confirmPassword">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Confirm Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom margin_bottomd"
+                                    placeholder="Re-Enter Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                        </>
+                      )}
+                      {values.userType == "Student" && (
+                        <>
+                          <Col md={12} lg={6}>
+                            <Field name="name">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Name
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Full Name"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="designation">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Designation
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Designation"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="email">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Email
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="email"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Your Email"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="mobileNumber">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Mobile Number
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="number"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Mobile No."
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="state">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      State
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input "
+                                  >
+                                    <option value="">Choose State</option>
+                                    {stateList &&
+                                      stateList?.map((item) => {
+                                        return (
+                                          <option
+                                            key={item.id}
+                                            value={item?.countryId}
+                                          >
+                                            {item?.state}{" "}
+                                          </option>
+                                        );
+                                      })}
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
+                                    />
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="school">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      School/College/Company
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="School/College/Company"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="highestEducation">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Highest Education
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter your Highest Qualification"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={12}>
+                            <Field name="summary">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Summary
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Summary"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="expertise">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Area of Expertise
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Expertise area in comma separated value"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="accomplishments">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Accomplishments
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <textarea
+                                    {...input}
+                                    type="textarea"
+                                    rows="4"
+                                    className="form-control signup_form_input summary_input margin_bottom"
+                                    placeholder="Accomplishments in comma separated value"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="experience">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
                                     <label className="signup_form_label">
                                       Total Experience
                                     </label>
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter your total experience"
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter your total experience"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}></Col>
+                          <Col md={12} lg={6}>
+                            <Field name="profilePhoto">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Profile Photo
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    // {...input}
+                                    type="file"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Choose File"
+                                    onChange={(event) =>
+                                      input?.onChange(event.target.files[0])
+                                    }
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="coverPhoto">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Cover Photo
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    // {...input}
+                                    type="file"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Choose File"
+                                    onChange={(event) =>
+                                      input.onChange(event.target.files[0])
+                                    }
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="password">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="confirmPassword">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Confirm Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Re-Enter Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                        </>
+                      )}
+                      {values.userType == "College" && (
+                        <>
+                          <Col md={12} lg={6}>
+                            <Field name="email">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      College Email
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="email"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Email"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="mobileNumber">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Mobile Number
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="number"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Mobile Number"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="state">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      State
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option>state 1</option>
+                                    <option>state 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}></Col>
-                            <Col md={12} lg={6}>
-                              <Field name="profilePhoto">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Profile Photo
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="file"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Choose File"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span>{meta.error}</span>
-                                    )} */}
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="city">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      City
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="coverPhoto">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Cover Photo
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="file"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Choose File"
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option>city 1</option>
+                                    <option>city 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="website">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      College Website
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="College Website"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={12}>
+                            <Field name="college">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      College
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="password">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Password"
+                                  <input
+                                    {...input}
+                                    type="text"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Choose College"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="password">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="confirmPassword">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Confirm Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                        </>
+                      )}
+                      {values.userType == "Organization" && (
+                        <>
+                          <Col md={12} lg={6}>
+                            <Field name="orgcategory">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Select Organization Category
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option value="">--Select--</option>
+
+                                    <option>Organization 1</option>
+                                    <option>Organization 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
+                                      <span className="text-danger">
+                                        {meta.error}
+                                      </span>
+                                    )} */}
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="company">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Select Company
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option value="">
+                                      --Select Company--
+                                    </option>
+
+                                    <option>Company 1</option>
+                                    <option>Company 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="confirmPassword">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Confirm Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom margin_bottomd"
-                                      placeholder="Re-Enter Password"
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="headregofc">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Is it a Head/Registered Office
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option value="">--Select --</option>
+
+                                    <option>yes</option>
+                                    <option>No</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                          </>
-                        )}
-                        {values.userType == "Student" && (
-                          <>
-                            <Col md={12} lg={6}>
-                              <Field name="name">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Name
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Full Name"
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="state">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      State
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option>state 1</option>
+                                    <option>state 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="designation">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Designation
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Designation"
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
+                                  </div>
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="city">
+                              {({ input, meta }) => (
+                                <>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      City
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <select
+                                    {...input}
+                                    className="form-control select-style signup_form_input"
+                                  >
+                                    <option>city 1</option>
+                                    <option>city 2</option>
+                                  </select>
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="email">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Email
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="email"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Your Email"
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
                                     />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="mobileNumber">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Mobile Number
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="number"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Mobile No."
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
+                                </>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="email">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Email
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
                                         {meta.error}
                                       </span>
-                                    )} */}
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="state">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        State
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input "
-                                    >
-                                      <option value="">Choose State</option>
-                                      {stateList &&
-                                        stateList?.map((item) => {
-                                          return (
-                                            <option
-                                              key={item.id}
-                                              value={item?.countryId}
-                                            >
-                                              {item?.state}{" "}
-                                            </option>
-                                          );
-                                        })}
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="school">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        School/College/Company
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="School/College/Company"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="email"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Email"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="mobileNumber">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Mobile Number
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="highestEducation">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Highest Education
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter your Highest Qualification"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="number"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Enter Mobile Number"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+
+                          <Col md={12} lg={6}>
+                            <Field name="password">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={12}>
-                              <Field name="summary">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Summary
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Summary"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                          <Col md={12} lg={6}>
+                            <Field name="confirmPassword">
+                              {({ input, meta }) => (
+                                <div>
+                                  <div className="d-flex">
+                                    <label className="signup_form_label">
+                                      Confirm Password
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className="text-danger required_msg">
+                                        {meta.error}
+                                      </span>
+                                    )}
                                   </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="expertise">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Area of Expertise
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Expertise area in comma separated value"
-                                    />
-                                    {/* {meta.error && meta.touched && (
+                                  <input
+                                    {...input}
+                                    type="password"
+                                    className="form-control signup_form_input margin_bottom"
+                                    placeholder="Confirm Password"
+                                  />
+                                  {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
                                       </span>
                                     )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="accomplishments">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Accomplishments
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
+                                </div>
+                              )}
+                            </Field>
+                          </Col>
+                        </>
+                      )}
+                    </Row>
+                    <Row>
+                      <Col className="text-center">
+                        <button type="submit" className="admin_signup_btn">
+                          Next Step
+                        </button>
+                      </Col>
+                    </Row>
+                  </>
+                </form>
+              )}
+            />
 
-                                    <textarea
-                                      {...input}
-                                      type="textarea"
-                                      rows="4"
-                                      className="form-control signup_form_input summary_input margin_bottom"
-                                      placeholder="Accomplishments in comma separated value"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="experience">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Total Experience
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter your total experience"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}></Col>
-                            <Col md={12} lg={6}>
-                              <Field name="profilePhoto">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Profile Photo
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      // {...input}
-                                      type="file"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Choose File"
-                                      onChange={(event) =>
-                                        input?.onChange(event.target.files[0])
-                                      }
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="coverPhoto">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Cover Photo
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      // {...input}
-                                      type="file"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Choose File"
-                                      onChange={(event) =>
-                                        input.onChange(event.target.files[0])
-                                      }
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="password">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="confirmPassword">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Confirm Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Re-Enter Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                          </>
-                        )}
-                        {values.userType == "College" && (
-                          <>
-                            <Col md={12} lg={6}>
-                              <Field name="email">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        College Email
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="email"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Email"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="mobileNumber">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Mobile Number
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="number"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Mobile Number"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="state">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        State
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option>state 1</option>
-                                      <option>state 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="city">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        City
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option>city 1</option>
-                                      <option>city 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="website">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        College Website
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="College Website"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={12}>
-                              <Field name="college">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        College
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="text"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Choose College"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="password">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="confirmPassword">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Confirm Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                          </>
-                        )}
-                        {values.userType == "Organization" && (
-                          <>
-                            <Col md={12} lg={6}>
-                              <Field name="orgcategory">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Select Organization Category
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option value="">--Select--</option>
-
-                                      <option>Organization 1</option>
-                                      <option>Organization 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="company">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Select Company
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option value="">
-                                        --Select Company--
-                                      </option>
-
-                                      <option>Company 1</option>
-                                      <option>Company 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="headregofc">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Is it a Head/Registered Office
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option value="">--Select --</option>
-
-                                      <option>yes</option>
-                                      <option>No</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="state">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        State
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option>state 1</option>
-                                      <option>state 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="city">
-                                {({ input, meta }) => (
-                                  <>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        City
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-                                    <select
-                                      {...input}
-                                      className="form-control select-style signup_form_input"
-                                    >
-                                      <option>city 1</option>
-                                      <option>city 2</option>
-                                    </select>
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                    <div className="text-end">
-                                      <img
-                                        className="select_down_icon"
-                                        src="/images/down.png"
-                                      />
-                                    </div>
-                                  </>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="email">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Email
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="email"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Email"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="mobileNumber">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Mobile Number
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="number"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Enter Mobile Number"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-
-                            <Col md={12} lg={6}>
-                              <Field name="password">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                            <Col md={12} lg={6}>
-                              <Field name="confirmPassword">
-                                {({ input, meta }) => (
-                                  <div>
-                                    <div className="d-flex">
-                                      <label className="signup_form_label">
-                                        Confirm Password
-                                      </label>
-                                      {meta.error && meta.touched && (
-                                        <span className="text-danger required_msg">
-                                          {meta.error}
-                                        </span>
-                                      )}
-                                    </div>
-
-                                    <input
-                                      {...input}
-                                      type="password"
-                                      className="form-control signup_form_input margin_bottom"
-                                      placeholder="Confirm Password"
-                                    />
-                                    {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  </div>
-                                )}
-                              </Field>
-                            </Col>
-                          </>
-                        )}
-                      </Row>
-                      <Row>
-                        <Col className="text-center">
-                          <button type="submit" className="admin_signup_btn">
-                            Next Step
-                          </button>
-                        </Col>
-                      </Row>
-                    </>
-                  </form>
-                )}
-              />
-            )}
-
-            {/* <FormGenerator
-              onSubmit={onSubmit}
-              validate={validate}
-              fieldData={fields[dataValue]}
-              initialValues={initialValues}
-              rowCss={`${dataValue === 1 && "form_row"}`}
-            /> */}
           </div>
         </Row>
       </Container>
