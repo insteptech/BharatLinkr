@@ -10,7 +10,6 @@ import { CollegeLikes, CollegeLikesList, getColleges } from "../../../redux/acti
 import { getTokenDecode } from "../../utils";
 
 import { toast } from "react-toastify";
-import SignupModal from "../../modals/signupmodal";
 
 export const cardData = [
   {
@@ -99,8 +98,6 @@ const CollegeCard = ({ item, index }, props) => {
 
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
-  const [modal, setModal] = useState(false);
-
   const [update, setUpdate] = useState(false);
   const [pagination, setPagination] = useState({
     pageNo: 1,
@@ -127,12 +124,12 @@ const CollegeCard = ({ item, index }, props) => {
         }
       })
     } else {
-      setModal(true);
+      setModalShow(true);
     }
   };
-  const handlesignup =  () => {
-    setModal(false);
-  }
+
+
+
 
   const isliked = likesList?.filter((i) => {
 
@@ -317,7 +314,6 @@ const CollegeCard = ({ item, index }, props) => {
       </Card>
 
       <CollegeShareModal show={modalShow} onHide={() => handleHide()} />
-      <SignupModal show={modal} onHide={() => handlesignup()} />
     </>
   );
 };
