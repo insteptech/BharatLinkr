@@ -60,20 +60,6 @@ function CreateCollege() {
 
   const [editCourse, setEditCourse] = useState(null);
 
-  const cityList = useSelector(
-    (State) => State.cityList?.cityList?.data?.result
-  );
-  const stateList = useSelector(
-    (State) => State.stateList?.stateList?.data?.data?.rows
-  );
-  const masterFilterData = useSelector(
-    (state) => state?.allMasterFilterList?.masterfilterlist?.data?.data
-  );
-  const mainStreamlist = useSelector(
-    (state) => state?.mainStreamList?.mainStreamValue?.data?.data?.rows
-  );
-
-
   const [colstreamdata, setColstreamdata] = useState();
 
   const cityList = useSelector((State) => State.cityList?.cityList?.data?.result);
@@ -137,111 +123,11 @@ function CreateCollege() {
   };
 
   const handleEditcollegeDetails = (editcoursedata) => {
-    console.log(editcoursedata, "ertertert1111");
     setEditCourse(editcoursedata);
   };
 
-  console.log(editCourse, "sdfdsdf12121");
-
   const handleSubmit = (values) => {
-    if (!Id) {
-      // values.collegeStreams.map((item) => {
-      //   let x = [];
-      //   values.courseFee.map((name) => {
-      //     x.push({
-      //       ...item,
-      //       ...name,
-      //     });
-      //   });
-      //   values.collegeStreams = x;
-      // });
-
-      let formData = new FormData();
-      if (values.college[0].collegeLogo) {
-        formData.append("collegeImageFile", values.college[0].collegeLogo);
-      }
-      if (values.college[0].collegeImage) {
-        formData.append("collegeLogoFile", values.college[0].collegeImage);
-=======
-  // const handleSubmit = (values) => {
-  //   values.collegeStreams.map((item) => {
-  //     let x = [];
-  //     values.courseFee.map((name) => {
-  //       x.push({
-  //         ...item,
-  //         ...name,
-  //       });
-  //     });
-  //     values.collegeStreams = x;
-  //   });
-
-  //   let formData = new FormData();
-  //   if (values.college[0].collegeLogo) {
-  //     formData.append("collegeImageFile", values.college[0].collegeLogo);
-  //   }
-  //   if (values.college[0].collegeImage) {
-  //     formData.append("collegeLogoFile", values.college[0].collegeImage);
-  //   }
-  //   if (dataValue == 0) {
-  //     setDataValue(1);
-  //   } else if (dataValue === 1) {
-  //     setDataValue(2);
-  //   } else if (dataValue === 2) {
-  //     if (FileState && FileState.length > 0) {
-  //       values.faq.map((item, index) => {
-  //         let x = FileState[index].name.split("_")[0];
-  //         item.uniqueId = x;
-  //       });
-  //       for (let i = 0; i < FileState.length; i++) {
-  //         formData.append("imageFile", FileState[i]);
-  //       }
-  //     }
-
-  //     delete values.college[0].collegeLogo;
-  //     delete values.college[0].collegeImage;
-  //     const tempvalues = { ...values };
-
-  //     const data = { payload: [tempvalues] };
-
-  //     formData.append("collegeData", JSON.stringify(data));
-
-  //     dispatch(addCollege(formData)).then((res) => {
-  //       if (res?.payload?.data?.success) {
-  //         Router.push("/admin/colleges");
-  //         toast.success("College added");
-  //       } else {
-  //         toast.error("Error");
-  //       }
-  //     });
-  //   }
-  // };
-
-  const handleSubmit = (values) => {
-    if (Id) {
-      
-    } else {
-      if (dataValue == 0) {
-        setDataValue(1);
-      } else if (dataValue === 1) {
-        setDataValue(2);
-      } else if (dataValue === 2) { 
-        let data = { payload: [] }
-        
-        values.collegeStreams.map((item) => {
-          let x = [];
-          values.courseFee.map((name) => {
-            x.push({
-              ...item,
-              ...name,
-            });
-          });
-          values.collegeStreams = x;
-        });
-
-        
-      }
-    }
-
+    if (!Id) { 
 
     let formData = new FormData();
     if (values.college[0].collegeLogo) {
@@ -265,6 +151,7 @@ function CreateCollege() {
         }
 
       }
+    }
 
       if (dataValue == 0) {
         setDataValue(1);
@@ -377,6 +264,10 @@ function CreateCollege() {
           faqObj[key] = value;
         });
       });
+
+      // if (collegeDetails?.collegeName === examobj?.collegeName) {
+      //   delete examobj.examName;
+      // }
 
       const updateDetails = {
         id: collegeDetails?.id,
@@ -494,7 +385,8 @@ function CreateCollege() {
         });
       }
     }
-  };
+    
+  }
 
   const handleFileChange = (filesObject, name) => {
     const uniqueId = Date.now();
@@ -2903,4 +2795,4 @@ function CreateCollege() {
   );
 }
 
-export default CreateCollege;
+export default CreateCollege
