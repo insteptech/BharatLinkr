@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
+import { companyLikeslist, getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
 import {
   getIndustryById,
   getIndustryList,
@@ -18,7 +18,8 @@ const sectorBySlice = createSlice({
     sectorByIdlist: [],
     industryBylist: [],
     organisationList: [],
-    organisation:[],
+    organisation: [],
+    orglikedlist: [],
     error: ""
   },
 
@@ -83,6 +84,15 @@ const sectorBySlice = createSlice({
     builder.addCase(getOrganisationbyid.fulfilled, (state, action) => {
       (state.status = ""),
         (state.organisation = action.payload?.data?.data);
+    });
+
+    //liked
+    builder.addCase(companyLikeslist.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyLikeslist.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.orglikedlist = action.payload?.data?.data?.rows);
     });
   },
 });

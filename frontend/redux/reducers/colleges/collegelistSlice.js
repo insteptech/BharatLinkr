@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CollegeLikes, getCollegebyId, getColleges } from "../../actions/college/college";
+import { CollegeLikes, CollegeLikesList, getCollegebyId, getColleges } from "../../actions/college/college";
 
 const collegeListSlice = createSlice({
     name: "collegelist",
@@ -12,11 +12,13 @@ const collegeListSlice = createSlice({
         college: [],
         collegeStatus: "",
         collegeLikes: "",
+        collegeListLikes: [],
+        colllegeLikesStatus : "",
     },
     extraReducers: (builder) => {
         builder.addCase(getColleges.pending, (state, action) => {
-          state.isLoading = true
-            
+            state.isLoading = true
+
         });
         builder.addCase(getColleges.rejected, (state, action) => {
             state.isLoading = false
@@ -35,9 +37,17 @@ const collegeListSlice = createSlice({
             state.collegeStatus = "";
         });
         builder.addCase(CollegeLikes.fulfilled, (state, action) => {
-            state.college = action?.payload?.data?.data
+            state.collegeListLikes = action?.payload?.data?.data
             state.collegeLikes = "";
         });
+        builder.addCase(CollegeLikesList.rejected, (state, action) => {
+            state.collegeListLikes = [];
+            state.colllegeLikesStatus = action?.status?.message;
+        });
+        // builder.addCase(CollegeLikesList.fulfilled, (state, action) => {
+        //     state.collegeListLikes = action?.payload?.data?.data
+        //     state.colllegeLikesStatus = "";
+        // });
     },
 });
 

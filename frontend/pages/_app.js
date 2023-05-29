@@ -59,6 +59,14 @@ function MyApp({ Component, pageProps }) {
           </SSRProvider>
         </Provider>
       );
+    case '/forget': return (
+      <Provider store={store}>
+        <SSRProvider>
+          <Component {...pageProps} />
+          <ToastContainer />
+        </SSRProvider>
+      </Provider>
+    )
 
     default:
       if (role == "admin") {

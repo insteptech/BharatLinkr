@@ -19,7 +19,7 @@ export default function PdfComponent(props) {
   return (
     <>
       {item?.pdf ? (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.5.141/build/pdf.worker.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.6.172/build/pdf.worker.js">
           <div
           // style={{
           //   height: "750px",

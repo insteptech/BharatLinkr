@@ -98,6 +98,18 @@ const userPostLikeList = async function (req) {
   return result;
 };
 
+
+const updateUserPassword = async function (req) {
+  const result = await authDbContext.updateUserPassword(req);
+  return result;
+};
+
+const forgotUserPassword = async function (req) {
+  const result = await authDbContext.forgotUserPassword(req);
+  return result;
+};
+
+
 module.exports = {
   register,
   login,
@@ -108,5 +120,7 @@ module.exports = {
   verificationOtp,
   resendOtp,
   userActive,
-  userPostLikeList
+  userPostLikeList,
+  updateUserPassword,
+  forgotUserPassword
 };

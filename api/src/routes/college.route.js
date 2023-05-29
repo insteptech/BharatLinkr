@@ -85,10 +85,10 @@ router.delete('/collegePostsDelete/:id', collegeController.collegePostDelete);
 router.post('/collegePendingRequestList', collegeController.collegePendingRequestList);
 
 
-router.delete('/collegeAssociateCourselDelete', collegeController.collegeAssociateCourseDelete);
-router.delete('/collegeAgencyDelete', collegeController.collegeAgencyDelete);
-router.delete('/collegeStreamDelete', collegeController.collegeStreamsDelete);
-router.delete('/collegeFAQDelete', collegeController.collegeFAQDelete);
+router.post('/collegeAssociateCourselDelete', collegeController.collegeAssociateCourseDelete);
+router.post('/collegeAgencyDelete', collegeController.collegeAgencyDelete);
+router.post('/collegeStreamDelete', collegeController.collegeStreamsDelete);
+router.post('/collegeFAQDelete', collegeController.collegeFAQDelete);
 
 
 

@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getColleges } from "../../redux/actions/college/college";
+import { CollegeLikesList, getColleges } from "../../redux/actions/college/college";
 import CollegeLeftPage from "./collegeLeftPage";
 import CollegeRightPage from "./collegeRightPage";
+import { getUsersList } from "../../redux/actions/auth";
+import { getTokenDecode } from "../utils";
 
 const CollegePage = () => {
   const [filters, setFilters] = useState({});
   const [selectedFilter, setSelectedFilter] = useState([]);
   const dispatch = useDispatch();
+  const user = getTokenDecode();
   const collegedata = useSelector((data) => data?.collegelist?.collegelist);
 
   const handleSearch = (e) => {
@@ -20,7 +23,12 @@ const CollegePage = () => {
 
   useEffect(() => {
     dispatch(getColleges());
+ 
+    if (user) {
+      dispatch(CollegeLikesList(user.id));
+    }
   }, []);
+
 
   const handleFilters = (data, name, isChecked) => {
     if (filters[name]) {

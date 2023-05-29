@@ -88,7 +88,20 @@ export const getUsersList = createAsyncThunk("getUsersList/auth/userList", async
 
 export const getUserDetails = createAsyncThunk('', async (id) => {
   return apiRequest
-    .post(`auth/userList`, {id:id})
+    .post(`auth/userList`, { id: id })
     .then(res => res)
     .catch(err => err)
+})
+
+export const forgetPassword = createAsyncThunk("forgetPassword/auth/userForgotPassword", async (data)=> {
+  return apiRequest
+    .post(`auth/userForgotPassword`, { email : data })
+    .then(res => res)
+    .catch(err => err)
+})
+export const  updatePassword = createAsyncThunk("updatePassword/auth/userPasswordUpdate", async (data) =>{
+  return apiRequest
+  .post(`auth/userPasswordUpdate`, data)
+  .then(res => res)
+  .catch(err => err)
 })

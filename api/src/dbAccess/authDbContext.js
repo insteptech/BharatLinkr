@@ -1,10 +1,11 @@
 const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require("nodemailer")
 
 
 
-const { User, Role, AuthToken, RolePermission, Permission, State, City,listOfUsersLikes } = require('../../models');
+const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes } = require('../../models');
 const { roles } = require('../../config/roles');
 
 function generateOTP() {
@@ -19,10 +20,24 @@ function generateOTP() {
   return OTP;
 }
 
-const writeFiles = async ({ files,profile,cover }) => {
-const baseDir = path.join(__dirname, '../../');
+var transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false
+}
+});
 
-const dir = `${baseDir}/documents/userProfile`;
+
+
+
+const writeFiles = async ({ files, profile, cover }) => {
+  const baseDir = path.join(__dirname, '../../');
+
+  const dir = `${baseDir}/documents/userProfile`;
 
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
@@ -60,7 +75,6 @@ const dir = `${baseDir}/documents/userProfile`;
 const register = async (req) => {
   try {
     const profileData = JSON.parse(req.body.profileData);
-
     const { profile, cover } = req.files;
 
     let existingUserById = null;
@@ -128,8 +142,9 @@ const register = async (req) => {
     }
 
     const otp = generateOTP();
+    console.log(otp, '900090')
     userObj.otp = otp;
-    userObj.ExpiresAt = Date.now() + 60000;
+    userObj.ExpiresAt = Date.now() + 120000;
 
     let existingUser
 
@@ -148,7 +163,52 @@ const register = async (req) => {
 
       result = await User.create(userObj);
     }
-    return { success: true, user: result, roleDetail };
+
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: profileData.email,
+      subject: "Email Verification",
+      text: `Hi your OTP for verification is ${userObj.otp}. Please note that this OTP will get expired after 2 minutes`,
+      // html: '<a href="www.google.com">Click this link to verify your account</a>',
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+        // do something useful
+      }
+    });
+
+    const userResult = await User.findOne({
+      where: { id: result.id },
+      attributes: ['id',
+        'isNumberVerified',
+        'userType',
+        'name',
+        'designation',
+        'email',
+        'mobileNumber',
+        'stateId',
+        'cityId',
+        'school_college_company',
+        'highestEducation',
+        'summary',
+        'areaOfExpertise',
+        'accomplishments',
+        'totalExperience',
+        'profilePhoto',
+        'coverPhoto',
+        'password',
+        'collegeWebsite',
+        'collegeId',
+        'roleId'
+      ]
+    })
+
+    return { success: true, user: userResult, roleDetail };
   } catch (error) {
     throw new Error(error);
   }
@@ -164,7 +224,7 @@ const login = async (req) => {
           required: false,
           as: 'Roles',
           attributes: ['id', 'key', 'title'],
-          
+
         },
       ],
     });
@@ -215,14 +275,36 @@ const verificationOtp = async (req) => {
 const resendOtp = async (req) => {
   try {
     const otp = generateOTP();
-    const expire = Date.now() + 60000;
+    const expire = Date.now() + 120000;
+
 
     const requestOTP = await User.findOne({
       where: { id: req.body.id },
     });
     const updateOtp = await User.update({ otp, ExpiresAt: expire }, { where: { id: req.body.id } });
+
+    const mailOptions = {
+      from: process.env.EMAIL,
+      to: requestOTP.email,
+      subject: "Email Verification",
+      text: `Hi your OTP for verification is ${otp}. Please note that this OTP will get expired after 2 minutes`,
+      // html: '<a href="www.google.com">Click this link to verify your account</a>',
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log("Email sent: " + info.response);
+        // do something useful
+      }
+    });
+
+
+
     return { success: true };
   } catch (error) {
+    console.log(error,'8989898989')
     throw new Error(error);
   }
 };
@@ -270,7 +352,29 @@ const userList = async (req) => {
           required: false,
           as: 'Cities',
         },
-      ]
+      ],
+      attributes: ['id',
+      'isNumberVerified',
+      'userType',
+      'name',
+      'designation',
+      'email',
+      'mobileNumber',
+      'stateId',
+      'cityId',
+      'school_college_company',
+      'highestEducation',
+      'summary',
+      'areaOfExpertise',
+      'accomplishments',
+      'totalExperience',
+      'profilePhoto',
+      'coverPhoto',
+      'password',
+      'collegeWebsite',
+      'collegeId',
+      'roleId'
+    ]
     });
     return { data: result, success: true };
   } catch (error) {
@@ -310,12 +414,12 @@ const userActive = async (req) => {
 const userPostLikeList = async (req) => {
   try {
     let whereCondition = {};
-    if (req.body.userId&& req.body.categoryTypes) {
-      whereCondition ={ userId:req.body.userId,categoryTypes: req.body.categoryTypes };
+    if (req.body.userId && req.body.categoryTypes) {
+      whereCondition = { userId: req.body.userId, categoryTypes: req.body.categoryTypes };
     }
     const result = await listOfUsersLikes.findAndCountAll({
       where: whereCondition,
-   
+
     });
     return { data: result, success: true };
   } catch (error) {
@@ -325,6 +429,63 @@ const userPostLikeList = async (req) => {
 
 
 //// this api for user list who liked the number of post for matching the same post the like , so that user cannot like the same post 
+
+
+const updateUserPassword = async (req) => {
+
+  try{
+  const loggedUser = await User.findOne({
+    where:{email:req.body.email}
+  });
+console.log(loggedUser,'9898989')
+  const hashedPassword = await bcrypt.hash(req.body.password,12);
+
+  const updateUser = await User.update(
+    
+      {password: hashedPassword},
+   { where: {email: req.body.email}} ,
+  );
+  if(updateUser){
+    message="Password Change Succesfully"
+  }
+  return { newData: updateUser,message, success: true };
+    } catch (error) {
+      return { newData: null, success: false };
+    }
+};
+
+
+const forgotUserPassword = async (req, res) => {
+  const loggedUser = await User.findOne({
+  where: { email: req.body.email}
+  });
+
+
+  if (!loggedUser) {
+    // return res.status(400).send({ message: "User not found", success: false });
+    return { success: false, data: null, message: 'User does not exist.' };
+  }
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: loggedUser.email,
+    subject: "Update password",
+    // text: `Hi your OTP for verification is. Please note that this OTP will get expired after 2 minutes`,
+    html: `<p> Please click on this <a href=http://localhost:4000/auth/userPasswordUpdate>link</a> to change your password. </p>`,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error,'989898989898');
+    } else {
+      console.log("Email sent: " + info.response);
+      // do something useful
+    }
+  });
+
+  return {  success: true };
+
+};
 
 
 
@@ -339,5 +500,7 @@ module.exports = {
   userActive,
   verificationOtp,
   resendOtp,
-  userPostLikeList
+  userPostLikeList,
+  updateUserPassword,
+  forgotUserPassword
 };

@@ -42,7 +42,7 @@ const OrganisationPage = () => {
   };
 
   useEffect(() => {
-    dispatch(getOrganisationlist());
+    
   }, []);
 
   return (
