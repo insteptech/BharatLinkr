@@ -34,3 +34,11 @@ export const CollegeLikes = createAsyncThunk("collegeLikes/college/collegeLikeSh
         .then((res) => res)
         .catch((err) => err);
 })
+
+// to update college
+export const updateCollege = createAsyncThunk("updateCollege/college/updateCollege", async (data) => {
+    return apiRequest
+        .post("college/updateCollege", data)
+        .then((res) => res)
+        .catch((err) => err);
+})
