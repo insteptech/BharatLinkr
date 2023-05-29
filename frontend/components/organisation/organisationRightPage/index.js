@@ -10,6 +10,7 @@ import Profession from "./profession";
 import Internship from "./Internship";
 import { getTokenDecode, isUserLogined } from "../../utils";
 import SignupModal from "../../modals/signupmodal";
+import JobCard from "./jobCard";
 
 const dropData = [
   {
@@ -174,7 +175,7 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
             </div>
           </Col>
         </Row>
-        {dataValue == 0 && <CompanyCard />}
+        {dataValue == 0 && <JobCard />}
         {dataValue == 1 && <Profession />}
 
         {dataValue == 2 && <Internship />}
