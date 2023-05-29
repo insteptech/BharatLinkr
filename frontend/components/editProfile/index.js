@@ -98,25 +98,21 @@ const EditProfile = () => {
                             height={200}
                             width={200}
                             className="profile_hero_img"
+                            // src={`${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`}
                             src={
                               userDetials?.profilePhoto
                                 ? `${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`
                                 : "/images/dammy.svg"
                             }
                           />
-                          <label
-                            className="profile_pen_bg logo_pen"
-                            for="actual-btn"
-                          >
+                          <div className="profile_pen_bg logo_pen">
                             <img className="pen" src="/images/pen.png" />
-                          </label>
-                          <input type="file" id="actual-btn" hidden />
+                          </div>
                         </div>
                         <div className="edit_pen_col">
-                          <label className="profile_pen_bg" for="actual-btn">
+                          <div className="profile_pen_bg">
                             <img src="/images/pen.png" />
-                          </label>
-                          <input type="file" id="actual-btn" hidden />
+                          </div>
                         </div>
                       </div>
                     </div>

@@ -23,7 +23,7 @@ function CollegeShareModal(props) {
         <div className="text-center position-relative share-college-modal-body">
           <img
             src="/images/cross-icon.svg"
-            className="close-icon position-absolute chat_box_close_btn p-0"
+            className="close-icon position-absolute"
             onClick={props.onHide}
           />
           <h3 className="edit_profile_h2 mobile_font_18 py-3 mb-0">
