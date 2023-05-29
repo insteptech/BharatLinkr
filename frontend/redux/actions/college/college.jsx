@@ -38,21 +38,15 @@ export const CollegeLikes = createAsyncThunk(
   "collegeLikes/college/collegeLikeShareCount",
   async (data) => {
     return apiRequest
-      .post(`college/collegeLikeShareCount`, data)
-      .then((res) => res)
-      .catch((err) => err);
-  }
-);
+        .post(`college/collegeLikeShareCount`, data )
+        .then((res) => res)
+        .catch((err) => err);
+})
 
-export const CollegeLikesList = createAsyncThunk(
-  "collegeLikes/college/collegeLikeShareCount",
-  async (id) => {
+// to update college
+export const updateCollege = createAsyncThunk("updateCollege/college/updateCollege", async (data) => {
     return apiRequest
-      .post("auth/userLikesList", {
-        userId: id,
-        categoryTypes: "college",
-      })
-      .then((res) => res)
-      .catch((err) => err);
-  }
-);
+        .post("college/updateCollege", data)
+        .then((res) => res)
+        .catch((err) => err);
+})

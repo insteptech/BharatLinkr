@@ -11,14 +11,12 @@ import Select from "react-select";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  cityDropdown,
-  getCityList,
-} from "../../../redux/actions/location/createCity";
+import { cityDropdown } from "../../../redux/actions/location/createCity";
 import { getState } from "../../../redux/actions/location/createState";
 import {
   addCollege,
   getCollegebyId,
+  updateCollege,
 } from "../../../redux/actions/college/college";
 import {
   getAllMasterFilter,
@@ -41,6 +39,13 @@ const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
   ssr: false,
 });
 import { Table } from "react-bootstrap";
+import {
+  collegeAbout,
+  collegeadmission,
+  placements,
+  scholarship,
+  distanceeducation,
+} from "../../../utils/helper";
 
 function CreateCollege() {
   const dispatch = useDispatch();
@@ -52,6 +57,8 @@ function CreateCollege() {
 
 
   const [associateCollege, setAssociateCollege] = useState([]);
+
+  const [editCourse, setEditCourse] = useState(null);
 
   const cityList = useSelector(
     (State) => State.cityList?.cityList?.data?.result
@@ -102,39 +109,6 @@ function CreateCollege() {
     }
   });
 
-//   let collegeAgencyDetails =  collegeDetails?.CollegeAgency?.map((item, index) => 
-//   ({
-//      collegeAgencyId: item?.collegeAgencyId,
-//      collegeAgencyFor: item?.collegeAgencyFor,
-//      totalAgency: item?.totalAgency,
-//      totalAgencyForYears: item?.totalAgencyForYears,
-//    })
-//  )
-
-//   let newValue = {...collegeAgencyDetails}
- 
-
-  
-//   const updateDetails = {
-//     id: collegeDetails?.id,
-//     chooseAffiliationId: collegeDetails?.chooseAffiliationId,
-//     collegeMailId: collegeDetails?.collegeMailId,
-//     collegeTypeId: collegeDetails?.collegeTypeId,
-//     collegeEstablishedDate: collegeDetails?.collegeEstablishedDate,
-//     chooseApprovalId: collegeDetails?.chooseApprovalId,
-//     collegeStateId: collegeDetails?.collegeStateId,
-//     collegeCityId: collegeDetails?.collegeCityId,
-//     collegeAgencyId: newValue['0'].collegeAgencyId,
-//     collegeAgencyFor: newValue['0'].collegeAgencyFor,
-//     totalAgency: newValue['0'].totalAgency,
-//     totalAgencyForYears: newValue['0'].totalAgencyForYears,
-
-  
-//     }
-//     console.log(updateDetails, "ertertertert",newValue)
-
-//   console.log(updateDetails, "updateDetails");
-
   const addAssociateCourse = (fields, form, collegecourse) => {
     setAssociateCollege([...associateCollege, collegecourse[0]]);
 
@@ -162,10 +136,14 @@ function CreateCollege() {
     ]);
   };
 
-  console.log(dataValue, "Sdfsdfs", associateCollege);
+  const handleEditcollegeDetails = (editcoursedata) => {
+    console.log(editcoursedata, "ertertert1111");
+    setEditCourse(editcoursedata);
+  };
+
+  console.log(editCourse, "sdfdsdf12121");
 
   const handleSubmit = (values) => {
-
     if (!Id) {
       // values.collegeStreams.map((item) => {
       //   let x = [];
@@ -318,7 +296,7 @@ function CreateCollege() {
 
         dispatch(addCollege(formData)).then((res) => {
           if (res?.payload?.data?.success) {
-            Router.push("/admin/colleges");
+            Router.push("/admin/college");
             toast.success("College added");
           } else {
             toast.error("Error");
@@ -326,18 +304,83 @@ function CreateCollege() {
         });
       }
     } else {
+      // for college course
+      let obj = {};
+      collegeDetails?.AssociateCourse?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          obj[key] = value;
+        });
+      });
 
-    let collegeAgencyDetails =  collegeDetails?.CollegeAgency?.map((item, index) => 
-        ({
-           collegeAgencyId: item?.collegeAgencyId,
-           collegeAgencyFor: item?.collegeAgencyFor,
-           totalAgency: item?.totalAgency,
-           totalAgencyForYears: item?.totalAgencyForYears,
-         })
-       )
+      // for college agency
+      let agencyObj = {};
+      collegeDetails?.CollegeAgency?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          agencyObj[key] = value;
+        });
+      });
+
+      // for college streams
+      let streamObj = {};
+      collegeDetails?.AssociateCourse?.forEach((element) => {
+        element?.CourseAssociateStream?.forEach((item) => {
+          Object.entries(item).forEach(([key, value]) => {
+            streamObj[key] = value;
+          });
+        });
+      });
+
+      // for college about
+      let collegeaboutObj = {};
+      collegeDetails?.CollegeAbout?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          collegeaboutObj[key] = value;
+        });
+      });
+
+      // for college admission
+      let collegeadmissionObj = {};
+      collegeDetails?.CollegeAdmission?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          collegeadmissionObj[key] = value;
+        });
+      });
+
+      // for distance education
+      let distanceEduObj = {};
+      collegeDetails?.DistanceEducation?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          distanceEduObj[key] = value;
+        });
+      });
+
+      // for scholarship
+      let scholarshipObj = {};
+      collegeDetails?.Scholarship?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          scholarshipObj[key] = value;
+        });
+      });
+
+      // for placements
+      let placementObj = {};
+      collegeDetails?.Placements?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          placementObj[key] = value;
+        });
+      });
+
+      // for faq
+      let faqObj = {};
+      collegeDetails?.FAQ?.forEach((element) => {
+        Object.entries(element).forEach(([key, value]) => {
+          faqObj[key] = value;
+        });
+      });
 
       const updateDetails = {
         id: collegeDetails?.id,
+        collegeName: collegeDetails?.collegeName,
         chooseAffiliationId: collegeDetails?.chooseAffiliationId,
         collegeMailId: collegeDetails?.collegeMailId,
         collegeTypeId: collegeDetails?.collegeTypeId,
@@ -345,10 +388,113 @@ function CreateCollege() {
         chooseApprovalId: collegeDetails?.chooseApprovalId,
         collegeStateId: collegeDetails?.collegeStateId,
         collegeCityId: collegeDetails?.collegeCityId,
-        
-            }
+        collegeNaacGrade: collegeDetails?.collegeNaacGrade,
+        collegeStatusId: collegeDetails?.collegeStatusId,
+
+        collegeCourse: {
+          id: obj?.id,
+          courseTypeId: obj?.courseTypeId,
+          courseName: obj?.courseName,
+          coursePlaceId: obj?.coursePlaceId,
+          courseDuration: obj?.courseDuration,
+          courseEligibility: obj?.courseEligibility,
+          courseLevel: obj?.courseLevel,
+          programTypeId: obj?.ProgramType?.id,
+          courseCategoryId: obj?.CourseCategory?.id,
+          chooseExamAcceptedId: obj?.chooseExamAcceptedId,
+        },
+        collegeAgencies: [
+          {
+            id: agencyObj?.id,
+            collegeAgencyId: agencyObj?.collegeAgencyId,
+            collegeAgencyFor: agencyObj?.collegeAgencyFor,
+            totalAgency: agencyObj?.totalAgency,
+            totalAgencyForYears: agencyObj?.totalAgencyForYears,
+          },
+        ],
+        collegeStreams: {
+          id: streamObj?.id,
+          mainStreamId: streamObj?.MainStream?.id,
+          subStreamId: streamObj?.SubStream?.id,
+          colStreamId: streamObj?.ColStream?.id,
+          courseFeeDetailsId: streamObj?.courseFeeDetailsId,
+          courseFee: streamObj?.courseFee,
+        },
+        collegeAbouts: {
+          id: collegeaboutObj?.id,
+          aboutIntro: collegeaboutObj?.aboutIntro,
+          aboutHighLights: collegeaboutObj?.aboutHighLights,
+          aboutRankingAndAwards: collegeaboutObj?.aboutRankingAndAwards,
+          aboutCourses: collegeaboutObj?.aboutCourses,
+          aboutScholarShipPlacements:
+            collegeaboutObj?.aboutScholarShipPlacements,
+          aboutFacilities: collegeaboutObj?.aboutFacilities,
+        },
+        collegeAdmissions: {
+          id: collegeadmissionObj?.id,
+          admissionIntro: collegeadmissionObj?.admissionIntro,
+          admissionAboutTest: collegeadmissionObj?.admissionAboutTest,
+          admissionImportantDates: collegeadmissionObj?.admissionImportantDates,
+          admissionHighLights: collegeadmissionObj?.admissionHighLights,
+          applicationProcess: collegeadmissionObj?.applicationProcess,
+          PHDadmissionProcess: collegeadmissionObj?.PHDadmissionProcess,
+        },
+        distanceEducation: {
+          id: distanceEduObj?.id,
+          basicInfo: distanceEduObj?.basicInfo,
+          courseDetails: distanceEduObj?.courseDetails,
+          honors: distanceEduObj?.honors,
+        },
+        scholarShip: {
+          id: scholarshipObj?.id,
+          scholarShipIntro: scholarshipObj?.scholarShipIntro,
+          basedOnUniExams: scholarshipObj?.basedOnUniExams,
+          basedOnAdmissionTest: scholarshipObj?.basedOnAdmissionTest,
+          basedOnSportsQuota: scholarshipObj?.basedOnSportsQuota,
+          basedOnDiplomaGraduates: scholarshipObj?.basedOnDiplomaGraduates,
+        },
+        placements: {
+          id: placementObj?.id,
+          placeMentIntro: placementObj?.placeMentIntro,
+          highLights2021: placementObj?.highLights2021,
+          MBAhighLights: placementObj?.MBAhighLights,
+          BTECHhighLights: placementObj?.BTECHhighLights,
+          yearWisePlaceMents: placementObj?.yearWisePlaceMents,
+          topRecruiters: placementObj?.topRecruiters,
+        },
+        faq: [
+          {
+            id: faqObj?.id,
+            uniqueId: faqObj?.image,
+            question: faqObj?.question,
+            answerType: faqObj?.answerType,
+            answer: faqObj?.answer,
+          },
+        ],
+      };
+
+      let formdata = new FormData();
+
+      if (dataValue == 0) {
+        setDataValue(1);
+      } else if (dataValue === 1) {
+        setAssociateCollege([...associateCollege, values.collegeCourse[0]]);
+        setDataValue(2);
+      } else if (dataValue === 2) {
+        formdata.append("collegeData", JSON.stringify(updateDetails));
+
+        dispatch(updateCollege(formdata)).then((res) => {
+          console.log(res, "fgdfgdfgdfgdfg");
+          if (res?.payload?.data?.success) {
+            Router.push("/admin/college");
+            toast.success("College updated");
+          } else {
+            toast.error("Error");
           }
-  }
+        });
+      }
+    }
+  };
 
   const handleFileChange = (filesObject, name) => {
     const uniqueId = Date.now();
@@ -369,46 +515,13 @@ function CreateCollege() {
     }
   };
 
-  const collegeAbout = [
-    { title: "Intro", key: "aboutIntro" },
-    { title: "Highlights", key: "aboutHighLights" },
-    { title: "Ranking & Awards", key: "aboutRankingAndAwards" },
-    { title: "Courses", key: "aboutCourses" },
-    { title: "Scholarship Placements", key: "aboutScholarShipPlacements" },
-    { title: "Facilities", key: "aboutFacilities" },
-  ];
+  collegeDetails?.AssociateCourse?.forEach((item) => {
+    item?.CourseAssociateStream?.forEach((streams) => {
+      console.log(streams, "sdfsdfsdwqeqweqweqwe");
+    });
+  });
 
-  const collegeadmission = [
-    { title: "Intro", key: "admissionIntro" },
-    { title: "About Test", key: "admissionAboutTest" },
-    { title: "Imp. Dates", key: "admissionImportantDates" },
-    { title: "Admission Highlights", key: "admissionHighLights" },
-    { title: "Application Process", key: "applicationProcess" },
-    { title: "PHD Admission Process", key: "PHDadmissionProcess" },
-  ];
-
-  const distanceeducation = [
-    { title: "Basic Info", key: "basicInfo" },
-    { title: "Course Details", key: "courseDetails" },
-    { title: "Honors", key: "honors" },
-  ];
-
-  const scholarship = [
-    { title: "Intro", key: "scholarShipIntro" },
-    { title: "Based on Uni Exams", key: "basedOnUniExams" },
-    { title: "Based on Admission Test", key: "basedOnAdmissionTest" },
-    { title: "Based on Sports Quota", key: "basedOnSportsQuota" },
-    { title: "Based on Diploma, Grad", key: "basedOnDiplomaGraduates" },
-  ];
-
-  const placements = [
-    { title: "Intro", key: "placeMentIntro" },
-    { title: "Highlights 2021", key: "highLights2021" },
-    { title: "MBA Highlights", key: "MBAhighLights" },
-    { title: "BTECH Highlights", key: "BTECHhighLights" },
-    { title: "Year Wise Placements", key: "yearWisePlaceMents" },
-    { title: "Top Recruiters", key: "topRecruiters" },
-  ];
+  console.log(associateCollege, "xcvxcvxcvxcv");
 
   const validate = (values) => {
     console.log(values, "data");
@@ -594,28 +707,44 @@ function CreateCollege() {
             collegeCityId: collegeDetails?.collegeCityId,
             collegeNaacGrade: collegeDetails?.collegeNaacGrade,
             collegeStatusId: collegeDetails?.collegeStatusId,
-            collegeLogo: collegeDetails?.collegeLogo, //doubt
+            collegeLogo: collegeDetails?.collegeLogo,
             collegeImage: collegeDetails?.collegeImage,
           },
         ];
 
-        collegeDetails?.AssociateCourse?.forEach(
-          (item) =>
-            (initialValues.collegeCourse = [
-              {
-                courseTypeId: item?.courseTypeId,
-                courseName: item?.courseName,
-                coursePlaceId: item?.coursePlaceId,
-                courseDuration: item?.courseDuration,
-                courseEligibility: item?.courseEligibility,
-                courseLevel: item?.courseLevel,
-                programTypeId: item?.ProgramType?.id,
-                courseCategoryId: item?.CourseCategory?.id,
-                chooseExamAcceptedId: item?.chooseExamAcceptedId,
-              },
-            ])
-        );
-
+        // {
+        //   editCourse
+        //     ? (initialValues.collegeCourse = [
+        //         {
+        //           courseTypeId: editCourse?.courseTypeId,
+        //           courseName: editCourse?.courseName,
+        //           coursePlaceId: editCourse?.coursePlaceId,
+        //           courseDuration: editCourse?.courseDuration,
+        //           courseEligibility: editCourse?.courseEligibility,
+        //           courseLevel: editCourse?.courseLevel,
+        //           programTypeId: editCourse?.ProgramType?.id,
+        //           courseCategoryId: editCourse?.CourseCategory?.id,
+        //           chooseExamAcceptedId: editCourse?.chooseExamAcceptedId,
+        //         },
+        //       ])
+        //     : 
+            collegeDetails?.AssociateCourse?.forEach(
+                (item) =>
+                  (initialValues.collegeCourse = [
+                    {
+                      courseTypeId: item?.courseTypeId,
+                      courseName: item?.courseName,
+                      coursePlaceId: item?.coursePlaceId,
+                      courseDuration: item?.courseDuration,
+                      courseEligibility: item?.courseEligibility,
+                      courseLevel: item?.courseLevel,
+                      programTypeId: item?.ProgramType?.id,
+                      courseCategoryId: item?.CourseCategory?.id,
+                      chooseExamAcceptedId: item?.chooseExamAcceptedId,
+                    },
+                  ])
+              )
+        // }
         collegeDetails?.CollegeAbout?.forEach((item) => {
           initialValues.collegeAbouts = [
             {
@@ -709,11 +838,11 @@ function CreateCollege() {
             (streams) =>
               (initialValues.collegeStreams = [
                 {
-                  mainStreamId: streams?.MainStream?.id,
+                  mainStreamId: streams?.mainStreamId,
                   subStreamId: streams?.SubStream?.id,
-                  colStreamId: streams?.ColStream?.id,
+                  colStreamId: streams?.ColStream.id,
                   courseFeeDetailsId: streams?.courseFeeDetailsId,
-                  courseFee: item?.courseFee,
+                  courseFee: streams?.courseFee,
                 },
               ])
           )
@@ -821,7 +950,6 @@ function CreateCollege() {
           courseFee: "",
         },
       ];
-
       return initialValues;
     }
   };
@@ -841,12 +969,7 @@ function CreateCollege() {
   }, [Id]);
 
   const handleCityList = (e) => {
-    console.log(e.target.value);
-    // if (e.target.value!=="") {
     dispatch(cityDropdown(e.target.value));
-    // } else {
-    // dispatch(cityDropdown(''))
-    // }
   };
 
   return (
@@ -1576,8 +1699,67 @@ function CreateCollege() {
                                     </td>
                                   </tr>
                                 );
-                              })}{" "}
-                            *
+                              })}
+                          </tbody>
+                        </Table>
+                        <hr></hr>
+                      </div>
+                    )}
+
+                    {Id && (
+                      <div>
+                        <Table
+                          responsive
+                          className="admin_table"
+                          bordered
+                          hover
+                        >
+                          <thead>
+                            <tr>
+                              {tableHeading &&
+                                tableHeading?.map((i, index) => {
+                                  return (
+                                    <>
+                                      <th className="table_head" key={index}>
+                                        {i}
+                                      </th>
+                                    </>
+                                  );
+                                })}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {collegeDetails &&
+                              collegeDetails?.AssociateCourse?.map(
+                                (asscourse, index) => {
+                                  return (
+                                    <tr key={index}>
+                                      <td className="text-center admin_table_data">
+                                        {index + 1}
+                                      </td>
+
+                                      <td className="text-center admin_table_data">
+                                        {asscourse?.courseName}
+                                      </td>
+
+                                      <td className="text-center admin_table_data">
+                                        <img
+                                          className="mx-1 admin_table_action_icon"
+                                          src="/images/edit-icon-blue.png"
+                                          onClick={() =>
+                                            handleEditcollegeDetails(asscourse)
+                                          }
+                                        ></img>
+                                        <img
+                                          className="mx-1 admin_table_action_icon"
+                                          src="/images/delete-icon-blue.png"
+                                          onClick={() => handleDelete(item)}
+                                        ></img>
+                                      </td>
+                                    </tr>
+                                  );
+                                }
+                              )}
                           </tbody>
                         </Table>
                         <hr></hr>
@@ -1621,14 +1803,6 @@ function CreateCollege() {
                                                           e
                                                         );
                                                       }}
-                                                      // value={mainStreamlist?.filter(
-                                                      //   (item) => {
-                                                      //     return (
-                                                      //       item.mainStreamName ===
-                                                      //       mainstreamdata
-                                                      //     );
-                                                      //   }
-                                                      // )}
                                                     >
                                                       <option value={""}>
                                                         Select Main Stream

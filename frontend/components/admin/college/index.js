@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { apibasePath } from "../../../config";
-import { getColleges } from "../../../redux/actions/college/college";
+import { deleteCollege, getColleges } from "../../../redux/actions/college/college";
 import CommonHead from "../../common-components/UserHead/CommonHead";
 import DeleteModal from "../../modals/deleteModal";
 import AdminTable from "../AdminTable";
 import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
+import { toast } from "react-toastify";
 
 function CollegeAdminPage(props) {
   const [pagination, setPagination] = useState({
@@ -96,6 +97,7 @@ function CollegeAdminPage(props) {
             <tbody>
               {collegeList?.rows &&
                 collegeList?.rows?.map((item, index) => {
+                  console.log(item, "werwerwerwer")
                   return (
                     <tr key={index}>
                       <td className="text-center admin_table_data">
@@ -127,7 +129,7 @@ function CollegeAdminPage(props) {
                         {item?.States?.state}
                       </td>
                       <td className="text-center admin_table_data">
-                        {item?.collegeCourse?.length}
+                        {item?.AssociateCourse?.length}
                       </td>
                       <td className="text-center admin_table_data">
                         <img
