@@ -128,11 +128,7 @@ const CollegeCard = ({ item, index }, props) => {
     }
   };
 
-
-
-
   const isliked = likesList?.filter((i) => {
-
     if (item.id === i.categoryId) {
       return true
     }
@@ -227,7 +223,7 @@ const CollegeCard = ({ item, index }, props) => {
                 </Col>
               </Row>
             </div>
-            <div className="like_comment_row">
+            <div className="">
               <Row>
                 <Col xs={3} className="text-center  p-2 pe-0">
                   <div
@@ -240,8 +236,6 @@ const CollegeCard = ({ item, index }, props) => {
                       }
                     }}
                   >
-
-
                     <Image
                       width={20}
                       height={20}

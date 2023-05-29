@@ -20,7 +20,7 @@ import {
 } from "../../../../redux/actions/organisation/addorganisation";
 import { getTokenDecode, isUserLogined } from "../../../utils";
 
-function CompanyCard({ setModalShow }) {
+function JobCard({ setModalShow }) {
   const isloggedin = isUserLogined();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -241,7 +241,7 @@ function CompanyCard({ setModalShow }) {
               </Row>
               <div className="mt-2">
                 <Row className="job_title_row">
-                  {/* <Col xl={9} className="job_title_col">
+                  <Col xl={9} className="job_title_col">
                     <Row>
                       <Col className="p-0 text-center">
                         <h6 className="p_c_card_fees_heading mobile_font_12">
@@ -286,7 +286,7 @@ function CompanyCard({ setModalShow }) {
                         </p>
                       </Col>
                     </Row>
-                  </Col> */}
+                  </Col>
                   <Col xl={3} className="text-end">
                     <div className="view_btn_div">
                       <Button
@@ -317,4 +317,4 @@ function CompanyCard({ setModalShow }) {
   );
 }
 
-export default CompanyCard;
+export default JobCard;
