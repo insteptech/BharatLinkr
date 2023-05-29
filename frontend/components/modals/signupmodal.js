@@ -20,10 +20,11 @@ function SignupModal(props) {
       className={`signup-now-modal mx-auto`}
     >
       <Modal.Body>
-        <div className="w-100 text-end">
+      <div className="text-center position-relative share-college-modal-body">
+        
           <img
             onClick={props.onHide}
-            className="me-2"
+            className="close-icon position-absolute chat_box_close_btn p-0"
             src="/images/cross-icon.svg"
           />
         </div>

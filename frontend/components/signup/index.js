@@ -465,19 +465,26 @@ function SignUpPage() {
 
         <Row>
           <ul className="nav ps-2 pe-2">
-            {FormSteps &&
-              FormSteps.map((steps, stepsIndex) => (
-                <li className="nav-item form_tabs" key={stepsIndex}>
-                  <a
-                    className={`nav-link btn_tabs admin_tabs_name ${dataValue === stepsIndex && "head-active"
-                      }`}
-                    active={true}
-                    onClick={() => setDataValue(stepsIndex)}
-                  >
-                    {steps}
-                  </a>
-                </li>
-              ))}
+            <li className="nav-item form_tabs">
+              <a
+                className={`nav-link btn_tabs admin_tabs_name ${dataValue === 1 && "head-active"
+                  }`}
+                active={true}
+                onClick={() => setDataValue(0)}
+              >
+                Step  1
+              </a>
+            </li>
+            <li className="nav-item form_tabs">
+              <a
+                className={`nav-link btn_tabs admin_tabs_name ${dataValue === 1 && "head-active"
+                  }`}
+                active={true}
+              >
+                Step 2
+              </a>
+            </li>
+
           </ul>
         </Row>
 
