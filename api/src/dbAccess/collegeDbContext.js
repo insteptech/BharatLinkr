@@ -618,36 +618,35 @@ const updateCollege = async (req) => {
         }
       };
 
-  
-      await Promise.all(
-        collegeData.collegeAgencies.map(async (agencyItem) => {
-          let faqCollege;
-          if (cllg && cllg.collegeFAQ) {
-            await Promise.all(
+  if(collegeData.collegeAgencies){
 
-              cllg.collegeAgency.map(async (item3) => {
-                faqCollege = await collegeAgency.findOne({ where: { id: item3.id } })
+    await Promise.all(
+      collegeData.collegeAgencies.map(async (agencyItem) => {
+        let faqCollege;
+        if (cllg && cllg.collegeAgencies) {
+          await Promise.all(
 
-              })
-            )
-          }
-          await writeFiles(req.files);
+            cllg.collegeAgencies.map(async (item3) => {
+              faqCollege = await collegeAgency.findOne({ where: { id: item3.id } })
 
-       
-          if (agencyItem.id) {
-            await collegeAgency.update(agencyItem, { where: { id: agencyItem.id }, returning: true })
-          } else {
+            })
+          )
+        }
+    
+        if (agencyItem.id) {
+          await collegeAgency.update(agencyItem, { where: { id: agencyItem.id }, returning: true })
+        } else {
 
-            agencyItem['collegeId'] = collegeData.id;
-            await collegeAgency.create(agencyItem)
-          }
-        })
-      )
-
+          agencyItem['collegeId'] = collegeData.id;
+          await collegeAgency.create(agencyItem)
+        }
+      })
+    )
 
 
 
-
+  }
+    
 ///////////////////////////////////////////
       if (collegeData.collegeStreams) {
         if (collegeData.collegeStreams.id) {
@@ -703,47 +702,56 @@ const updateCollege = async (req) => {
           await collegePlacements.create(collegeData.placements)
         }
       }
-      await Promise.all(
-        collegeData.faq.map(async (faqItem) => {
-          let faqCollege;
-          if (cllg && cllg.collegeFAQ) {
-            await Promise.all(
 
-              cllg.collegeFAQ.map(async (item3) => {
-                faqCollege = await collegeFAQ.findOne({ where: { id: item3.id } })
+if(collegeData.faq){
 
-              })
-            )
-          }
-          await writeFiles(req.files);
+  await Promise.all(
+    collegeData.faq.map(async (faqItem) => {
+      let faqCollege;
+      if (cllg && cllg.collegeFAQ) {
+        await Promise.all(
 
-          if (imageFile && imageFile.length > 0) {
+          cllg.collegeFAQ.map(async (item3) => {
+            faqCollege = await collegeFAQ.findOne({ where: { id: item3.id } })
 
-            const fileExist = imageFile.find(
-              (image) => image.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == faqItem.uniqueId
-            );
+          })
+        )
+      }
+      await writeFiles(req.files);
 
-            if (fileExist) {
+      if (imageFile && imageFile.length > 0) {
 
-              if (faqCollege && faqCollege.image)
+        const fileExist = imageFile.find(
+          (image) => image.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == faqItem.uniqueId
+        );
 
-                if (fs.existsSync(path.resolve(dir, `${faqCollege.image}`)))
-                  fs.unlinkSync(path.resolve(dir, `${faqCollege.image}`));
+        if (fileExist) {
 
-              faqItem.image = fileExist.originalname;
-            }
+          if (faqCollege && faqCollege.image)
 
-            if (imageFile) faqItem['image'] = faqItem.image;
-          }
-          if (faqItem.id) {
-            await collegeFAQ.update(faqItem, { where: { id: faqItem.id }, returning: true })
-          } else {
+            if (fs.existsSync(path.resolve(dir, `${faqCollege.image}`)))
+              fs.unlinkSync(path.resolve(dir, `${faqCollege.image}`));
 
-            faqItem['collegeId'] = collegeData.id;
-            await collegeFAQ.create(faqItem)
-          }
-        })
-      )
+          faqItem.image = fileExist.originalname;
+        }
+
+        if (imageFile) faqItem['image'] = faqItem.image;
+      }
+      if (faqItem.id) {
+        await collegeFAQ.update(faqItem, { where: { id: faqItem.id }, returning: true })
+      } else {
+
+        faqItem['collegeId'] = collegeData.id;
+        await collegeFAQ.create(faqItem)
+      }
+    })
+  )
+
+
+}
+
+
+     
 
 
       result.push(updateData)
@@ -1468,7 +1476,6 @@ const collegeLinkApproval = async (req) => {
     throw new Error(error);
   }
 };
-
 
 const addCollegePosts = async (req) => {
   try {
