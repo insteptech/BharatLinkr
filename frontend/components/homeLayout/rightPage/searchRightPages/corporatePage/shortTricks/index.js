@@ -149,7 +149,7 @@ const ShortTricks = () => {
                   </div>
                 </Col>
 
-                <Col lg={6}>
+                <Col md={6}>
                   <div className="corporate_card_btn_col align_center">
                     <Button className="corporate_card_btn" onClick={() => {
                       if (isliked.length > 0) {

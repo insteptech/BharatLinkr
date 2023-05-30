@@ -50,7 +50,11 @@ const ExamLongCard = ({ item }, props) => {
           width={60}
           className="profile-pic img-fluid hide_img"
           // src="/images/cover-bg.jpg"
-          src={`${apibasePath}documents/exam/${item?.examLogo}`}
+          src={
+            item?.examLogo
+              ? `${apibasePath}documents/exam/${item?.examLogo}`
+              : "images/no-profile.png"
+          }
         />
         <Card.Body className="pt-0 pb-0">
           <Row>
