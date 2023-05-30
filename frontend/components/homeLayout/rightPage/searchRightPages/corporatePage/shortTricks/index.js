@@ -106,12 +106,14 @@ const ShortTricks = () => {
     <>
       {corporateRegisterlist &&
         corporateRegisterlist?.rows?.map((item, index) => {
-
-          let isliked = likedList.filter((i) => {
-            if (item.id === i.categoryId) {
-              return true
-            }
-          })
+          let isliked
+          if (likedList) {
+            isliked = likedList.filter((i) => {
+              if (item.id === i.categoryId) {
+                return true
+              }
+            })
+          }
 
           return (
             <div
@@ -152,13 +154,13 @@ const ShortTricks = () => {
                 <Col lg={6}>
                   <div className="corporate_card_btn_col align_center">
                     <Button className="corporate_card_btn" onClick={() => {
-                      if (isliked.length > 0) {
+                      if (isliked?.length > 0) {
                         handleLikes(item, 'dislikes')
                       } else {
                         handleLikes(item, 'likes')
                       }
                     }}>
-                      <Image className="me-1" src={isliked.length > 0 ? "/images/black-like.svg" : "/images/border-like.svg"} />
+                      <Image className="me-1" src={isliked?.length > 0 ? "/images/black-like.svg" : "/images/border-like.svg"} />
                       {'Like'}
                     </Button>
                     <Button

@@ -64,7 +64,7 @@ export const corporatelikesList = createAsyncThunk(
   "corporatelikesList/auth/userLikesList",
   async (id) => {
     return apiRequest
-      .post("auth/userLikesList", {id:id, categoryTypes:"corporate"})
+      .post("auth/userLikesList", {userId:id, categoryTypes:"corporate"})
       .then((res) => res)
       .catch((err) => err);
   }
