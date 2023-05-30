@@ -816,7 +816,7 @@ const allCollegeList = async (req) => {
       }
 
       if (req.body.id) {
-        whrCondition = req.body.id
+        whrCondition = {id:req.body.id}
       }
       if (req.body.mainStreamId) {
         wherecond = { ['$AssociateCourse.CourseAssociateStream.mainStreamId$']: req.body.mainStreamId }
@@ -1090,7 +1090,7 @@ const allCollegeList = async (req) => {
     ////////////////else part ///////////////////
     else {
       result = await college.findAndCountAll({
-
+          where:wherecond,
         include: [
           {
             model: collegeLikesCount,
