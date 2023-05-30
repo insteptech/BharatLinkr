@@ -54,7 +54,7 @@ export const corporateLikes = createAsyncThunk(
   "corpotateLikes/corporate/corporateLikesCount",
   async (data) => {
     return apiRequest
-      .post("corporate/corporateLikesCount", data)
+      .post("corporate/corporateAddLikesCount", data)
       .then((res) => res)
       .catch((err) => err);
   }
