@@ -66,9 +66,16 @@ export const submitmocktest = createAsyncThunk(
   }
 );
 
-export const mocktestResult = createAsyncThunk("", async (data) => {
+export const mocktestResult = createAsyncThunk("mocktestResult/corporate/userScore", async (data) => {
   return apiRequest
     .post(`corporate/userScore`, data)
+    .then((req) => req)
+    .catch((err) => err);
+});
+
+export const deleteMockQuestion = createAsyncThunk("deleteMockQuestion/corporate/mockTestQuestionDelete", async (data) => {
+  return apiRequest
+    .post(`corporate/mockTestQuestionDelete`, data)
     .then((req) => req)
     .catch((err) => err);
 });
