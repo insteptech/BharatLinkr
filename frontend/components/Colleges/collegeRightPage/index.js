@@ -7,9 +7,10 @@ import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import CollegeLeftPage from "../collegeLeftPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { getColleges } from "../../../redux/actions/college/college";
+import { CollegeLikesList, getColleges } from "../../../redux/actions/college/college";
 import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
+import { getTokenDecode } from "../../utils";
 
 const streamData = [
   {
@@ -93,7 +94,14 @@ const CollegeRightPage = (props) => {
   useEffect(() => {
     dispatch(getMainStream());
     dispatch(getColleges());
+    if (getTokenDecode()) {
+
+      dispatch(CollegeLikesList(getTokenDecode()?.userId))
+    }
   }, []);
+  // useEffect(() => {
+
+  // }, [])
 
   return (
     <>
