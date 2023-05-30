@@ -55,21 +55,34 @@ function CreateCollege() {
 
   const [dataValue, setDataValue] = useState(0);
 
-
   const [associateCollege, setAssociateCollege] = useState([]);
 
   const [editCourse, setEditCourse] = useState(null);
 
   const [colstreamdata, setColstreamdata] = useState();
 
-  const cityList = useSelector((State) => State.cityList?.cityList?.data?.result);
-  const stateList = useSelector((State) => State.stateList?.stateList?.data?.data?.rows);
-  const masterFilterData = useSelector((state) => state?.allMasterFilterList?.masterfilterlist?.data?.data);
-  const mainStreamlist = useSelector((state) => state?.mainStreamList?.mainStreamValue?.data?.data?.rows);
-  const substreamSelectVal = useSelector((state) => state?.subStreamList?.subStreamDetails?.data?.data?.rows);
-  const examList = useSelector((state) => state?.examList?.examlist?.data?.data?.rows);
-  const colstreamSelectVal = useSelector((state) => state?.colStreamList?.colstreamDetails?.data?.data?.rows);
-  
+  const cityList = useSelector(
+    (State) => State.cityList?.cityList?.data?.result
+  );
+  const stateList = useSelector(
+    (State) => State.stateList?.stateList?.data?.data?.rows
+  );
+  const masterFilterData = useSelector(
+    (state) => state?.allMasterFilterList?.masterfilterlist?.data?.data
+  );
+  const mainStreamlist = useSelector(
+    (state) => state?.mainStreamList?.mainStreamValue?.data?.data?.rows
+  );
+  const substreamSelectVal = useSelector(
+    (state) => state?.subStreamList?.subStreamDetails?.data?.data?.rows
+  );
+  const examList = useSelector(
+    (state) => state?.examList?.examlist?.data?.data?.rows
+  );
+  const colstreamSelectVal = useSelector(
+    (state) => state?.colStreamList?.colstreamDetails?.data?.data?.rows
+  );
+
   const handleMainstreamselect = (e) => {
     let selectvalue = e.target.value;
     dispatch(getSubstreamData({ mainStreamId: selectvalue }));
@@ -83,7 +96,6 @@ function CreateCollege() {
   const handleColstreamselect = (e) => {
     setColstreamdata(e.target.value);
   };
-
 
   const tableHeading = ["No.", "Course-Name", "Action"];
 
@@ -127,31 +139,29 @@ function CreateCollege() {
   };
 
   const handleSubmit = (values) => {
-    if (!Id) { 
-
-    let formData = new FormData();
-    if (values.college[0].collegeLogo) {
-      formData.append("collegeImageFile", values.college[0].collegeLogo);
-    }
-    if (values.college[0].collegeImage) {
-      formData.append("collegeLogoFile", values.college[0].collegeImage);
-    }
-    if (dataValue == 0) {
-      setDataValue(1);
-    } else if (dataValue === 1) {
-      setDataValue(2);
-    } else if (dataValue === 2) {
-      if (FileState && FileState.length > 0) {
-        values.faq.map((item, index) => {
-          let x = FileState[index].name.split("_")[0];
-          item.uniqueId = x;
-        });
-        for (let i = 0; i < FileState.length; i++) {
-          formData.append("imageFile", FileState[i]);
-        }
-
+    if (!Id) {
+      let formData = new FormData();
+      if (values.college[0].collegeLogo) {
+        formData.append("collegeImageFile", values.college[0].collegeLogo);
       }
-    }
+      if (values.college[0].collegeImage) {
+        formData.append("collegeLogoFile", values.college[0].collegeImage);
+      }
+      if (dataValue == 0) {
+        setDataValue(1);
+      } else if (dataValue === 1) {
+        setDataValue(2);
+      } else if (dataValue === 2) {
+        if (FileState && FileState.length > 0) {
+          values.faq.map((item, index) => {
+            let x = FileState[index].name.split("_")[0];
+            item.uniqueId = x;
+          });
+          for (let i = 0; i < FileState.length; i++) {
+            formData.append("imageFile", FileState[i]);
+          }
+        }
+      }
 
       if (dataValue == 0) {
         setDataValue(1);
@@ -193,23 +203,23 @@ function CreateCollege() {
     } else {
       // for college course
       let obj = {};
-      collegeDetails?.AssociateCourse?.forEach((element) => {
+      values?.AssociateCourse?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           obj[key] = value;
         });
       });
 
-      // for college agency
+      //  for college agency
       let agencyObj = {};
-      collegeDetails?.CollegeAgency?.forEach((element) => {
+      values?.CollegeAgency?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           agencyObj[key] = value;
         });
       });
 
-      // for college streams
+      //  for college streams
       let streamObj = {};
-      collegeDetails?.AssociateCourse?.forEach((element) => {
+      values?.AssociateCourse?.forEach((element) => {
         element?.CourseAssociateStream?.forEach((item) => {
           Object.entries(item).forEach(([key, value]) => {
             streamObj[key] = value;
@@ -217,41 +227,41 @@ function CreateCollege() {
         });
       });
 
-      // for college about
+      //  for college about
       let collegeaboutObj = {};
-      collegeDetails?.CollegeAbout?.forEach((element) => {
+      values?.CollegeAbout?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           collegeaboutObj[key] = value;
         });
       });
 
-      // for college admission
+      //  for college admission
       let collegeadmissionObj = {};
-      collegeDetails?.CollegeAdmission?.forEach((element) => {
+      values?.CollegeAdmission?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           collegeadmissionObj[key] = value;
         });
       });
 
-      // for distance education
+      //  for distance education
       let distanceEduObj = {};
-      collegeDetails?.DistanceEducation?.forEach((element) => {
+      values?.DistanceEducation?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           distanceEduObj[key] = value;
         });
       });
 
-      // for scholarship
+      //  for scholarship
       let scholarshipObj = {};
-      collegeDetails?.Scholarship?.forEach((element) => {
+      values?.Scholarship?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           scholarshipObj[key] = value;
         });
       });
 
-      // for placements
+      //  for placements
       let placementObj = {};
-      collegeDetails?.Placements?.forEach((element) => {
+      values?.Placements?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           placementObj[key] = value;
         });
@@ -259,28 +269,32 @@ function CreateCollege() {
 
       // for faq
       let faqObj = {};
-      collegeDetails?.FAQ?.forEach((element) => {
+      values?.FAQ?.forEach((element) => {
         Object.entries(element).forEach(([key, value]) => {
           faqObj[key] = value;
         });
       });
 
-      // if (collegeDetails?.collegeName === examobj?.collegeName) {
-      //   delete examobj.examName;
-      // }
+      // for college
+      let collegeObj = {};
+      values.college.forEach((item) => {
+        Object.entries(item).forEach(([key, value]) => {
+          collegeObj[key] = value;
+        });
+      });
 
-      const updateDetails = {
+      let updateDetails = {
         id: collegeDetails?.id,
-        collegeName: collegeDetails?.collegeName,
-        chooseAffiliationId: collegeDetails?.chooseAffiliationId,
-        collegeMailId: collegeDetails?.collegeMailId,
-        collegeTypeId: collegeDetails?.collegeTypeId,
-        collegeEstablishedDate: collegeDetails?.collegeEstablishedDate,
-        chooseApprovalId: collegeDetails?.chooseApprovalId,
-        collegeStateId: collegeDetails?.collegeStateId,
-        collegeCityId: collegeDetails?.collegeCityId,
-        collegeNaacGrade: collegeDetails?.collegeNaacGrade,
-        collegeStatusId: collegeDetails?.collegeStatusId,
+        collegeName: collegeObj?.collegeName,
+        chooseAffiliationId: collegeObj?.chooseAffiliationId,
+        collegeMailId: collegeObj?.collegeMailId,
+        collegeTypeId: collegeObj?.collegeTypeId,
+        collegeEstablishedDate: collegeObj?.collegeEstablishedDate,
+        chooseApprovalId: collegeObj?.chooseApprovalId,
+        collegeStateId: collegeObj?.collegeStateId,
+        collegeCityId: collegeObj?.collegeCityId,
+        collegeNaacGrade: collegeObj?.collegeNaacGrade,
+        collegeStatusId: collegeObj?.collegeStatusId,
 
         collegeCourse: {
           id: obj?.id,
@@ -364,29 +378,34 @@ function CreateCollege() {
         ],
       };
 
+      if (collegeDetails?.collegeName === updateDetails.collegeName) {
+        delete updateDetails.collegeName;
+      }
+
       let formdata = new FormData();
 
       if (dataValue == 0) {
         setDataValue(1);
       } else if (dataValue === 1) {
-        setAssociateCollege([...associateCollege, values.collegeCourse[0]]);
+        // setAssociateCollege([...associateCollege, values.collegeCourse[0]]);
         setDataValue(2);
       } else if (dataValue === 2) {
         formdata.append("collegeData", JSON.stringify(updateDetails));
 
-        dispatch(updateCollege(formdata)).then((res) => {
-          console.log(res, "fgdfgdfgdfgdfg");
-          if (res?.payload?.data?.success) {
-            Router.push("/admin/college");
-            toast.success("College updated");
-          } else {
-            toast.error("Error");
-          }
-        });
+        if (formdata !== 0) {
+          dispatch(updateCollege(formdata)).then((res) => {
+            console.log(res, "fgdfgdfgdfgdfg");
+            if (res?.payload?.data?.success) {
+              Router.push("/admin/college");
+              toast.success("College updated");
+            } else {
+              toast.error("Error");
+            }
+          });
+        }
       }
     }
-    
-  }
+  };
 
   const handleFileChange = (filesObject, name) => {
     const uniqueId = Date.now();
@@ -407,165 +426,142 @@ function CreateCollege() {
     }
   };
 
-  collegeDetails?.AssociateCourse?.forEach((item) => {
-    item?.CourseAssociateStream?.forEach((streams) => {
-      console.log(streams, "sdfsdfsdwqeqweqweqwe");
-    });
-  });
-
-  console.log(associateCollege, "xcvxcvxcvxcv");
-
   const validate = (values) => {
-    console.log(values, "data");
     const errors = {};
     let itemArray1 = [];
     let itemArray2 = [];
+    let itemArray3 = [];
+    let itemArray4 = [];
+    let itemArray5 = [];
+
     if (dataValue === 0) {
-      values.CollegeAgency.map((item, index) => {
+      values.college.map((item, index) => {
         const error = {};
-        if (!item.selectAgencies) {
-          error["selectAgencies"] = "*";
+        if (!item.chooseAffiliationId) {
+          error["chooseAffiliationId"] = "*";
         }
-        if (!item.Overall) {
-          error["Overall"] = "*";
+        if (!item.collegeName) {
+          error["collegeName"] = "*";
         }
-        if (!item.TotalAgency) {
-          error["TotalAgency"] = "*";
+        if (!item.collegeMailId) {
+          error["collegeMailId"] = "*";
         }
-        if (!item.Year) {
-          error["Year"] = "*";
+        if (!item.collegeTypeId) {
+          error["collegeTypeId"] = "*";
+        }
+        if (!item.collegeEstablishedDate) {
+          error["collegeEstablishedDate"] = "*";
+        }
+        if (!item.chooseApprovalId) {
+          error["chooseApprovalId"] = "*";
+        }
+        if (!item.collegeStateId) {
+          error["collegeStateId"] = "*";
+        }
+        if (!item.collegeCityId) {
+          error["collegeCityId"] = "*";
+        }
+        if (!item.collegeNaacGrade) {
+          error["collegeNaacGrade"] = "*";
+        }
+        if (!item.collegeStatusId) {
+          error["collegeStatusId"] = "*";
+        }
+        if (!item.collegeLogo) {
+          error["collegeLogo"] = "*";
+        }
+        if (!item.collegeImage) {
+          error["collegeImage"] = "*";
         }
         itemArray1.push(error);
       });
-      errors["CollegeAgency"] = itemArray1;
-      if (!values.chooseAffiliation) {
-        errors["chooseAffiliation"] = "*";
-      }
-      if (!values.collegeName) {
-        errors["collegeName"] = "*";
-      }
-      if (!values.CollegeMail) {
-        errors["CollegeMail"] = "*";
-      }
-      if (!values.collegeType) {
-        errors["collegeType"] = "*";
-      }
-      if (!values.establishedDate) {
-        errors["establishedDate"] = "*";
-      }
-      if (!values.approval) {
-        errors["approval"] = "*";
-      }
-      if (!values.collegeState) {
-        errors["collegeState"] = "*";
-      }
-      if (!values.collegeCity) {
-        errors["collegeCity"] = "*";
-      }
-      if (!values.collegeGrade) {
-        errors["collegeGrade"] = "*";
-      }
-      if (!values.collegeStatus) {
-        errors["collegeStatus"] = "*";
-      }
-      if (!values.collegeLogo) {
-        errors["collegeLogo"] = "*";
-      }
-      if (!values.collegeImage) {
-        errors["collegeImage"] = "*";
-      }
-      if (values.CollegeAgency) {
-      }
-      // if (values.select) {
-      //   let itemErrors = []
-      //   values.select.map((item, index) => {
-      //     console.log(item, 'itrem')
-      //     const error = {}
-      //       if (!item.agencyName) {
-      //         error['agencyName'] = 'required'
-      //     }
-      //     if (!item.agencyEmail) {
-      //         error['agencyEmail'] = 'required'
-      //       }
-      //       itemErrors.push(error)
-      //   })
-      //   errors['select'] = itemErrors;
-      // }
+      errors["college"] = itemArray1;
+
+      values.collegeAgencies.map((item, index) => {
+        const error = {};
+        if (!item.collegeAgencyId) {
+          error["collegeAgencyId"] = "*";
+        }
+        if (!item.collegeAgencyFor) {
+          error["collegeAgencyFor"] = "*";
+        }
+        if (!item.totalAgency) {
+          error["totalAgency"] = "*";
+        }
+        if (!item.totalAgencyForYears) {
+          error["totalAgencyForYears"] = "*";
+        }
+        itemArray2.push(error);
+      });
+      errors["collegeAgencies"] = itemArray2;
     }
     if (dataValue === 1) {
-      if (values.ChooseStreams) {
-        values.ChooseStreams.map((item, index) => {
-          let error = {};
-          if (!item.SelectStream) {
-            error["SelectStream"] = "*";
-          }
-          if (!item.MainStream) {
-            error["MainStream"] = "*";
-          }
-          if (!item.SubStream) {
-            error["SubStream"] = "*";
-          }
-          itemArray1.push(error);
-        });
-        errors["ChooseStreams"] = itemArray1;
-      }
-      if (values.CourseFeeDetails) {
-        values.CourseFeeDetails.map((item, index) => {
-          let error = {};
-          if (!item.FeeType) {
-            error["FeeType"] = "*";
-          }
-          if (!item.CourseFee) {
-            error["CourseFee"] = "*";
-          }
-          itemArray2.push(error);
-        });
-        errors["CourseFeeDetails"] = itemArray2;
-      }
-      if (!values.CourseType) {
-        errors["CourseType"] = "*";
-      }
-      if (!values.CourseName) {
-        errors["CourseName"] = "*";
-      }
-      if (!values.CoursePlace) {
-        errors["CoursePlace"] = "*";
-      }
-      if (!values.CourseDuration) {
-        errors["CourseDuration"] = "*";
-      }
-      if (!values.CourseEligibility) {
-        errors["CourseEligibility"] = "*";
-      }
-      if (!values.TypeofCourse) {
-        errors["TypeofCourse"] = "*";
-      }
-      if (!values.ProgramType) {
-        errors["ProgramType"] = "*";
-      }
-      if (!values.CourseCategory) {
-        errors["CourseCategory"] = "*";
-      }
-      if (!values.ChooseExamAccepted) {
-        errors["ChooseExamAccepted"] = "*";
-      }
-      if (!values.ShowonFiltering) {
-        errors["ShowonFiltering"] = "*";
-      }
-      // if (values.courseFees) {
-      //   let itemErrors = []
-      //   values.courseFees.map((item, index) => {
-      //     const error = {}
-      //     if (!item.feeType) {
-      //       error['feeType'] = 'required'
-      //     } if (!item.courseFee) {
-      //       error['courseFee'] = 'required'
-      //     }
-      //     itemErrors.push(error)
-      //     console.log(itemErrors,'rrrrrrr')
-      //   })
-      //   errors['courseFees'] = itemErrors;
-      // }
+      values.collegeCourse.map((item, index) => {
+        let error = {};
+        if (!item.courseTypeId) {
+          error["courseTypeId"] = "*";
+        }
+        if (!item.courseName) {
+          error["courseName"] = "*";
+        }
+        if (!item.coursePlaceId) {
+          error["coursePlaceId"] = "*";
+        }
+        if (!item.courseDuration) {
+          error["courseDuration"] = "*";
+        }
+        if (!item.courseDuration) {
+          error["courseDuration"] = "*";
+        }
+        if (!item.courseEligibility) {
+          error["courseEligibility"] = "*";
+        }
+        if (!item.courseLevel) {
+          error["courseLevel"] = "*";
+        }
+        if (!item.programTypeId) {
+          error["programTypeId"] = "*";
+        }
+        if (!item.courseCategoryId) {
+          error["courseCategoryId"] = "*";
+        }
+        if (!item.chooseExamAcceptedId) {
+          error["chooseExamAcceptedId"] = "*";
+        }
+        if (!item.ShowonFiltering) {
+          error["ShowonFiltering"] = "*";
+        }
+
+        itemArray4.push(error);
+      });
+      errors["collegeCourse"] = itemArray4;
+
+      values.collegeStreams.map((item, index) => {
+        let error = {};
+        if (!item.mainStreamId) {
+          error["mainStreamId"] = "*";
+        }
+        if (!item.subStreamId) {
+          error["subStreamId"] = "*";
+        }
+        if (!item.colStreamId) {
+          error["colStreamId"] = "*";
+        }
+        itemArray3.push(error);
+      });
+      errors["collegeStreams"] = itemArray3;
+
+      values.collegeStreams.map((item, index) => {
+        let error = {};
+        if (!item.courseFeeDetailsId) {
+          error["courseFeeDetailsId"] = "*";
+        }
+        if (!item.courseFee) {
+          error["courseFee"] = "*";
+        }
+        itemArray5.push(error);
+      });
+      errors["collegeStreams"] = itemArray5;
     }
 
     return errors;
@@ -619,23 +615,23 @@ function CreateCollege() {
         //           chooseExamAcceptedId: editCourse?.chooseExamAcceptedId,
         //         },
         //       ])
-        //     : 
-            collegeDetails?.AssociateCourse?.forEach(
-                (item) =>
-                  (initialValues.collegeCourse = [
-                    {
-                      courseTypeId: item?.courseTypeId,
-                      courseName: item?.courseName,
-                      coursePlaceId: item?.coursePlaceId,
-                      courseDuration: item?.courseDuration,
-                      courseEligibility: item?.courseEligibility,
-                      courseLevel: item?.courseLevel,
-                      programTypeId: item?.ProgramType?.id,
-                      courseCategoryId: item?.CourseCategory?.id,
-                      chooseExamAcceptedId: item?.chooseExamAcceptedId,
-                    },
-                  ])
-              )
+        //     :
+        collegeDetails?.AssociateCourse?.forEach(
+          (item) =>
+            (initialValues.collegeCourse = [
+              {
+                courseTypeId: item?.courseTypeId,
+                courseName: item?.courseName,
+                coursePlaceId: item?.coursePlaceId,
+                courseDuration: item?.courseDuration,
+                courseEligibility: item?.courseEligibility,
+                courseLevel: item?.courseLevel,
+                programTypeId: item?.ProgramType?.id,
+                courseCategoryId: item?.CourseCategory?.id,
+                chooseExamAcceptedId: item?.chooseExamAcceptedId,
+              },
+            ])
+        );
         // }
         collegeDetails?.CollegeAbout?.forEach((item) => {
           initialValues.collegeAbouts = [
@@ -896,7 +892,7 @@ function CreateCollege() {
               ...arrayMutators,
             }}
             keepDirtyOnReinitialize
-            // validate={validateForm}
+            validate={validate}
             initialValues={useMemo(
               (event) => setInitialValues(event),
               [collegeDetails]
@@ -1256,7 +1252,7 @@ function CreateCollege() {
                                                       </select>
                                                       {meta.error &&
                                                         meta.touched && (
-                                                          <span className="text-danger required_msg position_required">
+                                                          <span className="text-danger required_msg">
                                                             {meta.error}
                                                           </span>
                                                         )}
@@ -1302,7 +1298,7 @@ function CreateCollege() {
                                                       </select>
                                                       {meta.error &&
                                                         meta.touched && (
-                                                          <span className="text-danger required_msg position_required">
+                                                          <span className="text-danger required_msg">
                                                             {meta.error}
                                                           </span>
                                                         )}
@@ -1332,7 +1328,7 @@ function CreateCollege() {
                                                       />
                                                       {meta.error &&
                                                         meta.touched && (
-                                                          <span className="text-danger required_msg position_required">
+                                                          <span className="text-danger required_msg">
                                                             {meta.error}
                                                           </span>
                                                         )}
@@ -1355,7 +1351,7 @@ function CreateCollege() {
                                                       />
                                                       {meta.error &&
                                                         meta.touched && (
-                                                          <span className="text-danger required_msg position_required">
+                                                          <span className="text-danger required_msg">
                                                             {meta.error}
                                                           </span>
                                                         )}
@@ -1678,14 +1674,6 @@ function CreateCollege() {
                                               >
                                                 {({ input, meta }) => (
                                                   <>
-                                                    <div className="d-flex">
-                                                      {meta.touched &&
-                                                        meta.error && (
-                                                          <span className="text-danger required_msg">
-                                                            {meta.error}
-                                                          </span>
-                                                        )}
-                                                    </div>
                                                     <select
                                                       {...input}
                                                       className="form-control select-style signup_form_input"
@@ -1715,15 +1703,23 @@ function CreateCollege() {
                                                           )
                                                         )}
                                                     </select>
+                                                    <div className="text-end">
+                                                      <img
+                                                        className="select_down_icon"
+                                                        src="/images/down.png"
+                                                      />
+                                                    </div>
+                                                    <div className="d-flex">
+                                                      {meta.touched &&
+                                                        meta.error && (
+                                                          <span className="text-danger required_msg">
+                                                            {meta.error}
+                                                          </span>
+                                                        )}
+                                                    </div>
                                                   </>
                                                 )}
                                               </Field>
-                                              <div className="text-end">
-                                                <img
-                                                  className="select_down_icon"
-                                                  src="/images/down.png"
-                                                />
-                                              </div>
                                             </Col>
                                             <Col lg={4} md={8}>
                                               <Field
@@ -1731,14 +1727,6 @@ function CreateCollege() {
                                               >
                                                 {({ input, meta }) => (
                                                   <>
-                                                    {/* <div className="d-flex">
-                                            {meta.touched && meta.error && (
-                                              <span className="text-danger required_msg">
-                                                {meta.error}
-                                              </span>
-                                            )}
-                                          </div> */}
-
                                                     <select
                                                       {...input}
                                                       className="form-control select-style signup_form_input margin_top"
@@ -1752,6 +1740,7 @@ function CreateCollege() {
                                                       <option value={""}>
                                                         Select Sub Stream
                                                       </option>
+
                                                       {substreamSelectVal &&
                                                         substreamSelectVal.length >
                                                           0 &&
@@ -1768,20 +1757,23 @@ function CreateCollege() {
                                                           )
                                                         )}
                                                     </select>
-                                                    {/* {meta.touched && meta.error && (
-                                            <span className="text-danger required_msg">
-                                              {meta.error}
-                                            </span>
-                                          )} */}
+                                                    <div className="text-end">
+                                                      <img
+                                                        className="select_down_icon"
+                                                        src="/images/down.png"
+                                                      />
+                                                    </div>
+                                                    <div className="d-flex">
+                                                      {meta.touched &&
+                                                        meta.error && (
+                                                          <span className="text-danger required_msg">
+                                                            {meta.error}
+                                                          </span>
+                                                        )}
+                                                    </div>
                                                   </>
                                                 )}
                                               </Field>
-                                              <div className="text-end">
-                                                <img
-                                                  className="select_down_icon"
-                                                  src="/images/down.png"
-                                                />
-                                              </div>
                                             </Col>
                                             <Col
                                               lg={4}
@@ -1823,20 +1815,24 @@ function CreateCollege() {
                                                           )
                                                         )}
                                                     </select>
-                                                    {/* {meta.touched && meta.error && (
-                                            <span className="text-danger required_msg">
-                                              {meta.error}
-                                            </span>
-                                          )} */}
+                                                    <div className="">
+                                                      <img
+                                                        className="select_down_icon_second"
+                                                        src="/images/down.png"
+                                                      />
+                                                    </div>
+                                                    <div className="d-flex">
+                                                      {meta.touched &&
+                                                        meta.error && (
+                                                          <span className="text-danger required_msg">
+                                                            {meta.error}
+                                                          </span>
+                                                        )}
+                                                    </div>
                                                   </>
                                                 )}
                                               </Field>
-                                              <div className="">
-                                                <img
-                                                  className="select_down_icon_second"
-                                                  src="/images/down.png"
-                                                />
-                                              </div>
+
                                               <div className="d-flex mt-2 margin_bottom">
                                                 <div
                                                   type="button"
@@ -2004,15 +2000,24 @@ function CreateCollege() {
                                               </div>
                                             </Col>
                                             <Col lg={6} md={12}>
-                                              <label className="signup_form_label">
-                                                Course Fee
-                                              </label>
                                               <div className="d-flex ">
                                                 <Field
                                                   name={`${name}.courseFee`}
                                                 >
                                                   {({ input, meta }) => (
                                                     <div className="w-100">
+                                                      <label className="signup_form_label">
+                                                        Course Fee
+                                                      </label>
+                                                      <div className="d-flex">
+                                                        {meta.touched &&
+                                                          meta.error && (
+                                                            <span className="text-danger required_msg">
+                                                              {meta.error}
+                                                            </span>
+                                                          )}
+                                                      </div>
+
                                                       <input
                                                         {...input}
                                                         type="number"
@@ -2795,4 +2800,4 @@ function CreateCollege() {
   );
 }
 
-export default CreateCollege
+export default CreateCollege;
