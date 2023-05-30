@@ -15,10 +15,32 @@ module.exports = (sequelize, DataTypes) => {
   }
   organisation.init({
     orgCatgeory: DataTypes.STRING,
-    groupName: DataTypes.STRING,
+    groupId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'organisationGroup',
+        key: 'id',
+      },
+    },
 
-    brandName: DataTypes.STRING,
-    companyName: DataTypes.STRING,
+    brandId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'organisationBrand',
+        key: 'id',
+      },
+    },
+    
+    companyId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'organisationCompany',
+        key: 'id',
+      },
+    },
   
     typeOfCompany: DataTypes.STRING,
     companySize: DataTypes.STRING,
@@ -28,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
     headOffice: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
+    },
+    plotNumber: {
+      type: DataTypes.STRING(100000)
+    },
+    streetAddress: {
+      type: DataTypes.STRING(100000)
     },
     stateId: {
       type: DataTypes.INTEGER,
@@ -44,6 +72,12 @@ module.exports = (sequelize, DataTypes) => {
         model: 'City',
         key: 'id',
       },
+    },
+    latitude: {
+      type: DataTypes.FLOAT
+    },
+    longitude: {
+      type: DataTypes.FLOAT
     },
     contactNumber: DataTypes.STRING,
     email: DataTypes.STRING,

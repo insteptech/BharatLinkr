@@ -169,6 +169,12 @@ db.organisation.hasMany(db.organisationLinksData,{as:"Followers", foreignKey: "o
 db.organisationLinksData.belongsTo(db.organisation,{as:"organisationss", foreignKey: "organisationId"})
 db.organisation.hasMany(db.organisationPost,{as:"Posts", foreignKey: "organisationId"})
 
+db.organisation.belongsTo(db.organisationCompany,{as:"OrganisationCompany", foreignKey: "companyId"})
+db.organisation.belongsTo(db.organisationBrand,{as:"OrganisationBrand", foreignKey: "brandId"})
+db.organisation.belongsTo(db.organisationGroup,{as:"OrganisationGroup", foreignKey: "groupId"})
+
+
+
 
 
 
