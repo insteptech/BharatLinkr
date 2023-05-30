@@ -78,8 +78,8 @@ const EditProfile = () => {
                   <Col lg={12} className="text-center">
                     <div className="user_profile_cover_div">
                       <Image
-                        height={1000}
-                        width={100}
+                        height={1080}
+                        width={1080}
                         className={
                           userDetials?.coverPhoto
                             ? "img-fluid user_profile_cover_img"
@@ -95,8 +95,8 @@ const EditProfile = () => {
                       <div className="profile_hero_edit_icon_row">
                         <div className="profile_hero_img_col">
                           <Image
-                            height={200}
-                            width={200}
+                            height={1080}
+                            width={1080}
                             className="profile_hero_img"
                             // src={`${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`}
                             src={
