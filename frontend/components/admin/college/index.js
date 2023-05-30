@@ -29,7 +29,9 @@ function CollegeAdminPage(props) {
   };
   
   const handleDelete = (item) => {
+    console.log(item, "rtr434444")
     dispatch(deleteCollege(item.id)).then((res) => {
+      console.log(res, "rtertert2123123")
       if (res?.payload?.data?.success ) {
         toast.success("Deleted");
         dispatch(getColleges(pagination));
