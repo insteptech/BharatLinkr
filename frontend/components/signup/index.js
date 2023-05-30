@@ -407,6 +407,34 @@ function SignUpPage() {
   };
 
   const handleSubmit = (values) => {
+
+    const payload = {
+      accomplishments: values.accomplishments,
+      designation: values.designation,
+      email: values.email,
+      experience: values.experience,
+      expertise: values.expertise,
+      highestEducation: values.highestEducation,
+      mobileNumber: values.mobileNumber,
+      name: values.name,
+      password: values.password,
+      school: values.school,
+      stateId: Number(values.state),
+      cityId: Number(values.city),
+      summary: values.summary,
+      userType: values.userType,
+
+      // college values
+      website : values.website,
+      college : values.college,
+
+      //organization values
+      company : values.company,
+      orgcategory : values.orgcategory,
+      headregofc : values.headregofc,
+
+    }
+
     setMobileNum(values.mobileNumber);
     if (values != 0) {
 
@@ -419,7 +447,7 @@ function SignUpPage() {
     if (values.coverPhoto) {
       dataFomrs.append("cover", values?.coverPhoto);
     }
-    dataFomrs.append("profileData", JSON.stringify(values));
+    dataFomrs.append("profileData", JSON.stringify(payload));
 
     dispatch(getUsers(dataFomrs));
   };
