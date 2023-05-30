@@ -461,9 +461,7 @@ const collegeDelete = async (req) => {
     await collegeAgency.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
-    await collegeAssociateStream.update({ deleted: true }, {
-      where: { collegeId: collg.id },
-    });
+
     await collegeAdmission.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
@@ -818,7 +816,7 @@ const allCollegeList = async (req) => {
       }
 
       if (req.body.id) {
-        whrCondition = req.body.id
+        whrCondition = {id:req.body.id}
       }
       if (req.body.mainStreamId) {
         wherecond = { ['$AssociateCourse.CourseAssociateStream.mainStreamId$']: req.body.mainStreamId }
@@ -1092,7 +1090,7 @@ const allCollegeList = async (req) => {
     ////////////////else part ///////////////////
     else {
       result = await college.findAndCountAll({
-
+          where:wherecond,
         include: [
           {
             model: collegeLikesCount,

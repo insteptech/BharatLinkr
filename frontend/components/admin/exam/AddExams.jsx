@@ -688,7 +688,7 @@ export default function AddExams() {
           ...arrayMutators,
         }}
         keepDirtyOnReinitialize
-        // validate={validate}
+         validate={validate}
         initialValues={useMemo((e) => init(e), [prevExamData])}
         render={({ handleSubmit, values, dirtyFields, initialValues }) => (
           <form onSubmit={handleSubmit}>
