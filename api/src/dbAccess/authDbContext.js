@@ -414,13 +414,14 @@ const userActive = async (req) => {
 const userPostLikeList = async (req) => {
   try {
     let whereCondition = {};
+    let result;
     if (req.body.userId && req.body.categoryTypes) {
       whereCondition = { userId: req.body.userId, categoryTypes: req.body.categoryTypes };
+       result = await listOfUsersLikes.findAndCountAll({
+        where: whereCondition,
+      });
     }
-    const result = await listOfUsersLikes.findAndCountAll({
-      where: whereCondition,
-
-    });
+ 
     return { data: result, success: true };
   } catch (error) {
     throw new Error(error);
