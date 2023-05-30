@@ -461,9 +461,7 @@ const collegeDelete = async (req) => {
     await collegeAgency.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
-    await collegeAssociateStream.update({ deleted: true }, {
-      where: { collegeId: collg.id },
-    });
+
     await collegeAdmission.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
