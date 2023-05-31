@@ -11,17 +11,33 @@ module.exports = {
       orgCatgeory: {
         type: Sequelize.STRING
       },
-      groupName: {
-        type: Sequelize.STRING
+ 
+      groupId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'organisationGroups',
+          key: 'id',
+        },
       },
 
-      brandName: {
-        type: Sequelize.STRING
+      brandId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'organisationBrands',
+          key: 'id',
+        },
       },
-      companyName: {
-        type: Sequelize.STRING
+      
+      companyId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'organisationCompanies',
+          key: 'id',
+        },
       },
-
   
   
       typeOfCompany: {
@@ -43,6 +59,12 @@ module.exports = {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
       },
+      plotNumber: {
+        type: Sequelize.STRING(100000)
+      },
+      streetAddress: {
+        type: Sequelize.STRING(100000)
+      },
       stateId: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -58,6 +80,12 @@ module.exports = {
           model: 'Cities',
           key: 'id',
         },
+      },
+      latitude: {
+        type: Sequelize.FLOAT
+      },
+      longitude: {
+        type: Sequelize.FLOAT
       },
  
       contactNumber: {

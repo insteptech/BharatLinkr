@@ -198,6 +198,101 @@ const organisationcompanyLevelDelete = async function (req) {
   return result;
 };
 
+const addCompany = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.addCompany(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const updateCompany = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.updateCompany(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const companyList = async function (req) {
+  const result = await organisationDbContext.companyList(req);
+  return result;
+};
+
+const companyDelete = async function (req) {
+  const result = await organisationDbContext.companyDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+const addOrganisationGroup = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.addOrganisationGroup(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const updateOrganisationGroup = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.updateOrganisationGroup(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const organisationGroupList = async function (req) {
+  const result = await organisationDbContext.organisationGroupList(req);
+  return result;
+};
+
+const organisationGroupDelete = async function (req) {
+  const result = await organisationDbContext.organisationGroupDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+const addOrganisationBrand = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.addOrganisationBrand(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const updateOrganisationBrand = async function (req) {
+  let org = null;
+  const result = await organisationDbContext.updateOrganisationBrand(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const organisationBrandList = async function (req) {
+  const result = await organisationDbContext.organisationBrandList(req);
+  return result;
+};
+
+const organisationBrandDelete = async function (req) {
+  const result = await organisationDbContext.organisationBrandDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
 
 module.exports = {
   addSector,
@@ -223,6 +318,18 @@ module.exports = {
   organisationSectorDelete,
   organisationIndustryDelete,
   organisationBusinessDelete,
-  organisationcompanyLevelDelete
+  organisationcompanyLevelDelete,
+  addCompany,
+  updateCompany,
+  companyList,
+  companyDelete,
+  addOrganisationGroup,
+  updateOrganisationGroup,
+  organisationGroupList,
+  organisationGroupDelete,
+  addOrganisationBrand,
+  updateOrganisationBrand,
+  organisationBrandList,
+  organisationBrandDelete
 
 };
