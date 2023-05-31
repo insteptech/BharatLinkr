@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { companyLikeslist, getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
+import { companyBrandList, companyGroupList, companyLikeslist, companyNameList, getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
 import {
   getIndustryById,
   getIndustryList,
@@ -20,6 +20,9 @@ const sectorBySlice = createSlice({
     organisationList: [],
     organisation: [],
     orglikedlist: [],
+    companyNamelist: [],
+    grouplist: [],
+    brandlist:[],
     error: ""
   },
 
@@ -93,6 +96,33 @@ const sectorBySlice = createSlice({
     builder.addCase(companyLikeslist.fulfilled, (state, action) => {
       (state.status = ""),
         (state.orglikedlist = action.payload?.data?.data?.rows);
+    });
+    
+    //companyNameList
+    builder.addCase(companyNameList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyNameList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.companyNamelist = action.payload?.data?.data?.rows);
+    });
+    
+    //Brandlist
+    builder.addCase(companyBrandList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyBrandList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.brandlist = action.payload?.data?.data?.rows);
+    });
+    
+    //grouplist
+    builder.addCase(companyGroupList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyGroupList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.grouplist = action.payload?.data?.data?.rows);
     });
   },
 });

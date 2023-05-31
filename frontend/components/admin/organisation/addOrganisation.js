@@ -9,8 +9,10 @@ import { getlistSector, getIndustryList } from '../../../redux/actions/organisat
 import { getState } from "../../../redux/actions/location/createState";
 import { cityDropdown } from "../../../redux/actions/location/createCity";
 import { useRouter } from "next/router";
-import { addOrganisation, getOrganisationbyid, updateOrganisation } from "../../../redux/actions/organisation/addorganisation";
+import { addOrganisation, companyBrandList, companyGroupList, companyNameList, getOrganisationbyid, updateOrganisation } from "../../../redux/actions/organisation/addorganisation";
 import { toast } from "react-toastify";
+import Select from "react-select";
+import Creatable from 'react-select/creatable'
 
 const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
     ssr: false,
@@ -62,6 +64,9 @@ function AddOrganisation() {
                 data.CMS = values.cms[0]
                 delete values.cms
                 data.payload[0] = values
+                data.payload[0].brandId = values.brandId.value
+                data.payload[0].groupId = values.groupId.value
+                data.payload[0].companyId = values.companyId.value
 
                 var formData = new FormData();
                 formData.append("organisationData", JSON.stringify(data))
@@ -88,6 +93,9 @@ function AddOrganisation() {
         dispatch(getIndustryList(selectSectorids))
         dispatch(getState());
         dispatch(cityDropdown(""));
+        dispatch(companyGroupList())
+        dispatch(companyBrandList())
+        dispatch(companyNameList())
     }, [Id, selectSectorids])
 
     const handleCityList = (e) => {
@@ -184,6 +192,9 @@ function AddOrganisation() {
     const industrylist = useSelector((data) => data?.sectorData?.industrylist)
     const statelist = useSelector((data) => data?.stateList?.stateList?.data?.data?.rows)
     const citylist = useSelector((data) => data?.cityList?.cityList?.data?.result)
+    const companynamelist = useSelector((data) => data?.sectorData?.companyNamelist)
+    const grouplist = useSelector((data) => data?.sectorData?.grouplist)
+    const brandnamelist = useSelector((data) => data?.sectorData?.brandlist)
 
     const handleFileChange = (filesObject, name) => {
         const uniqueId = Date.now();
@@ -275,11 +286,11 @@ function AddOrganisation() {
         } else {
             initialValues = {
                 orgCatgeory: "",
-                groupName: '',
+                groupId: '',
                 sector: [{ sectorId: '' }],
                 industry: [{ industryId: '' }],
-                brandName: "",
-                companyName: "",
+                brandId: "",
+                companyId: "",
                 levelOfCompany: [{ companyLevel: '' }],
                 businessNature: [{ natureOfBusiness: '' }],
                 typeOfCompany: "",
@@ -290,6 +301,8 @@ function AddOrganisation() {
                 headOffice: null,
                 stateId: '',
                 cityId: '',
+                plotNumber: '',
+                streetAddress: '',
                 contactNumber: "",
                 email: "",
                 yourRole: "",
@@ -322,14 +335,14 @@ function AddOrganisation() {
             if (!values.orgCatgeory || !values.orgCatgeory === "") {
                 errors["orgCatgeory"] = "*";
             }
-            if (!values.groupName || !values.groupName === "") {
-                errors["groupName"] = "*";
+            if (!values.groupId || !values.groupId === "") {
+                errors["groupId"] = "*";
             }
-            if (!values.brandName || !values.brandName === "") {
-                errors["brandName"] = "*";
+            if (!values.brandId || !values.brandId === "") {
+                errors["brandId"] = "*";
             }
-            if (!values.companyName || !values.companyName === "") {
-                errors["companyName"] = "*";
+            if (!values.companyId || !values.companyId === "") {
+                errors["companyId"] = "*";
             }
             if (!values.typeOfCompany || !values.typeOfCompany === "") {
                 errors["typeOfCompany"] = "*";
@@ -351,6 +364,12 @@ function AddOrganisation() {
             }
             if (!values.cityId || !values.cityId === "") {
                 errors["cityId"] = "*";
+            }
+            if (!values.plotNumber || !values.plotNumber === "") {
+                errors["plotNumber"] = "*";
+            }
+            if (!values.streetAddress || !values.streetAddress === "") {
+                errors["streetAddress"] = "*";
             }
             if (!values.email || !values.email === "") {
                 errors["email"] = "*";
@@ -457,7 +476,7 @@ function AddOrganisation() {
                                                 </Field>
                                             </Col>
                                             <Col md={12} lg={6}>
-                                                <Field name={`groupName`}>
+                                                <Field name={`groupId`}>
                                                     {({ input, meta }) => (
                                                         <>
                                                             <div className="d-flex">
@@ -470,10 +489,19 @@ function AddOrganisation() {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <input
+                                                            <Creatable
                                                                 {...input}
-                                                                className="form-control select-style signup_form_input margin_bottom"
                                                                 placeholder="Enter Group Name"
+                                                                isSearchable={true}
+                                                                options={grouplist?.map((item) => {
+                                                                    return (
+                                                                        {
+                                                                            label: item?.groupName,
+                                                                            value: item?.id
+                                                                        }
+                                                                    )
+                                                                })
+                                                                }
                                                             />
                                                         </>
                                                     )}
@@ -498,7 +526,7 @@ function AddOrganisation() {
                                                                                             className="form-control select-style signup_form_input "
                                                                                             onChange={(e) => {
                                                                                                 input.onChange(e);
-                                                                                                handleSectorSelect(e,values);
+                                                                                                handleSectorSelect(e, values);
                                                                                             }}
                                                                                         >
                                                                                             <option value="">Select Sector</option>
@@ -647,7 +675,7 @@ function AddOrganisation() {
                                                 </Col>
                                             </Row>
                                             <Col md={12} lg={6}>
-                                                <Field name={`brandName`}>
+                                                <Field name={`brandId`}>
                                                     {({ input, meta }) => (
                                                         <>
                                                             <div className="d-flex">
@@ -660,17 +688,26 @@ function AddOrganisation() {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <input
+                                                            <Creatable
                                                                 {...input}
-                                                                className="form-control select-style signup_form_input margin_bottom"
                                                                 placeholder="Enter Brand Name"
+                                                                isSearchable={true}
+                                                                options={brandnamelist?.map((item) => {
+                                                                    return (
+                                                                        {
+                                                                            label: item?.brandName,
+                                                                            value: item?.id
+                                                                        }
+                                                                    )
+                                                                })
+                                                                }
                                                             />
                                                         </>
                                                     )}
                                                 </Field>
                                             </Col>
                                             <Col md={12} lg={6}>
-                                                <Field name={`companyName`}>
+                                                <Field name={`companyId`}>
                                                     {({ input, meta }) => (
                                                         <>
                                                             <div className="d-flex">
@@ -683,10 +720,19 @@ function AddOrganisation() {
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <input
+                                                            <Creatable
                                                                 {...input}
-                                                                className="form-control select-style signup_form_input margin_bottom"
-                                                                placeholder="Enter Primary Contact No."
+                                                                placeholder="Enter Compay Name"
+                                                                isSearchable={true}
+                                                                options={companynamelist?.map((item) => {
+                                                                    return (
+                                                                        {
+                                                                            label: item?.companyName,
+                                                                            value: item?.id
+                                                                        }
+                                                                    )
+                                                                })
+                                                                }
                                                             />
                                                         </>
                                                     )}
@@ -1082,6 +1128,52 @@ function AddOrganisation() {
                                                                     src="/images/down.png"
                                                                 />
                                                             </div>
+                                                        </>
+                                                    )}
+                                                </Field>
+                                            </Col>
+                                            <Col md={12} lg={6}>
+                                                <Field name={`plotNumber`}>
+                                                    {({ input, meta }) => (
+                                                        <>
+                                                            <div className="d-flex">
+                                                                <label className="signup_form_label">
+                                                                    Plot No.
+                                                                </label>
+                                                                {meta.error && meta.touched && (
+                                                                    <span className="text-danger required_msg">
+                                                                        {meta.error}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <input
+                                                                {...input}
+                                                                className="form-control select-style signup_form_input margin_bottom"
+                                                                placeholder="Enter Plot No."
+                                                            />
+                                                        </>
+                                                    )}
+                                                </Field>
+                                            </Col>
+                                            <Col md={12} lg={6}>
+                                                <Field name={`streetAddress`}>
+                                                    {({ input, meta }) => (
+                                                        <>
+                                                            <div className="d-flex">
+                                                                <label className="signup_form_label">
+                                                                    Street Address
+                                                                </label>
+                                                                {meta.error && meta.touched && (
+                                                                    <span className="text-danger required_msg">
+                                                                        {meta.error}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <input
+                                                                {...input}
+                                                                className="form-control select-style signup_form_input margin_bottom"
+                                                                placeholder="Enter Street Address"
+                                                            />
                                                         </>
                                                     )}
                                                 </Field>
