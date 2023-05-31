@@ -66,7 +66,7 @@ export const Peopledata = [
 const PeopleCard = () => {
   const [flip, setFlip] = useState(null);
   return (
-    <Row xs={1} md={3} className="g-4">
+    <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-4">
     {Peopledata &&
       Peopledata.map((item) => (
         <Col className="flip-card">
