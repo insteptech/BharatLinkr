@@ -70,3 +70,31 @@ export const companyLike = createAsyncThunk(
       .catch((err) => err);
   }
 );
+
+export const companyGroupList = createAsyncThunk(
+  "companyGroupList/organisation/organisationGroupList",
+  async (data) => {
+    return apiRequest
+      .post("organisation/organisationGroupList", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+export const companyNameList = createAsyncThunk(
+  "companyNameList/organisation/companyList",
+  async (data) => {
+    return apiRequest
+      .post("organisation/companyList", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+export const companyBrandList = createAsyncThunk(
+  "companyBrandList/organisation/organisationBrandList",
+  async (data) => {
+    return apiRequest
+      .post("organisation/organisationBrandList", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
