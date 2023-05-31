@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import {
   addExam,
   editExam,
+  examFaqDelete,
   getExamById,
 } from "../../../redux/actions/exams/createExam";
 
@@ -30,16 +31,10 @@ export default function AddExams() {
   const [examlogo, setExamlogo] = useState();
   const router = useRouter();
 
-  const mainStreamdata = useSelector(
-    (data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
-  );
-  const prevExamData = useSelector(
-    (data) => data?.exambyid?.exam?.data?.data?.rows[0]
-  );
+  const mainStreamdata = useSelector((data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows);
+  const prevExamData = useSelector((data) => data?.exambyid?.exam?.data?.data?.rows[0]);
   const prevExamLoader = useSelector((data) => data?.exambyid);
-  const masterFilterData = useSelector(
-    (data) => data?.allMasterFilterList?.masterfilterlist?.data?.data
-  );
+  const masterFilterData = useSelector((data) => data?.allMasterFilterList?.masterfilterlist?.data?.data);
   const masterValues = "coursetype,applicationmode,exammode,examtype";
 
   const { Id } = router.query;
@@ -663,9 +658,8 @@ export default function AddExams() {
                 FormSteps?.map((steps, stepsIndex) => (
                   <li className="nav-item " key={stepsIndex}>
                     <a
-                      className={`nav-link admin_tabs_name ${
-                        dataValue === stepsIndex && "head-active"
-                      }`}
+                      className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                        }`}
                       // active={true}
                       onClick={() => setDataValue(stepsIndex)}
                     >
@@ -688,7 +682,7 @@ export default function AddExams() {
           ...arrayMutators,
         }}
         keepDirtyOnReinitialize
-         validate={validate}
+        validate={validate}
         initialValues={useMemo((e) => init(e), [prevExamData])}
         render={({ handleSubmit, values, dirtyFields, initialValues }) => (
           <form onSubmit={handleSubmit}>
@@ -1688,12 +1682,13 @@ export default function AddExams() {
                             <>
                               {fields?.map((name, index) => (
                                 <div key={index}>
+                                  {console.log(values?.exam[0]?.id, 'faqqqqqqqqqq')}
                                   <Field name={`${name}.question`}>
                                     {({ input, meta }) => (
                                       <>
                                         <CKeditorGenerator
                                           input={input}
-                                          onReady={(editor) => {}}
+                                          onReady={(editor) => { }}
                                         />
                                       </>
                                     )}
@@ -1755,8 +1750,20 @@ export default function AddExams() {
                                   {fields.length > 1 && (
                                     <img
                                       onClick={() => {
-                                        fields.remove(index);
-                                        handlefaqremove(index);
+                                        if (Id && values?.examFAQ[index]?.id) {
+                                          dispatch(examFaqDelete({
+                                            id: Number(values?.examFAQ[index]?.id),
+                                            examId: Number(values?.exam[0]?.id)
+                                          })).then((res) => {
+                                            if (res?.payload?.data?.success) {
+                                              fields.remove(index)
+                                              handlefaqremove(index)
+                                            }
+                                          })
+                                        } else { 
+                                          fields.remove(index);
+                                          handlefaqremove(index);
+                                        }
                                       }}
                                       className="add_remove_icon"
                                       src="/images/delete-icon-blue.png"
@@ -1777,7 +1784,7 @@ export default function AddExams() {
                     <button
                       className="admin_signup_btn admin_signup_btn_mobile"
                       type="submit"
-                      // onClick={()=>{ddddddddddd(values,dirtyFields)}}
+                    // onClick={()=>{ddddddddddd(values,dirtyFields)}}
                     >
                       Add Category
                     </button>

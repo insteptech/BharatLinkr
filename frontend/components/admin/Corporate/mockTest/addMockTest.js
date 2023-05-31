@@ -9,6 +9,7 @@ import { getMainCategory } from "../../../../redux/actions/corporate/addmaincate
 import { getSubCategory } from "../../../../redux/actions/corporate/addsubcategory";
 import {
   addMockTestCorporate,
+  deleteMockQuestion,
   getMockTestbyid,
   updateMocktest,
 } from "../../../../redux/actions/corporate/addmocktestcorporate";
@@ -101,42 +102,42 @@ function AddMockTest() {
           answer: getMocktestDetails?.Questions[0]?.Answerss[0]?.answer,
         };
       });
-    
 
-    let datamocktest = value.MockTest.map((item) => {
-      return {
-        id: getMocktestDetails?.id,
-        mainCategoryId: item.mainCategoryId,
-        subCategoryId: item.subCategoryId,
-        topicName: item.topicName,
-        subTopic: item?.subTopic,
-        feildName: item?.feildName,
-        totalMarksOfTest: item?.totalMarksOfTest,
-        questionMarks: item?.questionMarks,
-        totalTime: item?.totalTime,
-        totalQuestions: item?.totalQuestions,
-        MocktestQuestions: datamocktestquestion,
-      };
-    });
 
-    var formdata = new FormData();
-
-    let dataval = {
-      payload: datamocktest,
-    };
-
-    formdata.append("mockTestData", JSON.stringify(dataval));
-
-    if (formData != 0 && dataval) {
-      dispatch(updateMocktest(formdata)).then((res) => {
-        if (res?.payload?.data?.success) {
-          router.push("/admin/corporate/addcorporate");
-          toast.success("Updated");
-        }
+      let datamocktest = value.MockTest.map((item) => {
+        return {
+          id: getMocktestDetails?.id,
+          mainCategoryId: item.mainCategoryId,
+          subCategoryId: item.subCategoryId,
+          topicName: item.topicName,
+          subTopic: item?.subTopic,
+          feildName: item?.feildName,
+          totalMarksOfTest: item?.totalMarksOfTest,
+          questionMarks: item?.questionMarks,
+          totalTime: item?.totalTime,
+          totalQuestions: item?.totalQuestions,
+          MocktestQuestions: datamocktestquestion,
+        };
       });
+
+      var formdata = new FormData();
+
+      let dataval = {
+        payload: datamocktest,
+      };
+
+      formdata.append("mockTestData", JSON.stringify(dataval));
+
+      if (formData != 0 && dataval) {
+        dispatch(updateMocktest(formdata)).then((res) => {
+          if (res?.payload?.data?.success) {
+            router.push("/admin/corporate/addcorporate");
+            toast.success("Updated");
+          }
+        });
+      }
     }
   }
-}
 
   const handlefileremoval = (i) => {
     if (FileState.length > 0) {
@@ -185,6 +186,7 @@ function AddMockTest() {
       const initialValues = {
         MockTest: [
           {
+            id: getMocktestDetails?.id,
             mainCategoryId: getMocktestDetails?.MainCategory?.id,
             subCategoryId: getMocktestDetails?.SubCategory?.id,
             topicName: getMocktestDetails?.topicName,
@@ -332,7 +334,7 @@ function AddMockTest() {
         keepDirtyOnReinitialize
         validate={validate}
         initialValues={useMemo(() => setInitials())}
-        render={({ handleSubmit, submitFailed }) => (
+        render={({ handleSubmit, submitFailed, values }) => (
           <form onSubmit={handleSubmit}>
             <FieldArray name="MockTest">
               {({ fields }) => (
@@ -616,9 +618,8 @@ function AddMockTest() {
                         FormSteps?.map((steps, stepsIndex) => (
                           <li className="nav-item " key={stepsIndex}>
                             <a
-                              className={`nav-link admin_tabs_name ${
-                                dataValue === stepsIndex && "head-active"
-                              }`}
+                              className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                                }`}
                               active={true}
                               onClick={() => setDataValue(stepsIndex)}
                             >
@@ -641,13 +642,14 @@ function AddMockTest() {
                         backgroundColor: "#FFF",
                       }}
                       eventKey={0}
-                      // title="General"
+                    // title="General"
                     >
                       <FieldArray name="MocktestQuestions">
                         {({ fields }) => (
                           <>
                             {fields?.map((name, index) => (
                               <div key={index}>
+                                <h1>Question no. {index + 1}</h1>
                                 <Field name={`${name}.QuestionData.question`}>
                                   {({ input, meta }) => (
                                     <>
@@ -761,13 +763,24 @@ function AddMockTest() {
                                       <>
                                         <img
                                           onClick={() => {
-                                            fields.remove(index);
-                                            handlefileremoval(index);
+                                            if (Id && values?.MocktestQuestions[index]?.id) {
+                                              dispatch(deleteMockQuestion({
+                                                mockTestId: Number(values?.MockTest[0]?.id),
+                                                id: Number(values?.MocktestQuestions[index]?.id)
+                                              })).then((res) => {
+                                                if (res?.payload?.data?.success) {
+                                                  fields.remove(index);
+                                                  handlefileremoval(index);
+                                                }
+                                              })
+                                            } else {
+                                              fields.remove(index);
+                                              handlefileremoval(index);
+                                            }
                                           }}
                                           className="add_remove_icon"
                                           src="/images/delete-icon-blue.png"
                                         />
-                                        {index}
                                       </>
                                     )}
                                   </Col>
@@ -1116,6 +1129,7 @@ function AddMockTest() {
                                 </Row>
 
                                 <hr></hr>
+                              
                               </div>
                             ))}
                           </>
