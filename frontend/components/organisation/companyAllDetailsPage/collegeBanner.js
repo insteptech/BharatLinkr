@@ -18,75 +18,89 @@ function CollegeBanner({ orgdata }) {
               width={100}
               alt=""
               className="about_college_hero_banner"
-              src={`${apibasePath}documents/organisation/${orgdata?.companyCover}`} />
+              src={`${apibasePath}documents/organisation/${orgdata?.companyCover}`}
+            />
             <Row className="college_hero_banner_text_div">
               <Col xs={2} className="text-end">
                 <Image
                   height={75}
                   width={75}
-                  alt=""
+                  alt="College logo here"
                   className="about_college_hero_logo"
-                  src={`${apibasePath}documents/organisation/${orgdata?.companyLogo}`} />
+                  src={`${apibasePath}documents/organisation/${orgdata?.companyLogo}`}
+                />
               </Col>
               <Col xs={10}>
                 <div className="college_hero_banner_right_col">
-                  <h4 className="detail_page_college_name ">{orgdata?.companyName}</h4>
+                  <h4 className="detail_page_college_name ">
+                    {orgdata?.companyName}
+                  </h4>
                   <div className="college_detail_banner_links_row">
-                    <p className="college_detail_banner_links mobile_font_12">
-                      <BootImage
+                    <div className="college_detail_banner_links mobile_font_12">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/light-location.svg"
-                       
-
                       />
-                      {orgdata?.headOffice === true ?
-                        `H.O ${orgdata?.States?.state}`
-                        :
-                        `B.O ${orgdata?.States?.state}`
-                      }
-                    </p>
-                    <p className="college_detail_banner_links mobile_font_12">
-                      <BootImage
+                      {orgdata?.headOffice === true
+                        ? `H.O ${orgdata?.States?.state}`
+                        : `B.O ${orgdata?.States?.state}`}
+                    </div>
+                    <div className="college_detail_banner_links mobile_font_12">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/light-book.svg"
                       />{" "}
                       {orgdata?.typeOfCompany}
-                    </p>
-                    <p className="college_detail_banner_links">
-                      <BootImage
+                    </div>
+                    <div className="college_detail_banner_links">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/light-message.svg"
                       />
                       25 Reviews
-                    </p>
-                    <p className="college_detail_banner_links">
-                      <BootImage
+                    </div>
+                    <div className="college_detail_banner_links">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/college-icon.svg"
                       />
                       ESTD {orgdata?.establishedYear}
-                    </p>
-                    <p className="college_detail_banner_links">
-                      <BootImage
+                    </div>
+                    <div className="college_detail_banner_links">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/light-star.svg"
                       />
                       {orgdata?.Industry?.name}
-                    </p>
-                    <p className="college_detail_banner_links">
-                      <BootImage
+                    </div>
+                    <div className="college_detail_banner_links">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/company-level.svg"
                       />
                       {orgdata?.companyLevel}
-                    </p>
-                    <p className="college_detail_banner_links">
-                      <BootImage
+                    </div>
+                    <div className="college_detail_banner_links">
+                      <Image
+                        width={15}
+                        height={15}
                         className="college_detail_banner_links_icon"
                         src="/images/light-star.svg"
                       />
                       {orgdata?.natureOfBuisness}
-                    </p>
+                    </div>
                   </div>
                 </div>
               </Col>
