@@ -67,4 +67,3 @@ export const updateCollege = createAsyncThunk(
       .catch((err) => err);
   }
 );
-

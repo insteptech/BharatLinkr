@@ -13,7 +13,10 @@ const { sector,
   listOfUsersLikes,
   organisationPost,
   organisationLinksData,
-  User } = require('../../models');
+  User,
+  organisationCompany,
+  organisationBrand,
+  organisationGroup } = require('../../models');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const path = require('path');
@@ -289,9 +292,9 @@ const addOrganisation = async (req) => {
 
         let objOrganisation = {
           orgCatgeory: item.orgCatgeory,
-          groupName: item.groupName,
-          brandName: item.brandName,
-          companyName: item.companyName,
+          groupId: item.groupId,
+          brandId: item.brandId,
+          companyId: item.companyId,
           typeOfCompany: item.typeOfCompany,
           companySize: item.companySize,
           establishedYear: item.establishedYear,
@@ -300,11 +303,51 @@ const addOrganisation = async (req) => {
           headOffice: item.headOffice,
           stateId: item.stateId,
           cityId: item.cityId,
-          address: item.address,
+          plotNumber: item.plotNumber,
+          streetAddress:item.streetAddress,
           contactNumber: item.contactNumber,
           email: item.email,
           yourRole: item.yourRole,
         }
+
+        
+
+     
+              let brand = item.brandId
+            if(typeof brand==='string' ){
+              brandName= await organisationBrand.create({brandName:brand})
+              const brandid = await organisationBrand.findOne({
+                where:{brandName:brand}
+              }) 
+              if(brandid.id){
+                objOrganisation.brandId= brandid.id
+              }
+            }
+
+            let company = item.companyId
+            if( typeof company === 'string' ){
+              companyName= await organisationCompany.create({companyName:company})
+              const companyid = await organisationCompany.findOne({
+                where:{companyName:company}
+              }) 
+              if(companyid.id){
+                objOrganisation.companyId= companyid.id
+                
+              }
+            }
+
+            let group = item.groupId
+            if( typeof group === 'string' ){
+              groupName= await organisationGroup.create({groupName:group})
+              const groupid = await organisationGroup.findOne({
+                where:{groupName:group}
+              }) 
+              if(groupid.id){
+                objOrganisation.groupId= groupid.id
+                
+              }
+              
+            }
 
         if (companyLogoFile && companyLogoFile.length > 0) {
           const fileExist = companyLogoFile.find((image1) => image1.originalname);
@@ -508,6 +551,25 @@ const organisationList = async (req) => {
           as: 'CompanyLevel'
         },
         {
+          model: organisationCompany,
+          required: false,
+          where:{deleted:false},
+          as: 'OrganisationCompany'
+        },
+        {
+          model: organisationBrand,
+          required: false,
+          where:{deleted:false},
+          as: 'OrganisationBrand'
+        },
+        {
+          model: organisationGroup,
+          required: false,
+          where:{deleted:false},
+          as: 'OrganisationGroup'
+        },
+
+        {
           model: State,
           required: false,
           as: 'States'
@@ -608,6 +670,44 @@ const updateOrgaisation = async (req) => {
     }
 
 
+
+    let brand = organisationData.brandId
+    if(typeof brand === 'string' ){
+      brandName= await organisationBrand.create({brandName:brand})
+      const brandid = await organisationBrand.findOne({
+        where:{brandName:brand}
+      }) 
+      if(brandid.id){
+        organisationData.brandId= brandid.id
+        
+      }
+    }
+
+    let company = organisationData.companyId
+    if(typeof company === 'string' ){
+      companyName= await organisationCompany.create({companyName:company})
+      const companyid = await organisationCompany.findOne({
+        where:{companyName:company}
+      }) 
+      if(companyid.id){
+        organisationData.companyId= companyid.id
+        
+      }
+    }
+
+
+    let group = organisationData.groupId
+    if(typeof group === 'string' ){
+      groupName= await organisationGroup.create({groupName:group})
+      const groupid = await organisationGroup.findOne({
+        where:{groupName:group}
+      }) 
+      if(groupid.id){
+        organisationData.groupId= groupid.id
+        
+      }
+    }
+      
 
     const updateData = await organisation.update(organisationData, { where: { id: organisationData.id }, returning: true })
 
@@ -904,7 +1004,7 @@ const addOrganisationLinksData = async (req) => {
   }
 };
 
-// this api call on approval of links 
+// this api call on approval of links ----------------------------/////
 const organisationLinkApproval = async (req) => {
   try {
     let obj = {
@@ -984,7 +1084,7 @@ const organisationPendingRequestList = async (req) => {
 };
 
 
-//these api for indiviual delete for sector, industry, businessnature, levelCompany
+//these api for indiviual delete for sector, industry, businessnature, levelCompany------//
 const organisationSectorDelete = async (req) => {
   try {
     const collg = await organisationSector.findOne({
@@ -1036,7 +1136,248 @@ const organisationcompanyLevelDelete = async (req) => {
     throw new Error(error);
   }
 };
-////////////////////////////////////////////////////////////////////////////////////
+//------------------------------------------------------------------------------------//
+
+
+//------------------------------ organisation comapny crud----------------------------//
+
+const addCompany = async(req) =>{
+try{
+let company;
+  await Promise.all(
+    req.body.companyData.map(async(item)=>{
+      company = await  organisationCompany.create(item)
+    })
+
+  )
+  return {data:company, success:true};
+
+}catch(error){
+  throw new Error(error);
+}
+}
+
+
+const updateCompany = async(req) =>{
+try{
+
+
+let company;
+  await Promise.all(
+req.body.companyData.map(async(item)=>{
+company = await organisationCompany.update(item,{where:{id:item.id},returning:true})
+})
+  )
+  return {data:company, success:true}
+}catch(error){
+  throw new Error(error);
+}
+
+}
+
+const companyList = async (req) => {
+  try {
+    const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+    const size = req.body.pageSize ? req.body.pageSize : 10;
+    let whrCondition = { deleted: false };
+    if (req.body.search) {
+      const obj = {
+        companyName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('companyName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+      };
+      whrCondition = { ...obj, ...whrCondition };
+    }
+    if (req.body.id) {
+      whrCondition = { id: req.body.id, deleted: false }
+    }
+
+    const result = await organisationCompany.findAndCountAll({
+      where: whrCondition,
+
+
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const companyDelete = async (req) => {
+  try {
+    const collg = await organisationCompany.findOne({
+      where: { id:req.id},
+    });
+
+    await collg.update({ deleted: true },{where:{id:req.id}});
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+//--------------------------------- organisation comapny crud----------------------------//
+
+
+//---------------------------------organisation group crud -----------------------------//
+
+const addOrganisationGroup = async(req) =>{
+  try{
+  let group;
+    await Promise.all(
+      req.body.groupData.map(async(item)=>{
+        group = await  organisationGroup.create(item)
+      })
+  
+    )
+    return {data:group, success:true};
+  
+  }catch(error){
+    throw new Error(error);
+  }
+  }
+  
+  const updateOrganisationGroup = async(req) =>{
+  try{
+  
+  
+  let group;
+    await Promise.all(
+  req.body.groupData.map(async(item)=>{
+  group = await organisationGroup.update(item,{where:{id:item.id},returning:true})
+  })
+    )
+    return {data:group, success:true}
+  }catch(error){
+    throw new Error(error);
+  }
+  
+  }
+  
+  const organisationGroupList = async (req) => {
+    try {
+      const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+      const size = req.body.pageSize ? req.body.pageSize : 10;
+      let whrCondition = { deleted: false };
+      if (req.body.search) {
+        const obj = {
+          groupName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('groupName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+        };
+        whrCondition = { ...obj, ...whrCondition };
+      }
+      if (req.body.id) {
+        whrCondition = { id: req.body.id, deleted: false }
+      }
+  
+      const result = await organisationGroup.findAndCountAll({
+        where: whrCondition,
+  
+  
+        offset: (pageNo - 1) * size,
+        limit: size,
+        distinct: true,
+      });
+      return { data: result, success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  
+  const organisationGroupDelete = async (req) => {
+    try {
+      const collg = await organisationGroup.findOne({
+        where: { id:req.id},
+      });
+  
+      await collg.update({ deleted: true },{where:{id:req.id}});
+      return { success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+//---------------------------------organisation group crud -----------------------------//
+
+
+//---------------------------------organisation brand crud -----------------------------//
+
+const addOrganisationBrand = async(req) =>{
+  try{
+  let brand;
+    await Promise.all(
+      req.body.brandData.map(async(item)=>{
+        brand = await  organisationBrand.create(item)
+      })
+  
+    )
+    return {data:brand, success:true};
+  
+  }catch(error){
+    throw new Error(error);
+  }
+  }
+  
+  const updateOrganisationBrand = async(req) =>{
+  try{
+  let brand;
+    await Promise.all(
+  req.body.brandData.map(async(item)=>{
+  brand = await organisationBrand.update(item,{where:{id:item.id},returning:true})
+  })
+    )
+    return {data:brand, success:true}
+  }catch(error){
+    throw new Error(error);
+  }
+  
+  }
+  
+
+  const organisationBrandList = async (req) => {
+    try {
+      const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+      const size = req.body.pageSize ? req.body.pageSize : 10;
+      let whrCondition = { deleted: false };
+      if (req.body.search) {
+        const obj = {
+          brandName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('brandName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+        };
+        whrCondition = { ...obj, ...whrCondition };
+      }
+      if (req.body.id) {
+        whrCondition = { id: req.body.id, deleted: false }
+      }
+  
+      const result = await organisationBrand.findAndCountAll({
+        where: whrCondition,
+  
+  
+        offset: (pageNo - 1) * size,
+        limit: size,
+        distinct: true,
+      });
+      return { data: result, success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+  
+  const organisationBrandDelete = async (req) => {
+    try {
+      const collg = await organisationBrand.findOne({
+        where: { id:req.id},
+      });
+  
+      await collg.update({ deleted: true },{where:{id:req.id}});
+      return { success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+
+//---------------------------------organisation brand crud -----------------------------//
+
 
 module.exports = {
   addSector,
@@ -1062,5 +1403,17 @@ module.exports = {
   organisationSectorDelete,
   organisationIndustryDelete,
   organisationBusinessDelete,
-  organisationcompanyLevelDelete
+  organisationcompanyLevelDelete,
+  addCompany,
+  updateCompany,
+  companyList,
+  companyDelete,
+  addOrganisationGroup,
+  updateOrganisationGroup,
+  organisationGroupList,
+  organisationGroupDelete,
+  addOrganisationBrand,
+  updateOrganisationBrand,
+  organisationBrandList,
+  organisationBrandDelete
 };

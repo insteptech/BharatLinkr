@@ -38,9 +38,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
-
-
-
   }, {
     sequelize,
     modelName: 'organisationCMS',
