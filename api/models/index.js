@@ -102,7 +102,10 @@ db.collegeAssociateCourse.hasMany(db.collegeAssociateStream, { as: "CourseAssoci
 db.collegeAssociateStream.belongsTo(db.mainStream, { as: "MainStream", foreignKey: 'mainStreamId' })
 db.collegeAssociateStream.belongsTo(db.subStream, { as: "SubStream", foreignKey: 'subStreamId' })
 db.collegeAssociateStream.belongsTo(db.colStream, { as: "ColStream", foreignKey: 'colStreamId' })
-db.collegeAssociateStream.belongsTo(db.masterFilter, { as: "FeeDetails", foreignKey: 'courseFeeDetailsId' })
+
+db.collegeAssociateCourse.hasMany(db.collegeAssociateFees, { as: "CourseFees", foreignKey: 'collegeAssociateId' })
+db.collegeAssociateFees.belongsTo(db.masterFilter, { as: "FeeDetails", foreignKey: 'courseFeeDetailsId' })
+
 
 
 
