@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('collegeAssociateStreams', {
+    await queryInterface.createTable('collegeAssociateFees', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,31 +16,15 @@ module.exports = {
           key: 'id',
         },
       },
-      mainStreamId: {
+      courseFeeDetailsId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'mainStreams',
+          model: 'masterFilters',
           key: 'id',
         },
       },
-      subStreamId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'subStreams',
-          key: 'id',
-        },
-      },
-      colStreamId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'colStreams',
-          key: 'id',
-        },
-      },
-
+      fees: Sequelize.INTEGER,
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
@@ -60,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('collegeAssociateStreams');
+    await queryInterface.dropTable('collegeAssociateFees');
   }
 };
