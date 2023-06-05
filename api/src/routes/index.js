@@ -13,12 +13,7 @@ const exam = require('./exam.route');
 const college = require('./college.route');
 const corporate =require('./corporate.route');
 const organisation =require('./organisation.route');
-
-
-
-
-
-
+const profession =require('./profession.route');
 
 
 
@@ -37,7 +32,9 @@ const defaultRoutes = [
   {path: '/Exam', route:exam},
   {path: '/college', route:college},
   {path: '/corporate', route:corporate},
-  {path: '/organisation', route:organisation}
+  {path: '/organisation', route:organisation},
+  {path: '/profession', route:profession}
+
 
 
 

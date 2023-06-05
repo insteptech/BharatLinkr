@@ -176,6 +176,7 @@ db.organisation.belongsTo(db.organisationCompany,{as:"OrganisationCompany", fore
 db.organisation.belongsTo(db.organisationBrand,{as:"OrganisationBrand", foreignKey: "brandId"})
 db.organisation.belongsTo(db.organisationGroup,{as:"OrganisationGroup", foreignKey: "groupId"})
 
+db.professionCode.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey: "familyId"})
 
 
 
