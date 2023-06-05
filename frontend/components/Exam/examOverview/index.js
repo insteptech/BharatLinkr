@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Examleftpage from "./examleftpage";
 import ExamrightPage from "./examrightpage";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function ExamOverView(props) {
   const [tab, setTab] = useState("about");
@@ -187,19 +188,20 @@ function ExamOverView(props) {
         <Container>
           <Row>
             <Col lg={12} md={12} className="">
-              <div className="blue_row_tabs">
-                <Swiper
+              <div className="blue_row_tabs mt-0">
+              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                {/* <Swiper
                   className="swiper_main_blue_row"
                   navigation
                   modules={[Navigation]}
                   spaceBetween={8}
                   autoplay={true}
                   slidesPerView={8}
-                >
-                  <ul className="nav tabs_scroll" style={{ display: "flex" }}>
+                > */}
+                  <ul className="nav tabs_scroll line_height" style={{ display: "flex" }}>
                     {FormSteps &&
                       FormSteps?.map((steps, stepsIndex) => (
-                        <SwiperSlide className="swiper_sub_div">
+                        // <SwiperSlide className="swiper_sub_div">
                           <li className="nav-item " key={stepsIndex}>
                             <a
                               className={`nav-link admin_tabs_name blue_row_tabs ${
@@ -212,10 +214,11 @@ function ExamOverView(props) {
                               {steps.value}
                             </a>
                           </li>
-                        </SwiperSlide>
+                        // </SwiperSlide>
                       ))}
                   </ul>
-                </Swiper>
+                {/* </Swiper> */}
+                </ScrollingCarousel>
               </div>
             </Col>
             <Col>

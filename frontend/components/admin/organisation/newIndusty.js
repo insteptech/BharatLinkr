@@ -229,7 +229,7 @@ const NewIndusty = () => {
                 <Row>
                   <Col className="text-center">
                     <button className="admin_signup_btn  mt-3" type="submit">
-                      {router.query.Id ? "Update" : "submit"}
+                      {router.query.Id ? "Update" : "Submit"}
                     </button>
                   </Col>
                 </Row>

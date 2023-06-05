@@ -532,7 +532,7 @@ optgroup {
   background: var(--admin-btn-bg);
   max-width: 14.625rem;
   border-radius: 0.3125rem;
-  padding: 1rem 1.875rem;
+  padding: 0.75rem 1.875rem;
   margin-top: 4.5rem;
   margin-bottom: 6.875rem;
   font-weight: 500;
@@ -1752,6 +1752,15 @@ input::-webkit-inner-spin-button {
   .card_btn{
     margin-bottom: 0px !important;
   }
+  .icon_text_row{
+    border-bottom: 0.0313rem solid #aaa9ac65;
+    padding-bottom: 10px;
+    justify-content: center;
+  }
+  .average_fees_text{
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @media screen and (max-width: 576px) {
@@ -2461,6 +2470,10 @@ margin-bottom: 20px !important;
   max-height: 360px;
   overflow: auto;
 }
+.max_height_overflow{
+  max-height: 150px;
+  overflow: auto;
+}
 .input_padding {
   width: 100%;
   padding: 0.625rem 1.25rem !important;
@@ -2698,9 +2711,9 @@ margin-bottom: 20px !important;
 }
 .view_and_apply_btn:hover {
   color: #FFA500;
-  border-radius: 20px;
-  background: transparent;
-  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  /* border-radius: 20px; */
+  background: var(--admin-body-bg);
+  /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
 }
 .view_and_apply_btn:active {
   background: var(--admin-btn-bg) !important;
@@ -3609,11 +3622,50 @@ img {
 .down_arrow_icon {
   margin-left: 0.3125rem;
 }
+.line_height .nav-link{
+  line-height: 26px;
+}
+.item_align{
+  display: flex;
+  align-items: center;
+}
+.item_end{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.course_fee_card_btn{
+  padding: 6px 20px !important;
+}
+.margin_none{
+  margin: 0;
+}
+.course_fee_card_paira{
+font-weight: 500;
+font-size: 13px;
+line-height: 20px;
+color: #0F0C1A;
+opacity: 0.9;
+margin-bottom: 0;
+}
+.icon_text_row{
+  display: flex;
+  align-items: center;
+  gap:7px;
+  flex-wrap:wrap;
+}
+.underline{
+  text-decoration: underline;
+  cursor: pointer;
+}
+.course_card_dot .dropdown-menu{
+width: 100px !important;
+}
 
 /* ---------------------------------corporate-page-start--------------------------- */
 
 .corporate_card {
-  padding: 0.625rem 1.25rem !important;
+  padding: 0.625rem 1.25rem !important; 
 }
 .font_15 {
   font-size: 0.9375rem;
@@ -4107,6 +4159,20 @@ img {
   padding: 0.625rem;
   text-align: center;
   margin-left: 1.25rem;
+}
+
+.course_fees_card{
+  /* padding: 16px !important; */
+}
+.total_fees_row{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.total_fees_main_row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* ---------------------------------user-college-about-page-end--------------------------- */
@@ -5393,10 +5459,7 @@ a:hover {
   margin-left: 40px;
 }
 .three_dot_btn:hover {
-  background: var(--admin-bg) !important;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  border: 0.0313rem solid #aaa9ac65;
 }
 .blue_three_dot .dropdown-toggle::after {
   display: none !important;
