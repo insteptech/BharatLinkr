@@ -104,6 +104,7 @@ function CompanyCard({ setModalShow }) {
               </ScrollingCarousel>
             </div> */}
       <>
+
         {orgList?.rows?.map((item, index) => {
           let isliked = orgLikedList.find((i) => {
             if (item.id === i.categoryId) {
@@ -131,9 +132,7 @@ function CompanyCard({ setModalShow }) {
                     </div>
                     <div className="w-100">
                       <h5 className="p_c_card_master_heading  mobile_blue_text mobile_font_18">
-                        {item?.companyName
-                          ? item?.companyName
-                          : "Tata Consultancy Services"}
+                        {item?.OrganisationCompany?.companyName}
                       </h5>
                       <div className="d-flex">
                         <div className="like_comment_row">
