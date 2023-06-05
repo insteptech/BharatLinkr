@@ -319,18 +319,18 @@ const getMasterFilterById = async (req) => {
         },
       });
 
-      const inCollegeAssociateStream = await collegeAssociateStream.findOne({
-        where: {
-          [Op.or]: [
-            { courseFeeDetailsId: req.id }
-          ],
-          deleted: false,
-        },
-      });
+      // const inCollegeAssociateStream = await collegeAssociateStream.findOne({
+      //   where: {
+      //     [Op.or]: [
+      //       { courseFeeDetailsId: req.id }
+      //     ],
+      //     deleted: false,
+      //   },
+      // });
 
-      if (inExam || inCourse || inCollege || inCollegeAgency || inCollegeAssociateCourse || inCollegeAssociateStream) {
+      if (inExam || inCourse || inCollege || inCollegeAgency || inCollegeAssociateCourse ) {
         throw new Error(`Sorry can't delete. As it is releated with
-        ${inExam ? 'Exam,' : inCourse ? 'Course,' : inCollege ? 'College': inCollegeAgency ? 'College': inCollegeAssociateCourse ? 'College': inCollegeAssociateStream ? 'College': ''}`);
+        ${inExam ? 'Exam,' : inCourse ? 'Course,' : inCollege ? 'College': inCollegeAgency ? 'College': inCollegeAssociateCourse ? 'College':  ''}`);
       }
       await master.update({ deleted: true });
       return { success: true };

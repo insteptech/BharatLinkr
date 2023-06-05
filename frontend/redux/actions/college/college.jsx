@@ -67,15 +67,3 @@ export const updateCollege = createAsyncThunk(
       .catch((err) => err);
   }
 );
-// export const CollegeLikesList = createAsyncThunk(
-//   "collegeLikes/college/collegeLikeShareCount",
-//   async (id) => {
-//     return apiRequest
-//       .post("auth/userLikesList", {
-//         userId: id,
-//         categoryTypes: "college",
-//       })
-//       .then((res) => res)
-//       .catch((err) => err);
-//   }
-// );

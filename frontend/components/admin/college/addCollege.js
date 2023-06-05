@@ -1,13 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Col, Container, placeholder, Row, Tab, Tabs } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
-import {
-  buttonTypes,
-  FieldTypes,
-  inputFieldTypes,
-} from "../../../utils/helper";
-import FormGenerator from "../../common-components/Form/FormGenerator";
-import Select from "react-select";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,6 +8,7 @@ import { cityDropdown } from "../../../redux/actions/location/createCity";
 import { getState } from "../../../redux/actions/location/createState";
 import {
   addCollege,
+  deleteAssociateCourse,
   getCollegebyId,
   updateCollege,
 } from "../../../redux/actions/college/college";
@@ -57,9 +51,18 @@ function CreateCollege() {
 
   const [associateCollege, setAssociateCollege] = useState([]);
 
+  const [collegestreamdata, setCollegestreamdata] = useState([]);
+
+  const [showAddCourse, setShowAddCourse] = useState(false);
+  const [showIndex, setShowIndex] = useState();
+
   const [editCourse, setEditCourse] = useState(null);
 
-  const [colstreamdata, setColstreamdata] = useState();
+  const [colstreamdata, setColstreamdata] = useState(null);
+  const [substreamopt, setSubstreamopt] = useState(null);
+
+  const [updateCollegestream, setUpdateCollegestream] = useState([]);
+
 
   const cityList = useSelector(
     (State) => State.cityList?.cityList?.data?.result
@@ -85,12 +88,23 @@ function CreateCollege() {
 
   const handleMainstreamselect = (e) => {
     let selectvalue = e.target.value;
+    setSubstreamopt(null);
+    setColstreamdata(null);
     dispatch(getSubstreamData({ mainStreamId: selectvalue }));
   };
 
+  useEffect(() => {
+    if (substreamopt === null) {
+      setColstreamdata(null);
+    }
+  }, [substreamopt]);
+
   const handleSubstreamselect = (e) => {
     let substreamval = e.target.value;
-    dispatch(getColStreamlist({ subStreamId: substreamval }));
+    dispatch(getColStreamlist({ subStreamId: substreamval })).then((e) =>
+      setColstreamdata(true)
+    );
+    setColstreamdata(null);
   };
 
   const handleColstreamselect = (e) => {
@@ -107,8 +121,12 @@ function CreateCollege() {
     }
   });
 
-  const addAssociateCourse = (fields, form, collegecourse) => {
+  const [updateAssociatecourse, setUpdateAssociatecourse] = useState([]);
+
+  const addAssociateCourse = (fields, form, collegecourse, collegestream) => {
+    
     setAssociateCollege([...associateCollege, collegecourse[0]]);
+    setCollegestreamdata([...collegestreamdata, collegestream[0]]);
 
     form.change("collegeCourse", [
       {
@@ -134,8 +152,45 @@ function CreateCollege() {
     ]);
   };
 
-  const handleEditcollegeDetails = (editcoursedata) => {
-    setEditCourse(editcoursedata);
+  const addUpdatedAssociateCourse = (fields, form, collegecourse, collegestream) => {
+    
+  setUpdateAssociatecourse([...updateAssociatecourse, collegecourse[0]])
+  setUpdateCollegestream([...updateCollegestream, collegestream[0]])
+  
+    form.change("collegeCourse", [
+      {
+        courseTypeId: "",
+        courseName: "",
+        coursePlaceId: "",
+        courseDuration: "",
+        courseEligibility: "",
+        courseLevel: "",
+        programTypeId: "",
+        courseCategoryId: "",
+        chooseExamAcceptedId: "",
+      },
+    ]);
+    form.change("collegeStreams", [
+      {
+        mainStreamId: "",
+        subStreamId: "",
+        colStreamId: "",
+        courseFeeDetailsId: "",
+        courseFee: "",
+      },
+    ]);
+  };
+
+
+  const handleDeleteAssociate = (deletecourse) => {
+    let deletepayload = {
+      id: deletecourse.id,
+      collegeId: deletecourse.collegeId,
+    };
+
+    dispatch(deleteAssociateCourse(deletepayload)).then((res) => {
+      console.log(res, "werwerwer2323333");
+    });
   };
 
   const handleSubmit = (values) => {
@@ -435,7 +490,7 @@ function CreateCollege() {
     let itemArray5 = [];
 
     if (dataValue === 0) {
-      values.college.map((item, index) => {
+      values?.college?.map((item, index) => {
         const error = {};
         if (!item.chooseAffiliationId) {
           error["chooseAffiliationId"] = "*";
@@ -477,7 +532,7 @@ function CreateCollege() {
       });
       errors["college"] = itemArray1;
 
-      values.collegeAgencies.map((item, index) => {
+      values?.collegeAgencies?.map((item, index) => {
         const error = {};
         if (!item.collegeAgencyId) {
           error["collegeAgencyId"] = "*";
@@ -496,7 +551,7 @@ function CreateCollege() {
       errors["collegeAgencies"] = itemArray2;
     }
     if (dataValue === 1) {
-      values.collegeCourse.map((item, index) => {
+      values?.collegeCourse?.map((item, index) => {
         let error = {};
         if (!item.courseTypeId) {
           error["courseTypeId"] = "*";
@@ -536,7 +591,7 @@ function CreateCollege() {
       });
       errors["collegeCourse"] = itemArray4;
 
-      values.collegeStreams.map((item, index) => {
+      values?.collegeStreams?.map((item, index) => {
         let error = {};
         if (!item.mainStreamId) {
           error["mainStreamId"] = "*";
@@ -551,7 +606,7 @@ function CreateCollege() {
       });
       errors["collegeStreams"] = itemArray3;
 
-      values.collegeStreams.map((item, index) => {
+      values?.collegeStreams?.map((item, index) => {
         let error = {};
         if (!item.courseFeeDetailsId) {
           error["courseFeeDetailsId"] = "*";
@@ -563,7 +618,6 @@ function CreateCollege() {
       });
       errors["collegeStreams"] = itemArray5;
     }
-
     return errors;
   };
 
@@ -599,40 +653,20 @@ function CreateCollege() {
             collegeImage: collegeDetails?.collegeImage,
           },
         ];
+        initialValues.collegeCourse = [
+          {
+            courseTypeId: "",
+            courseName: "",
+            coursePlaceId: "",
+            courseDuration: "",
+            courseEligibility: "",
+            courseLevel: "",
+            programTypeId: "",
+            courseCategoryId: "",
+            chooseExamAcceptedId: "",
+          },
+        ];
 
-        // {
-        //   editCourse
-        //     ? (initialValues.collegeCourse = [
-        //         {
-        //           courseTypeId: editCourse?.courseTypeId,
-        //           courseName: editCourse?.courseName,
-        //           coursePlaceId: editCourse?.coursePlaceId,
-        //           courseDuration: editCourse?.courseDuration,
-        //           courseEligibility: editCourse?.courseEligibility,
-        //           courseLevel: editCourse?.courseLevel,
-        //           programTypeId: editCourse?.ProgramType?.id,
-        //           courseCategoryId: editCourse?.CourseCategory?.id,
-        //           chooseExamAcceptedId: editCourse?.chooseExamAcceptedId,
-        //         },
-        //       ])
-        //     :
-        collegeDetails?.AssociateCourse?.forEach(
-          (item) =>
-            (initialValues.collegeCourse = [
-              {
-                courseTypeId: item?.courseTypeId,
-                courseName: item?.courseName,
-                coursePlaceId: item?.coursePlaceId,
-                courseDuration: item?.courseDuration,
-                courseEligibility: item?.courseEligibility,
-                courseLevel: item?.courseLevel,
-                programTypeId: item?.ProgramType?.id,
-                courseCategoryId: item?.CourseCategory?.id,
-                chooseExamAcceptedId: item?.chooseExamAcceptedId,
-              },
-            ])
-        );
-        // }
         collegeDetails?.CollegeAbout?.forEach((item) => {
           initialValues.collegeAbouts = [
             {
@@ -735,6 +769,15 @@ function CreateCollege() {
               ])
           )
         );
+        initialValues.collegeStreams = [
+          {
+            mainStreamId: "",
+            subStreamId: "",
+            colStreamId: "",
+            courseFeeDetailsId: "",
+            courseFee: "",
+          },
+        ];
         return initialValues;
       }
     } else {
@@ -859,6 +902,161 @@ function CreateCollege() {
   const handleCityList = (e) => {
     dispatch(cityDropdown(e.target.value));
   };
+
+  const editAssociate = (index, item, form) => {
+    setShowIndex(index);
+    setShowAddCourse(true);
+
+    form.change(`collegeCourse`, [item]);
+    form.change(`collegeStreams`, [
+      {
+        mainStreamId: 1
+        [index]?.mainStreamId,
+        subStreamId: collegestreamdata[index]?.subStreamId,
+        colStreamId: collegestreamdata[index]?.colStreamId,
+        courseFeeDetailsId: collegestreamdata[index]?.courseFeeDetailsId,
+        courseFee: collegestreamdata[index]?.courseFee,
+      },
+    ]);
+  };
+
+  const editAssociateUpdate = (index, item, form) => {
+    setShowIndex(index);
+    setShowAddCourse(true);
+
+    form.change(`collegeCourse`, [item]);
+    form.change(`collegeStreams`, [
+      {
+        mainStreamId: updateCollegestream[0]?.mainStreamId,
+        subStreamId: updateCollegestream[0]?.subStreamId,
+        colStreamId: updateCollegestream[0]?.colStreamId,
+        courseFeeDetailsId: updateCollegestream[0]?.courseFeeDetailsId,
+        courseFee: updateCollegestream[0]?.courseFee
+      }
+    ]);
+
+    console.log(updateCollegestream, "dfgdfgdfgdfgdfg");
+
+    if (updateAssociatecourse){
+
+      let streamCollegeDetailsObj = {};
+      updateAssociatecourse?.AssociateCourse?.map((element) => {
+        element?.CourseAssociateStream?.map((item) => {
+          Object.entries(item).map(([key, value]) => {
+            streamCollegeDetailsObj[key] = value;
+          });
+        });
+      });
+  
+      form.change(`collegeStreams`, [
+        {
+          mainStreamId: streamCollegeDetailsObj?.mainStreamId,
+          subStreamId: streamCollegeDetailsObj?.SubStream?.id,
+          colStreamId: streamCollegeDetailsObj?.ColStream?.colStreamName,
+          courseFeeDetailsId: streamCollegeDetailsObj?.courseFeeDetailsId,
+          courseFee: streamCollegeDetailsObj?.courseFee,
+        },
+      ]);
+    }
+  };
+
+  const handleDeleteAssociateCourse = (index) => {
+    let updatedAssociateCollege = [...associateCollege];
+    updatedAssociateCollege.splice(index, 1);
+    setAssociateCollege(updatedAssociateCollege);
+  };
+
+  const handleUpdateCourse = (form) => {
+    setShowAddCourse(false);
+    let updateAssociate = [...associateCollege];
+    updateAssociate.splice(
+      showIndex,
+      1,
+      ...form.getState().values.collegeCourse
+    );
+    setAssociateCollege(updateAssociate);
+
+    let updateCollegestream = [...collegestreamdata];
+    updateCollegestream.splice(
+      showIndex,
+      1,
+      ...form.getState().values.collegeStreams
+    );
+    setCollegestreamdata(updateCollegestream);
+
+    form.change("collegeCourse", [
+      {
+        courseTypeId: "",
+        courseName: "",
+        coursePlaceId: "",
+        courseDuration: "",
+        courseEligibility: "",
+        courseLevel: "",
+        programTypeId: "",
+        courseCategoryId: "",
+        chooseExamAcceptedId: "",
+      },
+    ]);
+
+    form.change("collegeStreams", [
+      {
+        mainStreamId: "",
+        subStreamId: "",
+        colStreamId: "",
+        courseFeeDetailsId: "",
+        courseFee: "",
+      },
+    ]);
+  };
+
+  // const handleUpdateCourseID = (form) => {
+  //   setShowAddCourse(false);
+  //   let updateAssociate = [...associateCollege];
+  //   updateAssociate.splice(
+  //     showIndex,
+  //     1,
+  //     ...form.getState().values.collegeCourse
+  //   );
+  //   setAssociateCollege(updateAssociate);
+
+  //   let updateCollegestream = [...collegestreamdata];
+  //   updateCollegestream.splice(
+  //     showIndex,
+  //     1,
+  //     ...form.getState().values.collegeStreams
+  //   );
+  //   setCollegestreamdata(updateCollegestream);
+
+  //   form.change("collegeCourse", [
+  //     {
+  //       courseTypeId: "",
+  //       courseName: "",
+  //       coursePlaceId: "",
+  //       courseDuration: "",
+  //       courseEligibility: "",
+  //       courseLevel: "",
+  //       programTypeId: "",
+  //       courseCategoryId: "",
+  //       chooseExamAcceptedId: "",
+  //     },
+  //   ]);
+
+  //   form.change("collegeStreams", [
+  //     {
+  //       mainStreamId: "",
+  //       subStreamId: "",
+  //       colStreamId: "",
+  //       courseFeeDetailsId: "",
+  //       courseFee: "",
+  //     },
+  //   ]);
+  //  };
+
+  useEffect(() => {
+    setUpdateAssociatecourse(collegeDetails?.AssociateCourse);
+  }, [collegeDetails]);
+
+ 
 
   return (
     <>
@@ -1561,8 +1759,7 @@ function CreateCollege() {
                             </tr>
                           </thead>
                           <tbody>
-                            {associateCollege &&
-                              associateCollege?.map((asscourse, index) => {
+                            {associateCollege && associateCollege?.map((asscourse, index) => {
                                 return (
                                   <tr key={index}>
                                     <td className="text-center admin_table_data">
@@ -1577,12 +1774,17 @@ function CreateCollege() {
                                       <img
                                         className="mx-1 admin_table_action_icon"
                                         src="/images/edit-icon-blue.png"
-                                        onClick={() => handleEdit(item)}
+                                        onClick={() =>
+                                          editAssociate(index, asscourse, form)
+                                        }
                                       ></img>
+
                                       <img
                                         className="mx-1 admin_table_action_icon"
                                         src="/images/delete-icon-blue.png"
-                                        onClick={() => handleDelete(item)}
+                                        onClick={() =>
+                                          handleDeleteAssociateCourse(index)
+                                        }
                                       ></img>
                                     </td>
                                   </tr>
@@ -1590,10 +1792,10 @@ function CreateCollege() {
                               })}
                           </tbody>
                         </Table>
-                        <hr></hr>
+                      
                       </div>
                     )}
-
+                    
                     {Id && (
                       <div>
                         <Table
@@ -1617,9 +1819,8 @@ function CreateCollege() {
                             </tr>
                           </thead>
                           <tbody>
-                            {collegeDetails &&
-                              collegeDetails?.AssociateCourse?.map(
-                                (asscourse, index) => {
+                            {updateAssociatecourse &&
+                              updateAssociatecourse?.map((asscourse, index) => {
                                   return (
                                     <tr key={index}>
                                       <td className="text-center admin_table_data">
@@ -1635,13 +1836,19 @@ function CreateCollege() {
                                           className="mx-1 admin_table_action_icon"
                                           src="/images/edit-icon-blue.png"
                                           onClick={() =>
-                                            handleEditcollegeDetails(asscourse)
+                                            editAssociateUpdate(
+                                              index,
+                                              asscourse,
+                                              form
+                                            )
                                           }
                                         ></img>
                                         <img
                                           className="mx-1 admin_table_action_icon"
                                           src="/images/delete-icon-blue.png"
-                                          onClick={() => handleDelete(item)}
+                                          onClick={() =>
+                                            handleDeleteAssociate(asscourse)
+                                          }
                                         ></img>
                                       </td>
                                     </tr>
@@ -1653,6 +1860,7 @@ function CreateCollege() {
                         <hr></hr>
                       </div>
                     )}
+
                     <FieldArray name="collegeCourse">
                       {({ fields }) => (
                         <>
@@ -1665,209 +1873,220 @@ function CreateCollege() {
                                       <>
                                         {fields.map((name, index) => (
                                           <Row>
-                                            <Col lg={4} md={8}>
-                                              <label className="signup_form_label">
-                                                Choose Streams
-                                              </label>
-                                              <Field
-                                                name={`${name}.mainStreamId`}
-                                              >
-                                                {({ input, meta }) => (
-                                                  <>
-                                                    <select
-                                                      {...input}
-                                                      className="form-control select-style signup_form_input"
-                                                      onChange={(e) => {
-                                                        input.onChange(e);
-                                                        handleMainstreamselect(
-                                                          e
-                                                        );
-                                                      }}
-                                                    >
-                                                      <option value={""}>
-                                                        Select Main Stream
-                                                      </option>
-                                                      {mainStreamlist &&
-                                                        mainStreamlist.length >
-                                                          0 &&
-                                                        mainStreamlist.map(
-                                                          (item, index) => (
-                                                            <option
-                                                              key={`MainStream_${index}`}
-                                                              value={item?.id}
-                                                            >
-                                                              {
-                                                                item.mainStreamName
-                                                              }
-                                                            </option>
-                                                          )
-                                                        )}
-                                                    </select>
-                                                    <div className="text-end">
-                                                      <img
-                                                        className="select_down_icon"
-                                                        src="/images/down.png"
-                                                      />
-                                                    </div>
-                                                    <div className="d-flex">
-                                                      {meta.touched &&
-                                                        meta.error && (
-                                                          <span className="text-danger required_msg">
-                                                            {meta.error}
-                                                          </span>
-                                                        )}
-                                                    </div>
-                                                  </>
-                                                )}
-                                              </Field>
-                                            </Col>
-                                            <Col lg={4} md={8}>
-                                              <Field
-                                                name={`${name}.subStreamId`}
-                                              >
-                                                {({ input, meta }) => (
-                                                  <>
-                                                    <select
-                                                      {...input}
-                                                      className="form-control select-style signup_form_input margin_top"
-                                                      onChange={(e) => {
-                                                        input.onChange(e);
-                                                        handleSubstreamselect(
-                                                          e
-                                                        );
-                                                      }}
-                                                    >
-                                                      <option value={""}>
-                                                        Select Sub Stream
-                                                      </option>
-
-                                                      {substreamSelectVal &&
-                                                        substreamSelectVal.length >
-                                                          0 &&
-                                                        substreamSelectVal.map(
-                                                          (item, index) => (
-                                                            <option
-                                                              key={`SubStream_${index}`}
-                                                              value={item?.id}
-                                                            >
-                                                              {
-                                                                item?.subStreamName
-                                                              }
-                                                            </option>
-                                                          )
-                                                        )}
-                                                    </select>
-                                                    <div className="text-end">
-                                                      <img
-                                                        className="select_down_icon"
-                                                        src="/images/down.png"
-                                                      />
-                                                    </div>
-                                                    <div className="d-flex">
-                                                      {meta.touched &&
-                                                        meta.error && (
-                                                          <span className="text-danger required_msg">
-                                                            {meta.error}
-                                                          </span>
-                                                        )}
-                                                    </div>
-                                                  </>
-                                                )}
-                                              </Field>
-                                            </Col>
-                                            <Col
-                                              lg={4}
-                                              md={8}
-                                              className="d-flex margin_top"
-                                            >
-                                              <Field
-                                                name={`${name}.colStreamId`}
-                                              >
-                                                {({ input, meta }) => (
-                                                  <>
-                                                    <select
-                                                      {...input}
-                                                      className="form-control select-style signup_form_input margin_bottom"
-                                                      onChange={(e) => {
-                                                        input.onChange(e);
-                                                        handleColstreamselect(
-                                                          e
-                                                        );
-                                                      }}
-                                                      value={colstreamdata}
-                                                    >
-                                                      <option value={""}>
-                                                        Select Col Stream
-                                                      </option>
-                                                      {colstreamSelectVal &&
-                                                        colstreamSelectVal.length >
-                                                          0 &&
-                                                        colstreamSelectVal.map(
-                                                          (item, index) => (
-                                                            <option
-                                                              key={`ColStream_${index}`}
-                                                              value={item.id}
-                                                            >
-                                                              {
-                                                                item.colStreamName
-                                                              }
-                                                            </option>
-                                                          )
-                                                        )}
-                                                    </select>
-                                                    <div className="">
-                                                      <img
-                                                        className="select_down_icon_second"
-                                                        src="/images/down.png"
-                                                      />
-                                                    </div>
-                                                    <div className="d-flex">
-                                                      {meta.touched &&
-                                                        meta.error && (
-                                                          <span className="text-danger required_msg">
-                                                            {meta.error}
-                                                          </span>
-                                                        )}
-                                                    </div>
-                                                  </>
-                                                )}
-                                              </Field>
-
-                                              <div className="d-flex mt-2 margin_bottom">
-                                                <div
-                                                  type="button"
-                                                  className="add_remove_btn ms-2"
-                                                  onClick={() =>
-                                                    fields.push({
-                                                      mainStreamId: "",
-                                                      subStreamId: "",
-                                                      colStreamId: "",
-                                                    })
-                                                  }
+                                            <>
+                                              <Col lg={4} md={8}>
+                                                <label className="signup_form_label">
+                                                  Choose Streams
+                                                </label>
+                                                <Field
+                                                  name={`${name}.mainStreamId`}
                                                 >
-                                                  <img
-                                                    className="add_remove_icon"
-                                                    src="/images/plus.png"
-                                                  />
-                                                </div>
-                                                {fields.length > 1 ? (
+                                                  {({ input, meta }) => (
+                                                    <>
+                                                      <select
+                                                        {...input}
+                                                        className="form-control select-style signup_form_input"
+                                                        onChange={(e) => {
+                                                          input.onChange(e);
+                                                          handleMainstreamselect(
+                                                            e
+                                                          );
+                                                        }}
+                                                      >
+                                                        <option value={""}>
+                                                          Select Main Stream
+                                                        </option>
+                                                        {mainStreamlist &&
+                                                          mainStreamlist.length >
+                                                            0 &&
+                                                          mainStreamlist.map(
+                                                            (item, index) => (
+                                                              <option
+                                                                key={`MainStream_${index}`}
+                                                                value={item?.id}
+                                                              >
+                                                                {
+                                                                  item.mainStreamName
+                                                                }
+                                                              </option>
+                                                            )
+                                                          )}
+                                                      </select>
+                                                      <div className="text-end">
+                                                        <img
+                                                          className="select_down_icon"
+                                                          src="/images/down.png"
+                                                        />
+                                                      </div>
+                                                      <div className="d-flex">
+                                                        {meta.touched &&
+                                                          meta.error && (
+                                                            <span className="text-danger required_msg">
+                                                              {meta.error}
+                                                            </span>
+                                                          )}
+                                                      </div>
+                                                    </>
+                                                  )}
+                                                </Field>
+                                              </Col>
+                                              <Col lg={4} md={8}>
+                                                <Field
+                                                  name={`${name}.subStreamId`}
+                                                >
+                                                  {({ input, meta }) => (
+                                                    <>
+                                                      <select
+                                                        {...input}
+                                                        className="form-control select-style signup_form_input margin_top"
+                                                        onChange={(e) => {
+                                                          input.onChange(e);
+                                                          handleSubstreamselect(
+                                                            e
+                                                          );
+                                                        }}
+                                                        value={substreamopt}
+                                                      >
+                                                        <option
+                                                          value={""}
+                                                          hidden
+                                                        >
+                                                          Select Sub Stream
+                                                        </option>
+
+                                                        {substreamSelectVal &&
+                                                          substreamSelectVal.length >
+                                                            0 &&
+                                                          substreamSelectVal.map(
+                                                            (item, index) => (
+                                                              <option
+                                                                key={`SubStream_${index}`}
+                                                                value={item?.id}
+                                                              >
+                                                                {
+                                                                  item?.subStreamName
+                                                                }
+                                                              </option>
+                                                            )
+                                                          )}
+                                                      </select>
+                                                      <div className="text-end">
+                                                        <img
+                                                          className="select_down_icon"
+                                                          src="/images/down.png"
+                                                        />
+                                                      </div>
+                                                      <div className="d-flex">
+                                                        {meta.touched &&
+                                                          meta.error && (
+                                                            <span className="text-danger required_msg">
+                                                              {meta.error}
+                                                            </span>
+                                                          )}
+                                                      </div>
+                                                    </>
+                                                  )}
+                                                </Field>
+                                              </Col>
+                                              <Col
+                                                lg={4}
+                                                md={8}
+                                                className="d-flex margin_top"
+                                              >
+                                                <Field
+                                                  name={`${name}.colStreamId`}
+                                                >
+                                                  {({ input, meta }) => (
+                                                    <>
+                                                      <select
+                                                        {...input}
+                                                        value={colstreamdata}
+                                                        className="form-control select-style signup_form_input margin_bottom"
+                                                        onChange={(e) => {
+                                                          input.onChange(e);
+                                                          handleColstreamselect(
+                                                            e
+                                                          );
+                                                        }}
+                                                      >
+                                                        <option
+                                                          value={""}
+                                                          hidden
+                                                        >
+                                                          Select Col Stream
+                                                        </option>
+                                                        {colstreamdata !==
+                                                          null &&
+                                                          colstreamSelectVal &&
+                                                          colstreamSelectVal.length >
+                                                            0 &&
+                                                          colstreamSelectVal.map(
+                                                            (item, index) => (
+                                                              <option
+                                                                key={`ColStream_${index}`}
+                                                                value={item.id}
+                                                              >
+                                                                {
+                                                                  item.colStreamName
+                                                                }
+                                                              </option>
+                                                            )
+                                                          )}
+                                                      </select>
+                                                      <div className="">
+                                                        <img
+                                                          className="select_down_icon_second"
+                                                          src="/images/down.png"
+                                                        />
+                                                      </div>
+                                                      <div className="d-flex">
+                                                        {meta.touched &&
+                                                          meta.error && (
+                                                            <span className="text-danger required_msg">
+                                                              {meta.error}
+                                                            </span>
+                                                          )}
+                                                      </div>
+                                                    </>
+                                                  )}
+                                                </Field>
+
+                                                <div className="d-flex mt-2 margin_bottom">
                                                   <div
-                                                    className="add_remove_btn ms-2"
                                                     type="button"
+                                                    className="add_remove_btn ms-2"
                                                     onClick={() =>
-                                                      fields.remove(index)
+                                                      fields.push({
+                                                        mainStreamId: "",
+                                                        subStreamId: "",
+                                                        colStreamId: "",
+                                                      })
                                                     }
                                                   >
                                                     <img
                                                       className="add_remove_icon"
-                                                      src="/images/minus.png"
+                                                      src="/images/plus.png"
                                                     />
                                                   </div>
-                                                ) : (
-                                                  <></>
-                                                )}
-                                              </div>
-                                            </Col>
+                                                  {fields.length > 1 ? (
+                                                    <div
+                                                      className="add_remove_btn ms-2"
+                                                      type="button"
+                                                      onClick={() =>
+                                                        fields.remove(index)
+                                                      }
+                                                    >
+                                                      <img
+                                                        className="add_remove_icon"
+                                                        src="/images/minus.png"
+                                                      />
+                                                    </div>
+                                                  ) : (
+                                                    <></>
+                                                  )}
+                                                </div>
+                                              </Col>
+                                            </>
                                           </Row>
                                         ))}
                                       </>
@@ -1940,6 +2159,9 @@ function CreateCollege() {
                                           type="text"
                                           className="form-control select-style signup_form_input margin_bottom"
                                           placeholder="Enter Course Name"
+                                          // onChange={(e) =>
+                                          //   input.onChange(e)
+                                          // }
                                         />
                                       </>
                                     )}
@@ -2401,26 +2623,61 @@ function CreateCollege() {
                               </Row>
                               <Row>
                                 <Col className="text-center">
-                                  <button
-                                    type="reset"
-                                    className="admin_signup_btn me-4 "
-                                    onClick={() =>
-                                      addAssociateCourse(
-                                        fields,
-                                        form,
-                                        values.collegeCourse
-                                      )
-                                    }
+                                  {showAddCourse ? (
+                                    <>
+                                   {!Id ? <button
+                                      className="admin_signup_btn me-4"
+                                      onClick={(e) => handleUpdateCourse(form)}
+                                    >
+                                      update course
+                                    </button>  :
+                                    <button
+                                    className="admin_signup_btn me-4"
+                                    onClick={(e) => handleUpdateCourseID(form)}
                                   >
-                                    Add More
-                                  </button>
-                                  <button
-                                    className="admin_signup_btn admin_signup_btn_mobile"
-                                    type="submit"
-                                    onClick={handleSubmit}
-                                  >
-                                    Submit
-                                  </button>
+                                    update course
+                                  </button>}
+                                    </>
+                                  ) : (
+                                    <>
+                                    {!Id ?  <button
+                                        type="reset"
+                                        className="admin_signup_btn me-4"
+                                        onClick={() => {
+                                          addAssociateCourse(
+                                            fields,
+                                            form,
+                                            values.collegeCourse,
+                                            values.collegeStreams
+                                          );
+                                        
+                                        }}
+                                      >
+                                        Add More
+                                      </button> : <button
+                                        type="reset"
+                                        className="admin_signup_btn me-4"
+                                        onClick={() => {
+                                          addUpdatedAssociateCourse(
+                                            fields,
+                                            form,
+                                            values.collegeCourse,
+                                            values.collegeStreams
+                                          );
+                                       
+                                        }}
+                                      >
+                                        Add More
+                                      </button>}
+                                      <button
+                                        className="admin_signup_btn admin_signup_btn_mobile"
+                                        type="submit"
+                                        onClick={handleSubmit}
+                                      >
+                                        Submit
+                                      </button>
+                                    </>
+                                  )}
                                 </Col>
                               </Row>
                             </div>
