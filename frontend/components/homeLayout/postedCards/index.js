@@ -235,7 +235,91 @@ const PostedCards = () => {
                           </div>
                         </Accordion.Header>
                         <Accordion.Body className="post_bar_accordion_body">
-                          <div className="">
+                          <div className="max_height_overflow">
+                            <div className="mid_comment_profile like_comment_detail_row">
+                              <div
+                                onClick={() => router.push("/editprofile")}
+                                className="mid_comment_left"
+                              >
+                                <img
+                                  className="suggested_card_profile"
+                                  src={item.profileImg}
+                                />
+                              </div>
+
+                              <div className="mid_comment_mid">
+                                <h1 className="font_11">{item.userName}</h1>
+                                <div className="img_student_line">
+                                  <span className="font_11">
+                                    {item?.text}
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="like_comment_icon_row">
+                                <img
+                                  className="like_icon"
+                                  src={item.likeIcon}
+                                />
+                                <img className="like_icon" src={item.comIcon} />
+                              </div>
+                            </div>
+                            <div className="mid_comment_profile like_comment_detail_row">
+                              <div
+                                onClick={() => router.push("/editprofile")}
+                                className="mid_comment_left"
+                              >
+                                <img
+                                  className="suggested_card_profile"
+                                  src={item.profileImg}
+                                />
+                              </div>
+
+                              <div className="mid_comment_mid">
+                                <h1 className="font_11">{item.userName}</h1>
+                                <div className="img_student_line">
+                                  <span className="font_11">
+                                    What a perfect time to share!
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="like_comment_icon_row">
+                                <img
+                                  className="like_icon"
+                                  src={item.likeIcon}
+                                />
+                                <img className="like_icon" src={item.comIcon} />
+                              </div>
+                            </div>
+                            <div className="mid_comment_profile like_comment_detail_row">
+                              <div
+                                onClick={() => router.push("/editprofile")}
+                                className="mid_comment_left"
+                              >
+                                <img
+                                  className="suggested_card_profile"
+                                  src={item.profileImg}
+                                />
+                              </div>
+
+                              <div className="mid_comment_mid">
+                                <h1 className="font_11">{item.userName}</h1>
+                                <div className="img_student_line">
+                                  <span className="font_11">
+                                    What a perfect time to share!
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="like_comment_icon_row">
+                                <img
+                                  className="like_icon"
+                                  src={item.likeIcon}
+                                />
+                                <img className="like_icon" src={item.comIcon} />
+                              </div>
+                            </div>
                             <div className="mid_comment_profile like_comment_detail_row">
                               <div
                                 onClick={() => router.push("/editprofile")}
@@ -251,7 +335,7 @@ const PostedCards = () => {
                                 <h1 className="font_11">{item.userName}</h1>
                                 <div className="img_student_line">
                                   <span className="font_11">
-                                    {item?.text}
+                                    What a perfect time to share!
                                   </span>
                                 </div>
                               </div>
