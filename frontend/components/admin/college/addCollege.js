@@ -49,13 +49,6 @@ function CreateCollege() {
   const router = useRouter();
   const { Id } = router.query;
 
-  const [associateCollege, setAssociateCollege] = useState([]);
-
-  const [collegestreamdata, setCollegestreamdata] = useState([]);
-
-  const [showAddCourse, setShowAddCourse] = useState(false);
-  const [showIndex, setShowIndex] = useState();
-
   const [colstreamdata, setColstreamdata] = useState(null);
   const [substreamopt, setSubstreamopt] = useState(null);
 
@@ -91,11 +84,11 @@ function CreateCollege() {
     }
   });
 
-  const handleMainstreamselect = (e) => {
+  const handleMainstreamselect = (e, streams, index) => {
     let selectvalue = e.target.value;
+    dispatch(getSubstreamData({ mainStreamId: Number(selectvalue) }));
     setSubstreamopt(null);
     setColstreamdata(null);
-    dispatch(getSubstreamData({ mainStreamId: Number(selectvalue) }));
   };
 
   useEffect(() => {
@@ -127,9 +120,8 @@ function CreateCollege() {
     });
   };
 
-
   const handleSubmit = (values, form) => {
-    if (!Id) { 
+    if (!Id) {
       let formData = new FormData();
       if (values.college[0].collegeLogo) {
         formData.append("collegeImageFile", values.college[0].collegeLogo);
@@ -167,7 +159,6 @@ function CreateCollege() {
             formData.append("imageFile", FileState[i]);
           }
         }
-
         delete values.college[0].collegeLogo;
         delete values.college[0].collegeImage;
         const tempvalues = { ...values };
@@ -258,26 +249,26 @@ function CreateCollege() {
         });
       });
 
-      let collegecourse = {}
+      let collegecourse = {};
       collegeDetails.AssociateCourse?.map((element) => {
-         Object.entries(element).map(([key, value]) => {
-           collegecourse[key] = value
-         })
-      })
-    
-      let streamssObj = {}
-      collegecourse?.CourseAssociateStream?.map((element) => {
-         Object.entries(element).map(([key, value]) => {
-          streamssObj[key] = value
-         })
-      })
+        Object.entries(element).map(([key, value]) => {
+          collegecourse[key] = value;
+        });
+      });
 
-      let coursefeeObj = {}
+      let streamssObj = {};
+      collegecourse?.CourseAssociateStream?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
+          streamssObj[key] = value;
+        });
+      });
+
+      let coursefeeObj = {};
       collegecourse?.collegeFees?.map((element) => {
-         Object.entries(element).map(([key, value]) => {
-          coursefeeObj[key] = value
-         })
-      })
+        Object.entries(element).map(([key, value]) => {
+          coursefeeObj[key] = value;
+        });
+      });
 
       let updateDetails = {
         id: collegeDetails?.id,
@@ -304,19 +295,18 @@ function CreateCollege() {
             programTypeId: collegecourse?.programTypeId,
             courseCategoryId: collegecourse?.courseCategoryId,
             chooseExamAcceptedId: collegecourse?.chooseExamAcceptedId,
-   
-      
+
             collegeStreams: [
               {
                 id: streamssObj?.id,
-                mainStreamId: streamssObj?.mainStreamId                ,
+                mainStreamId: streamssObj?.mainStreamId,
               },
               {
                 mainStreamId: streamssObj?.mainStreamId,
                 subStreamId: streamssObj?.subStreamId,
                 colStreamId: streamssObj?.colStreamId,
               },
-            ],     
+            ],
             collegeFees: [
               {
                 id: coursefeeObj?.id,
@@ -405,7 +395,6 @@ function CreateCollege() {
 
         if (formdata !== 0) {
           dispatch(updateCollege(formdata)).then((res) => {
-            console.log(res, "fgdfgdfgdfgdfg");
             if (res?.payload?.data?.success) {
               Router.push("/admin/college");
               toast.success("College updated");
@@ -585,6 +574,8 @@ function CreateCollege() {
 
   const FormSteps = ["College Register", "Associate Course", "CMS"];
 
+  console.log(collegeDetails, "qweqweqweqew");
+
   const setInitialValues = (event) => {
     if (event && Object.keys(event).length > 0) {
       return event;
@@ -613,7 +604,7 @@ function CreateCollege() {
           (item) => {
             let x = item?.CourseAssociateStream?.map((ele) => {
               return {
-                id: ele?.Mainstream?.id,
+                id: ele?.mainStreamId,
                 mainStreamId: ele?.mainStreamId,
                 subStreamId: ele?.subStreamId,
                 colStreamId: ele?.colStreamId,
@@ -644,7 +635,7 @@ function CreateCollege() {
           }
         );
 
-        collegeDetails?.CollegeAbout?.forEach((item) => {
+        collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
             {
               aboutIntro: item?.aboutIntro,
@@ -657,7 +648,7 @@ function CreateCollege() {
           ];
         });
 
-        collegeDetails?.CollegeAdmission?.forEach(
+        collegeDetails?.CollegeAdmission?.map(
           (item) =>
             (initialValues.collegeAdmissions = [
               {
@@ -671,7 +662,7 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.DistanceEducation?.forEach(
+        collegeDetails?.DistanceEducation?.map(
           (item) =>
             (initialValues.distanceEducation = [
               {
@@ -682,7 +673,7 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.Placements?.forEach(
+        collegeDetails?.Placements?.map(
           (item) =>
             (initialValues.placements = [
               {
@@ -696,7 +687,7 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.Scholarship?.forEach(
+        collegeDetails?.Scholarship?.map(
           (item) =>
             (initialValues.scholarShip = [
               {
@@ -709,7 +700,7 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.FAQ?.forEach(
+        collegeDetails?.FAQ?.map(
           (item) =>
             (initialValues.faq = [
               {
@@ -720,7 +711,7 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.CollegeAgency?.forEach(
+        collegeDetails?.CollegeAgency?.map(
           (item) =>
             (initialValues.collegeAgencies = [
               {
@@ -732,7 +723,6 @@ function CreateCollege() {
               },
             ])
         );
-
         return initialValues;
       }
     } else {
@@ -903,6 +893,7 @@ function CreateCollege() {
             render={({
               handleSubmit,
               values,
+              initialValues,
               form: {
                 mutators: { push, pop, remove },
               },
@@ -1583,18 +1574,28 @@ function CreateCollege() {
                                       onClick={() => setDisplayIndex(index)}
                                     ></img>
 
-                                    <img
-                                      className="mx-1 admin_table_action_icon"
-                                      src="/images/delete-icon-blue.png"
-                                      onClick={() => {
-                                        remove("collegeCourse", index);
-                                        if (index !== 0) {
-                                          setDisplayIndex(index - 1);
-                                        } else {
-                                          setDisplayIndex(0);
+                                    {Id ? (
+                                      <img
+                                        className="mx-1 admin_table_action_icon"
+                                        src="/images/delete-icon-blue.png"
+                                        onClick={() =>
+                                          handleDeleteAssociate(asscourse)
                                         }
-                                      }}
-                                    ></img>
+                                      ></img>
+                                    ) : (
+                                      <img
+                                        className="mx-1 admin_table_action_icon"
+                                        src="/images/delete-icon-blue.png"
+                                        onClick={() => {
+                                          remove("collegeCourse", index);
+                                          if (index !== 0) {
+                                            setDisplayIndex(index - 1);
+                                          } else {
+                                            setDisplayIndex(0);
+                                          }
+                                        }}
+                                      ></img>
+                                    )}
                                   </td>
                                 </tr>
                               ))}
@@ -1602,7 +1603,7 @@ function CreateCollege() {
                         </Table>
                       </div>
                     )}
-
+                    {console.log(initialValues, "dfgdfgdfgdfg")}
                     <Row>
                       <FieldArray name="collegeCourse">
                         {({ fields }) => (
@@ -1638,13 +1639,13 @@ function CreateCollege() {
                                                                   e
                                                                 );
                                                                 handleMainstreamselect(
-                                                                  e
+                                                                  e,
+                                                                  values.collegeCourse,
+                                                                  index
                                                                 );
                                                               }}
                                                             >
-                                                              <option
-                                                                value={""}
-                                                              >
+                                                              <option value={0}>
                                                                 Select Main
                                                                 Stream
                                                               </option>
@@ -1688,7 +1689,7 @@ function CreateCollege() {
                                                       </Field>
                                                     </Col>
                                                     <Col lg={4} md={8}>
-                                                      <Field
+                                                    <Field
                                                         name={`${name}.subStreamId`}
                                                       >
                                                         {({ input, meta }) => (
