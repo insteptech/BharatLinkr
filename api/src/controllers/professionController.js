@@ -110,7 +110,49 @@ const addProfession = async function (req, res) {
       });
   };
   
+  const addProfessionRegister = async function (req, res) {
+    await professionManager
+      .addProfessionRegister(req)
+      .then((response) => {
+        res.status(httpStatus.OK).send(response);
+      })
+      .catch((err) => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+      });
+  };
 
+  const professionRegisterList = async function (req, res) {
+    await professionManager
+      .professionRegisterList(req)
+      .then((response) => {
+        res.status(httpStatus.OK).send(response);
+      })
+      .catch((error) => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+      });
+  };
+
+  const updateProfessionRegister = async function (req, res) {
+    await professionManager
+      .updateProfessionRegister(req)
+      .then((response) => {
+        res.status(httpStatus.OK).send(response);
+      })
+      .catch((err) => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+      });
+  };
+
+  const professionRegisterDelete = async function (req, res) {
+    await professionManager
+      .professionRegisterDelete(req.params)
+      .then((response) => {
+        res.status(httpStatus.OK).send(response);
+      })
+      .catch((error) => {
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+      });
+  };
 
 
 module.exports = {
@@ -123,5 +165,9 @@ module.exports = {
   professionCodeList,
   professionCodeDelete,
   updateProfessionCode,
-  professionCodeActive
+  professionCodeActive,
+  addProfessionRegister,
+  professionRegisterList,
+  updateProfessionRegister,
+  professionRegisterDelete
 };
