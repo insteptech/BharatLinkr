@@ -1,5 +1,6 @@
 const { subStream, mainStream, colStream } = require('../../models');
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 const addColStream = async (req) => {
   try {
@@ -28,8 +29,8 @@ const colStreamList = async (req) => {
       const pageNo = req.body.pageNo ? req.body.pageNo : 1;
       const size = req.body.pageSize ? req.body.pageSize : 10;
       let whrCondition = { deleted: false };
-      if(req.body.id || req.body.subStreamId){
-        whrCondition = req.body.id || {subStreamId:req.body.subStreamId, deleted: false}
+      if(req.body.id){
+        whrCondition = {id:req.body.id }
       }
       if (req.body.search) {
         const obj = {
@@ -37,9 +38,15 @@ const colStreamList = async (req) => {
         };
         whrCondition = { ...obj, ...whrCondition };
       }
+
+      let sub = {};
+      if(req.body.subStreamId ){
+        sub ={subStreamId:req.body.subStreamId}
+      }
+
   
       const result = await colStream.findAndCountAll({
-        where: whrCondition,
+        where: { [Op.and]: [sub, whrCondition] },
         include:[
           {
             model: mainStream,
