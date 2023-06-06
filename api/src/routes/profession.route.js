@@ -17,5 +17,14 @@ router.delete('/professionCodeDelete/:id', professionController.professionCodeDe
 router.post('/updateProfessionCode', professionController.updateProfessionCode);
 router.post('/professionCodeActive/:id', professionController.professionCodeActive);
 
+router.post('/addProfessionRegister', professionController.addProfessionRegister);
+router.post('/professionRegisterList', professionController.professionRegisterList);
+router.post('/updateProfessionRegister', professionController.updateProfessionRegister);
+router.delete('/deleteProfessionRegister/:id', professionController.professionRegisterDelete);
+
+
+
+
+
 
 module.exports = router;

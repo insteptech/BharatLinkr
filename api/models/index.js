@@ -178,6 +178,10 @@ db.organisation.belongsTo(db.organisationGroup,{as:"OrganisationGroup", foreignK
 
 db.professionCode.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey: "familyId"})
 
+db.professionRegister.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey:"familyId"})
+db.professionRegister.belongsTo(db.professionCode,{as:"ProfessionCode", foreignKey:"professionId"})
+db.professionRegister.belongsTo(db.course,{as:"Courses", foreignKey:"courseId"})
+
 
 
 

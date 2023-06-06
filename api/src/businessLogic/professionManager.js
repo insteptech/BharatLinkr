@@ -5,7 +5,6 @@ const addFamily = async function (req) {
   const result = await professionDbContext.addFamily(req);
   if (result.success) {
     stream = result.data;
-    // console.log(course, '><<<><><');
     return { data: { stream }, success: true };
   }
 };
@@ -16,7 +15,6 @@ const familyCodeList = async function (req) {
 };
 
 const familyCodeDelete = async function (req) {
-  //   console.log(body, '><><><><><><><><><>');
   const result = await professionDbContext.familyCodeDelete(req);
 
   if (result.success) {
@@ -26,7 +24,6 @@ const familyCodeDelete = async function (req) {
 };
 const updateFamily = async function (req) {
   const result = await professionDbContext.updateFamily(req);
-  //  console.log(body);
   if (result.success) {
     return { data: { result }, success: true };
   }
@@ -48,7 +45,6 @@ const addProfession = async function (req) {
     const result = await professionDbContext.addProfession(req);
     if (result.success) {
       stream = result.data;
-      // console.log(course, '><<<><><');
       return { data: { stream }, success: true };
     }
   };
@@ -59,7 +55,6 @@ const addProfession = async function (req) {
   };
   
   const professionCodeDelete = async function (req) {
-    //   console.log(body, '><><><><><><><><><>');
     const result = await professionDbContext.professionCodeDelete(req);
   
     if (result.success) {
@@ -69,7 +64,6 @@ const addProfession = async function (req) {
   };
   const updateProfessionCode = async function (req) {
     const result = await professionDbContext.updateProfessionCode(req);
-    //  console.log(body);
     if (result.success) {
       return { data: { result }, success: true };
     }
@@ -85,6 +79,36 @@ const addProfession = async function (req) {
   };
 
 
+  const addProfessionRegister = async function (req) {
+    let stream = null;
+    const result = await professionDbContext.addProfessionRegister(req);
+    if (result.success) {
+      stream = result.data;
+      return { data: { stream }, success: true };
+    }
+  };
+
+  const professionRegisterList = async function (req) {
+    const result = await professionDbContext.professionRegisterList(req);
+    return result;
+  };
+
+  const updateProfessionRegister = async function (req) {
+    const result = await professionDbContext.updateProfessionRegister(req);
+    if (result.success) {
+      return { data: { result }, success: true };
+    }
+    return result;
+  };
+
+  const professionRegisterDelete = async function (req) {
+    const result = await professionDbContext.professionRegisterDelete(req);
+  
+    if (result.success) {
+      return { data: { result }, success: true };
+    }
+    return result;
+  };
 
 module.exports = {
     addFamily,
@@ -96,5 +120,9 @@ module.exports = {
   professionCodeList,
   professionCodeDelete,
   updateProfessionCode,
-  professionCodeActive
+  professionCodeActive,
+  addProfessionRegister,
+  professionRegisterList,
+  updateProfessionRegister,
+  professionRegisterDelete
 };

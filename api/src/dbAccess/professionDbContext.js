@@ -1,4 +1,4 @@
-const { familyCode, professionCode } = require('../../models');
+const { familyCode, professionCode, professionRegister, professionCMS, course } = require('../../models');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 
@@ -69,9 +69,19 @@ const familyCodeDelete = async (req) => {
             },
         });
 
-        if (profession) {
+        const professionRegisters = await professionRegister.findOne({
+            where: {
+                [Op.or]: [
+                    { familyId: req.id },
+
+                ],
+                deleted: false,
+            },
+        });
+
+        if (profession || professionRegisters ) {
             throw new Error(`Sorry can't delete. As it is releated with
-      ${profession ? 'profession,' : ''}`);
+      ${profession ? 'profession,' : professionRegisters ? 'professionRegisters,': ''}`);
         }
 
         await family.update({ deleted: true });
@@ -173,11 +183,11 @@ const professionCodeList = async (req) => {
         }
         const result = await professionCode.findAndCountAll({
             where: whrCondition,
-            include:[
+            include: [
                 {
-                    model:familyCode,
+                    model: familyCode,
                     required: false,
-                    as:"FamilyCode"
+                    as: "FamilyCode"
                 }
             ],
 
@@ -195,6 +205,21 @@ const professionCodeDelete = async (req) => {
         const streamdel = await professionCode.findOne({
             where: { id: req.id },
         });
+
+        const professionRegisters = await professionRegister.findOne({
+            where: {
+                [Op.or]: [
+                    { professionId: req.id },
+
+                ],
+                deleted: false,
+            },
+        });
+
+        if ( professionRegisters ) {
+            throw new Error(`Sorry can't delete. As it is releated with
+      ${ professionRegisters ? 'professionRegisters,': ''}`);
+        }
 
         await streamdel.update({ deleted: true });
 
@@ -250,6 +275,136 @@ const professionCodeActive = async (req) => {
 //-------------------------------Profession Code-----------------------------//
 
 
+
+// ----------------------------Profession Register--------------------------//
+const addProfessionRegister = async (req) => {
+    try {
+        let result1 = [];
+        await Promise.all(
+            req.body.professionRegister.map(async (item) => {
+
+                const result = await professionRegister.create({ ...item, returning: true });
+
+                item.cms['professionRegisterId'] = result.id;
+                await professionCMS.create(item.cms)
+
+                result1.push(result)
+            })
+        );
+        return { data: result1, success: true };
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+
+const professionRegisterList = async (req) => {
+    try {
+        const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+        const size = req.body.pageSize ? req.body.pageSize : 10;
+        let whrCondition = { deleted: false };
+        if (req.body.id) {
+            whrCondition = { id: req.body.id, deleted: false }
+
+        }
+        if (req.body.professionId) {
+            whrCondition = { professionId: req.body.professionId, deleted: false }
+
+        }
+
+        if (req.body.familyId) {
+            whrCondition = { familyId: req.body.familyId, deleted: false }
+
+        }
+
+        if (req.body.search) {
+            const obj = {
+                alsoCalled: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('alsoCalled')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+            };
+            whrCondition = { ...obj, ...whrCondition }
+        }
+        const result = await professionRegister.findAndCountAll({
+            where: whrCondition,
+            include: [
+                {
+                    model: familyCode,
+                    required: false,
+                    as: "FamilyCode"
+                },
+                {
+                    model: professionCode,
+                    required: false,
+                    as: "ProfessionCode"
+                },
+                {
+                    model: course,
+                    required: false,
+                    as: "Courses"
+                }
+            ],
+
+            offset: (pageNo - 1) * size,
+            limit: size,
+        });
+        return { data: result, success: true };
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+const updateProfessionRegister = async (req) => {
+    try {
+        const result = [];
+        await Promise.all(
+            req.body.professionRegister.map(async (item) => {
+                const prg = await professionRegister.findOne({
+                    where: {
+                        alsoCalled: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('alsoCalled')), Sequelize.fn('lower', item.alsoCalled)),
+                        deleted: false,
+                    },
+                });
+                if (prg && prg.id !== item.id) {
+                    throw new Error('Profession Already exists');
+                } else {
+                    const res = await professionRegister.update(
+                        { ...item },
+                        {
+                            returning: true,
+                            where: { id: item.id },
+                        }
+                    );
+                    await professionCMS.update(
+                       { ...item.cms},{where: { professionRegisterId: item.id },}
+                    )
+                    result.push(res)
+                }
+            })
+        );
+
+        return { data: result, success: true };
+    } catch (error) {
+        return { data: null, message: error.message, success: false };
+    }
+};
+
+const professionRegisterDelete = async (req) => {
+    try {
+        const reg = await professionRegister.findOne({
+            where: { id: req.id },
+        });
+
+
+
+        await reg.update({ deleted: true });
+
+        return { success: true };
+    } catch (error) {
+        throw new Error(error);
+    }
+};
+
+// ----------------------------Profession Register--------------------------//
+
 module.exports = {
     addFamily,
     familyCodeList,
@@ -260,5 +415,9 @@ module.exports = {
     professionCodeList,
     professionCodeDelete,
     updateProfessionCode,
-    professionCodeActive
+    professionCodeActive,
+    addProfessionRegister,
+    professionRegisterList,
+    updateProfessionRegister,
+    professionRegisterDelete
 };
