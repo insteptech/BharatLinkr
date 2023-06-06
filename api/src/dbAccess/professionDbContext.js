@@ -334,7 +334,14 @@ const professionRegisterList = async (req) => {
                 {
                     model: professionCode,
                     required: false,
-                    as: "ProfessionCode"
+                    as: "ProfessionCode",
+                    include:[
+                        {
+                            model: familyCode,
+                            required: false,
+                            as: "FamilyCode"
+                        }
+                    ]
                 },
                 {
                     model: course,
