@@ -138,19 +138,15 @@ const familyCodeActive = async (req) => {
 
 const addProfession = async (req) => {
     try {
-        const profession1 = [];
+        let result;
         await Promise.all(
             req.body.profession.map(async (item) => {
-                const prg = await professionCode.findOne({ where: { professionCode: item.professionCode, deleted: false } });
-                if (!prg) {
-                    const result = await professionCode.create({ ...item, returning: true });
-                    profession1.push(result);
+        
+                    result = await professionCode.create({ ...item, returning: true });
                     return result;
-                }
-                profession1.push({ professionCode: item.professionCode, status: 'duplicate' });
-            })
-        );
-        return { data: profession1, success: true };
+                })
+                );
+        return { data: result, success: true };
     } catch (error) {
         throw new Error(error);
     }
