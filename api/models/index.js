@@ -181,6 +181,9 @@ db.professionCode.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey: "familyI
 db.professionRegister.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey:"familyId"})
 db.professionRegister.belongsTo(db.professionCode,{as:"ProfessionCode", foreignKey:"professionId"})
 db.professionRegister.belongsTo(db.course,{as:"Courses", foreignKey:"courseId"})
+db.professionRegister.hasMany(db.professionCMS,{as:"CMS", foreignKey:"professionRegisterId"})
+
+
 
 
 
