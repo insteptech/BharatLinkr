@@ -343,6 +343,11 @@ const professionRegisterList = async (req) => {
                     model: course,
                     required: false,
                     as: "Courses"
+                },
+                {
+                    model: professionCMS,
+                    required: false,
+                    as: "CMS"
                 }
             ],
 
