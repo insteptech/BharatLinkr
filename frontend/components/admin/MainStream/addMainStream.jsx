@@ -26,10 +26,10 @@ export default function AddMainStream() {
   );
   const router = useRouter();
   const { Id } = router.query;
-  
+
   const handleSubmit = (values) => {
     let updatedData = {};
-  
+
     if (!router.query.Id) {
       dispatch(addMainStreams(values)).then((res) => {
         if (res?.payload?.data?.success) {
@@ -52,12 +52,11 @@ export default function AddMainStream() {
         ],
       };
       dispatch(editMainStream(updatedData)).then((res) => {
-  
         if (res?.payload?.data?.success) {
           router.push("/admin/streams");
           toast.success("Updated");
         } else {
-          toast.error(res?.payload?.data?.message)
+          toast.error(res?.payload?.data?.message);
         }
       });
     }
@@ -83,7 +82,7 @@ export default function AddMainStream() {
     errors["mainStreamName"] = itemErray;
     return errors;
   };
-  
+
   useEffect(() => {
     // handleInit()
     if (router.query.Id) {
@@ -145,8 +144,7 @@ export default function AddMainStream() {
                                       </div>
                                     )}
                                   </Field>
-
-                                  <div className="d-flex mt-2 ">
+                                  <div className=" plus_minus_btn_div">
                                     {!router.query.Id && (
                                       <div
                                         type="button"

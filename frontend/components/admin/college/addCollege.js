@@ -1358,25 +1358,26 @@ function CreateCollege() {
                                                     </>
                                                   )}
                                                 </Field>
-
-                                                <div className="d-flex mt-2 add_remove_btn_div">
-                                                  <div
-                                                    type="button"
-                                                    className="add_remove_btn plus_btn_margin"
-                                                    onClick={() =>
-                                                      fields.push({
-                                                        selectAgencies: "",
-                                                        Overall: "",
-                                                        TotalAgency: "",
-                                                        Year: "",
-                                                      })
-                                                    }
-                                                  >
-                                                    <img
-                                                      className="add_remove_icon"
-                                                      src="/images/plus.png"
-                                                    />
-                                                  </div>
+                                                <div className=" plus_minus_btn_div">
+                                                  {!router.query.Id && (
+                                                    <div
+                                                      type="button"
+                                                      className="add_remove_btn"
+                                                      onClick={() =>
+                                                        fields.push({
+                                                          selectAgencies: "",
+                                                          Overall: "",
+                                                          TotalAgency: "",
+                                                          Year: "",
+                                                        })
+                                                      }
+                                                    >
+                                                      <img
+                                                        className="add_remove_icon"
+                                                        src="/images/plus.png"
+                                                      />
+                                                    </div>
+                                                  )}
                                                   {fields.length > 1 ? (
                                                     <div
                                                       className="add_remove_btn"
@@ -1832,27 +1833,28 @@ function CreateCollege() {
                                                   </>
                                                 )}
                                               </Field>
-
-                                              <div className="d-flex mt-2 margin_bottom">
-                                                <div
-                                                  type="button"
-                                                  className="add_remove_btn ms-2"
-                                                  onClick={() =>
-                                                    fields.push({
-                                                      mainStreamId: "",
-                                                      subStreamId: "",
-                                                      colStreamId: "",
-                                                    })
-                                                  }
-                                                >
-                                                  <img
-                                                    className="add_remove_icon"
-                                                    src="/images/plus.png"
-                                                  />
-                                                </div>
+                                              <div className=" plus_minus_btn_div">
+                                                {!router.query.Id && (
+                                                  <div
+                                                    type="button"
+                                                    className="add_remove_btn"
+                                                    onClick={() =>
+                                                      fields.push({
+                                                        mainStreamId: "",
+                                                        subStreamId: "",
+                                                        colStreamId: "",
+                                                      })
+                                                    }
+                                                  >
+                                                    <img
+                                                      className="add_remove_icon"
+                                                      src="/images/plus.png"
+                                                    />
+                                                  </div>
+                                                )}
                                                 {fields.length > 1 ? (
                                                   <div
-                                                    className="add_remove_btn ms-2"
+                                                    className="add_remove_btn"
                                                     type="button"
                                                     onClick={() =>
                                                       fields.remove(index)
@@ -2028,7 +2030,43 @@ function CreateCollege() {
                                                     </div>
                                                   )}
                                                 </Field>
-                                                <div className="d-flex mt-2 margin_bottom">
+                                                <div className=" plus_minus_btn_div">
+                                                {!router.query.Id && (
+                                                  <div
+                                                    type="button"
+                                                    className="add_remove_btn"
+                                                    onClick={() =>
+                                                      fields.push({
+                                                        mainStreamId: "",
+                                                        subStreamId: "",
+                                                        colStreamId: "",
+                                                      })
+                                                    }
+                                                  >
+                                                    <img
+                                                      className="add_remove_icon"
+                                                      src="/images/plus.png"
+                                                    />
+                                                  </div>
+                                                )}
+                                                {fields.length > 1 ? (
+                                                  <div
+                                                    className="add_remove_btn"
+                                                    type="button"
+                                                    onClick={() =>
+                                                      fields.remove(index)
+                                                    }
+                                                  >
+                                                    <img
+                                                      className="add_remove_icon"
+                                                      src="/images/minus.png"
+                                                    />
+                                                  </div>
+                                                ) : (
+                                                  <></>
+                                                )}
+                                              </div>
+                                                {/* <div className="d-flex mt-2 margin_bottom">
                                                   <div
                                                     type="button"
                                                     className="add_remove_btn ms-2 margin_top"
@@ -2060,7 +2098,7 @@ function CreateCollege() {
                                                   ) : (
                                                     <></>
                                                   )}
-                                                </div>
+                                                </div> */}
                                               </div>
                                             </Col>
                                           </Row>

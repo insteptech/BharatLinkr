@@ -281,10 +281,10 @@ optgroup {
   margin: 2.8125rem 0;
   transition: all 0.5s;
 }
-.login_btn:hover{
+.login_btn:hover {
   background: var(--admin-bg) !important;
   color: var(--admin-btn-bg) !important;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 .main_admin_login_bg {
   background: var(--admin-body-bg);
@@ -341,46 +341,45 @@ optgroup {
 }
 
 /* -------------------------forgot-start---------------------------------- */
-.forgot_page{
+.forgot_page {
   width: 100%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow-y: hidden;
-  
 }
-.remember_row{
+.remember_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
 }
-.sign_text{
+.sign_text {
   font-weight: 400;
-    font-size: 1rem;
-    line-height: 1.5rem;
-    color: #6ea3ff;
-    cursor: pointer;
-    text-decoration: underline ;
-    transition: all 0.4s;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  color: #6ea3ff;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: all 0.4s;
 }
-.sign_text:hover{
-  text-decoration: none ;
+.sign_text:hover {
+  text-decoration: none;
   transform: scale(1.1);
 }
-.forgot_form{
+.forgot_form {
   padding: 40px;
-  max-width: 29.625rem; 
+  max-width: 29.625rem;
   background: #ffffff;
   box-shadow: 0rem 0.4375rem 1.125rem rgba(0, 0, 0, 0.121569);
   border-radius: 20px;
 }
-.error_text{
+.error_text {
   font-size: 12px;
   margin-left: 5px;
 }
-.main_forgot_bg{
+.main_forgot_bg {
 }
 /* -------------------------forgot-end---------------------------------- */
 
@@ -422,7 +421,10 @@ optgroup {
 .position_label {
   position: relative;
 }
-
+.select_div .css-13cymwt-control:focus {
+  background-color: #1ba643 !important;
+  border-color: transparent !important;
+}
 .position_required {
   position: absolute;
   top: 0;
@@ -464,7 +466,7 @@ optgroup {
 .select_down_icon {
   width: 0.9375rem;
   margin-right: 1.75rem;
-  margin-top: -5.3125rem;
+  margin-top: -80px;
 }
 .cant_find_div {
   margin-top: 45px;
@@ -573,12 +575,16 @@ optgroup {
   align-items: center;
   justify-content: center;
   padding: 0.75rem;
-  margin-bottom: 0.4375rem;
+  /* margin-bottom: 0.4375rem; */
   margin-left: 0.9375rem;
 }
 .add_remove_btn:hover {
   background: var(--admin-bg);
   border: 0.0625rem solid #c8c1df;
+}
+.plus_minus_btn_margin{
+  margin-top: 38px;
+  margin-bottom: 30px;
 }
 .next_step_btn {
   background: var(--admin-btn-bg);
@@ -1006,7 +1012,7 @@ input::-webkit-inner-spin-button {
   .header_padding {
     padding: 0 2.5rem !important;
   }
-  .card_btn{
+  .card_btn {
     margin-bottom: 8px !important;
   }
 }
@@ -1066,10 +1072,10 @@ input::-webkit-inner-spin-button {
   .view_and_apply_btn {
     font-size: 16px !important;
   }
-  .side_tabs{
+  .side_tabs {
     padding: 4px 15px !important;
   }
-  .card_btn{
+  .card_btn {
     margin-bottom: 0px !important;
   }
 }
@@ -1086,7 +1092,6 @@ input::-webkit-inner-spin-button {
   .header_padding {
     padding: 0 3.75rem !important;
   }
-
 }
 @media only screen and (max-width: 1000px) {
   .header_search_input {
@@ -1117,7 +1122,7 @@ input::-webkit-inner-spin-button {
     padding: 2.5rem 3.75rem;
   }
   .tabs_scroll {
-    overflow-x: scroll;
+    overflow-x: auto;
     flex-wrap: nowrap !important;
   }
 
@@ -1246,7 +1251,7 @@ input::-webkit-inner-spin-button {
     align-items: center;
     justify-content: center;
   }
-  .card_btn{
+  .card_btn {
     margin-bottom: 8px !important;
   }
 }
@@ -1749,15 +1754,15 @@ input::-webkit-inner-spin-button {
   .story_bottom_name {
     display: block !important;
   }
-  .card_btn{
+  .card_btn {
     margin-bottom: 0px !important;
   }
-  .icon_text_row{
+  .icon_text_row {
     border-bottom: 0.0313rem solid #aaa9ac65;
     padding-bottom: 10px;
     justify-content: center;
   }
-  .average_fees_text{
+  .average_fees_text {
     width: 100%;
     text-align: center;
   }
@@ -1781,7 +1786,7 @@ input::-webkit-inner-spin-button {
     font-size: 14px !important;
     margin-top: 15px;
   }
-  .m_top_f_p{
+  .m_top_f_p {
     margin-top: 20px;
   }
   .header_search_input {
@@ -1919,19 +1924,19 @@ input::-webkit-inner-spin-button {
   .post_bar {
     padding: 5px 8px !important;
   }
-  .forgot_form{
+  .forgot_form {
     width: 90%;
     padding: 30px 20px;
   }
- 
-  .forgot_submit_btn_div{
+
+  .forgot_submit_btn_div {
     text-align: center;
     margin-top: 10px;
   }
-  .forgot_submit_btn{
-margin-bottom: 20px !important;
+  .forgot_submit_btn {
+    margin-bottom: 20px !important;
   }
-  .login_input{
+  .login_input {
     padding: 10px 20px;
   }
 }
@@ -2470,7 +2475,7 @@ margin-bottom: 20px !important;
   max-height: 360px;
   overflow: auto;
 }
-.max_height_overflow{
+.max_height_overflow {
   max-height: 150px;
   overflow: auto;
 }
@@ -2688,7 +2693,7 @@ margin-bottom: 20px !important;
 .view_and_apply_btn {
   font-size: 18px;
   font-weight: 600;
-  color: #FFA500;
+  color: #ffa500;
   background: rgba(238, 234, 243, 0.666);
   padding: 5px 20px;
   cursor: pointer;
@@ -2710,7 +2715,7 @@ margin-bottom: 20px !important;
   white-space: nowrap;
 }
 .view_and_apply_btn:hover {
-  color: #FFA500;
+  color: #ffa500;
   /* border-radius: 20px; */
   background: var(--admin-body-bg);
   /* box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px; */
@@ -2775,8 +2780,15 @@ margin-bottom: 20px !important;
 .job_title_row {
   margin-top: 24px;
 }
-.company_card_img{
+.company_card_img {
   background: var(--admin-body-bg);
+}
+.plus_minus_btn_div {
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding-bottom: 16px; */
 }
 
 /* ------------------------company-card-end------------ */
@@ -2878,7 +2890,7 @@ margin-bottom: 20px !important;
   justify-content: center;
   transition: all 0.2s ease-in-out;
 }
-.chat_box_close_btn:hover{
+.chat_box_close_btn:hover {
   transform: scale(1.2) rotate(180deg);
 }
 .blue_bg {
@@ -3622,50 +3634,50 @@ img {
 .down_arrow_icon {
   margin-left: 0.3125rem;
 }
-.line_height .nav-link{
+.line_height .nav-link {
   line-height: 26px;
 }
-.item_align{
+.item_align {
   display: flex;
   align-items: center;
 }
-.item_end{
+.item_end {
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
-.course_fee_card_btn{
+.course_fee_card_btn {
   padding: 6px 20px !important;
 }
-.margin_none{
+.margin_none {
   margin: 0;
 }
-.course_fee_card_paira{
-font-weight: 500;
-font-size: 13px;
-line-height: 20px;
-color: #0F0C1A;
-opacity: 0.9;
-margin-bottom: 0;
+.course_fee_card_paira {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 20px;
+  color: #0f0c1a;
+  opacity: 0.9;
+  margin-bottom: 0;
 }
-.icon_text_row{
+.icon_text_row {
   display: flex;
   align-items: center;
-  gap:7px;
-  flex-wrap:wrap;
+  gap: 7px;
+  flex-wrap: wrap;
 }
-.underline{
+.underline {
   text-decoration: underline;
   cursor: pointer;
 }
-.course_card_dot .dropdown-menu{
-width: 100px !important;
+.course_card_dot .dropdown-menu {
+  width: 100px !important;
 }
 
 /* ---------------------------------corporate-page-start--------------------------- */
 
 .corporate_card {
-  padding: 0.625rem 1.25rem !important; 
+  padding: 0.625rem 1.25rem !important;
 }
 .font_15 {
   font-size: 0.9375rem;
@@ -4161,15 +4173,15 @@ width: 100px !important;
   margin-left: 1.25rem;
 }
 
-.course_fees_card{
+.course_fees_card {
   /* padding: 16px !important; */
 }
-.total_fees_row{
+.total_fees_row {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.total_fees_main_row{
+.total_fees_main_row {
   display: flex;
   align-items: center;
   justify-content: space-between;
