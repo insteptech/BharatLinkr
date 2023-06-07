@@ -69,4 +69,15 @@ export const updateCollege = createAsyncThunk(
   }
 );
 
+export const deleteAssociateCOllege = createAsyncThunk(
+  "deleteAssociateCOllege/college/collegeAssociateCourselDelete",
+  async (data) => {
+    return apiRequest
+      .post("college/collegeAssociateCourselDelete", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+
+
 
