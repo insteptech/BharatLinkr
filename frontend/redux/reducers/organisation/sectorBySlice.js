@@ -6,6 +6,7 @@ import {
   getSectorById,
   getlistSector,
 } from "../../actions/organisation/addsector";
+import { familyCodeById, familycodeList, professioncodeList,professionCodeById, professionlist } from "../../actions/organisation/profession";
 
 const sectorBySlice = createSlice({
   name: "sector",
@@ -22,7 +23,12 @@ const sectorBySlice = createSlice({
     orglikedlist: [],
     companyNamelist: [],
     grouplist: [],
-    brandlist:[],
+    brandlist: [],
+    familyCodelist: [],
+    familycodeById: [],
+    professionCodeList: [],
+    professionCodeById: [],
+    professionList: [],
     error: ""
   },
 
@@ -97,7 +103,7 @@ const sectorBySlice = createSlice({
       (state.status = ""),
         (state.orglikedlist = action.payload?.data?.data?.rows);
     });
-    
+
     //companyNameList
     builder.addCase(companyNameList.pending, (state, action) => {
       (state.status = action.payload?.status);
@@ -106,7 +112,7 @@ const sectorBySlice = createSlice({
       (state.status = ""),
         (state.companyNamelist = action.payload?.data?.data?.rows);
     });
-    
+
     //Brandlist
     builder.addCase(companyBrandList.pending, (state, action) => {
       (state.status = action.payload?.status);
@@ -115,7 +121,7 @@ const sectorBySlice = createSlice({
       (state.status = ""),
         (state.brandlist = action.payload?.data?.data?.rows);
     });
-    
+
     //grouplist
     builder.addCase(companyGroupList.pending, (state, action) => {
       (state.status = action.payload?.status);
@@ -123,6 +129,51 @@ const sectorBySlice = createSlice({
     builder.addCase(companyGroupList.fulfilled, (state, action) => {
       (state.status = ""),
         (state.grouplist = action.payload?.data?.data?.rows);
+    });
+
+    //familycodelist
+    builder.addCase(familycodeList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(familycodeList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.familyCodelist = action.payload?.data?.data);
+    });
+
+    //familycodeById
+    builder.addCase(familyCodeById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(familyCodeById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.familycodeById = action.payload?.data?.data?.rows);
+    });
+
+    //professioncodelist
+    builder.addCase(professioncodeList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professioncodeList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionCodeList = action.payload?.data?.data);
+    });
+
+    //profession code by id
+    builder.addCase(professionCodeById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professionCodeById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionCodeById = action.payload?.data?.data?.rows);
+    });
+
+    //profession list
+    builder.addCase(professionlist.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professionlist.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionList = action.payload?.data?.data);
     });
   },
 });

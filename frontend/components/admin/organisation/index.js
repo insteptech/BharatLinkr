@@ -16,6 +16,7 @@ import { apibasePath } from "../../../config";
 import Pagination from "../pagination/pagination";
 import Pagesize from "../pagination/pagesize";
 import { toast } from "react-toastify";
+import { deleteFamilycode, deleteProfessioncode, familycodeList, professioncodeList, professionlist, deleteProfession } from "../../../redux/actions/organisation/profession";
 
 function Organisation() {
   const [pagination, setPagination] = useState({
@@ -24,6 +25,7 @@ function Organisation() {
   })
   const [modalShow, setModalShow] = useState(false);
   const [deleteItem, setDeleteItem] = useState();
+  const [displayProfessions, setDisplayProfessions] = useState("Family code")
   const handleHide = () => {
     setModalShow(false);
   };
@@ -60,6 +62,9 @@ function Organisation() {
     dispatch(getlistSector(pagination));
     dispatch(getIndustryList(pagination));
     dispatch(getOrganisationlist(pagination));
+    dispatch(familycodeList(pagination));
+    dispatch(professioncodeList(pagination));
+    dispatch(professionlist(pagination))
   }, [pagination]);
 
   const getIndustrylist = useSelector(
@@ -69,6 +74,14 @@ function Organisation() {
   const loadergetIndustrylist = useSelector(
     (state) => state?.sectorData?.isLoading
   );
+
+  const familycodelist = useSelector((state) => state?.sectorData?.familyCodelist)
+  const professioncodelist = useSelector((state) => state?.sectorData?.professionCodeList)
+  const professionList = useSelector((state) => state?.sectorData?.professionList)
+
+  const professionTabs = ["Family code", "Profession Code", "Profession list"]
+  const familyCodeTablehead = ["Sr. no", "Family Name", "Family Code", "Action"]
+  const professionCodeTablehead = ["Sr. no", "Profession Name", "Profession Code", "Action"]
 
   const organisationData = [
     {
@@ -126,10 +139,34 @@ function Organisation() {
   const handleDeleteSector = (item) => {
     dispatch(deleteSector(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        dispatch(getlistSector());
+        dispatch(getlistSector(pagination));
       }
     });
   };
+
+  const handleFamilyCodeDelete = (item) => {
+    dispatch(deleteFamilycode(item?.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(familycodeList(pagination));
+      }
+    });
+  }
+
+  const handleProfessionCodeDelete = (item) => {
+    dispatch(deleteProfessioncode(item?.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(professioncodeList(pagination));
+      }
+    });
+  }
+
+  const handleDeleteProfession = (item) => {
+    dispatch(deleteProfession(item.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(professionlist(pagination));
+      }
+    });
+  }
 
   const handleEditSector = (item) => {
     router.push(`/admin/organisation/sector/update/${item.id}`);
@@ -138,10 +175,11 @@ function Organisation() {
   const handleDeleteIndustry = (item) => {
     dispatch(deleteIndustry(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        dispatch(getIndustryList());
+        dispatch(getIndustryList(pagination));
       }
     });
   };
+
 
   const handleEditIndustry = (item) => {
     router.push(`/admin/organisation/industry/update/${item.id}`);
@@ -232,16 +270,46 @@ function Organisation() {
             )}
             {dataValue === 3 && (
               <>
-                <div>
-                  <Button className="border_btn">Upload CSV</Button>
-                  <Button className="border_btn">Download CSV</Button>
-                  <Button
-                    className="border_btn green"
-                    onClick={() => router.push("organisation/profession/add")}
-                  >
-                    Add New
-                  </Button>
-                </div>
+                {displayProfessions === "Family code" && (
+                  <>
+                    <div>
+                      <Button className="border_btn">Upload CSV</Button>
+                      <Button className="border_btn">Download CSV</Button>
+                      <Button
+                        className="border_btn green"
+                        onClick={() => router.push("organisation/familycode/add")}
+                      >
+                        Add New
+                      </Button>
+                    </div>
+                  </>
+                )}
+                {displayProfessions === "Profession Code" && (
+                  <>
+                    <div>
+                      <Button className="border_btn">Upload CSV</Button>
+                      <Button className="border_btn">Download CSV</Button>
+                      <Button
+                        className="border_btn green"
+                        onClick={() => router.push("organisation/professioncode/add")}
+                      >
+                        Add New
+                      </Button>
+                    </div>
+                  </>
+                )}
+                {displayProfessions === "Profession list" && (
+                  <div>
+                    <Button className="border_btn">Upload CSV</Button>
+                    <Button className="border_btn">Download CSV</Button>
+                    <Button
+                      className="border_btn green"
+                      onClick={() => router.push("organisation/profession/add")}
+                    >
+                      Add New
+                    </Button>
+                  </div>
+                )}
               </>
             )}
           </Col>
@@ -448,78 +516,215 @@ function Organisation() {
       {/* Professions Table */}
       {dataValue === 3 && (
         <>
-          <div className="admin_stream_table">
-            <Row>
-              <Table responsive className="admin_table" bordered hover>
-                <thead>
-                  <tr>
-                    {professionHeading.map((hd, index) => {
-                      return (
-                        <th className="table_head" key={index}>
-                          {hd}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {organisationData &&
-                    organisationData?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_data">
-                            {index + 1}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.name}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.city}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.level}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src="/images/edit-icon-blue.png"
-                            // onClick={() => handleEdit(item)}
-                            ></img>
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src="/images/delete-icon-blue.png"
-                            // onClick={() => {
-                            // setModalShow(true);
-                            // setDeleteItem(item);
-                            // }}
-                            ></img>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-            </Row>
-            <div className="admin_table_footer">
-              <Row>
-                <Col md={6} className="table_footer_start">
-                  <h6>Showing 1 to 6 of 50 enteries</h6>
-                </Col>
-                <Col md={6}>
-                  <div className="table_footer_end">
-                    <Button className="border_btn green">Previous</Button>
-                    <Button className="border_btn green">Next</Button>
-                  </div>
-                </Col>
-              </Row>
-            </div>
-            <DeleteModal
-            // show={modalShow}
-            // onHide={() => handleHide()}
-            // handleDelete={handleDelete}
-            // deleteItem={deleteItem}
-            />
+          <div className="d-flex">
+            {professionTabs.map((item, index) => {
+              return (<div key={index} onClick={() => setDisplayProfessions(item)} className={`me-4 ${item === displayProfessions && "head-active"}`}>{item}</div>)
+            })}
           </div>
+
+          {displayProfessions === "Family code" && (
+            <>
+              <Row>
+                <Table responsive className="admin_stream_table" bordered hover>
+                  <thead>
+                    <tr>
+                      {familyCodeTablehead.map((hd, index) => {
+                        return (
+                          <th className="table_head" key={index}>
+                            {hd}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {familycodelist?.rows?.length > 0 && (
+                      familycodelist?.rows?.map((item, index) => {
+                        return (
+                          <tr key={index} >
+                            <td className="text-center admin_table_data">
+                              {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.familyName}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.familyCode}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              <img
+                                className="mx-1 admin_table_action_icon"
+                                src="/images/edit-icon-blue.png"
+                                onClick={() => router.push(`/admin/organisation/familycode/update/${item?.id}`)}
+                              ></img>
+                              <img
+                                className="mx-1 admin_table_action_icon"
+                                src="/images/delete-icon-blue.png"
+                                onClick={() => {
+                                  setModalShow(true);
+                                  setDeleteItem(item);
+                                }}
+                              ></img>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    )}
+                  </tbody>
+                </Table>
+                <div className="admin_table_footer">
+                  <Pagination pagination={pagination} setPagination={setPagination} list={familycodelist} />
+                </div>
+                <DeleteModal
+                  show={modalShow}
+                  onHide={() => handleHide()}
+                  handleDelete={handleFamilyCodeDelete}
+                  deleteItem={deleteItem}
+                />
+              </Row>
+            </>
+          )}
+
+          {displayProfessions === "Profession Code" && (
+            <>
+              <Row>
+                <Table responsive className="admin_stream_table" bordered hover>
+                  <thead>
+                    <tr>
+                      {professionCodeTablehead.map((hd, index) => {
+                        return (
+                          <th className="table_head" key={index}>
+                            {hd}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {professioncodelist?.rows && professioncodelist?.rows?.length > 0 &&
+                      (
+                        <>
+                          {professioncodelist?.rows.map((item, index) => {
+                            return (
+                              <tr key={index} >
+                                <td className="text-center admin_table_data">
+                                  {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+                                </td>
+                                <td className="text-center admin_table_data">
+                                  {item?.professionName}
+                                </td>
+                                <td className="text-center admin_table_data">
+                                  {item?.professionCode}
+                                </td>
+                                <td className="text-center admin_table_data">
+                                  <img
+                                    className="mx-1 admin_table_action_icon"
+                                    src="/images/edit-icon-blue.png"
+                                    onClick={() => router.push(`/admin/organisation/professioncode/update/${item?.id}`)}
+                                  ></img>
+                                  <img
+                                    className="mx-1 admin_table_action_icon"
+                                    src="/images/delete-icon-blue.png"
+                                    onClick={() => {
+                                      setModalShow(true);
+                                      setDeleteItem(item);
+                                    }}
+                                  ></img>
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </>
+                      )}
+                  </tbody>
+                  <div className="admin_table_footer">
+                    <Pagination pagination={pagination} setPagination={setPagination} list={professioncodelist} />
+                  </div>
+                  <DeleteModal
+                    show={modalShow}
+                    onHide={() => handleHide()}
+                    handleDelete={handleProfessionCodeDelete}
+                    deleteItem={deleteItem}
+                  />
+                </Table>
+              </Row>
+            </>
+          )}
+
+          {displayProfessions === "Profession list" && (
+            <>
+              <div className="admin_stream_table">
+                <Row>
+                  <Table responsive className="admin_table" bordered hover>
+                    <thead>
+                      <tr>
+                        {professionHeading.map((hd, index) => {
+                          return (
+                            <th className="table_head" key={index}>
+                              {hd}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {professionList?.rows?.length > 0 &&
+                        professionList?.rows?.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="text-center admin_table_data">
+                                {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                {item?.ProfessionCode ?
+                                  <>
+                                    {`${item?.ProfessionCode?.FamilyCode?.familyCode}.${item?.ProfessionCode?.professionCode}`} - {item?.ProfessionCode?.professionName}
+                                  </>
+                                  :
+                                  <>
+                                    {`${item?.FamilyCode?.familyCode}.0000`} - {item?.FamilyCode?.familyName}
+                                  </>
+                                }
+                              </td>
+                              <td className="text-center admin_table_data">
+                                {item?.alsoCalled}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                {item?.prepLevel}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src="/images/edit-icon-blue.png"
+                                  onClick={() => handleEdit(item)}
+                                ></img>
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src="/images/delete-icon-blue.png"
+                                  onClick={() => {
+                                    setModalShow(true);
+                                    setDeleteItem(item);
+                                  }}
+                                ></img>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </Table>
+                </Row>
+                <div className="admin_table_footer">
+                  <Pagination pagination={pagination} setPagination={setPagination} list={professionList} />
+                </div>
+                <DeleteModal
+                  show={modalShow}
+                  onHide={() => handleHide()}
+                  handleDelete={handleDeleteProfession}
+                  deleteItem={deleteItem}
+                />
+              </div>
+            </>
+          )}
         </>
       )}
     </>
