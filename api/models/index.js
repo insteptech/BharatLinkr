@@ -102,7 +102,10 @@ db.collegeAssociateCourse.hasMany(db.collegeAssociateStream, { as: "CourseAssoci
 db.collegeAssociateStream.belongsTo(db.mainStream, { as: "MainStream", foreignKey: 'mainStreamId' })
 db.collegeAssociateStream.belongsTo(db.subStream, { as: "SubStream", foreignKey: 'subStreamId' })
 db.collegeAssociateStream.belongsTo(db.colStream, { as: "ColStream", foreignKey: 'colStreamId' })
-db.collegeAssociateStream.belongsTo(db.masterFilter, { as: "FeeDetails", foreignKey: 'courseFeeDetailsId' })
+
+db.collegeAssociateCourse.hasMany(db.collegeAssociateFees, { as: "CourseFees", foreignKey: 'collegeAssociateId' })
+db.collegeAssociateFees.belongsTo(db.masterFilter, { as: "FeeDetails", foreignKey: 'courseFeeDetailsId' })
+
 
 
 
@@ -172,6 +175,14 @@ db.organisation.hasMany(db.organisationPost,{as:"Posts", foreignKey: "organisati
 db.organisation.belongsTo(db.organisationCompany,{as:"OrganisationCompany", foreignKey: "companyId"})
 db.organisation.belongsTo(db.organisationBrand,{as:"OrganisationBrand", foreignKey: "brandId"})
 db.organisation.belongsTo(db.organisationGroup,{as:"OrganisationGroup", foreignKey: "groupId"})
+
+db.professionCode.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey: "familyId"})
+
+db.professionRegister.belongsTo(db.familyCode,{as:"FamilyCode", foreignKey:"familyId"})
+db.professionRegister.belongsTo(db.professionCode,{as:"ProfessionCode", foreignKey:"professionId"})
+db.professionRegister.belongsTo(db.course,{as:"Courses", foreignKey:"courseId"})
+db.professionRegister.hasMany(db.professionCMS,{as:"CMS", foreignKey:"professionRegisterId"})
+
 
 
 

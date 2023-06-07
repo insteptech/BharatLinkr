@@ -113,6 +113,8 @@ function OrganisationLeftPage({ dataValue }, props) {
         });
       }
     }
+
+
     // const refinedName = refined(itemName);
     // if (selectId.includes(id)) {
     //   let temp = [...selectId];
@@ -130,50 +132,6 @@ function OrganisationLeftPage({ dataValue }, props) {
     // }
   };
 
-  const companyAge = [
-    
-      {
-        value: [1900, 1910],
-        key: "1900 - 1910",
-      },
-      {
-        value: [1910, 1920],
-        key: "1910 - 1920",
-      },
-      {
-        value: [1920, 1930],
-        key: "1920 - 1930",
-      },
-      {
-        value: [1930, 1940],
-        key: "1930 - 1940",
-      },
-      {
-        value: [1940, 1950],
-        key: "1940 - 1950",
-      },
-      {
-        value: [1950, 1960],
-        key: "1950 - 1960",
-      },
-      {
-        value: [1960, 1970],
-        key: "1960 - 1970",
-      },
-      {
-        value: [1970, 1980],
-        key: "1970 - 1980",
-      },
-      {
-        value: [1980, 1990],
-        key: "1980 - 1990",
-      },
-      {
-        value: [1990, 2000],
-        key: "1990 - 2000",
-      },
-  
-  ];
 
   const companylevel = [
     "Corporate",
@@ -252,6 +210,20 @@ function OrganisationLeftPage({ dataValue }, props) {
       dispatch(cityDropdown());
     }
   }, [apiFilterObject]);
+
+  let x = new Date().getFullYear()
+  let yearList = []
+
+  for (let i = 1; i < 20; i++) {
+    yearList.push({ value: [x - i * 10, x], key: i * 10 + 'yrs', id: i })
+  }
+  const handleYearSelect = (item) => {
+    setApiFilterObject({
+      ...apiFilterObject,
+      "establishedYear": item,
+    });
+
+  }
 
   return (
     <>
@@ -689,7 +661,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                   <input
                     className="college_box_check_input"
                     type="checkbox"
-                    //  onChange={() => handleStateSelect(item.id)}
+                  //  onChange={() => handleStateSelect(item.id)}
                   />
                   <label className="check_input_label">hello</label>
                 </div>
@@ -719,7 +691,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                   <input
                     className="college_box_check_input"
                     type="checkbox"
-                    //  onChange={() => handleStateSelect(item.id)}
+                  //  onChange={() => handleStateSelect(item.id)}
                   />
                   <label className="check_input_label">hello</label>
                 </div>
@@ -749,7 +721,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                   <input
                     className="college_box_check_input"
                     type="checkbox"
-                    //  onChange={() => handleStateSelect(item.id)}
+                  //  onChange={() => handleStateSelect(item.id)}
                   />
                   <label className="check_input_label">hello</label>
                 </div>
@@ -779,7 +751,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                   <input
                     className="college_box_check_input"
                     type="checkbox"
-                    //  onChange={() => handleStateSelect(item.id)}
+                  //  onChange={() => handleStateSelect(item.id)}
                   />
                   <label className="check_input_label">hello</label>
                 </div>
@@ -809,7 +781,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                   <input
                     className="college_box_check_input"
                     type="checkbox"
-                    //  onChange={() => handleStateSelect(item.id)}
+                  //  onChange={() => handleStateSelect(item.id)}
                   />
                   <label className="check_input_label">hello</label>
                 </div>
@@ -955,7 +927,7 @@ function OrganisationLeftPage({ dataValue }, props) {
           </div>
 
           <div className="colleges_left_boxes">
-            <p className="college_box_heading">Established Year</p>
+            <p className="college_box_heading">Company Age</p>
             {/*Search */}
             <div>
               <input
@@ -967,7 +939,7 @@ function OrganisationLeftPage({ dataValue }, props) {
             </div>
             {/*Checkbox */}
             <div className="box_data">
-              {companyAge?.map((item) => {
+              {yearList?.map((item) => {
                 return (
                   <>
                     <div className="check_input_label_div">
@@ -975,7 +947,7 @@ function OrganisationLeftPage({ dataValue }, props) {
                         className="college_box_check_input"
                         type="checkbox"
                         name="establishedYear"
-                        onChange={(e) => handleStateSelect(e, item.value)}
+                        onChange={(e) => handleYearSelect(item.value)}
                         checked={selectedStateCheck("establishedYear", item.key)}
                       />
                       <label className="check_input_label">{item.key}</label>

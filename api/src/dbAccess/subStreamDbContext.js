@@ -28,8 +28,8 @@ const subStreamList = async (req) => {
         const pageNo = req.body.pageNo ? req.body.pageNo : 1;
         const size = req.body.pageSize ? req.body.pageSize : 10;
         let whrCondition = { deleted: false };
-        if(req.body.id || req.body.mainStreamId){
-          whrCondition = req.body.id || {mainStreamId:req.body.mainStreamId, deleted: false }
+        if(req.body.id ){
+          whrCondition ={id: req.body.id} 
 
         }
         if (req.body.search) {
@@ -38,8 +38,13 @@ const subStreamList = async (req) => {
           };
           whrCondition = { ...obj, ...whrCondition };
         }
+        let main = {};
+        if(req.body.mainStreamId ){
+          main ={mainStreamId:req.body.mainStreamId}
+        }
+
         const result = await subStream.findAndCountAll({
-          where: whrCondition,
+          where: { [Op.and]: [main, whrCondition] },
           include:[
             {
               model: mainStream,

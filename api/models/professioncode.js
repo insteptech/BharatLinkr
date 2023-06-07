@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class collegeAssociateStream extends Model {
+  class professionCode extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,40 +13,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  collegeAssociateStream.init({
-    collegeAssociateId: {
+  professionCode.init({
+    familyId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'collegeAssociateCourses',
+        model: 'familyCode',
         key: 'id',
       },
     },
-    mainStreamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'mainStreams',
-        key: 'id',
-      },
-    },
-    subStreamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'subStreams',
-        key: 'id',
-      },
-    },
-    colStreamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'colStreams',
-        key: 'id',
-      },
-    },
-
+    professionCode: DataTypes.STRING,
+    professionName: DataTypes.STRING,
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -54,12 +31,13 @@ module.exports = (sequelize, DataTypes) => {
     deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    
     },
   }, {
     sequelize,
-    modelName: 'collegeAssociateStream',
+    modelName: 'professionCode',
     paranoid: false,
     timestamps: true,
   });
-  return collegeAssociateStream;
+  return professionCode;
 };

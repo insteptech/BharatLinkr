@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class collegeAssociateStream extends Model {
+  class professionRegister extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,40 +13,38 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  collegeAssociateStream.init({
-    collegeAssociateId: {
+  professionRegister.init({
+    familyId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'collegeAssociateCourses',
+        model: 'familyCode',
         key: 'id',
       },
     },
-    mainStreamId: {
+    professionId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
-        model: 'mainStreams',
+        model: 'professionCode',
         key: 'id',
       },
     },
-    subStreamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'subStreams',
-        key: 'id',
-      },
-    },
-    colStreamId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'colStreams',
-        key: 'id',
-      },
-    },
+    alsoCalled: DataTypes.STRING(100000),
+    prepLevel: DataTypes.STRING,
+    highDemandOfProfession: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
 
+    },
+    courseId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'course',
+        key: 'id',
+      },
+    },
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
@@ -54,12 +52,13 @@ module.exports = (sequelize, DataTypes) => {
     deleted: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+
     },
   }, {
     sequelize,
-    modelName: 'collegeAssociateStream',
+    modelName: 'professionRegister',
     paranoid: false,
     timestamps: true,
   });
-  return collegeAssociateStream;
+  return professionRegister;
 };

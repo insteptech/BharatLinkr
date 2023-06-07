@@ -1,46 +1,27 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('collegeAssociateStreams', {
+    await queryInterface.createTable('professionCodes', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      collegeAssociateId: {
+      familyId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'collegeAssociateCourses',
+          model: 'familyCodes',
           key: 'id',
         },
       },
-      mainStreamId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'mainStreams',
-          key: 'id',
-        },
+      professionCode: {
+        type: Sequelize.STRING
       },
-      subStreamId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'subStreams',
-          key: 'id',
-        },
+      professionName: {
+        type: Sequelize.STRING
       },
-      colStreamId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'colStreams',
-          key: 'id',
-        },
-      },
-
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
@@ -60,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('collegeAssociateStreams');
+    await queryInterface.dropTable('professionCodes');
   }
 };
