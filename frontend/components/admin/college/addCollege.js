@@ -85,26 +85,12 @@ function CreateCollege() {
   });
 
   const [collegeArr, setCollegeArr] = useState({
-    0: {substreamData: substreamSelectVal, colStreamData: colstreamSelectVal}
+    0: { substreamData: substreamSelectVal, colStreamData: colstreamSelectVal }
   })
 
-  useEffect(() => {
-   if(collegeDetails){
-     collegeDetails?.AssociateCourse?.map((elem) => {
-       elem?.CourseAssociateStream?.map((item) => {
-        if(item){
-           dispatch(getSubstreamData({mainStreamId: [item?.subStreamId]}))
-        }
-           setCollegeArr({substreamData: substreamSelectVal})
-       })
-     })
-   }
-  },[collegeDetails])
-  
-   console.log(collegeArr, "ddfgfgdfgdfgdf123123")
 
   const handleMainstreamselect = (e, streams, index) => {
- 
+
     dispatch(getSubstreamData({ mainStreamId: e.target.value }))
       .then(res => {
         if (res.payload.data.success) {
@@ -127,8 +113,8 @@ function CreateCollege() {
           setCollegeArr({
             ...collegeArr,
             [e.target.value]: {
-                substreamData: collegeArr[e.target.value]?.substreamData              ,
-               colStreamData: res?.payload?.data?.data?.rows
+              substreamData: collegeArr[e.target.value]?.substreamData,
+              colStreamData: res?.payload?.data?.data?.rows
             }
           })
         }
@@ -146,8 +132,8 @@ function CreateCollege() {
     };
 
     dispatch(deleteAssociateCOllege(deletepayload)).then((res) => {
-      if(res?.payload?.data?.success){
-         toast.success("Deleted", {autoClose: 1000})
+      if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
       }
     });
   };
@@ -563,37 +549,72 @@ function CreateCollege() {
           error["ShowonFiltering"] = "*";
         }
 
+        item?.collegeStreams?.map((items) => {
+          let error = {};
+          if (!items.mainStreamId) {
+            error["mainStreamId"] = "*";
+          }
+          if (!items.subStreamId) {
+            error["subStreamId"] = "*";
+          }
+          if (!items.colStreamId) {
+            error["colStreamId"] = "*";
+          }
+          itemArray3.push(error);
+        })
+
         itemArray4.push(error);
+
+
+        item?.courseFees?.map((itemss, index) => {
+          let error = {};
+          if (!itemss.courseFeeDetailsId) {
+            error["courseFeeDetailsId"] = "*";
+          }
+          if (!itemss.courseFee) {
+            error["fees"] = "*";
+          }
+          itemArray5.push(error);
+        });
+        errors["courseFees"] = itemArray5;
+
       });
       errors["collegeCourse"] = itemArray4;
-
-      values?.collegeStreams?.map((item, index) => {
-        let error = {};
-        if (!item.mainStreamId) {
-          error["mainStreamId"] = "*";
-        }
-        if (!item.subStreamId) {
-          error["subStreamId"] = "*";
-        }
-        if (!item.colStreamId) {
-          error["colStreamId"] = "*";
-        }
-        itemArray3.push(error);
-      });
-      errors["collegeStreams"] = itemArray3;
-
-      values?.collegeStreams?.map((item, index) => {
-        let error = {};
-        if (!item.courseFeeDetailsId) {
-          error["courseFeeDetailsId"] = "*";
-        }
-        if (!item.courseFee) {
-          error["courseFee"] = "*";
-        }
-        itemArray5.push(error);
-      });
-      errors["collegeStreams"] = itemArray5;
+      errors.collegeCourse["collegeStreams"] = itemArray3;
+      errors.collegeCourse["courseFees"]= itemArray5
+    
     }
+      // values?.collegeCourse?.map((elem, index) => (
+      //   elem?.collegeStreams?.map((item) => {
+      //     let error = {};
+      //     if (!item.mainStreamId) {
+      //       error["mainStreamId"] = "*";
+      //     }
+      //     if (!item.subStreamId) {
+      //       error["subStreamId"] = "*";
+      //     }
+      //     if (!item.colStreamId) {
+      //       error["colStreamId"] = "*";
+      //     }
+      //     itemArray3.push(error);
+      //   })
+       
+      // ));
+      // errors["collegeStreams"] = itemArray3;
+
+    //   values?.collegeStreams?.map((item, index) => {
+    //     let error = {};
+    //     if (!item.courseFeeDetailsId) {
+    //       error["courseFeeDetailsId"] = "*";
+    //     }
+    //     if (!item.courseFee) {
+    //       error["courseFee"] = "*";
+    //     }
+    //     itemArray5.push(error);
+    //   });
+    //   errors["collegeStreams"] = itemArray5;
+    // }
+  
     return errors;
   };
 
@@ -606,8 +627,10 @@ function CreateCollege() {
 
   const FormSteps = ["College Register", "Associate Course", "CMS"];
 
-  console.log(collegeArr,substreamSelectVal, "dfgdfgdfgdfgdfg")
-
+  const dispatchforStreams = (mainArray, subarray) => {
+    dispatch(getSubstreamData({ mainStreamId: mainArray }))
+    dispatch(getColStreamlist({ subStreamId: subarray }))
+  }
   const setInitialValues = (event) => {
     if (event && Object.keys(event).length > 0) {
       return event;
@@ -632,38 +655,17 @@ function CreateCollege() {
             collegeImage: collegeDetails?.collegeImage,
           },
         ]
-       
-        // initialValues.collegeCourse = collegeDetails?.AssociateCourse?.map((item, index) => {
-        //   let x = item?.CourseAssociateStream?.map((ele) => {
-        //     let subStreamId = null; // Initialize subStreamId as null
-        //     if (collegeArr &&
-        //         values?.collegeCourse[index] &&
-        //         values?.collegeCourse[index]?.collegeStreams &&
-        //         values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex].mainStreamId &&
-        //         values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex] &&
-        //         collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex].mainStreamId] &&
-        //         collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex].mainStreamId].substreamData &&
-        //         collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex].mainStreamId].substreamData.length > 0
-        //     ) {
-        //       subStreamId = collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex].mainStreamId].substreamData[0].subStreamName;
-        //     }
-            
-        //     return {
-        //       id: ele?.mainStreamId,
-        //       mainStreamId: ele?.mainStreamId,
-        //       subStreamId: subStreamId,
-        //       colStreamId: ele?.ColStream?.id,
-        //     }
-        //   })
-      
-        
+        let mainStreamArray = []
+        let subStreamArray = []
         initialValues.collegeCourse = collegeDetails?.AssociateCourse?.map(
-          (item,index) => {
+          (item) => {
             let x = item?.CourseAssociateStream?.map((ele) => {
+              if (!mainStreamArray.includes(ele.mainStreamId)) mainStreamArray.push(ele.mainStreamId)
+              if (!subStreamArray.includes(ele.subStreamId)) subStreamArray.push(ele.subStreamId)
               return {
                 id: ele?.mainStreamId,
                 mainStreamId: ele?.mainStreamId,
-                subStreamId: ele?.subStreamId,
+                subStreamId: ele.subStreamId,
                 colStreamId: ele?.ColStream?.id,
               };
             });
@@ -692,7 +694,9 @@ function CreateCollege() {
           }
         );
 
-        collegeDetails?.CollegeAbout?.map((item) => {
+      dispatchforStreams(mainStreamArray, subStreamArray)
+
+       collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
             {
               aboutIntro: item?.aboutIntro,
@@ -910,7 +914,6 @@ function CreateCollege() {
     dispatch(cityDropdown(e.target.value));
   };
 
-  console.log(collegeDetails ,"sdfsdfsdfsdf1231231")
   return (
     <>
       {/* <Container> */}
@@ -1758,9 +1761,7 @@ function CreateCollege() {
                                                                 input.onChange(
                                                                   e
                                                                 );
-                                                                handleSubstreamselect(
-                                                                  e
-                                                                );
+                                                                handleSubstreamselect(e);
                                                               }}
                                                             >
                                                               <option
@@ -1771,7 +1772,7 @@ function CreateCollege() {
                                                                 Stream
                                                               </option>
 
-                                                 {collegeArr &&
+                                                              {!Id ? collegeArr &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId] &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId]?.substreamData &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId]?.substreamData.length > 0 &&
@@ -1787,11 +1788,18 @@ function CreateCollege() {
                                                                       }
                                                                     >
                                                                       {
-                                                                        item.subStreamName
+                                                                        item?.subStreamName
                                                                       }
                                                                     </option>
                                                                   )
-                                                                )}
+                                                                )
+                                                                :
+                                                                substreamSelectVal &&
+                                                                substreamSelectVal.length > 0 &&
+                                                                substreamSelectVal.map((item) =>
+                                                                  item?.mainStreamId === values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId && (
+                                                                    <option key={`SubStream_${index}`} value={item?.id}> {item?.subStreamName} </option>
+                                                                  ))}
                                                             </select>
                                                             <div className="text-end">
                                                               <img
@@ -1823,9 +1831,7 @@ function CreateCollege() {
                                                           <>
                                                             <select
                                                               {...input}
-                                                              // value={
-                                                              //   colstreamdata
-                                                              // }
+                                                              
                                                               className="form-control select-style signup_form_input margin_bottom"
                                                               onChange={(e) => {
                                                                 input.onChange(
@@ -1843,26 +1849,27 @@ function CreateCollege() {
                                                                 Select Col
                                                                 Stream
                                                               </option>
-                                                   {collegeArr &&
+                                                              {!Id ? collegeArr &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId] &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData.length > 0 &&
                                                                 collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData?.map((
-                                                                    item,
-                                                                    index
-                                                                  ) => (
-                                                                    <option
-                                                                      key={`ColStream_${index}`}
-                                                                      value={
-                                                                        item.id
-                                                                      }
-                                                                    >
-                                                                      {
-                                                                        item?.colStreamName
-                                                                      }
-                                                                    </option>
-                                                                  )
-                                                                )}
+                                                                  item,
+                                                                  index
+                                                                ) => (
+                                                                  <option
+                                                                    key={`ColStream_${index}`}
+                                                                    value={
+                                                                      item.id
+                                                                    } >
+                                                                    {item?.colStreamName}
+                                                                  </option>
+                                                                )) : (colstreamSelectVal &&
+                                                                  colstreamSelectVal.length > 0 &&
+                                                                  colstreamSelectVal.map((item) =>
+                                                                    item.subStreamId === values.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId && (
+                                                                      <option key={`SubStream_${index}`} value={item.id}> {item.colStreamName} </option>
+                                                                    )))}
                                                             </select>
                                                             <div className="">
                                                               <img
@@ -1912,7 +1919,7 @@ function CreateCollege() {
                                                             type="button"
                                                             onClick={() =>
                                                               fields.remove(
-                                                                index
+                                                                collegeStreamsIndex
                                                               )} >
                                                             <img
                                                               className="add_remove_icon"
