@@ -16,6 +16,7 @@ import { apibasePath } from "../../../config";
 import Pagination from "../pagination/pagination";
 import Pagesize from "../pagination/pagesize";
 import { toast } from "react-toastify";
+import { getRole } from "../../utils/index"
 import { deleteFamilycode, deleteProfessioncode, familycodeList, professioncodeList, professionlist, deleteProfession } from "../../../redux/actions/organisation/profession";
 
 function Organisation() {
@@ -59,12 +60,16 @@ function Organisation() {
   const organisationlist = useSelector((state) => state?.sectorData?.organisationList)
 
   useEffect(() => {
-    dispatch(getlistSector(pagination));
-    dispatch(getIndustryList(pagination));
-    dispatch(getOrganisationlist(pagination));
-    dispatch(familycodeList(pagination));
-    dispatch(professioncodeList(pagination));
-    dispatch(professionlist(pagination))
+    // if (getRole() !== "admin") {
+    //   router.push('/organisation')
+    // } else {
+      dispatch(getlistSector(pagination));
+      dispatch(getIndustryList(pagination));
+      dispatch(getOrganisationlist(pagination));
+      dispatch(familycodeList(pagination));
+      dispatch(professioncodeList(pagination));
+      dispatch(professionlist(pagination));
+    // }
   }, [pagination]);
 
   const getIndustrylist = useSelector(
@@ -696,7 +701,7 @@ function Organisation() {
                                 <img
                                   className="mx-1 admin_table_action_icon"
                                   src="/images/edit-icon-blue.png"
-                                  onClick={() => handleEdit(item)}
+                                  onClick={() => router.push(`organisation/profession/update/${item?.id}`)}
                                 ></img>
                                 <img
                                   className="mx-1 admin_table_action_icon"

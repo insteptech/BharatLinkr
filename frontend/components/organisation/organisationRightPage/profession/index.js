@@ -1,35 +1,20 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useEffect } from "react";
 import { Table } from "react-bootstrap";
-
-const professionData = [
-  {
-    level: 2,
-    code: "11-121.09",
-    occupation: "chief Executive",
-    path: "/organisation/profession/summary",
-  },
-  {
-    level: 5,
-    code: "11-432.09",
-    occupation: "salse Managers",
-  },
-  {
-    level: 8,
-    code: "11-111.45",
-    occupation: "security Managers",
-  },
-  {
-    level: 3,
-    code: "11-545.00",
-    occupation: "chief Executive",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { professionlist } from "../../../../redux/actions/organisation/profession";
 
 const Profession = (props) => {
- 
-  
   const router = useRouter();
+  const dispatch = useDispatch()
+
+  const professionList = useSelector((state) => state?.sectorData?.professionList?.rows)
+  const porfessionListCount =
+
+    useEffect(() => {
+      dispatch(professionlist())
+    }, [])
+
   return (
     <div>
       <Table responsive className="admin_table" bordered hover>
@@ -41,25 +26,41 @@ const Profession = (props) => {
           </tr>
         </thead>
         <tbody>
-          {professionData &&
-            professionData?.map((item) => {
+          {professionList && professionList?.length > 0 &&
+            professionList?.map((item, index) => {
               return (
-                <>
-                  <tr key={item.id}>
-                    <td className="text-center admin_table_data">
-                      {item.level}
-                    </td>
-                    <td className="text-center admin_table_data">
-                      {item.code}
-                    </td>
-                    <td
-                      onClick={() => router.push(item.path)}
-                      className="text-center admin_table_data profession_link"
-                    >
-                      {item.occupation}
-                    </td>
-                  </tr>
-                </>
+                <tr key={index}>
+                  <td className="text-center admin_table_data">
+                    {item?.prepLevel}
+                  </td>
+                  <td className="text-center admin_table_data">
+                    {
+                      item?.ProfessionCode ?
+                        <>
+                          {`${item?.ProfessionCode?.FamilyCode?.familyCode}.${item?.ProfessionCode?.professionCode}`}
+                        </>
+                        :
+                        <>
+                          {`${item?.FamilyCode?.familyCode}.0000`}
+                        </>
+                    }
+                  </td>
+                  <td
+                    onClick={() => router.push(`/organisation/profession/summary/${item?.id}`)}
+                    className="text-center admin_table_data profession_link"
+                  >
+                    {
+                      item?.ProfessionCode ?
+                        <>
+                        {`${item?.ProfessionCode?.professionName}`}
+                        </>
+                        :
+                        <>
+                        {`${item?.FamilyCode?.familyName}`}
+                        </>
+                    }
+                  </td>
+                </tr>
               );
             })}
         </tbody>

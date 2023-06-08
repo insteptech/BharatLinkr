@@ -117,7 +117,6 @@ function AddOrganisation () {
   }
 
   const handleSectorSelect = (e, values) => {
-    console.log(values.sector)
     let x = selectSectorids
     if (!x.sectorId.includes(Number(e.target.value))) {
       x.sectorId.push(Number(e.target.value))
