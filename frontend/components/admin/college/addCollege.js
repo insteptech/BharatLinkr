@@ -89,40 +89,8 @@ function CreateCollege() {
   })
 
 
-  const handleMainstreamselect = (e, streams, index) => {
-
-    dispatch(getSubstreamData({ mainStreamId: e.target.value }))
-      .then(res => {
-        if (res.payload.data.success) {
-          setCollegeArr({
-            ...collegeArr,
-            [e.target.value]: {
-              substreamData: res.payload.data.data.rows,
-              colStreamData: []
-            }
-          });
-        }
-      })
-  };
-
-  const handleSubstreamselect = (e) => {
-
-    dispatch(getColStreamlist({ subStreamId: e.target.value }))
-      .then(res => {
-        if (res?.payload?.data?.data?.rows) {
-          setCollegeArr({
-            ...collegeArr,
-            [e.target.value]: {
-              substreamData: collegeArr[e.target.value]?.substreamData,
-              colStreamData: res?.payload?.data?.data?.rows
-            }
-          })
-        }
-      })
-  };
-
-  const handleColstreamselect = (e) => {
-    setColstreamdata(e.target.value);
+  const handleMainstreamselect = (form) => {
+    form.change('subStreamId', '')
   };
 
   const handleDeleteAssociate = (deletecourse) => {
@@ -579,42 +547,14 @@ function CreateCollege() {
         errors["courseFees"] = itemArray5;
 
       });
+     
       errors["collegeCourse"] = itemArray4;
-      errors.collegeCourse["collegeStreams"] = itemArray3;
-      errors.collegeCourse["courseFees"]= itemArray5
-    
-    }
-      // values?.collegeCourse?.map((elem, index) => (
-      //   elem?.collegeStreams?.map((item) => {
-      //     let error = {};
-      //     if (!item.mainStreamId) {
-      //       error["mainStreamId"] = "*";
-      //     }
-      //     if (!item.subStreamId) {
-      //       error["subStreamId"] = "*";
-      //     }
-      //     if (!item.colStreamId) {
-      //       error["colStreamId"] = "*";
-      //     }
-      //     itemArray3.push(error);
-      //   })
-       
-      // ));
-      // errors["collegeStreams"] = itemArray3;
+      errors["collegeCourse"][0]["collegeStreams"] = itemArray3;
+      errors["collegeCourse"][0]["courseFees"] = itemArray5;
+         
 
-    //   values?.collegeStreams?.map((item, index) => {
-    //     let error = {};
-    //     if (!item.courseFeeDetailsId) {
-    //       error["courseFeeDetailsId"] = "*";
-    //     }
-    //     if (!item.courseFee) {
-    //       error["courseFee"] = "*";
-    //     }
-    //     itemArray5.push(error);
-    //   });
-    //   errors["collegeStreams"] = itemArray5;
-    // }
-  
+    }
+    
     return errors;
   };
 
@@ -694,9 +634,9 @@ function CreateCollege() {
           }
         );
 
-      dispatchforStreams(mainStreamArray, subStreamArray)
+        dispatchforStreams(mainStreamArray, subStreamArray)
 
-       collegeDetails?.CollegeAbout?.map((item) => {
+        collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
             {
               aboutIntro: item?.aboutIntro,
@@ -896,6 +836,9 @@ function CreateCollege() {
     }
   };
 
+  const substreamfulllist = useSelector((state) => state?.subStreamList?.subStreamValue?.data?.data?.rows)
+  const colstreamfulllist = useSelector((state) => state?.colStreamList?.colStreamSlice?.data?.data?.rows)
+
   useEffect(() => {
     dispatch(getState());
     dispatch(cityDropdown(""));
@@ -907,7 +850,7 @@ function CreateCollege() {
   }, []);
 
   useEffect(() => {
-    dispatch(getCollegebyId({ id: Number(Id) }));
+    if (Id) dispatch(getCollegebyId({ id: Number(Id) }));
   }, [Id]);
 
   const handleCityList = (e) => {
@@ -1673,9 +1616,7 @@ function CreateCollege() {
                                 index === displayIndex && (
                                   <div key={index}>
                                     <Row>
-                                      <FieldArray
-                                        name={`${name}.collegeStreams`}
-                                      >
+                                      <FieldArray name={`${name}.collegeStreams`}>
                                         {({ fields }) => (
                                           <div>
                                             <>
@@ -1686,46 +1627,26 @@ function CreateCollege() {
                                                       <label className="signup_form_label">
                                                         Choose Streams
                                                       </label>
-                                                      <Field
-                                                        name={`${collegeStreamsname}.mainStreamId`}
-                                                      >
-                                                        {({ input, meta }) => (
+                                                      <Field name={`${collegeStreamsname}.mainStreamId`}>
+                                                        {({ input, meta }) => (                                   
                                                           <>
                                                             <select
                                                               {...input}
                                                               className="form-control select-style signup_form_input"
                                                               onChange={(e) => {
-                                                                input.onChange(
-                                                                  e
-                                                                );
-                                                                handleMainstreamselect(
-                                                                  e,
-                                                                  values.collegeCourse,
-                                                                  collegeStreamsIndex
-                                                                );
-                                                              }}
-                                                            >
-                                                              <option value={0}>
-                                                                Select Main
-                                                                Stream
+                                                                input.onChange(e);
+                                                                handleMainstreamselect(form);
+                                                              }}>
+                                                              <option value="">
+                                                                Select Main Stream
                                                               </option>
                                                               {mainStreamlist &&
-                                                                mainStreamlist.length >
-                                                                0 &&
-                                                                mainStreamlist.map(
-                                                                  (
-                                                                    item,
-                                                                    index
-                                                                  ) => (
+                                                                mainStreamlist.length > 0 &&
+                                                                mainStreamlist.map((item, index) => (
                                                                     <option
                                                                       key={`MainStream_${index}`}
-                                                                      value={
-                                                                        item?.id
-                                                                      }
-                                                                    >
-                                                                      {
-                                                                        item.mainStreamName
-                                                                      }
+                                                                      value={item?.id}>
+                                                                      {item.mainStreamName}
                                                                     </option>
                                                                   )
                                                                 )}
@@ -1737,6 +1658,7 @@ function CreateCollege() {
                                                               />
                                                             </div>
                                                             <div className="d-flex">
+                                                              {console.log(meta.error, "errrrrrrrrrrrrrrr")}
                                                               {meta.touched &&
                                                                 meta.error && (
                                                                   <span className="text-danger required_msg">
@@ -1752,71 +1674,51 @@ function CreateCollege() {
                                                       <Field
                                                         name={`${collegeStreamsname}.subStreamId`}
                                                       >
-                                                        {({ input, meta }) => (
-                                                          <>
-                                                            <select
-                                                              {...input}
-                                                              className="form-control select-style signup_form_input margin_top"
-                                                              onChange={(e) => {
-                                                                input.onChange(
-                                                                  e
-                                                                );
-                                                                handleSubstreamselect(e);
-                                                              }}
-                                                            >
-                                                              <option
-                                                                value={""}
-                                                                hidden
+                                                        {({ input, meta }) => {
+                                                          let list = substreamfulllist?.filter((ele) => {
+                                                            return ele?.mainStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId
+                                                          })
+                                                          return (
+                                                            <>
+                                                              <select
+                                                                {...input}
+                                                                className="form-control select-style signup_form_input margin_top"
+                                                                onChange={(e) => {
+                                                                  input.onChange(
+                                                                    e
+                                                                  );
+                                                                }}
+                                                                disabled={values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId ? false : true}
                                                               >
-                                                                Select Sub
-                                                                Stream
-                                                              </option>
+                                                                <option
+                                                                  value={""}
+                                                                  hidden
+                                                                >
+                                                                  Select Sub
+                                                                  Stream
+                                                                </option>
+                                                                {substreamfulllist?.map((ele, i) =>
+                                                                  ele?.mainStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId
+                                                                  && (<option key={i} value={ele?.id}>{ele?.subStreamName}</option>))}
 
-                                                              {!Id ? collegeArr &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId] &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId]?.substreamData &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId]?.substreamData.length > 0 &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.mainStreamId]?.substreamData.map(
-                                                                  (
-                                                                    item,
-                                                                    index
-                                                                  ) => (
-                                                                    <option
-                                                                      key={`SubStream_${index}`}
-                                                                      value={
-                                                                        item.id
-                                                                      }
-                                                                    >
-                                                                      {
-                                                                        item?.subStreamName
-                                                                      }
-                                                                    </option>
-                                                                  )
-                                                                )
-                                                                :
-                                                                substreamSelectVal &&
-                                                                substreamSelectVal.length > 0 &&
-                                                                substreamSelectVal.map((item) =>
-                                                                  item?.mainStreamId === values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId && (
-                                                                    <option key={`SubStream_${index}`} value={item?.id}> {item?.subStreamName} </option>
-                                                                  ))}
-                                                            </select>
-                                                            <div className="text-end">
-                                                              <img
-                                                                className="select_down_icon"
-                                                                src="/images/down.png"
-                                                              />
-                                                            </div>
-                                                            <div className="d-flex">
-                                                              {meta.touched &&
-                                                                meta.error && (
-                                                                  <span className="text-danger required_msg">
-                                                                    {meta.error}
-                                                                  </span>
-                                                                )}
-                                                            </div>
-                                                          </>
-                                                        )}
+                                                              </select>
+                                                              <div className="text-end">
+                                                                <img
+                                                                  className="select_down_icon"
+                                                                  src="/images/down.png"
+                                                                />
+                                                              </div>
+                                                              <div className="d-flex">
+                                                                {meta.touched &&
+                                                                  meta.error && (
+                                                                    <span className="text-danger required_msg">
+                                                                      {meta.error}
+                                                                    </span>
+                                                                  )}
+                                                              </div>
+                                                            </>)
+                                                        }
+                                                        }
                                                       </Field>
                                                     </Col>
                                                     <Col
@@ -1831,15 +1733,13 @@ function CreateCollege() {
                                                           <>
                                                             <select
                                                               {...input}
-                                                              
+                                                              disabled={values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId ? false : true}
                                                               className="form-control select-style signup_form_input margin_bottom"
                                                               onChange={(e) => {
                                                                 input.onChange(
                                                                   e
                                                                 );
-                                                                handleColstreamselect(
-                                                                  e
-                                                                );
+
                                                               }}
                                                             >
                                                               <option
@@ -1849,27 +1749,11 @@ function CreateCollege() {
                                                                 Select Col
                                                                 Stream
                                                               </option>
-                                                              {!Id ? collegeArr &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId] &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData.length > 0 &&
-                                                                collegeArr[values.collegeCourse[index].collegeStreams[collegeStreamsIndex]?.subStreamId]?.colStreamData?.map((
-                                                                  item,
-                                                                  index
-                                                                ) => (
-                                                                  <option
-                                                                    key={`ColStream_${index}`}
-                                                                    value={
-                                                                      item.id
-                                                                    } >
-                                                                    {item?.colStreamName}
-                                                                  </option>
-                                                                )) : (colstreamSelectVal &&
-                                                                  colstreamSelectVal.length > 0 &&
-                                                                  colstreamSelectVal.map((item) =>
-                                                                    item.subStreamId === values.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId && (
-                                                                      <option key={`SubStream_${index}`} value={item.id}> {item.colStreamName} </option>
-                                                                    )))}
+
+                                                              {colstreamfulllist?.map((ele, i) =>
+                                                                ele?.subStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId
+                                                                && (<option key={i} value={ele?.id}>{ele?.colStreamName}</option>))}
+
                                                             </select>
                                                             <div className="">
                                                               <img
