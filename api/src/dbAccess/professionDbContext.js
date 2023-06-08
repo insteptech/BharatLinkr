@@ -307,11 +307,20 @@ const professionRegisterList = async (req) => {
             whrCondition = { professionId: req.body.professionId, deleted: false }
 
         }
-
+            let family= {};
         if (req.body.familyId) {
-            whrCondition = { familyId: req.body.familyId, deleted: false }
+            family = { familyId: req.body.familyId, deleted: false }
 
         }
+
+
+        let courseName= {};
+        if (req.body.courseId) {
+            courseName = { courseId: req.body.courseId, deleted: false }
+
+        }
+
+
 
         if (req.body.search) {
             const obj = {
@@ -320,7 +329,7 @@ const professionRegisterList = async (req) => {
             whrCondition = { ...obj, ...whrCondition }
         }
         const result = await professionRegister.findAndCountAll({
-            where: whrCondition,
+            where: {[Op.and]:[whrCondition,family,courseName]},
             include: [
                 {
                     model: familyCode,
@@ -343,12 +352,8 @@ const professionRegisterList = async (req) => {
                     model: course,
                     required: false,
                     as: "Courses"
-                },
-                {
-                    model: professionCMS,
-                    required: false,
-                    as: "CMS"
                 }
+         
             ],
 
             offset: (pageNo - 1) * size,
