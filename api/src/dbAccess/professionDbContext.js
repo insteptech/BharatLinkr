@@ -313,6 +313,12 @@ const professionRegisterList = async (req) => {
 
         }
 
+        let prep= {};
+        if (req.body.prepLevel) {
+            prep = { prepLevel: req.body.prepLevel, deleted: false }
+
+        }
+
 
         let courseName= {};
         if (req.body.courseId) {
@@ -329,7 +335,7 @@ const professionRegisterList = async (req) => {
             whrCondition = { ...obj, ...whrCondition }
         }
         const result = await professionRegister.findAndCountAll({
-            where: {[Op.and]:[whrCondition,family,courseName]},
+            where: {[Op.and]:[whrCondition,family,courseName,prep]},
             include: [
                 {
                     model: familyCode,
