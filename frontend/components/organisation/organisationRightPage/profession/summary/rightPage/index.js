@@ -1,6 +1,8 @@
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import React from "react";
 import { Accordion, Col, Form, Row } from "react-bootstrap";
+import DOMPurify from "dompurify";
+
 
 const summaryTabs = [
   "At a Glance",
@@ -65,8 +67,7 @@ const accoData = [
   },
 ];
 
-const SummaryRight = (props) => {
-  const { dataValue, setDataValue } = props;
+const SummaryRight = ({ professionDetails, dataValue, professiontypes }) => {
 
   const handleClick = () => {
     ref.current?.scrollIntoView({ behavior: "smooth" });
@@ -74,7 +75,10 @@ const SummaryRight = (props) => {
 
   return (
     <>
-      <div className="admin_home_tabs_row top_padding_none big_screen_none">
+      {professionDetails && professionDetails?.length > 0 &&
+        (
+          <>
+            {/* <div className="admin_home_tabs_row top_padding_none big_screen_none">
         <Row>
           <Col lg={12} className="p-0">
             <ScrollingCarousel show={5.5} slide={4} swiping={true}>
@@ -83,9 +87,8 @@ const SummaryRight = (props) => {
                   summaryTabs?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         active={true}
                         onClick={() => setDataValue(stepsIndex)}
                       >
@@ -97,157 +100,210 @@ const SummaryRight = (props) => {
             </ScrollingCarousel>
           </Col>
         </Row>
-      </div>
-      <div className="">
-        {props.dataValue === 0 && (
-          <>
-            {summaryData &&
-              summaryData?.map((item) => {
-                return (
-                  <>
-                    <div key={item.id}>
-                      <h2 className="intro_heading mb-0">
-                        Cartographers and Photogrammetrists
-                      </h2>
-                      <h6 className="mb-3 blue_font">{item.code}</h6>
-                      <p>{item.content}</p>
-                      <h6>
-                        Also Called:{" "}
-                        <span className="review_card_text_paira">
-                          {item.category}
-                        </span>
-                      </h6>
-                    </div>
-                  </>
-                );
-              })}
-          </>
-        )}
-        {props.dataValue === 1 && (
-          <>
-            <div>
-              <h2 className="intro_heading mb-3">
-                Types of Cartogarphers & Photogrammetrists
-              </h2>
-              <Form.Select aria-label="Default select example" className="mb-3">
-                <option>Status</option>
-                <option value="1">Active</option>
-                <option value="2">Expired</option>
-              </Form.Select>
-              <Accordion defaultActiveKey="0">
-                {accoData &&
-                  accoData?.map((item, index) => (
-                    <>
-                      <Accordion.Item key={index} eventKey={item.eventKey}>
-                        <Accordion.Header className="">
-                          <h6 className="m-0">
-                            <img
-                              className="me-2 mb-1"
-                              width={14}
-                              src="/images/plus-circle.svg"
-                            />
-                            {item.title}
-                          </h6>
-                        </Accordion.Header>
-                        <Accordion.Body className="py-0">
-                          <p>{item.item1}</p>
-                          <p>{item.item2}</p>
-                          <p>{item.item3}</p>
-                          <p>{item.item4}</p>
-                          <p>{item.item5}</p>
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </>
-                  ))}
-              </Accordion>
+      </div> */}
+            <div className="">
+              {dataValue === 0 && (
+                <>
+                  <div>
+                    <h2 className="intro_heading mb-0">
+                      {professionDetails[0]?.ProfessionCode ? professionDetails[0]?.ProfessionCode?.professionName : professionDetails[0]?.FamilyCode?.familyName}
+                    </h2>
+                    <h6 className="mb-3 blue_font">{professionDetails[0]?.ProfessionCode ? `${professionDetails[0]?.ProfessionCode?.FamilyCode?.familyCode}.${professionDetails[0]?.ProfessionCode?.professionCode}` : `${professionDetails[0]?.FamilyCode?.familyCode}.0000`}</h6>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.glance),
+                      }}
+                    />
+                    <h6>
+                      Also Called:{" "}
+                      <span className="review_card_text_paira">
+                        {professionDetails[0]?.alsoCalled}
+                      </span>
+                    </h6>
+                  </div>
+                </>
+              )}
+              {dataValue === 1 && !professionDetails[0]?.ProfessionCode && (
+                <>
+                  <div>
+                    <h2 className="intro_heading mb-3">
+                      Types of {professionDetails[0]?.FamilyCode?.familyName}
+                    </h2>
+                    <Form.Select aria-label="Default select example" className="mb-3">
+                      <option>Status</option>
+                      <option value="1">Active</option>
+                      <option value="2">Expired</option>
+                    </Form.Select>
+                    <Accordion defaultActiveKey="0">
+                      {professiontypes?.rows?.length > 0 &&
+                        professiontypes?.rows?.map((item, index) => (
+                          <>
+                            {item?.ProfessionCode &&
+                              <Accordion.Item key={index} eventKey={index}>
+                                <Accordion.Header className="">
+                                  <h6 className="m-0">
+                                    <img
+                                      className="me-2 mb-1"
+                                      width={14}
+                                      src="/images/plus-circle.svg"
+                                    />
+                                    {item?.ProfessionCode?.professionName}
+                                  </h6>
+                                </Accordion.Header>
+                                <Accordion.Body className="py-0">
+                                  info
+                                </Accordion.Body>
+                              </Accordion.Item>
+                            }
+                          </>
+                        ))}
+                    </Accordion>
+                  </div>
+                </>
+              )}
+              {dataValue === 2 && (
+                <>
+                  <div>
+                    <h2 className="intro_heading mb-3">Tasks</h2>
+                    <Form.Select aria-label="Default select example" className="mb-3">
+                      <option>Status</option>
+                      <option value="1">Active</option>
+                      <option value="2">Expired</option>
+                    </Form.Select>
+                    <h6 className="d-flex">
+                      {/* <div className="dark_blue_dot color_dot mt-1"></div> */}
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.tasks),
+                        }}
+                      />
+                    </h6>
+                  </div>
+                </>
+              )}
+              {dataValue === 3 && (
+                <>
+                  <div>
+                    <h2 className="intro_heading mb-3">Education</h2>
+                    <Form.Select aria-label="Default select example" className="mb-3">
+                      <option>Status</option>
+                      <option value="1">Active</option>
+                      <option value="2">Expired</option>
+                    </Form.Select>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.education),
+                      }}
+                    />
+                    {/* <h6>
+                      <img
+                        className="me-2 mb-1"
+                        width={14}
+                        src="/images/plus-circle.svg"
+                      />
+                      Diploma
+                    </h6>
+                    <h6>
+                      <img
+                        className="me-2 mb-1"
+                        width={14}
+                        src="/images/plus-circle.svg"
+                      />{" "}
+                      Cirtifications
+                    </h6>
+                    <h6>
+                      <img
+                        className="me-2 mb-1"
+                        width={14}
+                        src="/images/plus-circle.svg"
+                      />{" "}
+                      Diploma
+                    </h6>
+                    <h6>
+                      <img
+                        className="me-2 mb-1"
+                        width={14}
+                        src="/images/plus-circle.svg"
+                      />{" "}
+                      Bachelor Degree
+                    </h6>
+                    <h6>
+                      <img
+                        className="me-2 mb-1"
+                        width={14}
+                        src="/images/plus-circle.svg"
+                      />{" "}
+                      Master Degree
+                    </h6>
+                    <h6 className="d-flex mt-3">
+                      <div className="dark_blue_dot color_dot mt-1"></div>
+                      Prepare Detailed reports on audit findings
+                    </h6>
+                    <h6 className="d-flex">
+                      <div className="dark_blue_dot color_dot mt-1"></div>
+                      Lift Truck operator, other
+                    </h6> */}
+                  </div>
+                </>
+              )}
+              {dataValue === 4 && (
+                <>
+                  <h2 className="intro_heading mb-3">Experience</h2>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.experience),
+                    }}
+                  />
+                </>
+              )}
+              {dataValue === 5 && (
+                <>
+                <h2 className="intro_heading mb-3">Knowledge</h2>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.knowledge),
+                    }}
+                  />
+                </>
+              )}
+              {dataValue === 6 && (
+                <>
+                <h2 className="intro_heading mb-3">Technical Skills</h2>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.technicalSkills),
+                    }}
+                  />
+                </>
+              )}
+              {dataValue === 7 && (
+                <>
+                <h2 className="intro_heading mb-3">Future Prospects</h2>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.futureProspects),
+                    }}
+                  />
+                </>
+              )}
+              {dataValue === 8 && (
+                <>
+                <h2 className="intro_heading mb-3">Certificates</h2>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.certificates),
+                    }}
+                  />
+                </>
+              )}
+
             </div>
           </>
-        )}
-        {props.dataValue === 2 && (
-          <>
-            <div>
-              <h2 className="intro_heading mb-3">Tasks</h2>
-              <Form.Select aria-label="Default select example" className="mb-3">
-                <option>Status</option>
-                <option value="1">Active</option>
-                <option value="2">Expired</option>
-              </Form.Select>
-              <h6 className="d-flex">
-                <div className="dark_blue_dot color_dot mt-1"></div>
-                Prepare Detailed reports on audit findings
-              </h6>
-              <h6 className="d-flex">
-                <div className="dark_blue_dot color_dot mt-1"></div>
-                Lift Truck operator, other
-              </h6>
-            </div>
-          </>
-        )}
-        {props.dataValue === 3 && (
-          <>
-            <div>
-              <h2 className="intro_heading mb-3">Education</h2>
-              <Form.Select aria-label="Default select example" className="mb-3">
-                <option>Status</option>
-                <option value="1">Active</option>
-                <option value="2">Expired</option>
-              </Form.Select>
-              <h6>
-                <img
-                  className="me-2 mb-1"
-                  width={14}
-                  src="/images/plus-circle.svg"
-                />
-                Diploma
-              </h6>
-              <h6>
-                <img
-                  className="me-2 mb-1"
-                  width={14}
-                  src="/images/plus-circle.svg"
-                />{" "}
-                Cirtifications
-              </h6>
-              <h6>
-                <img
-                  className="me-2 mb-1"
-                  width={14}
-                  src="/images/plus-circle.svg"
-                />{" "}
-                Diploma
-              </h6>
-              <h6>
-                <img
-                  className="me-2 mb-1"
-                  width={14}
-                  src="/images/plus-circle.svg"
-                />{" "}
-                Bachelor Degree
-              </h6>
-              <h6>
-                <img
-                  className="me-2 mb-1"
-                  width={14}
-                  src="/images/plus-circle.svg"
-                />{" "}
-                Master Degree
-              </h6>
-              <h6 className="d-flex mt-3">
-                <div className="dark_blue_dot color_dot mt-1"></div>
-                Prepare Detailed reports on audit findings
-              </h6>
-              <h6 className="d-flex">
-                <div className="dark_blue_dot color_dot mt-1"></div>
-                Lift Truck operator, other
-              </h6>
-            </div>
-          </>
-        )}
-        {props.dataValue === 4 && <h3>SCHOLARSHIP PLACEMENTS1</h3>}
-        {props.dataValue === 5 && "kjfjdh"}
-      </div>
+        )
+      }
     </>
-  );
+  )
 };
+
 
 export default SummaryRight;

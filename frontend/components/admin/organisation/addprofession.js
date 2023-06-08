@@ -5,7 +5,7 @@ import arrayMutators from "final-form-arrays";
 import { FieldArray } from 'react-final-form-arrays';
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from 'react-redux';
-import { addProfession, familycodeList, professioncodeList } from '../../../redux/actions/organisation/profession';
+import { addProfession, familycodeList, getProfessionById, professioncodeList, updateProfession } from '../../../redux/actions/organisation/profession';
 import { getCourse } from '../../../redux/actions/course/addcourse';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -24,33 +24,43 @@ function Addprofession() {
     const professionList = useSelector((state) => state?.sectorData?.professionCodeList)
     const courseList = useSelector((state) => state?.courseList?.courselist?.data)
 
-    const handleSubmit = (values) => {
-        if (Id) {
+    const professionDetails = useSelector((state) => state?.sectorData?.professionById)
 
+    const handleFamilySelect = (e) => {
+        dispatch(professioncodeList({familyId:Number(e.target.value)}))
+    }
+
+    const handleSubmit = (values) => {
+        if (dataValue === 0) {
+            setDataValue(1)
         } else {
-            if (dataValue === 0) {
-                setDataValue(1)
-            }else {
-                
-                let data = { professionRegister: [] }
-                data.professionRegister[0] = {
+            let data = { professionRegister: [] }
+            data.professionRegister[0] = {
                 ...values
             }
             if (type === 'Family') {
                 delete data.professionRegister[0].professionId
-            } else {
-                delete data.professionRegister[0].familyId
             }
             data.professionRegister[0].cms = values?.cms[0]
-            dispatch(addProfession(data)).then((res) => {
-                if (res?.payload?.data?.success) {
-                    toast.success('Success')
-                    router.push('/admin/organisation')
-                } else {
-                    toast.error('Error')
-                }
-            })
-        }
+            if (Id) {
+                dispatch(updateProfession(data)).then((res) => {
+                    if (res?.payload?.data?.success) {
+                        toast.success('Success')
+                        router.push('/admin/organisation')
+                    } else {
+                        toast.error('Error')
+                    }
+                })
+            } else {
+                dispatch(addProfession(data)).then((res) => {
+                    if (res?.payload?.data?.success) {
+                        toast.success('Success')
+                        router.push('/admin/organisation')
+                    } else {
+                        toast.error('Error')
+                    }
+                })
+            }
         }
     };
 
@@ -71,26 +81,52 @@ function Addprofession() {
             return e;
         };
         let initialValues = {};
-        initialValues = {
-            familyId: '',
-            professionId: '',
-            alsoCalled: '',
-            prepLevel: '',
-            highDemandOfProfession: '',
-            courseId: '',
-            cms: [{
-                glance: '',
-                types: '',
-                tasks: '',
-                education: '',
-                experience: '',
-                knowledge: '',
-                technicalSkills: '',
-                futureProspects: '',
-                certificates: ''
-            }]
+        if (Id) {
+            if (professionDetails?.length > 0) {
+                if (professionDetails[0]?.ProfessionCode) { setType("Profession") }
+                initialValues = {
+                    id: professionDetails[0]?.id,
+                    familyId: professionDetails[0]?.familyId,
+                    professionId: professionDetails[0]?.professionId,
+                    alsoCalled: professionDetails[0]?.alsoCalled,
+                    prepLevel: professionDetails[0]?.prepLevel,
+                    highDemandOfProfession: professionDetails[0]?.highDemandOfProfession,
+                    courseId: professionDetails[0]?.courseId,
+                }
+                initialValues.cms = [{
+                    id: professionDetails[0]?.CMS[0]?.id,
+                    glance: professionDetails[0]?.CMS[0]?.glance,
+                    types: professionDetails[0]?.CMS[0]?.types,
+                    tasks: professionDetails[0]?.CMS[0]?.tasks,
+                    education: professionDetails[0]?.CMS[0]?.education,
+                    experience: professionDetails[0]?.CMS[0]?.experience,
+                    knowledge: professionDetails[0]?.CMS[0]?.knowledge,
+                    technicalSkills: professionDetails[0]?.CMS[0]?.technicalSkills,
+                    futureProspects: professionDetails[0]?.CMS[0]?.futureProspects,
+                    certificates: professionDetails[0]?.CMS[0]?.certificates,
+                }]
+            }
+        } else {
+            initialValues = {
+                familyId: '',
+                professionId: '',
+                alsoCalled: '',
+                prepLevel: '',
+                highDemandOfProfession: '',
+                courseId: '',
+                cms: [{
+                    glance: '',
+                    types: '',
+                    tasks: '',
+                    education: '',
+                    experience: '',
+                    knowledge: '',
+                    technicalSkills: '',
+                    futureProspects: '',
+                    certificates: ''
+                }]
+            }
         }
-        // certificates,futureProspects,technicalSkills,knowledge,experience,education,tasks,types,glance
         return initialValues
     };
 
@@ -111,11 +147,10 @@ function Addprofession() {
         if (!values.alsoCalled) {
             errors["alsoCalled"] = "*"
         }
-        if (type === "Family") {
-            if (!values.familyId) {
-                errors["familyId"] = "*"
-            }
-        } else {
+        if (!values.familyId) {
+            errors["familyId"] = "*"
+        }
+        if (type !== "Family") {
             if (!values.professionId) {
                 errors["professionId"] = "*"
             }
@@ -127,7 +162,10 @@ function Addprofession() {
         dispatch(familycodeList())
         dispatch(professioncodeList())
         dispatch(getCourse())
-    }, [])
+        if (Id) {
+            dispatch(getProfessionById(Number(Id)))
+        }
+    }, [Id])
 
     return (
         <>
@@ -159,8 +197,8 @@ function Addprofession() {
                         }}
                         keepDirtyOnReinitialize
                         validate={validate}
-                        initialValues={useMemo((e) => (init(e)), [])}
-                        render={({ handleSubmit }) => (
+                        initialValues={useMemo((e) => (init(e)), [professionDetails])}
+                        render={({ handleSubmit, values }) => (
                             <form onSubmit={handleSubmit}>
                                 {dataValue === 0 ?
                                     <>
@@ -176,6 +214,7 @@ function Addprofession() {
                                                         className="form-control select-style signup_form_input "
                                                         onChange={(e) => setType(e.target.value)}
                                                         value={type}
+                                                        disabled={Id ? true : false}
                                                     >
                                                         <option>Family</option>
                                                         <option>Profession</option>
@@ -188,35 +227,39 @@ function Addprofession() {
                                                     </div>
                                                 </>
                                             </Col>
-                                            {type === 'Family' ?
-                                                <Col md={12} lg={6}>
-                                                    <Field name={`familyId`}>
-                                                        {({ input, meta }) => (
-                                                            <>
-                                                                <div className="d-flex">
-                                                                    <label className="signup_form_label">
-                                                                        Family
-                                                                    </label>
-                                                                    {meta.error && meta.touched && (
-                                                                        <span className="text-danger required_msg">
-                                                                            {meta.error}
-                                                                        </span>
-                                                                    )}
-                                                                </div>
-                                                                <select
-                                                                    {...input}
-                                                                    className="form-control select-style signup_form_input margin_bottom"
-                                                                >
-                                                                    <option value="">Select family</option>
-                                                                    {familyList?.rows?.length > 0 && familyList?.rows?.map((item, index) => {
-                                                                        return (<option key={index} value={item?.id}>{item?.familyName}</option>)
-                                                                    })}
-                                                                </select>
-                                                            </>
-                                                        )}
-                                                    </Field>
-                                                </Col>
-                                                :
+
+                                            <Col md={12} lg={6}>
+                                                <Field name={`familyId`} >
+                                                    {({ input, meta }) => (
+                                                        <>
+                                                            <div className="d-flex">
+                                                                <label className="signup_form_label">
+                                                                    Family
+                                                                </label>
+                                                                {meta.error && meta.touched && (
+                                                                    <span className="text-danger required_msg">
+                                                                        {meta.error}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <select
+                                                                {...input}
+                                                                className="form-control select-style signup_form_input margin_bottom"
+                                                                onChange={(e) => {
+                                                                    input.onChange(e)
+                                                                    handleFamilySelect(e, values)
+                                                                }}
+                                                            >
+                                                                <option value="">Select family</option>
+                                                                {familyList?.rows?.length > 0 && familyList?.rows?.map((item, index) => {
+                                                                    return (<option key={index} value={item?.id}>{item?.familyName}</option>)
+                                                                })}
+                                                            </select>
+                                                        </>
+                                                    )}
+                                                </Field>
+                                            </Col>
+                                            {type !== 'Family' &&
                                                 <Col md={12} lg={6}>
                                                     <Field name={`professionId`}>
                                                         {({ input, meta }) => (
@@ -234,6 +277,7 @@ function Addprofession() {
                                                                 <select
                                                                     {...input}
                                                                     className="form-control select-style signup_form_input margin_bottom"
+                                                                    disabled={!values?.familyId ? true : false}
                                                                 >
                                                                     <option value="">Select Profession</option>
                                                                     {professionList?.rows?.length > 0 && professionList?.rows?.map((item, index) => {

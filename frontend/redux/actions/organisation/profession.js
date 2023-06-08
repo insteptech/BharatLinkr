@@ -105,7 +105,7 @@ export const addProfession = createAsyncThunk(
     "addProfession/profession/addProfessionRegister",
     async (data) => {
         return apiRequest
-            .post(`profession/addProfessionRegister`,data)
+            .post(`profession/addProfessionRegister`, data)
             .then((res) => res)
             .catch((err) => err);
     }
@@ -115,7 +115,7 @@ export const professionlist = createAsyncThunk(
     "professionlist/profession/professionRegisterList",
     async (data) => {
         return apiRequest
-            .post(`profession/professionRegisterList`,data)
+            .post(`profession/professionRegisterList`, data)
             .then((res) => res)
             .catch((err) => err);
     }
@@ -126,6 +126,26 @@ export const deleteProfession = createAsyncThunk(
     async (id) => {
         return apiRequest
             .delete(`profession/deleteProfessionRegister/${Number(id)}`)
+            .then((res) => res)
+            .catch((err) => err);
+    }
+);
+
+export const getProfessionById = createAsyncThunk(
+    "getProfessionById/profession/professionRegisterList",
+    async (id) => {
+        return apiRequest
+            .post(`profession/professionRegisterList`, { id: id })
+            .then((res) => res)
+            .catch((err) => err);
+    }
+);
+
+export const updateProfession = createAsyncThunk(
+    "updateProfession/profession/updateProfessionRegister",
+    async (data) => {
+        return apiRequest
+            .post(`profession/updateProfessionRegister`, data)
             .then((res) => res)
             .catch((err) => err);
     }

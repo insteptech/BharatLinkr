@@ -6,7 +6,7 @@ import {
   getSectorById,
   getlistSector,
 } from "../../actions/organisation/addsector";
-import { familyCodeById, familycodeList, professioncodeList,professionCodeById, professionlist } from "../../actions/organisation/profession";
+import { familyCodeById, familycodeList, professioncodeList,professionCodeById, professionlist, getProfessionById, professioncodeDropdownlist } from "../../actions/organisation/profession";
 
 const sectorBySlice = createSlice({
   name: "sector",
@@ -29,6 +29,8 @@ const sectorBySlice = createSlice({
     professionCodeList: [],
     professionCodeById: [],
     professionList: [],
+    professionById: [],
+    professionCodeDropdown:[],
     error: ""
   },
 
@@ -157,6 +159,15 @@ const sectorBySlice = createSlice({
       (state.status = ""),
         (state.professionCodeList = action.payload?.data?.data);
     });
+    
+    // //profession code dropdown
+    // builder.addCase(professioncodeDropdownlist.pending, (state, action) => {
+    //   (state.status = action.payload?.status);
+    // });
+    // builder.addCase(professioncodeDropdownlist.fulfilled, (state, action) => {
+    //   (state.status = ""),
+    //     (state.professionCodeDropdown = action.payload?.data?.data?.rows);
+    // });
 
     //profession code by id
     builder.addCase(professionCodeById.pending, (state, action) => {
@@ -174,6 +185,15 @@ const sectorBySlice = createSlice({
     builder.addCase(professionlist.fulfilled, (state, action) => {
       (state.status = ""),
         (state.professionList = action.payload?.data?.data);
+    });
+
+    //profession by id
+    builder.addCase(getProfessionById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(getProfessionById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionById = action.payload?.data?.data?.rows);
     });
   },
 });
