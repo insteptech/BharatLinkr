@@ -50,8 +50,6 @@ function CreateCollege() {
   const router = useRouter();
   const { Id } = router.query;
 
-  const [colstreamdata, setColstreamdata] = useState(null);
-
   const cityList = useSelector(
     (State) => State.cityList?.cityList?.data?.result
   );
@@ -165,56 +163,56 @@ function CreateCollege() {
     } else {
       // for college course
       let obj = {};
-      values?.AssociateCourse?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.AssociateCourse?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           obj[key] = value;
         });
       });
 
       //  for college agency
       let agencyObj = {};
-      values?.CollegeAgency?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.CollegeAgency?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           agencyObj[key] = value;
         });
       });
 
       //  for college about
       let collegeaboutObj = {};
-      values?.CollegeAbout?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.CollegeAbout?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           collegeaboutObj[key] = value;
         });
       });
 
       //  for college admission
       let collegeadmissionObj = {};
-      values?.CollegeAdmission?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.CollegeAdmission?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           collegeadmissionObj[key] = value;
         });
       });
 
       //  for distance education
       let distanceEduObj = {};
-      values?.DistanceEducation?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.DistanceEducation?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           distanceEduObj[key] = value;
         });
       });
 
       //  for scholarship
       let scholarshipObj = {};
-      values?.Scholarship?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.Scholarship?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           scholarshipObj[key] = value;
         });
       });
 
       //  for placements
       let placementObj = {};
-      values?.Placements?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+      values?.Placements?.map((element) => {
+        Object.entries(element).map(([key, value]) => {
           placementObj[key] = value;
         });
       });
@@ -222,39 +220,47 @@ function CreateCollege() {
       // for faq
       let faqObj = {};
       values?.FAQ?.forEach((element) => {
-        Object.entries(element).forEach(([key, value]) => {
+        Object.entries(element).map(([key, value]) => {
           faqObj[key] = value;
         });
       });
 
-      // for college
-      let collegeObj = {};
-      values.college.forEach((item) => {
-        Object.entries(item).forEach(([key, value]) => {
-          collegeObj[key] = value;
-        });
-      });
-
+  
       let collegecourse = {};
-      collegeDetails.AssociateCourse?.map((element) => {
+      values?.AssociateCourse?.map((element) => {
         Object.entries(element).map(([key, value]) => {
           collegecourse[key] = value;
         });
       });
 
+      //for associate course mainstream
       let streamssObj = {};
-      collegecourse?.CourseAssociateStream?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          streamssObj[key] = value;
+      values?.AssociateCourse?.map((collegecoursestream) => (
+        collegecoursestream?.CourseAssociateStream?.map((element) => {
+          Object.entries(element).map(([key, value]) => {
+            streamssObj[key] = value;
+          })
+        })
+      ))
+
+      // for college
+      let collegeObj = {};
+      values.college.map((item) => {
+        Object.entries(item).map(([key, value]) => {
+          collegeObj[key] = value;
         });
       });
 
+
+      //for associate course fees
       let coursefeeObj = {};
-      collegecourse?.collegeFees?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          coursefeeObj[key] = value;
-        });
-      });
+      values?.AssociateCourse?.map((collegecoursefee) => (
+        collegecoursefee?.CourseFees?.map((element) => {
+          Object.entries(element).map(([key, value]) => {
+            coursefeeObj[key] = value;
+          })
+        })
+      ))
 
       let updateDetails = {
         id: collegeDetails?.id,
@@ -281,7 +287,6 @@ function CreateCollege() {
             programTypeId: collegecourse?.programTypeId,
             courseCategoryId: collegecourse?.courseCategoryId,
             chooseExamAcceptedId: collegecourse?.chooseExamAcceptedId,
-
             collegeStreams: [
               {
                 id: streamssObj?.id,
@@ -300,6 +305,7 @@ function CreateCollege() {
               },
               {
                 fees: coursefeeObj?.fees,
+                courseFeeDetailsId: coursefeeObj?.courseFeeDetailsId
               },
             ],
           },
@@ -366,10 +372,6 @@ function CreateCollege() {
         ],
       };
 
-      if (collegeDetails?.collegeName === collegeObj?.collegeName) {
-        delete updateDetails.collegeName;
-      }
-
       let formdata = new FormData();
 
       if (dataValue == 0) {
@@ -377,17 +379,21 @@ function CreateCollege() {
       } else if (dataValue === 1) {
         setDataValue(2);
       } else if (dataValue === 2) {
+        values.id = collegeDetails.id
+        if (updateDetails?.collegeName === values?.collegeName) {
+          delete values?.collegeName;
+        }
         formdata.append("collegeData", JSON.stringify(updateDetails));
 
         if (formdata !== 0) {
           dispatch(updateCollege(formdata)).then((res) => {
             if (res?.payload?.data?.success) {
-              Router.push("/admin/college");
-              toast.success("College updated");
+              Router.push("/admin/college")
+              toast.success("College updated")
             } else {
-              toast.error("Error");
+              toast.error("Error")
             }
-          });
+          })
         }
       }
     }
@@ -530,31 +536,24 @@ function CreateCollege() {
           }
           itemArray3.push(error);
         })
-
         itemArray4.push(error);
-
 
         item?.courseFees?.map((itemss, index) => {
           let error = {};
           if (!itemss.courseFeeDetailsId) {
             error["courseFeeDetailsId"] = "*";
           }
-          if (!itemss.courseFee) {
+          if (!itemss.fees) {
             error["fees"] = "*";
           }
           itemArray5.push(error);
         });
         errors["courseFees"] = itemArray5;
-
       });
-     
       errors["collegeCourse"] = itemArray4;
       errors["collegeCourse"][0]["collegeStreams"] = itemArray3;
       errors["collegeCourse"][0]["courseFees"] = itemArray5;
-         
-
     }
-    
     return errors;
   };
 
@@ -1628,7 +1627,7 @@ function CreateCollege() {
                                                         Choose Streams
                                                       </label>
                                                       <Field name={`${collegeStreamsname}.mainStreamId`}>
-                                                        {({ input, meta }) => (                                   
+                                                        {({ input, meta }) => (
                                                           <>
                                                             <select
                                                               {...input}
@@ -1643,12 +1642,12 @@ function CreateCollege() {
                                                               {mainStreamlist &&
                                                                 mainStreamlist.length > 0 &&
                                                                 mainStreamlist.map((item, index) => (
-                                                                    <option
-                                                                      key={`MainStream_${index}`}
-                                                                      value={item?.id}>
-                                                                      {item.mainStreamName}
-                                                                    </option>
-                                                                  )
+                                                                  <option
+                                                                    key={`MainStream_${index}`}
+                                                                    value={item?.id}>
+                                                                    {item.mainStreamName}
+                                                                  </option>
+                                                                )
                                                                 )}
                                                             </select>
                                                             <div className="text-end">
@@ -1992,7 +1991,7 @@ function CreateCollege() {
                                                             fields.push({
                                                               courseFeeDetailsId:
                                                                 "",
-                                                              courseFee: "",
+                                                              fees: "",
                                                             })
                                                           }
                                                         >
