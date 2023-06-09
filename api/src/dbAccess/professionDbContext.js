@@ -312,22 +312,16 @@ const professionRegisterList = async (req) => {
             family = { familyId: req.body.familyId, deleted: false }
 
         }
-
         let prep= {};
         if (req.body.prepLevel) {
             prep = { prepLevel: req.body.prepLevel, deleted: false }
 
         }
-
-
         let courseName= {};
         if (req.body.courseId) {
             courseName = { courseId: req.body.courseId, deleted: false }
 
         }
-
-
-
         if (req.body.search) {
             const obj = {
                 alsoCalled: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('alsoCalled')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
@@ -358,7 +352,13 @@ const professionRegisterList = async (req) => {
                     model: course,
                     required: false,
                     as: "Courses"
+                },
+                {
+                    model: professionCMS,
+                    required: false,
+                    as: "CMS"
                 }
+         
          
             ],
 
