@@ -12,25 +12,49 @@ import {
 import { useRouter } from "next/router";
 import { refined } from "../../../utils/helper";
 import { getOrganisationlist } from "../../../redux/actions/organisation/addorganisation";
+import { familycodeList, professionlist } from "../../../redux/actions/organisation/profession";
+import { getCourse } from "../../../redux/actions/course/addcourse";
 
 function OrganisationLeftPage({ dataValue }, props) {
   // const [selectId, setSelectId] = useState([]);
   const [apiFilterObject, setApiFilterObject] = useState({});
-  const [searchValue, setSearchValue] = useState();
   const [activeState, setActiveState] = useState([]);
   const router = useRouter();
+  const dispatch = useDispatch();
+
   const { query } = router;
 
-  const stateList = useSelector(
-    (data) => data?.stateList?.stateList?.data?.data?.rows
-  );
-  var cityList = useSelector(
-    (city) => city?.cityList?.cityList?.data?.data?.rows
-  );
+  const [professionFilterData, setProfessionFilterData] = useState({})
 
-  const cityStateList = useSelector(
-    (state) => state?.cityList?.cityList?.data?.result
-  );
+  const stateList = useSelector((data) => data?.stateList?.stateList?.data?.data?.rows);
+  var cityList = useSelector((city) => city?.cityList?.cityList?.data?.data?.rows);
+  const cityStateList = useSelector((state) => state?.cityList?.cityList?.data?.result);
+
+  const courselist = useSelector((data) => data?.courseList?.courselist?.data?.rows);
+  const familyCodelist = useSelector((data) => data?.sectorData?.familyCodelist?.rows);
+
+  console.log(familyCodelist, 'ooooooooo')
+
+  const handleprofessionFilters = (id, key) => {
+    let x = professionFilterData
+    if (x[key]) {
+      let found = x[key].includes(id)
+      if (found) {
+        if (x[key].length == 1) {
+          delete x[key]
+        } else {
+          let index = x[key].indexOf(id)
+          x[key].splice(index, 1)
+        }
+      } else {
+        x[key].push(id)
+      }
+    } else {
+      x[key] = [id]
+    }
+    setProfessionFilterData(x)
+    dispatch(professionlist(x))
+  }
 
   const StringArray = [
     "CompanyLevel",
@@ -38,6 +62,8 @@ function OrganisationLeftPage({ dataValue }, props) {
     "establishedYear",
     "typeOfCompany",
   ];
+
+  const prepleveldata = ["1", "2", "3", "4", "5"]
 
   useEffect(() => {
     if (query) {
@@ -59,6 +85,8 @@ function OrganisationLeftPage({ dataValue }, props) {
       setApiFilterObject(queryObject);
       setActiveState(Object.keys(query));
     }
+    dispatch(getCourse())
+    dispatch(familycodeList())
   }, [JSON.stringify(query)]);
 
   const handleStateSelect = (e, itemId, itemName) => {
@@ -175,7 +203,6 @@ function OrganisationLeftPage({ dataValue }, props) {
     dispatch();
   };
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getState());
     // dispatch(getCityList());
@@ -654,20 +681,18 @@ function OrganisationLeftPage({ dataValue }, props) {
             </div>
             {/*Checkbox */}
             <div className="box_data">
-              {/* {stateList?.map((item) => { */}
-              {/* return ( */}
-              <>
-                <div className="check_input_label_div">
-                  <input
-                    className="college_box_check_input"
-                    type="checkbox"
-                  //  onChange={() => handleStateSelect(item.id)}
-                  />
-                  <label className="check_input_label">hello</label>
-                </div>
-              </>
-              {/* ); */}
-              {/* })} */}
+              {prepleveldata?.map((item, index) => {
+                return (
+                  <div className="check_input_label_div" key={index}>
+                    <input
+                      className="college_box_check_input"
+                      type="checkbox"
+                      onChange={() => handleprofessionFilters(item, 'prepLevel')}
+                    />
+                    <label className="check_input_label">{item}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -684,20 +709,18 @@ function OrganisationLeftPage({ dataValue }, props) {
             </div>
             {/*Checkbox */}
             <div className="box_data">
-              {/* {stateList?.map((item) => { */}
-              {/* return ( */}
-              <>
-                <div className="check_input_label_div">
-                  <input
-                    className="college_box_check_input"
-                    type="checkbox"
-                  //  onChange={() => handleStateSelect(item.id)}
-                  />
-                  <label className="check_input_label">hello</label>
-                </div>
-              </>
-              {/* ); */}
-              {/* })} */}
+              {courselist?.map((item, index) => {
+                return (
+                  <div key={index} className="check_input_label_div">
+                    <input
+                      className="college_box_check_input"
+                      type="checkbox"
+                      onChange={() => handleprofessionFilters(item?.id, "courseId")}
+                    />
+                    <label className="check_input_label">{item?.courseName}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -714,20 +737,18 @@ function OrganisationLeftPage({ dataValue }, props) {
             </div>
             {/*Checkbox */}
             <div className="box_data">
-              {/* {stateList?.map((item) => { */}
-              {/* return ( */}
-              <>
-                <div className="check_input_label_div">
-                  <input
-                    className="college_box_check_input"
-                    type="checkbox"
-                  //  onChange={() => handleStateSelect(item.id)}
-                  />
-                  <label className="check_input_label">hello</label>
-                </div>
-              </>
-              {/* ); */}
-              {/* })} */}
+              {familyCodelist?.map((item, index) => {
+                return (
+                  <div className="check_input_label_div" key={index}>
+                    <input
+                      className="college_box_check_input"
+                      type="checkbox"
+                      onChange={() => handleprofessionFilters(item?.id, 'familyId')}
+                    />
+                    <label className="check_input_label">{item?.familyName}</label>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
