@@ -1,3 +1,4 @@
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { Button, Col, Form, Row, Table } from "react-bootstrap";
@@ -339,7 +340,8 @@ function UserLeadAnalyticsTable() {
         <Row>
           <Col xl={6} lg={12} md={12} className="p-0">
             <div className="d-flex table_heading_header table_heading_header_sub_admin p-0">
-              <ul className="nav tabs_scroll">
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav">
                 {json &&
                   json?.map((steps, stepsIndex) => (
                     <li className="nav-item" key={stepsIndex}>
@@ -365,21 +367,10 @@ function UserLeadAnalyticsTable() {
                   </>
                 )}
               </ul>
+              </ScrollingCarousel>
             </div>
           </Col>
-          {/* ---------------------------------------mobile-screen------------------------------- */}
-          <Col lg={12} md={12} className="show_enteries_mobile p-0">
-            <div className="enteries_input_sub_admin enteries_input location_enteries">
-              <h6 className="enteries_input_label">Show Enteries</h6>
-              <Form.Select aria-label="Default select example">
-                <option>10</option>
-                <option value="1">3</option>
-                <option value="2">5</option>
-                <option value="3">8</option>
-              </Form.Select>
-            </div>
-          </Col>
-          {/* ------------------------------------------end-------------------------------------- */}
+        
           <Col xl={6} lg={12} md={12} className="user_lead_entery p-0">
             <div className="enteries_input location_enteries hide_entery">
               <h6 className="enteries_input_label">Show Enteries</h6>
@@ -396,6 +387,21 @@ function UserLeadAnalyticsTable() {
           </Col>
         </Row>
       </div>
+      <Row>
+          {/* ---------------------------------------mobile-screen------------------------------- */}
+          <Col lg={12} md={12} className="display_btn_row p-0">
+            <div className="enteries_input_sub_admin enteries_input location_enteries">
+              <h6 className="enteries_input_label">Show Enteries</h6>
+              <Form.Select aria-label="Default select example">
+                <option>10</option>
+                <option value="1">3</option>
+                <option value="2">5</option>
+                <option value="3">8</option>
+              </Form.Select>
+            </div>
+          </Col>
+          {/* ------------------------------------------end-------------------------------------- */}
+      </Row>
       {active === "College" &&
         <Table responsive className="admin_table" bordered hover>
           <thead>
@@ -549,7 +555,7 @@ function UserLeadAnalyticsTable() {
           </thead>
           <tbody>
             {corporatedata && corporatedata?.map((item, index) => {
-              return (
+              return (   
                 <tr key={index}>
                   <td className="text-center admin_table_data">{index + 1}</td>
                   <td className="text-center admin_table_data">{item.name}</td>
@@ -561,9 +567,9 @@ function UserLeadAnalyticsTable() {
                   <td className="text-center admin_table_data">{item.subcategory}</td>
                   <td className="text-center admin_table_data">{item.location}</td>
                   <td className="text-center admin_table_data">{item.date}</td>
-                  <td className="text-center admin_table_data">
+                  <td className="text-center admin_table_data edit_delete_btn">
                     <img
-                      className="mx-1 admin_table_action_icon"
+                      className="mx-1 admin_table_action_icon" 
                       src="/images/edit-icon-blue.png"
                       onClick={() => handleEdit(item)}
                     />

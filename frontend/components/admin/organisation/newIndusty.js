@@ -48,10 +48,10 @@ const NewIndusty = () => {
         if (res?.payload?.data?.success) {
           const status = res?.payload?.data?.data?.org[0]?.status;
           if (status == "duplicate") {
-            toast.error(`Industry is ${status}`, {autoClose:1000});
+            toast.error(`Industry is ${status}`, { autoClose: 1000 });
           } else {
-            router.push("/admin/organisation", {autoClose: 1000});
-            toast.success("Industry added successfuly", {autoClose: 1000});
+            router.push("/admin/organisation", { autoClose: 1000 });
+            toast.success("Industry added successfuly", { autoClose: 1000 });
           }
         }
       });
@@ -190,7 +190,7 @@ const NewIndusty = () => {
                                     </div>
                                   )}
                                 </Field>
-                                <div className="d-flex mt-2 ">
+                                <div className=" plus_minus_btn_div">
                                   {!router.query.Id && (
                                     <div
                                       type="button"
@@ -218,6 +218,7 @@ const NewIndusty = () => {
                                     <></>
                                   )}
                                 </div>
+                                
                               </div>
                             </Col>
                           </Row>
