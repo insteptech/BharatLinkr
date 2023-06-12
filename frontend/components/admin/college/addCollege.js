@@ -41,6 +41,7 @@ import {
   scholarship,
   distanceeducation,
 } from "../../../utils/helper";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function CreateCollege() {
   const dispatch = useDispatch();
@@ -161,230 +162,29 @@ function CreateCollege() {
         });
       }
     } else {
-      // for college course
-      let obj = {};
-      values?.AssociateCourse?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          obj[key] = value;
-        });
-      });
-
-      //  for college agency
-      let agencyObj = {};
-      values?.CollegeAgency?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          agencyObj[key] = value;
-        });
-      });
-
-      //  for college about
-      let collegeaboutObj = {};
-      values?.CollegeAbout?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          collegeaboutObj[key] = value;
-        });
-      });
-
-      //  for college admission
-      let collegeadmissionObj = {};
-      values?.CollegeAdmission?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          collegeadmissionObj[key] = value;
-        });
-      });
-
-      //  for distance education
-      let distanceEduObj = {};
-      values?.DistanceEducation?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          distanceEduObj[key] = value;
-        });
-      });
-
-      //  for scholarship
-      let scholarshipObj = {};
-      values?.Scholarship?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          scholarshipObj[key] = value;
-        });
-      });
-
-      //  for placements
-      let placementObj = {};
-      values?.Placements?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          placementObj[key] = value;
-        });
-      });
-
-      // for faq
-      let faqObj = {};
-      values?.FAQ?.forEach((element) => {
-        Object.entries(element).map(([key, value]) => {
-          faqObj[key] = value;
-        });
-      });
-
-  
-      let collegecourse = {};
-      values?.AssociateCourse?.map((element) => {
-        Object.entries(element).map(([key, value]) => {
-          collegecourse[key] = value;
-        });
-      });
-
-      //for associate course mainstream
-      let streamssObj = {};
-      values?.AssociateCourse?.map((collegecoursestream) => (
-        collegecoursestream?.CourseAssociateStream?.map((element) => {
-          Object.entries(element).map(([key, value]) => {
-            streamssObj[key] = value;
-          })
-        })
-      ))
-
-      // for college
-      let collegeObj = {};
-      values.college.map((item) => {
-        Object.entries(item).map(([key, value]) => {
-          collegeObj[key] = value;
-        });
-      });
-
-
-      //for associate course fees
-      let coursefeeObj = {};
-      values?.AssociateCourse?.map((collegecoursefee) => (
-        collegecoursefee?.CourseFees?.map((element) => {
-          Object.entries(element).map(([key, value]) => {
-            coursefeeObj[key] = value;
-          })
-        })
-      ))
-
-      let updateDetails = {
-        id: collegeDetails?.id,
-        collegeName: collegeObj?.collegeName,
-        chooseAffiliationId: collegeObj?.chooseAffiliationId,
-        collegeMailId: collegeObj?.collegeMailId,
-        collegeTypeId: collegeObj?.collegeTypeId,
-        collegeEstablishedDate: collegeObj?.collegeEstablishedDate,
-        chooseApprovalId: collegeObj?.chooseApprovalId,
-        collegeStateId: collegeObj?.collegeStateId,
-        collegeCityId: collegeObj?.collegeCityId,
-        collegeNaacGrade: collegeObj?.collegeNaacGrade,
-        collegeStatusId: collegeObj?.collegeStatusId,
-
-        collegeCourse: [
-          {
-            id: collegecourse?.id,
-            courseTypeId: collegecourse?.courseTypeId,
-            courseName: collegecourse?.courseName,
-            coursePlaceId: collegecourse?.coursePlaceId,
-            courseDuration: collegecourse?.courseDuration,
-            courseEligibility: collegecourse?.courseEligibility,
-            courseLevel: collegecourse?.courseLevel,
-            programTypeId: collegecourse?.programTypeId,
-            courseCategoryId: collegecourse?.courseCategoryId,
-            chooseExamAcceptedId: collegecourse?.chooseExamAcceptedId,
-            collegeStreams: [
-              {
-                id: streamssObj?.id,
-                mainStreamId: streamssObj?.mainStreamId,
-              },
-              {
-                mainStreamId: streamssObj?.mainStreamId,
-                subStreamId: streamssObj?.subStreamId,
-                colStreamId: streamssObj?.colStreamId,
-              },
-            ],
-            collegeFees: [
-              {
-                id: coursefeeObj?.id,
-                fees: coursefeeObj?.fees,
-              },
-              {
-                fees: coursefeeObj?.fees,
-                courseFeeDetailsId: coursefeeObj?.courseFeeDetailsId
-              },
-            ],
-          },
-        ],
-        collegeAgencies: [
-          {
-            id: agencyObj?.id,
-            collegeAgencyId: agencyObj?.collegeAgencyId,
-            collegeAgencyFor: agencyObj?.collegeAgencyFor,
-            totalAgency: agencyObj?.totalAgency,
-            totalAgencyForYears: agencyObj?.totalAgencyForYears,
-          },
-        ],
-        collegeAbouts: {
-          id: collegeaboutObj?.id,
-          aboutIntro: collegeaboutObj?.aboutIntro,
-          aboutHighLights: collegeaboutObj?.aboutHighLights,
-          aboutRankingAndAwards: collegeaboutObj?.aboutRankingAndAwards,
-          aboutCourses: collegeaboutObj?.aboutCourses,
-          aboutScholarShipPlacements:
-            collegeaboutObj?.aboutScholarShipPlacements,
-          aboutFacilities: collegeaboutObj?.aboutFacilities,
-        },
-        collegeAdmissions: {
-          id: collegeadmissionObj?.id,
-          admissionIntro: collegeadmissionObj?.admissionIntro,
-          admissionAboutTest: collegeadmissionObj?.admissionAboutTest,
-          admissionImportantDates: collegeadmissionObj?.admissionImportantDates,
-          admissionHighLights: collegeadmissionObj?.admissionHighLights,
-          applicationProcess: collegeadmissionObj?.applicationProcess,
-          PHDadmissionProcess: collegeadmissionObj?.PHDadmissionProcess,
-        },
-        distanceEducation: {
-          id: distanceEduObj?.id,
-          basicInfo: distanceEduObj?.basicInfo,
-          courseDetails: distanceEduObj?.courseDetails,
-          honors: distanceEduObj?.honors,
-        },
-        scholarShip: {
-          id: scholarshipObj?.id,
-          scholarShipIntro: scholarshipObj?.scholarShipIntro,
-          basedOnUniExams: scholarshipObj?.basedOnUniExams,
-          basedOnAdmissionTest: scholarshipObj?.basedOnAdmissionTest,
-          basedOnSportsQuota: scholarshipObj?.basedOnSportsQuota,
-          basedOnDiplomaGraduates: scholarshipObj?.basedOnDiplomaGraduates,
-        },
-        placements: {
-          id: placementObj?.id,
-          placeMentIntro: placementObj?.placeMentIntro,
-          highLights2021: placementObj?.highLights2021,
-          MBAhighLights: placementObj?.MBAhighLights,
-          BTECHhighLights: placementObj?.BTECHhighLights,
-          yearWisePlaceMents: placementObj?.yearWisePlaceMents,
-          topRecruiters: placementObj?.topRecruiters,
-        },
-        faq: [
-          {
-            id: faqObj?.id,
-            uniqueId: faqObj?.image,
-            question: faqObj?.question,
-            answerType: faqObj?.answerType,
-            answer: faqObj?.answer,
-          },
-        ],
-      };
-
-      let formdata = new FormData();
 
       if (dataValue == 0) {
         setDataValue(1);
       } else if (dataValue === 1) {
         setDataValue(2);
       } else if (dataValue === 2) {
-        values.id = collegeDetails.id
-        if (updateDetails?.collegeName === values?.collegeName) {
-          delete values?.collegeName;
-        }
-        formdata.append("collegeData", JSON.stringify(updateDetails));
+        let x = values;
+        let collegeUpdateObj = {};
+        let formdata = new FormData();
 
+        Object.keys(x).map(key => {
+          if (key === "college") {
+            Object.keys(x[key][0]).map((ele) => {
+              collegeUpdateObj[ele] = x[key][0][ele]
+            })
+          } if (key === "scholarShip" || key === "placements" || key === "distanceEducation" || key === "collegeAdmissions" || key === "collegeAbouts") {
+            collegeUpdateObj[key] = x[key][0]
+          } if (key === "collegeAgencies" || key === "faq") {
+            collegeUpdateObj[key] = x[key]
+          }
+        })
+
+        formdata.append("collegeData", JSON.stringify(collegeUpdateObj));
         if (formdata !== 0) {
           dispatch(updateCollege(formdata)).then((res) => {
             if (res?.payload?.data?.success) {
@@ -861,21 +661,25 @@ function CreateCollege() {
       {/* <Container> */}
       <div className="admin_home_tabs_row">
         <Row>
-          <ul className="nav tabs_scroll">
-            {FormSteps &&
-              FormSteps.map((steps, stepsIndex) => (
-                <li className="nav-item" key={stepsIndex}>
-                  <a
-                    className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
-                      }`}
-                    active="true"
-                    onClick={() => handleTab(stepsIndex)}
-                  >
-                    {steps}
-                  </a>
-                </li>
-              ))}
-          </ul>
+          <Col className="p-0">
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll">
+                {FormSteps &&
+                  FormSteps.map((steps, stepsIndex) => (
+                    <li className="nav-item" key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
+                        active="true"
+                        onClick={() => handleTab(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
+          </Col>
         </Row>
       </div>
 
@@ -1255,7 +1059,7 @@ function CreateCollege() {
                                                     </>
                                                   )}
                                                 </Field>
-                                                <div className="">
+                                                <div className="item_hide_768">
                                                   <img
                                                     className="select_down_icon_second"
                                                     src="/images/down.png"
@@ -1301,7 +1105,7 @@ function CreateCollege() {
                                                     </>
                                                   )}
                                                 </Field>
-                                                <div className="">
+                                                <div className="item_hide_768">
                                                   <img
                                                     className="select_down_icon_second"
                                                     src="/images/down.png"
@@ -1355,35 +1159,32 @@ function CreateCollege() {
                                                   )}
                                                 </Field>
 
-                                                <div className="d-flex mt-2 add_remove_btn_div">
-                                                  <div
-                                                    type="button"
-                                                    className="add_remove_btn plus_btn_margin"
-                                                    onClick={() =>
-                                                      fields.push({
-                                                        selectAgencies: "",
-                                                        Overall: "",
-                                                        TotalAgency: "",
-                                                        Year: "",
-                                                      })
-                                                    }
-                                                  >
-                                                    <img
-                                                      className="add_remove_icon"
-                                                      src="/images/plus.png"
-                                                    />
-                                                  </div>
-                                                  {fields.length > 1 ? (
+                                                <div className="d-flex plus_minus_btn_row my-2">
+                                                  {!router.query.Id && (
                                                     <div
-                                                      className="add_remove_btn"
                                                       type="button"
+                                                      className="add_remove_btn"
                                                       onClick={() =>
-                                                        fields.remove(index)
+                                                        fields.push({
+                                                          industryId: "",
+                                                        })
                                                       }
                                                     >
                                                       <img
                                                         className="add_remove_icon"
-                                                        src="/images/minus.png"
+                                                        src="/images/plus.png"
+                                                      />
+                                                    </div>
+                                                  )}
+                                                  {fields.length > 1 ? (
+                                                    <div
+                                                      className="add_remove_btn"
+                                                      type="button"
+                                                      onClick={() => fields.remove(index)}
+                                                    >
+                                                      <img
+                                                        className="add_remove_icon"
+                                                        src="/images/delete-black.png"
                                                       />
                                                     </div>
                                                   ) : (
@@ -1657,7 +1458,6 @@ function CreateCollege() {
                                                               />
                                                             </div>
                                                             <div className="d-flex">
-                                                              {console.log(meta.error, "errrrrrrrrrrrrrrr")}
                                                               {meta.touched &&
                                                                 meta.error && (
                                                                   <span className="text-danger required_msg">
