@@ -209,7 +209,7 @@ function AdminManagementTable() {
           <Col xl={6} lg={12} md={12} className="p-0">
             <div className="d-flex table_heading_header_sub_admin p-0">
               <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                <ul className="nav tabs_scroll">
+                <ul className="nav">
                   {json &&
                     json?.map((steps, stepsIndex) => (
                       <li className="nav-item" key={stepsIndex}>
