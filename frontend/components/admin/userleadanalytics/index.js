@@ -39,278 +39,313 @@ function UserLeadAnalyticsTable() {
   const [active, setActive] = useState("College");
   const [activeTab, setActiveTab] = useState(json[0]);
   const [dataValue, setDataValue] = useState(0);
-  const collegeHeading = ['No.', 'Name', 'Email', 'Contact', 'Country', 'city', 'College', 'Course', 'Action']
+  const collegeHeading = [
+    "No.",
+    "Name",
+    "Email",
+    "Contact",
+    "Country",
+    "city",
+    "College",
+    "Course",
+    "Action",
+  ];
   const collegeData = [
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
     {
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      country: 'India',
-      college: 'Chandigarh University',
-      city: 'mohali',
-      course: 'B.tech'
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      country: "India",
+      college: "Chandigarh University",
+      city: "mohali",
+      course: "B.tech",
     },
-  ]
-  const corporateHeading = ['No.', 'Name', 'Email', 'Contact', 'Education', 'Experience', 'Category', 'Field', 'Location', 'Date', 'Action']
+  ];
+  const corporateHeading = [
+    "No.",
+    "Name",
+    "Email",
+    "Contact",
+    "Education",
+    "Experience",
+    "Category",
+    "Field",
+    "Location",
+    "Date",
+    "Action",
+  ];
   const corporatedata = [
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'MBA',
-      experience: 'Graduate',
-      catgeory: 'Human Resources',
-      subcategory: 'Payroll',
-      location: 'Delhi',
-      date: '12-12-2022'
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "MBA",
+      experience: "Graduate",
+      catgeory: "Human Resources",
+      subcategory: "Payroll",
+      location: "Delhi",
+      date: "12-12-2022",
     },
-  ]
-  const jobpostHeading = ['No.', 'Name', 'Email', 'Contact', 'Education', 'Experience', 'Post', 'Post by', 'Entity Type', 'Entity Name', 'Post Date', 'Action']
+  ];
+  const jobpostHeading = [
+    "No.",
+    "Name",
+    "Email",
+    "Contact",
+    "Education",
+    "Experience",
+    "Post",
+    "Post by",
+    "Entity Type",
+    "Entity Name",
+    "Post Date",
+    "Action",
+  ];
   const jobpostdata = [
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
     {
-      usertype: 'Student',
-      name: 'Abhishek',
-      email: 'a@gmail.com',
-      contact: '1234567890',
-      education: 'graduate',
-      experience: '1yr',
-      post: 'We are looking for',
-      postby: 'Vineet',
-      entitytype: '',
-      entityname: '',
-      postdate: 'Payroll',
+      usertype: "Student",
+      name: "Abhishek",
+      email: "a@gmail.com",
+      contact: "1234567890",
+      education: "graduate",
+      experience: "1yr",
+      post: "We are looking for",
+      postby: "Vineet",
+      entitytype: "",
+      entityname: "",
+      postdate: "Payroll",
     },
-  ]
+  ];
   const selectoptions = [
     "Script",
     "Announcement",
@@ -326,8 +361,8 @@ function UserLeadAnalyticsTable() {
     "competitions",
     "hackathon",
     "Hiring Challenges",
-    "Campus Recruitment"
-  ]
+    "Campus Recruitment",
+  ];
   const handleTab = (key, index) => {
     setActive(key);
     setActiveTab(json.find((ele) => ele.key === active));
@@ -336,43 +371,47 @@ function UserLeadAnalyticsTable() {
   };
   return (
     <>
-      <div className="admin_home_tabs_row admin_home_tabs_row_padding bottom_border_mobile">
+      <div className="admin_home_tabs_row  bottom_border_mobile">
         <Row>
           <Col xl={6} lg={12} md={12} className="p-0">
             <div className="d-flex table_heading_header table_heading_header_sub_admin p-0">
-            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-              <ul className="nav">
-                {json &&
-                  json?.map((steps, stepsIndex) => (
-                    <li className="nav-item" key={stepsIndex}>
-                      <a
-                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                <ul className="nav">
+                  {json &&
+                    json?.map((steps, stepsIndex) => (
+                      <li className="nav-item" key={stepsIndex}>
+                        <a
+                          className={`nav-link admin_tabs_name ${
+                            dataValue === stepsIndex && "head-active"
                           }`}
-                        active={true}
-                        onClick={() => handleTab(steps.key, stepsIndex)}
-                      >
-                        {steps.DisplayName}
-                      </a>
-                    </li>
-                  ))}
-                {active === "JobPost" && (
-                  <>
-                    <select>
-                      {selectoptions?.map((item, index) => {
-                        return (
-                          <option key={index}>{item}</option>
-                        )
-                      })}
-                    </select>
-                  </>
-                )}
-              </ul>
+                          active={true}
+                          onClick={() => handleTab(steps.key, stepsIndex)}
+                        >
+                          {steps.DisplayName}
+                        </a>
+                      </li>
+                    ))}
+                  {active === "JobPost" && (
+                    <>
+                      <select>
+                        {selectoptions?.map((item, index) => {
+                          return <option key={index}>{item}</option>;
+                        })}
+                      </select>
+                    </>
+                  )}
+                </ul>
               </ScrollingCarousel>
             </div>
           </Col>
-        
-          <Col xl={6} lg={12} md={12} className="user_lead_entery p-0">
-            <div className="enteries_input location_enteries hide_entery">
+
+          <Col
+            xl={6}
+            lg={12}
+            md={12}
+            className="user_lead_entery hide_btn_row p-0"
+          >
+            <div className="enteries_input location_enteries">
               <h6 className="enteries_input_label">Show Enteries</h6>
               <Form.Select aria-label="Default select example">
                 <option>10</option>
@@ -388,21 +427,26 @@ function UserLeadAnalyticsTable() {
         </Row>
       </div>
       <Row>
-          {/* ---------------------------------------mobile-screen------------------------------- */}
-          <Col lg={12} md={12} className="display_btn_row p-0">
-            <div className="enteries_input_sub_admin enteries_input location_enteries">
-              <h6 className="enteries_input_label">Show Enteries</h6>
-              <Form.Select aria-label="Default select example">
-                <option>10</option>
-                <option value="1">3</option>
-                <option value="2">5</option>
-                <option value="3">8</option>
-              </Form.Select>
-            </div>
-          </Col>
-          {/* ------------------------------------------end-------------------------------------- */}
+        {/* ---------------------------------------mobile-screen------------------------------- */}
+        <Col lg={6} xs={6} className="display_btn_row text-start">
+          <div className="d-flex mt-0">
+            <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+            <Form.Select aria-label="Default select example">
+              <option>10</option>
+              <option value="1">3</option>
+              <option value="2">5</option>
+              <option value="3">8</option>
+            </Form.Select>
+          </div>
+        </Col>
+        <Col xs={6}  className="text-end download_btn_set display_btn_row">
+          <div>
+            <Button className="border_btn btn_margin">Download CSV</Button>
+          </div>
+        </Col>
+        {/* ------------------------------------------end-------------------------------------- */}
       </Row>
-      {active === "College" &&
+      {active === "College" && (
         <Table responsive className="admin_table" bordered hover>
           <thead>
             <tr>
@@ -416,39 +460,56 @@ function UserLeadAnalyticsTable() {
             </tr>
           </thead>
           <tbody>
-            {collegeData && collegeData?.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td className="text-center admin_table_data">{index + 1}</td>
-                  <td className="text-center admin_table_data">{item.name}</td>
-                  <td className="text-center admin_table_data">{item.email}</td>
-                  <td className="text-center admin_table_data">{item.contact}</td>
-                  <td className="text-center admin_table_data">{item.country}</td>
-                  <td className="text-center admin_table_data">{item.city}</td>
-                  <td className="text-center admin_table_data">{item.college}</td>
-                  <td className="text-center admin_table_data">{item.course}</td>
-                  <td className="text-center admin_table_data">
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/edit-icon-blue.png"
-                      onClick={() => handleEdit(item)}
-                    />
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/delete-icon-blue.png"
-                      onClick={() => {
-                        setModalShow(true)
-                        setDeleteItem(item)
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+            {collegeData &&
+              collegeData?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="text-center admin_table_data">
+                      {index + 1}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.name}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.email}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.contact}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.country}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.city}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.college}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.course}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/edit-icon-blue.png"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/delete-icon-blue.png"
+                        onClick={() => {
+                          setModalShow(true);
+                          setDeleteItem(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
-      }
-      {active === "Counselling" &&
+      )}
+      {active === "Counselling" && (
         <Table responsive className="admin_table" bordered hover>
           <thead>
             <tr>
@@ -462,39 +523,56 @@ function UserLeadAnalyticsTable() {
             </tr>
           </thead>
           <tbody>
-            {collegeData && collegeData?.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td className="text-center admin_table_data">{index + 1}</td>
-                  <td className="text-center admin_table_data">{item.name}</td>
-                  <td className="text-center admin_table_data">{item.email}</td>
-                  <td className="text-center admin_table_data">{item.contact}</td>
-                  <td className="text-center admin_table_data">{item.country}</td>
-                  <td className="text-center admin_table_data">{item.city}</td>
-                  <td className="text-center admin_table_data">{item.college}</td>
-                  <td className="text-center admin_table_data">{item.course}</td>
-                  <td className="text-center admin_table_data">
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/edit-icon-blue.png"
-                      onClick={() => handleEdit(item)}
-                    />
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/delete-icon-blue.png"
-                      onClick={() => {
-                        setModalShow(true)
-                        setDeleteItem(item)
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+            {collegeData &&
+              collegeData?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="text-center admin_table_data">
+                      {index + 1}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.name}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.email}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.contact}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.country}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.city}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.college}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.course}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/edit-icon-blue.png"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/delete-icon-blue.png"
+                        onClick={() => {
+                          setModalShow(true);
+                          setDeleteItem(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
-      }
-      {active === "IELTS" &&
+      )}
+      {active === "IELTS" && (
         <Table responsive className="admin_table" bordered hover>
           <thead>
             <tr>
@@ -508,39 +586,56 @@ function UserLeadAnalyticsTable() {
             </tr>
           </thead>
           <tbody>
-            {collegeData && collegeData?.map((item, index) => {
-              return (
-                <tr key={index}>
-                  <td className="text-center admin_table_data">{index + 1}</td>
-                  <td className="text-center admin_table_data">{item.name}</td>
-                  <td className="text-center admin_table_data">{item.email}</td>
-                  <td className="text-center admin_table_data">{item.contact}</td>
-                  <td className="text-center admin_table_data">{item.country}</td>
-                  <td className="text-center admin_table_data">{item.city}</td>
-                  <td className="text-center admin_table_data">{item.college}</td>
-                  <td className="text-center admin_table_data">{item.course}</td>
-                  <td className="text-center admin_table_data">
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/edit-icon-blue.png"
-                      onClick={() => handleEdit(item)}
-                    />
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/delete-icon-blue.png"
-                      onClick={() => {
-                        setModalShow(true)
-                        setDeleteItem(item)
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+            {collegeData &&
+              collegeData?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="text-center admin_table_data">
+                      {index + 1}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.name}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.email}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.contact}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.country}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.city}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.college}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.course}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/edit-icon-blue.png"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/delete-icon-blue.png"
+                        onClick={() => {
+                          setModalShow(true);
+                          setDeleteItem(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
-      }
-      {active === "Corporate" &&
+      )}
+      {active === "Corporate" && (
         <Table responsive className="admin_table" bordered hover>
           <thead>
             <tr>
@@ -554,40 +649,61 @@ function UserLeadAnalyticsTable() {
             </tr>
           </thead>
           <tbody>
-            {corporatedata && corporatedata?.map((item, index) => {
-              return (   
-                <tr key={index}>
-                  <td className="text-center admin_table_data">{index + 1}</td>
-                  <td className="text-center admin_table_data">{item.name}</td>
-                  <td className="text-center admin_table_data">{item.email}</td>
-                  <td className="text-center admin_table_data">{item.contact}</td>
-                  <td className="text-center admin_table_data">{item.education}</td>
-                  <td className="text-center admin_table_data">{item.experience}</td>
-                  <td className="text-center admin_table_data">{item.catgeory}</td>
-                  <td className="text-center admin_table_data">{item.subcategory}</td>
-                  <td className="text-center admin_table_data">{item.location}</td>
-                  <td className="text-center admin_table_data">{item.date}</td>
-                  <td className="text-center admin_table_data edit_delete_btn">
-                    <img
-                      className="mx-1 admin_table_action_icon" 
-                      src="/images/edit-icon-blue.png"
-                      onClick={() => handleEdit(item)}
-                    />
-                    <img
-                      className="mx-1 admin_table_action_icon"
-                      src="/images/delete-icon-blue.png"
-                      onClick={() => {
-                        setModalShow(true)
-                        setDeleteItem(item)
-                      }}
-                    />
-                  </td>
-                </tr>
-              )
-            })}
+            {corporatedata &&
+              corporatedata?.map((item, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="text-center admin_table_data">
+                      {index + 1}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.name}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.email}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.contact}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.education}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.experience}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.catgeory}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.subcategory}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.location}
+                    </td>
+                    <td className="text-center admin_table_data">
+                      {item.date}
+                    </td>
+                    <td className="text-center admin_table_data edit_delete_btn">
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/edit-icon-blue.png"
+                        onClick={() => handleEdit(item)}
+                      />
+                      <img
+                        className="mx-1 admin_table_action_icon"
+                        src="/images/delete-icon-blue.png"
+                        onClick={() => {
+                          setModalShow(true);
+                          setDeleteItem(item);
+                        }}
+                      />
+                    </td>
+                  </tr>
+                );
+              })}
           </tbody>
         </Table>
-      }
+      )}
       {active === "JobPost" && (
         <>
           <Table responsive className="admin_table" bordered hover>
@@ -603,38 +719,61 @@ function UserLeadAnalyticsTable() {
               </tr>
             </thead>
             <tbody>
-              {jobpostdata && jobpostdata?.map((item, index) => {
-                return (
-                  <tr key={index}>
-                    <td className="text-center admin_table_data">{index + 1}</td>
-                    <td className="text-center admin_table_data">{item.name}</td>
-                    <td className="text-center admin_table_data">{item.email}</td>
-                    <td className="text-center admin_table_data">{item.contact}</td>
-                    <td className="text-center admin_table_data">{item.education}</td>
-                    <td className="text-center admin_table_data">{item.experience}</td>
-                    <td className="text-center admin_table_data">{item.post}</td>
-                    <td className="text-center admin_table_data">{item.postby}</td>
-                    <td className="text-center admin_table_data">{item.entitytype}</td>
-                    <td className="text-center admin_table_data">{item.entityname}</td>
-                    <td className="text-center admin_table_data">{item.postdate}</td>
-                    <td className="text-center admin_table_data">
-                      <img
-                        className="mx-1 admin_table_action_icon"
-                        src="/images/edit-icon-blue.png"
-                        onClick={() => handleEdit(item)}
-                      />
-                      <img
-                        className="mx-1 admin_table_action_icon"
-                        src="/images/delete-icon-blue.png"
-                        onClick={() => {
-                          setModalShow(true)
-                          setDeleteItem(item)
-                        }}
-                      />
-                    </td>
-                  </tr>
-                )
-              })}
+              {jobpostdata &&
+                jobpostdata?.map((item, index) => {
+                  return (
+                    <tr key={index}>
+                      <td className="text-center admin_table_data">
+                        {index + 1}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.name}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.email}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.contact}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.education}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.experience}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.post}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.postby}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.entitytype}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.entityname}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        {item.postdate}
+                      </td>
+                      <td className="text-center admin_table_data">
+                        <img
+                          className="mx-1 admin_table_action_icon"
+                          src="/images/edit-icon-blue.png"
+                          onClick={() => handleEdit(item)}
+                        />
+                        <img
+                          className="mx-1 admin_table_action_icon"
+                          src="/images/delete-icon-blue.png"
+                          onClick={() => {
+                            setModalShow(true);
+                            setDeleteItem(item);
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  );
+                })}
             </tbody>
           </Table>
         </>
