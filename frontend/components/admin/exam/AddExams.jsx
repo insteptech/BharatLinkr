@@ -18,6 +18,7 @@ import {
   examFaqDelete,
   getExamById,
 } from "../../../redux/actions/exams/createExam";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
   ssr: false,
@@ -31,10 +32,16 @@ export default function AddExams() {
   const [examlogo, setExamlogo] = useState();
   const router = useRouter();
 
-  const mainStreamdata = useSelector((data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows);
-  const prevExamData = useSelector((data) => data?.exambyid?.exam?.data?.data?.rows[0]);
+  const mainStreamdata = useSelector(
+    (data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
+  );
+  const prevExamData = useSelector(
+    (data) => data?.exambyid?.exam?.data?.data?.rows[0]
+  );
   const prevExamLoader = useSelector((data) => data?.exambyid);
-  const masterFilterData = useSelector((data) => data?.allMasterFilterList?.masterfilterlist?.data?.data);
+  const masterFilterData = useSelector(
+    (data) => data?.allMasterFilterList?.masterfilterlist?.data?.data
+  );
   const masterValues = "coursetype,applicationmode,exammode,examtype";
 
   const { Id } = router.query;
@@ -653,21 +660,24 @@ export default function AddExams() {
       <div className="admin_home_tabs_row">
         <Row>
           <Col className="p-0">
-            <ul className="nav tabs_scroll">
-              {FormSteps &&
-                FormSteps?.map((steps, stepsIndex) => (
-                  <li className="nav-item " key={stepsIndex}>
-                    <a
-                      className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll">
+                {FormSteps &&
+                  FormSteps?.map((steps, stepsIndex) => (
+                    <li className="nav-item " key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
                         }`}
-                      // active={true}
-                      onClick={() => setDataValue(stepsIndex)}
-                    >
-                      {steps}
-                    </a>
-                  </li>
-                ))}
-            </ul>
+                        // active={true}
+                        onClick={() => setDataValue(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
           </Col>
           <Col className="text-end">
             <Button className="border_btn green delete_btn_margin">
@@ -1682,13 +1692,16 @@ export default function AddExams() {
                             <>
                               {fields?.map((name, index) => (
                                 <div key={index}>
-                                  {console.log(values?.exam[0]?.id, 'faqqqqqqqqqq')}
+                                  {console.log(
+                                    values?.exam[0]?.id,
+                                    "faqqqqqqqqqq"
+                                  )}
                                   <Field name={`${name}.question`}>
                                     {({ input, meta }) => (
                                       <>
                                         <CKeditorGenerator
                                           input={input}
-                                          onReady={(editor) => { }}
+                                          onReady={(editor) => {}}
                                         />
                                       </>
                                     )}
@@ -1751,16 +1764,22 @@ export default function AddExams() {
                                     <img
                                       onClick={() => {
                                         if (Id && values?.examFAQ[index]?.id) {
-                                          dispatch(examFaqDelete({
-                                            id: Number(values?.examFAQ[index]?.id),
-                                            examId: Number(values?.exam[0]?.id)
-                                          })).then((res) => {
+                                          dispatch(
+                                            examFaqDelete({
+                                              id: Number(
+                                                values?.examFAQ[index]?.id
+                                              ),
+                                              examId: Number(
+                                                values?.exam[0]?.id
+                                              ),
+                                            })
+                                          ).then((res) => {
                                             if (res?.payload?.data?.success) {
-                                              fields.remove(index)
-                                              handlefaqremove(index)
+                                              fields.remove(index);
+                                              handlefaqremove(index);
                                             }
-                                          })
-                                        } else { 
+                                          });
+                                        } else {
                                           fields.remove(index);
                                           handlefaqremove(index);
                                         }
@@ -1784,7 +1803,7 @@ export default function AddExams() {
                     <button
                       className="admin_signup_btn admin_signup_btn_mobile"
                       type="submit"
-                    // onClick={()=>{ddddddddddd(values,dirtyFields)}}
+                      // onClick={()=>{ddddddddddd(values,dirtyFields)}}
                     >
                       Add Category
                     </button>

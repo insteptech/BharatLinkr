@@ -10,6 +10,7 @@ import {
 import { toast } from "react-toastify";
 import { getSubCategory } from "../../redux/actions/corporate/addsubcategory";
 import LoaderPage from "../common-components/loader";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function CorporateTable() {
   const FormSteps = ["Corporate List", "Categories"];
@@ -34,7 +35,6 @@ function CorporateTable() {
   );
 
   const handleDelete = (item) => {
-  
     dispatch(deleteCorporate(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
         dispatch(getCorporateData());
@@ -64,31 +64,32 @@ function CorporateTable() {
     "Action",
   ];
 
-  const tableHeading2 = [
-    "No.", "Sub-Category", "Action"
-  ]
+  const tableHeading2 = ["No.", "Sub-Category", "Action"];
   return (
     <>
       <div className="admin_home_tabs_row">
         <Row>
           <Col xl={6} lg={12} md={12} className="p-0 ">
-            <div className="d-flex table_heading_header">
-              <ul className="nav tabs_scroll ">
-                {FormSteps &&
-                  FormSteps?.map((steps, stepsIndex) => (
-                    <li className="nav-item " key={stepsIndex}>
-                      <a
-                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+            <div className="justify_item">
+              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                <ul className="nav tabs_scroll ">
+                  {FormSteps &&
+                    FormSteps?.map((steps, stepsIndex) => (
+                      <li className="nav-item " key={stepsIndex}>
+                        <a
+                          className={`nav-link admin_tabs_name ${
+                            dataValue === stepsIndex && "head-active"
                           }`}
-                        active={true}
-                        onClick={() => setDataValue(stepsIndex)}
-                      >
-                        {steps}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
-              <div className="enteries_input ms-3">
+                          active={true}
+                          onClick={() => setDataValue(stepsIndex)}
+                        >
+                          {steps}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
+              </ScrollingCarousel>
+              <div className="enteries_input ms-3 mt-0 hide_btn_row">
                 <h6 className="enteries_input_label">Show Enteries</h6>
                 <Form.Select aria-label="Default select example">
                   <option>10</option>
@@ -99,8 +100,8 @@ function CorporateTable() {
               </div>
             </div>
           </Col>
-          <Col xl={6} lg={12} md={12} className="text-end">
-            {dataValue == 0 &&
+          <Col xl={6} lg={12} md={12} className="text-end hide_btn_row">
+            {dataValue == 0 && (
               <div>
                 <Button className="border_btn">Upload CSV</Button>
                 <Button className="border_btn">Download CSV</Button>
@@ -111,8 +112,8 @@ function CorporateTable() {
                   Add New
                 </Button>
               </div>
-            }
-            {dataValue == 1 &&
+            )}
+            {dataValue == 1 && (
               <>
                 <Button
                   onClick={() =>
@@ -131,11 +132,56 @@ function CorporateTable() {
                   Add Sub Category
                 </Button>
               </>
-            }
+            )}
           </Col>
         </Row>
       </div>
-      {dataValue == 0 &&
+      <Row>
+        <Col md={6} className="display_btn_row">
+          <div className="d-flex mt-0 ">
+            <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+            <Form.Select aria-label="Default select example">
+              <option>10</option>
+              <option value="1">3</option>
+              <option value="2">5</option>
+              <option value="3">8</option>
+            </Form.Select>
+          </div>
+        </Col>
+        <Col className="text-end display_btn_row">
+          {dataValue == 0 && (
+            <div>
+              <Button className="border_btn btn_margin">Upload CSV</Button>
+              <Button className="border_btn btn_margin">Download CSV</Button>
+              <Button
+                className="border_btn green btn_margin"
+                onClick={() => router.push("corporate/addcorporate")}
+              >
+                Add New
+              </Button>
+            </div>
+          )}
+          {dataValue == 1 && (
+            <>
+              <Button
+                onClick={() => router.push("/admin/corporate/mainCategory/add")}
+                className="border_btn upload_btn btn_margin"
+              >
+                Add Main Category
+              </Button>
+              <Button
+                onClick={() =>
+                  router.push("/admin/corporate/subcategory/addsubcategory")
+                }
+                className="border_btn upload_btn btn_margin"
+              >
+                Add Sub Category
+              </Button>
+            </>
+          )}
+        </Col>
+      </Row>
+      {dataValue == 0 && (
         <div>
           <Row>
             <div>
@@ -155,7 +201,10 @@ function CorporateTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {loadercorporateRegisterlist===true ? <LoaderPage /> :corporateRegisterlist &&
+                  {loadercorporateRegisterlist === true ? (
+                    <LoaderPage />
+                  ) : (
+                    corporateRegisterlist &&
                     corporateRegisterlist?.rows?.map((item, index) => {
                       return (
                         <tr key={index}>
@@ -175,7 +224,11 @@ function CorporateTable() {
                             {item?.subTopic}
                           </td>
                           <td className="text-center admin_table_data">
-                            {new Date(item?.updatedAt).toISOString().split("T")[0]}
+                            {
+                              new Date(item?.updatedAt)
+                                .toISOString()
+                                .split("T")[0]
+                            }
                           </td>
                           <td className="text-center admin_table_data">
                             {item?.views}
@@ -200,7 +253,8 @@ function CorporateTable() {
                           </td>
                         </tr>
                       );
-                    })}
+                    })
+                  )}
                 </tbody>
               </Table>
             </div>
@@ -216,7 +270,7 @@ function CorporateTable() {
 
                   <Button
                     className="border_btn green"
-                  // onClick={handlePagenation}
+                    // onClick={handlePagenation}
                   >
                     Next
                   </Button>
@@ -225,8 +279,8 @@ function CorporateTable() {
             </Row>
           </div>
         </div>
-      }
-      {dataValue == 1 &&
+      )}
+      {dataValue == 1 && (
         <>
           <div>
             <Table responsive className="admin_table" bordered hover>
@@ -245,7 +299,10 @@ function CorporateTable() {
                 </tr>
               </thead>
               <tbody>
-                {loadersubcategoryList===true ? <LoaderPage/> : subcategoryList &&
+                {loadersubcategoryList === true ? (
+                  <LoaderPage />
+                ) : (
+                  subcategoryList &&
                   subcategoryList?.map((item, index) => {
                     return (
                       <tr key={index}>
@@ -271,12 +328,12 @@ function CorporateTable() {
                         </td>
                       </tr>
                     );
-                  })}{" "}
-                *
+                  })
+                )}{" "}
               </tbody>
             </Table>
-        </div>
-        <div className="admin_table_footer">
+          </div>
+          <div className="admin_table_footer">
             <Row>
               <Col md={6} className="table_footer_start">
                 <h6>Showing {corporateRegisterlist?.length} enteries</h6>
@@ -287,7 +344,7 @@ function CorporateTable() {
 
                   <Button
                     className="border_btn green"
-                  // onClick={handlePagenation}
+                    // onClick={handlePagenation}
                   >
                     Next
                   </Button>
@@ -296,7 +353,7 @@ function CorporateTable() {
             </Row>
           </div>
         </>
-      }
+      )}
     </>
   );
 }

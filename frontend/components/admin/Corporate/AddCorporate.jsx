@@ -17,6 +17,7 @@ import { useRouter } from "next/router";
 import { getMainCategory } from "../../../redux/actions/corporate/addmaincategory";
 import { getSubCategory } from "../../../redux/actions/corporate/addsubcategory";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
   ssr: false,
@@ -85,10 +86,7 @@ export default function AddCorporate() {
         }
         if (formData != 0) {
           dispatch(CorporateData(formData)).then((res) => {
-            if (
-              res?.payload?.status === 200 &&
-              res?.payload?.data?.success
-            ) {
+            if (res?.payload?.status === 200 && res?.payload?.data?.success) {
               router.push("/admin/corporate");
             } else {
               // toast.error('something went wrong');
@@ -168,8 +166,6 @@ export default function AddCorporate() {
     }
   }, [router.query.Id]);
 
-
-
   const init = () => {
     let initialvalues;
     if (router.query.Id) {
@@ -179,7 +175,7 @@ export default function AddCorporate() {
         topicName: updateCorporateList[0]?.topicName,
         subTopic: updateCorporateList[0]?.subTopic,
         feildName: updateCorporateList[0]?.feildName,
-      //  CorporateCMS: updateCorporateList[0]?.CMS[0]?.about,
+        //  CorporateCMS: updateCorporateList[0]?.CMS[0]?.about,
       };
       return initialvalues;
     } else {
@@ -199,22 +195,24 @@ export default function AddCorporate() {
       <div className="admin_home_tabs_row">
         <Row>
           <Col lg={6} md={12} className="p-0">
-            <ul className="nav tabs_scroll">
-              {FormSteps &&
-                FormSteps?.map((steps, stepsIndex) => (
-                  <li className="nav-item " key={stepsIndex}>
-                    <a
-                      className={`nav-link admin_tabs_name ${
-                        dataValue === stepsIndex && "head-active"
-                      }`}
-                      active={true}
-                      onClick={() => setDataValue(stepsIndex)}
-                    >
-                      {steps}
-                    </a>
-                  </li>
-                ))}
-            </ul>
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll">
+                {FormSteps &&
+                  FormSteps?.map((steps, stepsIndex) => (
+                    <li className="nav-item " key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
+                        }`}
+                        active={true}
+                        onClick={() => setDataValue(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
           </Col>
           <Col lg={6} md={12} className="text-end p-0">
             {dataValue === 0 && (
