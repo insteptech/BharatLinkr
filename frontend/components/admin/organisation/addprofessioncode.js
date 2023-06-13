@@ -106,7 +106,7 @@ function AddProfessioncode() {
             <Container className="p-0">
                 <Row className="my-3 padding_top">
                     <Col>
-                        <h3 className="master_heading">Family code</h3>
+                        <h3 className="master_heading">Profession code</h3>
                         <hr></hr>
                     </Col>
                 </Row>

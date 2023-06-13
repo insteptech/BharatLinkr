@@ -38,7 +38,7 @@ function Organisation() {
   const [modalShow, setModalShow] = useState(false);
   const [deleteItem, setDeleteItem] = useState();
   const [displayProfessions, setDisplayProfessions] = useState("Family code");
-  const [displayCompany, setDisplayCompany] = useState("Sector");
+  const [displayCompanies, setDisplayCompanies] = useState("Sector")
   const handleHide = () => {
     setModalShow(false);
   };
@@ -121,49 +121,6 @@ function Organisation() {
     "Action",
   ];
 
-  const organisationData = [
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-  ];
-
   const handleDeleteOrganisation = (item) => {
     dispatch(deleteOrganisation(item)).then((res) => {
       if (res?.payload?.data?.success) {
@@ -189,6 +146,8 @@ function Organisation() {
       }
     });
   };
+
+  {console.log(companyTabs,dataValue,'pppppppp')}
 
   const handleProfessionCodeDelete = (item) => {
     dispatch(deleteProfessioncode(item?.id)).then((res) => {
@@ -264,40 +223,41 @@ function Organisation() {
             className="text-end admin_table_header_smallscreen hide_btn_row"
           >
             {dataValue === 0 && (
-              <div>
-                <Button
-                  className="border_btn"
-                  onClick={() => router.push("organisation/sector/add")}
-                >
-                  Add new sector
-                </Button>
-                <Button
-                  className="border_btn green"
-                  onClick={() => router.push("organisation/industry/add")}
-                >
-                  Add new industry
-                </Button>
-              </div>
-            )}
-            {dataValue === 1 && (
-              <div>
-                <Button
-                  className="border_btn"
-                  onClick={() => router.push("organisation/sector/add")}
-                >
-                  Add new sector
-                </Button>
-                <Button
-                  className="border_btn green"
-                  onClick={() => router.push("organisation/industry/add")}
-                >
-                  Add new industry
-                </Button>
-              </div>
-            )}
-            {dataValue === 2 && (
               <>
-                <div>
+                {displayCompanies === "Sector" && (
+                  <div>
+                    <Button
+                      className="border_btn"
+                      onClick={() => router.push("organisation/sector/add")}
+                    >
+                      Add new sector
+                    </Button>
+                    <Button
+                      className="border_btn green"
+                      onClick={() => router.push("organisation/industry/add")}
+                    >
+                      Add new industry
+                    </Button>
+                  </div>
+                )}
+                {displayCompanies === "Industry" && (
+                  <div>
+                  <Button
+                    className="border_btn"
+                    onClick={() => router.push("organisation/sector/add")}
+                  >
+                    Add new sector
+                  </Button>
+                  <Button
+                    className="border_btn green"
+                    onClick={() => router.push("organisation/industry/add")}
+                  >
+                    Add new industry
+                  </Button>
+                </div>
+                )}
+                {displayCompanies === "Companies" && (
+                  <div>
                   <Button className="border_btn">Upload CSV</Button>
                   <Button className="border_btn">Download CSV</Button>
                   <Button
@@ -307,9 +267,10 @@ function Organisation() {
                     Add New
                   </Button>
                 </div>
+                )}
               </>
             )}
-            {dataValue === 3 && (
+            {dataValue === 1 && (
               <>
                 {displayProfessions === "Family code" && (
                   <>
@@ -468,8 +429,8 @@ function Organisation() {
                   return (
                     <li
                       key={index}
-                      onClick={() => setDisplayCompany(item)}
-                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayCompany && "active_btn_tabs"
+                      onClick={() => setDisplayCompanies(item)}
+                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayCompanies && "active_btn_tabs"
                         }`}
                     >
                       {item}
@@ -479,7 +440,7 @@ function Organisation() {
               </ul>
             </ScrollingCarousel>
           </div>
-          {displayCompany === "Sector" && (
+          {displayCompanies === "Sector" && (
             <>
               <div className="admin_stream_table">
                 <Row>
@@ -548,7 +509,7 @@ function Organisation() {
             </>
           )}
 
-          {displayCompany === "Industry" && (
+          {displayCompanies === "Industry" && (
             <>
               <div className="admin_stream_table">
                 <Row>
@@ -616,7 +577,7 @@ function Organisation() {
             </>
           )}
 
-          {displayCompany === "Companies" && (
+          {displayCompanies === "Companies" && (
             <div className="admin_stream_table">
               <Row>
                 <Table responsive className="admin_table" bordered hover>
