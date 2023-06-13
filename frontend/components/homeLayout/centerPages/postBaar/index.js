@@ -10,28 +10,28 @@ const categoryopt = [
     icon: "/images/script-icon.png",
   },
   {
-    value: "Script",
+    value: "script",
     label: "Script",
     icon: "/images/script-icon.png",
   },
   {
-    value: "Announcement",
+    value: "announcement",
     label: "Announcement",
     icon: "/images/announcement-icon.png",
   },
-  { value: "Job", label: "Job", icon: "/images/job-icon.png" },
-  { value: "Internship", label: "Internship", icon: "/images/intern.png" },
-  { value: "Mentoring", label: "Mentoring", icon: "/images/more-icon.png" },
-  { value: "Question", label: "Question", icon: "/images/more-icon.png" },
-  { value: "Services", label: "Services", icon: "/images/more-icon.png" },
+  { value: "job", label: "Job", icon: "/images/job-icon.png" },
+  { value: "internship", label: "Internship", icon: "/images/intern.png" },
+  { value: "mentoring", label: "Mentoring", icon: "/images/more-icon.png" },
+  { value: "question", label: "Question", icon: "/images/more-icon.png" },
+  { value: "services", label: "Services", icon: "/images/more-icon.png" },
   {
-    value: "College festives",
+    value: "collegefestives",
     label: "College festives",
     icon: "/images/more-icon.png",
   },
   { value: "scholarship", label: "scholarship", icon: "/images/more-icon.png" },
   {
-    value: "cultural events",
+    value: "culturalevents ",
     label: "cultural events",
     icon: "/images/more-icon.png",
   },
@@ -43,12 +43,12 @@ const categoryopt = [
   },
   { value: "hackathon", label: "hackathon", icon: "/images/more-icon.png" },
   {
-    value: "Hiring Challenges",
+    value: "hiringchallenges",
     label: "Hiring Challenges",
     icon: "/images/more-icon.png",
   },
   {
-    value: "Campus Recruitment",
+    value: "campusrecruitment",
     label: "Campus Recruitment",
     icon: "/images/more-icon.png",
   },
@@ -130,7 +130,7 @@ const PostBaar = () => {
                 SingleValue,
               }}
             />
-            {selectedlist.value === "Script" ? (
+            {selectedlist.value === "script" ? (
               ""
             ) : (
               <input
@@ -156,7 +156,7 @@ const PostBaar = () => {
                     <option value="2">Expired</option>
                   </Form.Select>
                 )}
-                {selectedlist.value === "Job" && (
+                {selectedlist.value === "job" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Status</option>
@@ -205,7 +205,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                {selectedlist.value === "Internship" && (
+                {selectedlist.value === "internship" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Status</option>
@@ -254,7 +254,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                {selectedlist.value === "Mentoring" && (
+                {selectedlist.value === "mentoring" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Streams</option>
@@ -273,7 +273,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                {selectedlist.value === "Question" && (
+                {selectedlist.value === "question" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Streams</option>
@@ -317,7 +317,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                {selectedlist.value === "Services" && (
+                {selectedlist.value === "services" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Streams</option>
@@ -336,7 +336,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                {selectedlist.value === "College festives" && (
+                {selectedlist.value === "collegefestives" && (
                   <Form.Select aria-label="Default select example">
                     <option>Status</option>
                     <option value="1">Active</option>
@@ -372,7 +372,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                 {selectedlist.value === "cultural events" && (
+                 {selectedlist.value === "culturalevents " && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Status</option>
@@ -488,7 +488,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                 {selectedlist.value === "Hiring Challenge" && (
+                 {selectedlist.value === "hiringchallenges" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Status</option>
@@ -517,7 +517,7 @@ const PostBaar = () => {
                     </Form.Select>
                   </>
                 )}
-                 {selectedlist.value === "Campus Recruitment" && (
+                 {selectedlist.value === "campusrecruitment" && (
                   <>
                     <Form.Select aria-label="Default select example">
                       <option>Status</option>
