@@ -82,7 +82,7 @@ export default function CommonHead() {
   const handleMobileClose = () => setMobileScreen(false);
   const handleMobileShow = () => setMobileScreen(true);
 
-  const currentUserDetails = useSelector((item) => item?.loginUser?.userDetails?.rows);
+  const currentUserDetails = useSelector((item) => item?.userSlice.currentUser);
   const loginStatus = useSelector(state => state.userSlice.loginStatus)
   const activeNavItem = useSelector(state => state.userSlice.activeNavItem)
 
@@ -149,7 +149,7 @@ export default function CommonHead() {
   const HandleHome = () => {
     router.push("/");
   };
-
+  console.log(currentUserDetails, 'aaaaaaaaaaaaaaaaaaa')
   return (
     <>
       <div className="user_header_bg mobile_header_padding">
