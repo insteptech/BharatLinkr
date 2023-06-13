@@ -71,225 +71,11 @@ function SignUpPage() {
     selectcompany: "",
     headorregofc: "",
   };
-  // const handleChange = (e) => {
-  //   console.log(e.target.value);
-  //   setUsertype(e.target.value);
-  // };
-
+ 
   const stateList = useSelector(
     (item) => item?.stateList?.stateList?.data?.data?.rows
   );
-
-
-  // const fields = [
-  //   [
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "userType",
-  //       component: (input) => <Select {...input} options={stateOptions} />,
-  //       type: inputFieldTypes.text,
-  //       label: "Select User Type",
-  //       col: "6",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "name",
-  //       type: inputFieldTypes.text,
-  //       label: "Name",
-  //       col: "6",
-  //       placeholder: "Enter Full Name",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "designation",
-  //       type: inputFieldTypes.text,
-  //       label: "Designation",
-  //       col: "6",
-  //       placeholder: "Student",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "email",
-  //       type: inputFieldTypes.email,
-  //       label: "Email",
-  //       col: "6",
-  //       placeholder: "Enter your Email",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "mobileNumber",
-  //       type: inputFieldTypes.number,
-  //       label: "Mobile Number",
-  //       col: "6",
-  //       placeholder: "Enter Mobile Number",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "state",
-  //       component: (input) => <Select {...input} options={stateOptions} />,
-  //       type: inputFieldTypes.text,
-  //       label: "State",
-  //       col: "6",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "school",
-  //       type: inputFieldTypes.text,
-  //       label: "School/College/Company",
-  //       col: "6",
-  //       placeholder: "School/College/Company",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "highestEducation",
-  //       type: inputFieldTypes.text,
-  //       label: "Highest Education",
-  //       col: "6",
-  //       placeholder: "Enter your highest qualification",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "summary",
-  //       type: inputFieldTypes.textarea,
-  //       label: "Summary",
-  //       col: "12",
-  //       placeholder: "Summary",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "expertiseArea",
-  //       type: inputFieldTypes.textarea,
-  //       label: "Area Of Expertise",
-  //       col: "6",
-  //       placeholder: "Expertise area in comma separated value",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "accomplishment",
-  //       type: inputFieldTypes.textarea,
-  //       label: "Accomplishment",
-  //       col: "6",
-  //       placeholder: "Accomplishments in comma separated value",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "totalExperience",
-  //       type: inputFieldTypes.text,
-  //       label: "Total Experience",
-  //       col: "12",
-  //       placeholder: "Enter your total experience",
-  //       className: "experience_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "profilePhoto",
-  //       type: inputFieldTypes.file,
-  //       label: "Profile Photo",
-  //       col: "6",
-  //       placeholder: "",
-  //       className: "file_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "coverPhoto",
-  //       type: inputFieldTypes.file,
-  //       label: "Cover Photo",
-  //       col: "6",
-  //       placeholder: "",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "password",
-  //       type: inputFieldTypes.password,
-  //       label: "Password",
-  //       col: "6",
-  //       placeholder: "Password",
-  //       icon: "/images/close-eye.png",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "confirmPassword",
-  //       type: inputFieldTypes.password,
-  //       label: "Re-Enter Password",
-  //       col: "6",
-  //       placeholder: "Re-Enter Password",
-  //       icon: "/images/close-eye.png",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.actions,
-  //       buttons: [
-  //         {
-  //           type: "submit",
-  //           body: "Next Step",
-  //           variant: "primary",
-  //           className: "mx-auto admin_signup_btn",
-  //           activeCondition: false,
-  //           size: "lg",
-  //           col: "12",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  //   [
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_1",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_2",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_3",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_4",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_5",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.fields,
-  //       name: "OTP_6",
-  //       type: inputFieldTypes.number,
-  //       col: "1",
-  //       className: "otp_input",
-  //     },
-  //     {
-  //       fieldType: FieldTypes.actions,
-  //       buttons: [
-  //         {
-  //           type: "submit",
-  //           body: "Verify",
-  //           variant: "primary",
-  //           className: "mx-auto admin_signup_btn",
-  //           activeCondition: false,
-  //           size: "lg",
-  //           col: "12",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // ];
-
+  
   const validate = (values) => {
     const errors = {};
 
@@ -385,13 +171,6 @@ function SignUpPage() {
     return errors;
   };
 
-  const onSubmit = (values) => {
-    const finalValues = { ...values };
-    if (dataValue === 0) {
-      finalValues.userType = values.userType.values;
-      finalValues.state = values.state.values;
-    }
-  };
   const router = useRouter();
   const handleOtp = (values) => {
     let newVal = JSON.stringify(values);
@@ -412,8 +191,8 @@ function SignUpPage() {
       accomplishments: values.accomplishments,
       designation: values.designation,
       email: values.email,
-      experience: values.experience,
-      expertise: values.expertise,
+      totalExperience: values.experience,
+      areaOfExpertise: values.expertise,
       highestEducation: values.highestEducation,
       mobileNumber: values.mobileNumber,
       name: values.name,
