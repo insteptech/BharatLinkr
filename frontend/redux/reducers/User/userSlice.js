@@ -25,7 +25,7 @@ const userSlice = createSlice({
         builder.addCase(getUserDetailsById.fulfilled, (state, action) => {
             state.isLoading = false
             state.loginStatus = true
-            state.currentUser = action.payload
+            state.currentUser = action.payload.rows[0]
         });
         builder.addCase(getUserDetailsById.pending, (state, action) => {
             state.isLoading = true
