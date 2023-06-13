@@ -18,20 +18,21 @@ module.exports = {
       },
       postTypes: {
         type: Sequelize.ENUM(
-              'script',
-              'announcement',
-              'jobs',
-              'internship',
-              'mentoring',
-              'questionservices',
-              'collegefestives',
-              'scholarship',
-              'culturalevents ',
-              'conferences',
-              'competitions',
-              'hackathon',
-              'hiringchallenges',
-              'campusrecruitment'
+          'script',
+          'announcement',
+          'jobs',
+          'internship',
+          'mentoring',
+          'question',
+          'services',
+          'collegefestives',
+          'scholarship',
+          'culturalevents ',
+          'conferences',
+          'competitions',
+          'hackathon',
+          'hiringchallenges',
+          'campusrecruitment'
 
         ),
       },
@@ -139,7 +140,7 @@ module.exports = {
           key: 'id',
         },
       },
-      
+
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
