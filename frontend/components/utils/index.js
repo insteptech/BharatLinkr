@@ -50,3 +50,9 @@ export const getTokenDecode = () => {
     }
   }
 };
+
+export const LikedContent = {
+  college: 'college',
+  organisation: 'organisation',
+  corporate: 'corporate'
+}

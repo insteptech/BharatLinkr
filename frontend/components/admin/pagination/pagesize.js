@@ -10,7 +10,7 @@ function Pagesize({ setPagination }) {
     }
     return (
         <>
-            <Form.Select className='num_dropdown' aria-label="Default select example" name="pagesize" onChange={(e) => { handlePageSize(e.target.value) }}>
+            <Form.Select className='num_dropdown me-0' aria-label="Default select example" name="pagesize" onChange={(e) => { handlePageSize(e.target.value) }}>
                 <option >10</option>
                 <option >8</option>
                 <option >5</option>

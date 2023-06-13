@@ -5,79 +5,94 @@ import { Field, Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { getAllMasterFilter } from "../../../redux/actions/masterfilter/createmasterfilter"
+import { getAllMasterFilter } from "../../../redux/actions/masterfilter/createmasterfilter";
 import { FieldTypes, inputFieldTypes } from "../../../utils/helper";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
-import { addCourse, editCourse, getCoursebyId } from "../../../redux/actions/course/addcourse";
+import {
+  addCourse,
+  editCourse,
+  getCoursebyId,
+} from "../../../redux/actions/course/addcourse";
 import Router, { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
-const CKeditorGenerator = dynamic(() => import('../CKeditor'), {
+const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
   ssr: false,
 });
 
 export default function AddCourse() {
   const [dataValue, setDataValue] = useState(0);
   const FormSteps = ["Course Register", "CMS"];
-  const [durationState, setDurationState] = useState('Year')
-  const dispatch = useDispatch()
-  const mainStreamData = useSelector((data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows)
-  const masterFilterData = useSelector((data) => data?.allMasterFilterList?.masterfilterlist?.data?.data)
-  const examData = useSelector((data) => data?.examList?.examlist?.data?.data?.rows)
-  const prevData = useSelector((data) => data?.coursebyId?.course?.data?.data?.rows[0])
+  const [durationState, setDurationState] = useState("Year");
+  const dispatch = useDispatch();
+  const mainStreamData = useSelector(
+    (data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
+  );
+  const masterFilterData = useSelector(
+    (data) => data?.allMasterFilterList?.masterfilterlist?.data?.data
+  );
+  const examData = useSelector(
+    (data) => data?.examList?.examlist?.data?.data?.rows
+  );
+  const prevData = useSelector(
+    (data) => data?.coursebyId?.course?.data?.data?.rows[0]
+  );
   const courseCMS = [
-    { title: 'About', key: 'about' },
-    { title: 'Specialization', key: 'specialization' },
-    { title: 'Eligibility', key: 'eligibility' },
-    { title: 'Course After Details', key: 'courseAfterDetails' },
-    { title: 'Career', key: 'career' },
-    { title: 'Avg. Fees', key: 'avgFees' },
-    { title: 'Salary Trends', key: 'salaryTrends' }
-  ]
-  const router = useRouter()
+    { title: "About", key: "about" },
+    { title: "Specialization", key: "specialization" },
+    { title: "Eligibility", key: "eligibility" },
+    { title: "Course After Details", key: "courseAfterDetails" },
+    { title: "Career", key: "career" },
+    { title: "Avg. Fees", key: "avgFees" },
+    { title: "Salary Trends", key: "salaryTrends" },
+  ];
+  const router = useRouter();
   const handleSubmit = (values) => {
     if (router.query.Id) {
       if (dataValue == 0) {
-        setDataValue(1)
-      } if (dataValue == 1) {
+        setDataValue(1);
+      }
+      if (dataValue == 1) {
         values.courseDuration = values.courseDuration + ` ` + durationState;
-        values.id = prevData.id
+        values.id = prevData.id;
         if (values.courseName === prevData.courseName) {
-          delete values.courseName
+          delete values.courseName;
         }
         dispatch(editCourse(values)).then((res) => {
           if (res?.payload?.data?.success) {
-            toast.success("Updated")
-            router.push("/admin/courses")
+            toast.success("Updated");
+            router.push("/admin/courses");
           } else {
-            toast.error('error')
+            toast.error("error");
           }
-        })
+        });
       }
     } else {
       if (dataValue === 0) {
-        setDataValue(1)
-      } if (dataValue === 1) {
+        setDataValue(1);
+      }
+      if (dataValue === 1) {
         values.courseDuration = values.courseDuration + ` ` + durationState;
-        let data = { Course: [values] }
-    
+        let data = { Course: [values] };
+
         dispatch(addCourse(data)).then((res) => {
-          if (res?.payload?.data?.success ) {
-            let status = res?.payload?.data?.data?.stream[0].status
+          if (res?.payload?.data?.success) {
+            let status = res?.payload?.data?.data?.stream[0].status;
             if (status === "duplicate") {
-              toast.error('Duplicate')
-              values.courseDuration = values.courseDuration.split(' ')[0]
+              toast.error("Duplicate");
+              values.courseDuration = values.courseDuration.split(" ")[0];
             } else {
-              toast.success('Course added')
-              Router.push("/admin/courses")
+              toast.success("Course added");
+              Router.push("/admin/courses");
             }
           } else {
-            toast.error('error')
-            values.courseDuration = values.courseDuration.split(' ')[0]
+            toast.error("error");
+            values.courseDuration = values.courseDuration.split(" ")[0];
           }
-        })
+        });
       }
     }
   };
@@ -125,10 +140,10 @@ export default function AddCourse() {
     { values: "2", label: "Non-medical" },
   ];
 
-  const masterValues = 'coursetype,coursecategory,courselevel,eligibility'
+  const masterValues = "coursetype,coursecategory,courselevel,eligibility";
 
   const handledurationChange = (e) => {
-    setDurationState(e.target.value)
+    setDurationState(e.target.value);
   };
 
   const fields = [
@@ -273,19 +288,19 @@ export default function AddCourse() {
   ];
 
   useEffect(() => {
-    dispatch(getMainStream())
-    dispatch(getAllMasterFilter(masterValues))
-    dispatch(getAllExams())
+    dispatch(getMainStream());
+    dispatch(getAllMasterFilter(masterValues));
+    dispatch(getAllExams());
     if (router.query.Id) {
-      dispatch(getCoursebyId({ id: Number(router.query.Id) }))
-      setDurationState(prevData?.courseDuration.split(' ')[1])
+      dispatch(getCoursebyId({ id: Number(router.query.Id) }));
+      setDurationState(prevData?.courseDuration.split(" ")[1]);
     }
-  }, [router.query.Id])
+  }, [router.query.Id]);
 
   const init = (e) => {
     if (e && Object.keys(e).length > 0) {
       return e;
-    };
+    }
     let initialValues = {};
     if (router.query.Id) {
       initialValues = {
@@ -294,7 +309,7 @@ export default function AddCourse() {
         courseName: prevData?.courseName,
         courseCategoryId: prevData?.courseCategoryId,
         eligibility: prevData?.eligibility,
-        courseDuration: prevData?.courseDuration.split(' ')[0],
+        courseDuration: prevData?.courseDuration.split(" ")[0],
         averageFees: prevData?.averageFees,
         averageSalary: prevData?.averageSalary,
         entranceExamId: prevData?.entranceExamId,
@@ -307,10 +322,10 @@ export default function AddCourse() {
             courseAfterDetails: prevData?.CMS[0]?.courseAfterDetails,
             career: prevData?.CMS[0]?.career,
             avgFees: prevData?.CMS[0]?.avgFees,
-            salaryTrends: prevData?.CMS[0]?.salaryTrends
-          }
-        ]
-      }
+            salaryTrends: prevData?.CMS[0]?.salaryTrends,
+          },
+        ],
+      };
     } else {
       initialValues = {
         mainStreamId: null,
@@ -331,9 +346,9 @@ export default function AddCourse() {
             courseAfterDetails: null,
             career: null,
             avgFees: null,
-            salaryTrends: null
-          }
-        ]
+            salaryTrends: null,
+          },
+        ],
       };
     }
 
@@ -344,21 +359,26 @@ export default function AddCourse() {
     <>
       <div className="admin_home_tabs_row">
         <Row>
-          <ul className="nav tabs_scroll">
-            {FormSteps &&
-              FormSteps.map((steps, stepsIndex) => (
-                <li className="nav-item" key={stepsIndex}>
-                  <a
-                    className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
-                      }`}
-                    active='true'
-                    onClick={() => setDataValue(stepsIndex)}
-                  >
-                    {steps}
-                  </a>
-                </li>
-              ))}
-          </ul>
+          <Col className="p-0">
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll">
+                {FormSteps &&
+                  FormSteps.map((steps, stepsIndex) => (
+                    <li className="nav-item" key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
+                        }`}
+                        active="true"
+                        onClick={() => setDataValue(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
+          </Col>
         </Row>
       </div>
       <Row className="mt-5">
@@ -366,14 +386,14 @@ export default function AddCourse() {
           <Form
             onSubmit={handleSubmit}
             mutators={{
-              ...arrayMutators
+              ...arrayMutators,
             }}
             keepDirtyOnReinitialize
             validate={validate}
-            initialValues={useMemo((e) => (init(e)), [])}
+            initialValues={useMemo((e) => init(e), [])}
             render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit}>
-                {dataValue === 0 ?
+                {dataValue === 0 ? (
                   <>
                     <Row>
                       <Col md={12} lg={6}>
@@ -385,10 +405,19 @@ export default function AddCourse() {
                                 {...input}
                                 className="form-control signup_form_input"
                               >
-                                {!router.query.Id && <option value={null}>Select Mainstream</option>}
-                                {mainStreamData && mainStreamData.map((item, index) => {
-                                  return <option key={index} value={item.id}>{item?.mainStreamName}</option>
-                                })}
+                                {!router.query.Id && (
+                                  <option value={null}>
+                                    Select Mainstream
+                                  </option>
+                                )}
+                                {mainStreamData &&
+                                  mainStreamData.map((item, index) => {
+                                    return (
+                                      <option key={index} value={item.id}>
+                                        {item?.mainStreamName}
+                                      </option>
+                                    );
+                                  })}
                               </select>
                               <div className="text-end">
                                 <img
@@ -397,7 +426,9 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
@@ -412,10 +443,19 @@ export default function AddCourse() {
                                 {...input}
                                 className="form-control signup_form_input"
                               >
-                                {!router?.query?.Id && <option>Select Coursetype</option>}
-                                {masterFilterData && masterFilterData?.coursetype?.map((item, index) => {
-                                  return <option key={index} value={item.id}>{item?.name}</option>
-                                })}
+                                {!router?.query?.Id && (
+                                  <option>Select Coursetype</option>
+                                )}
+                                {masterFilterData &&
+                                  masterFilterData?.coursetype?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      );
+                                    }
+                                  )}
                               </select>
                               <div className="text-end">
                                 <img
@@ -424,7 +464,9 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
@@ -444,14 +486,18 @@ export default function AddCourse() {
                                 placeholder="Enter Course Name"
                               />
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </div>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Category</label>
+                        <label className="signup_form_label">
+                          Course Category
+                        </label>
                         <Field name="courseCategoryId">
                           {({ input, meta }) => (
                             <>
@@ -460,9 +506,16 @@ export default function AddCourse() {
                                 className="form-control signup_form_input"
                               >
                                 <option value="">Select Course category</option>
-                                {masterFilterData?.coursecategory && masterFilterData?.coursecategory?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.name}</option>)
-                                })}
+                                {masterFilterData?.coursecategory &&
+                                  masterFilterData?.coursecategory?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      );
+                                    }
+                                  )}
                               </select>
                               <div className="text-end">
                                 <img
@@ -471,7 +524,9 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
@@ -489,9 +544,16 @@ export default function AddCourse() {
                                 className="form-control signup_form_input"
                               >
                                 <option value="">Select Eligibility</option>
-                                {masterFilterData?.eligibility && masterFilterData?.eligibility?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.name}</option>)
-                                })}
+                                {masterFilterData?.eligibility &&
+                                  masterFilterData?.eligibility?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      );
+                                    }
+                                  )}
                               </select>
                               <div className="text-end">
                                 <img
@@ -500,7 +562,9 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
@@ -571,7 +635,9 @@ export default function AddCourse() {
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Average Fees</label>
+                        <label className="signup_form_label">
+                          Average Fees
+                        </label>
                         <Field name="averageFees">
                           {({ input, meta }) => (
                             <div>
@@ -582,14 +648,18 @@ export default function AddCourse() {
                                 placeholder="Enter Average Fees"
                               />
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </div>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Average Salary</label>
+                        <label className="signup_form_label">
+                          Average Salary
+                        </label>
                         <Field name="averageSalary">
                           {({ input, meta }) => (
                             <div>
@@ -600,7 +670,9 @@ export default function AddCourse() {
                                 placeholder="Enter Average Salary"
                               />
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </div>
                           )}
@@ -609,7 +681,9 @@ export default function AddCourse() {
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Entrance Exam</label>
+                        <label className="signup_form_label">
+                          Entrance Exam
+                        </label>
                         <Field name="entranceExamId">
                           {({ input, meta }) => (
                             <>
@@ -618,9 +692,14 @@ export default function AddCourse() {
                                 className="form-control select-style signup_form_input"
                               >
                                 <option value="">Select Exam</option>
-                                {examData && examData.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.examName}</option>)
-                                })}
+                                {examData &&
+                                  examData.map((item, index) => {
+                                    return (
+                                      <option key={index} value={item.id}>
+                                        {item?.examName}
+                                      </option>
+                                    );
+                                  })}
                               </select>
                               <div className="text-end">
                                 <img
@@ -629,14 +708,18 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Level</label>
+                        <label className="signup_form_label">
+                          Course Level
+                        </label>
                         <Field name="courseLevelId">
                           {({ input, meta }) => (
                             <>
@@ -645,9 +728,16 @@ export default function AddCourse() {
                                 className="form-control select-style signup_form_input"
                               >
                                 <option value="">Select Course level</option>
-                                {masterFilterData?.courselevel && masterFilterData?.courselevel?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item.name}</option>)
-                                })}
+                                {masterFilterData?.courselevel &&
+                                  masterFilterData?.courselevel?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item.name}
+                                        </option>
+                                      );
+                                    }
+                                  )}
                               </select>
                               <div className="text-end">
                                 <img
@@ -656,7 +746,9 @@ export default function AddCourse() {
                                 />
                               </div>
                               {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
+                                <span className="text-danger">
+                                  {meta.error}
+                                </span>
                               )}
                             </>
                           )}
@@ -674,10 +766,8 @@ export default function AddCourse() {
                       </Col>
                     </Row>
                   </>
-                  :
-                  null
-                }
-                {dataValue === 1 ?
+                ) : null}
+                {dataValue === 1 ? (
                   <>
                     <Row>
                       <Col>
@@ -692,23 +782,32 @@ export default function AddCourse() {
                                 >
                                   {courseCMS.map((item, index) => {
                                     return (
-                                      <Tab style={{ padding: '10px', border: "1px solid black", borderRadius: '5px', backgroundColor: '#FFF' }} key={index} eventKey={index} title={item.title}>
+                                      <Tab
+                                        style={{
+                                          padding: "10px",
+                                          border: "1px solid black",
+                                          borderRadius: "5px",
+                                          backgroundColor: "#FFF",
+                                        }}
+                                        key={index}
+                                        eventKey={index}
+                                        title={item.title}
+                                      >
                                         <Field name={`${name}.${item.key}`}>
                                           {({ input, meta }) => (
                                             <>
                                               <CKeditorGenerator
                                                 input={input}
-                                                onReady={(editor) => {
-                                                 
-                                                }}
+                                                onReady={(editor) => {}}
                                               />
                                             </>
                                           )}
                                         </Field>
                                       </Tab>
-                                    )
+                                    );
                                   })}
-                                </Tabs>))}
+                                </Tabs>
+                              ))}
                             </>
                           )}
                         </FieldArray>
@@ -725,10 +824,7 @@ export default function AddCourse() {
                       </Col>
                     </Row>
                   </>
-                  :
-                  null
-                }
-
+                ) : null}
               </form>
             )}
           />

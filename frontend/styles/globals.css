@@ -582,7 +582,7 @@ optgroup {
   background: var(--admin-bg);
   border: 0.0625rem solid #c8c1df;
 }
-.plus_minus_btn_margin{
+.plus_minus_btn_margin {
   margin-top: 38px;
   margin-bottom: 30px;
 }
@@ -746,7 +746,7 @@ input::-webkit-inner-spin-button {
   display: flex;
 }
 .leftmenu_icons {
-  width: 1.25rem;
+  width: 22px;
 }
 .mobile_login_btn {
   margin-top: 12px !important;
@@ -949,6 +949,14 @@ input::-webkit-inner-spin-button {
   border-radius: 100px;
   margin-right: 10px;
   opacity: 0.7;
+  cursor: pointer;
+}
+.border_btn_tabs:hover {
+  background: var(--admin-btn-bg);
+  color: #fff !important;
+}
+.border_tabs_padding {
+  padding: 10px 20px;
 }
 .active_btn_tabs {
   background: var(--admin-btn-bg);
@@ -977,6 +985,18 @@ input::-webkit-inner-spin-button {
 }
 .stream_table_head {
   border-radius: 1.25rem;
+}
+.tab_drop_justify {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.display_btn_row {
+  display: none;
+}
+.margin_top_none {
+  margin-top: 0 !important;
+  margin-bottom: 10px;
 }
 
 /* ------------------------table css end-------------------------- */
@@ -1033,7 +1053,7 @@ input::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 1.25rem;
+    /* margin-bottom: 1.25rem; */
   }
   .header_search_input {
     min-width: 31.25rem;
@@ -1046,6 +1066,15 @@ input::-webkit-inner-spin-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+  .hide_btn_row {
+    display: none;
+  }
+  .display_btn_row {
+    display: block;
+  }
+  .btn_margin{
+    margin-bottom: 10px;
   }
   /* ----------------------------user-header-start-------------------- */
   .user_header_btn {
@@ -1132,6 +1161,9 @@ input::-webkit-inner-spin-button {
   .center_sub_text {
     text-align: start;
     margin-bottom: 10px;
+  }
+  .border_tabs_padding {
+    padding: 6px 18px;
   }
 }
 @media only screen and (max-width: 992px) {
@@ -1256,6 +1288,9 @@ input::-webkit-inner-spin-button {
   }
 }
 @media only screen and (max-width: 768px) {
+  .item_hide_768{
+    display: none;
+  }
   .hcceco_logo {
     max-width: 80px;
   }
@@ -1283,7 +1318,7 @@ input::-webkit-inner-spin-button {
     padding: 0;
   }
   .user_header {
-    padding: 0 30px;
+    padding: 0 1.875rem;
   }
   .logout_btn {
     display: none;
@@ -1301,12 +1336,13 @@ input::-webkit-inner-spin-button {
   }
   .add_remove_btn {
     padding: 0.625rem;
+    margin: 0.625rem;
   }
   /* .admin_home_tabs_row {
     padding-bottom: 0 !important;
   } */
   .about_college_hero_banner {
-    height: 160px;
+    height: 10rem;
   }
   .margin_top {
     margin-top: 2rem;
@@ -1411,6 +1447,10 @@ input::-webkit-inner-spin-button {
   .user_lead_entery {
     margin-top: 0.625rem !important;
   }
+  .plus_minus_btn_margin{
+    margin-top: 32px;
+    margin-bottom: 30px;
+  }
   /* .admin_signup_btn_mobile {
     max-width: 8.125rem;
     padding: 0.625rem 0.9375rem;
@@ -1418,6 +1458,7 @@ input::-webkit-inner-spin-button {
     margin-bottom: 5rem;
     font-size: 0.9375rem;
   } */
+
   .mobile_item_center {
     display: flex;
     align-items: center;
@@ -1452,7 +1493,8 @@ input::-webkit-inner-spin-button {
     display: none;
   }
   .enteries_input {
-    margin: 0.9375rem 0;
+    margin-top: 0;
+    /* margin: 0.9375rem 0; */
   }
   .table_heading_header {
     margin-bottom: 0;
@@ -3675,6 +3717,12 @@ img {
 }
 
 /* ---------------------------------corporate-page-start--------------------------- */
+
+.justify_item{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 .corporate_card {
   padding: 0.625rem 1.25rem !important;

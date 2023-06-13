@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import AdminTable from "../AdminTable";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 const AdminHomePage = (props) => {
   const { tableData } = props;
@@ -58,8 +59,9 @@ const AdminHomePage = (props) => {
     <div>
       <div className=" admin_home_tabs_row">
         <Row>
-          <Col lg={10} md={6} className="p-0">
-            <ul className="nav tabs_scroll">
+          <Col lg={10} md={12} className="p-0">
+          <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+            <ul className="nav ">
               {json &&
                 json?.map((steps, stepsIndex) => (
                   <li className="nav-item" key={stepsIndex}>
@@ -68,15 +70,16 @@ const AdminHomePage = (props) => {
                         dataValue === stepsIndex && "head-active"
                       }`}
                       active={true}
-                      onClick={() => handleTab(steps.key, stepsIndex)}
+                      onClick={() => handleTab(steps.key, stepsIndex)} 
                     >
                       {steps.DisplayName}
                     </a>
                   </li>
                 ))}
             </ul>
+            </ScrollingCarousel>
           </Col>
-          <Col lg={2} md={6} className="p-0">
+          <Col lg={2} md={6} className="p-0 hide_btn_row">
             <div className="enteries_input">
               <h6 className="enteries_input_label">Show Enteries</h6>
               <Form.Select aria-label="Default select example">
@@ -89,6 +92,20 @@ const AdminHomePage = (props) => {
           </Col>
         </Row>
       </div>
+      <Row className="display_btn_row">
+        <Col className=" item_end">
+        <div className="d-flex mb-3">
+              <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+              <Form.Select aria-label="Default select example">
+                <option>10</option>
+                <option value="1">3</option>
+                <option value="2">5</option>
+                <option value="3">8</option>
+              </Form.Select>
+            </div>
+        </Col>
+      </Row>
+     
       {/* <hr /> */}
       <div className="admin_table">
         <AdminTable data={data} action={action} />

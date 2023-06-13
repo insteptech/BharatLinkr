@@ -20,6 +20,7 @@ import {
   getCountry,
 } from "../../../redux/actions/location/countryList";
 import LoaderPage from "../../common-components/loader";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function LocationPage() {
   const dispatch = useDispatch();
@@ -130,6 +131,7 @@ function LocationPage() {
         <Row>
           <Col xl={6} lg={12} md={12} className="p-0">
             <div className="d-flex table_heading_header p-0">
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
               <ul className="nav tabs_scroll">
                 {json &&
                   json?.map((steps, stepsIndex) => (
@@ -149,13 +151,14 @@ function LocationPage() {
                     </li>
                   ))}
               </ul>
-              <div className="enteries_input user_lead_entery_input location_enteries">
+              </ScrollingCarousel>
+              <div className="enteries_input user_lead_entery_input location_enteries hide_btn_row">
                 <h6 className="enteries_input_label">Show Enteries</h6>
                 <Pagesize setPagination={setPagination} />
               </div>
             </div>
           </Col>
-          <Col xl={6} lg={12} md={12} className="text-end p-0">
+          <Col xl={6} lg={12} md={12} className="text-end p-0 hide_btn_row">
             <div className="city_state_btn_margin">
               <Button
                 className="border_btn"
@@ -179,6 +182,36 @@ function LocationPage() {
           </Col>
         </Row>
       </div>
+      <Row>
+        <Col sm={6} className="display_btn_row">
+        <div className=" user_lead_entery_input d-flex ">
+                <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+                <Pagesize setPagination={setPagination} />
+              </div>
+        </Col>
+        <Col sm={6} className="display_btn_row">
+        <div className="text-end">
+              <Button
+                className="border_btn btn_margin"
+                onClick={() => router.push("location/addcity")}
+              >
+                Add New City
+              </Button>
+              <Button
+                className="border_btn btn_margin"
+                onClick={() => router.push("location/addstate")}
+              >
+                Add New State
+              </Button>
+              <Button
+                className="border_btn btn_margin "
+                onClick={() => router.push("location/addcountry")}
+              >
+                Add New Country
+              </Button>
+            </div>
+        </Col>
+      </Row>
 
       <div className="admin_table">
         {dataValue === 0 && (

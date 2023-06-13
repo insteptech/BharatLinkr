@@ -58,12 +58,12 @@ function ClientLeadAnalyticsTable() {
   return (
     <>
       <Row className="padding_top">
-        <Col xl={6} lg={12} md={12}>
+        <Col  lg={6}>
           <div className="d-flex table_heading_header">
             <h4 className="table_list_heading master_heading">Client Leads</h4>
             <div className="enteries_input">
               <h6 className="enteries_input_label">Show Enteries</h6>
-              <Form.Select aria-label="Default select example">
+              <Form.Select aria-label="Default select example" className='me-0'>
                 <option>10</option>
                 <option value="1">3</option>
                 <option value="2">5</option>
@@ -72,9 +72,9 @@ function ClientLeadAnalyticsTable() {
             </div>
           </div>
         </Col>
-        <Col xl={6} lg={12} md={12} className="text-end">
+        <Col  lg={6} className="text-end mt-2">
           <div>
-            <Button className="border_btn">Download CSV</Button>
+            <Button className="border_btn ">Download CSV</Button>
           </div>
         </Col>
       </Row>
