@@ -16,14 +16,136 @@ module.exports = (sequelize, DataTypes) => {
   organisationPost.init({
     organisationId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'organisation',
         key: 'id',
       },
     },
-    posts: DataTypes.STRING(10485760),
-    image: DataTypes.STRING,
+    postTypes: {
+      type: DataTypes.ENUM(
+            'script',
+            'announcement',
+            'jobs',
+            'internship',
+            'mentoring',
+            'questionservices',
+            'collegefestives',
+            'scholarship',
+            'culturalevents ',
+            'conferences',
+            'competitions',
+            'hackathon',
+            'hiringchallenges',
+            'campusrecruitment'
+
+      ),
+    },
+    title: {
+      type: DataTypes.STRING(10485760)
+    },
+    description: {
+      type: DataTypes.STRING(10485760)
+    },
+    image: {
+      type: DataTypes.STRING
+    },
+    department: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'mainStream',
+        key: 'id',
+      },
+    },
+    subDepartment: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'subStream',
+        key: 'id',
+      },
+    },
+    state: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'State',
+        key: 'id',
+      },
+    },
+    city: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'City',
+        key: 'id',
+      },
+    },
+    workMode: {
+      type: DataTypes.STRING
+    },
+    jobType: {
+      type: DataTypes.STRING
+    },
+
+    jobRole: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'masterFilter',
+        key: 'id',
+      },
+    },
+    eligibility: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'masterFilter',
+        key: 'id',
+      },
+    },
+    college: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'college',
+        key: 'id',
+      },
+    },
+    course: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'course',
+        key: 'id',
+      },
+    },
+    exam: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'exam',
+        key: 'id',
+      },
+    },
+    corporate: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'corporateRegister',
+        key: 'id',
+      },
+    },
+    status: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'Status',
+        key: 'id',
+      },
+    },
+    
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,
