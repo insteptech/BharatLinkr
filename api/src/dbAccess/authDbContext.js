@@ -156,7 +156,6 @@ const register = async (req) => {
     }
     let result;
     if (profileData.id) {
-      console.log('iffffffffff')
       result = await User.update(userObj, { where: { id: profileData.id }, returning: true });
 
     } else {
@@ -182,38 +181,8 @@ const register = async (req) => {
 
     }
 
-
-
-
-    // const userResult = await User.findOne({
-    //   where: { id: result.id },
-    //   attributes: ['id',
-    //     'isNumberVerified',
-    //     'userType',
-    //     'name',
-    //     'designation',
-    //     'email',
-    //     'mobileNumber',
-    //     'stateId',
-    //     'cityId',
-    //     'school_college_company',
-    //     'highestEducation',
-    //     'summary',
-    //     'areaOfExpertise',
-    //     'accomplishments',
-    //     'totalExperience',
-    //     'profilePhoto',
-    //     'coverPhoto',
-    //     'password',
-    //     'collegeWebsite',
-    //     'collegeId',
-    //     'roleId'
-    //   ]
-    // })
-
     return { success: true, user: result, roleDetail };
   } catch (error) {
-    console.log(error,'98989898989')
     throw new Error(error);
   }
 };
