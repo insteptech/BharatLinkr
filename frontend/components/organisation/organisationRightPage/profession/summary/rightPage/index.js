@@ -172,11 +172,13 @@ const SummaryRight = ({ professionDetails, dataValue, professiontypes }) => {
                     </Form.Select>
                     <h6 className="d-flex">
                       {/* <div className="dark_blue_dot color_dot mt-1"></div> */}
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.tasks),
-                        }}
-                      />
+                      {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.tasks),
+                          }}
+                        />
+                      }
                     </h6>
                   </div>
                 </>
@@ -189,12 +191,14 @@ const SummaryRight = ({ professionDetails, dataValue, professiontypes }) => {
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
+                  </Form.Select>
+                  {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
                     <div
                       dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.education),
                       }}
                     />
+                  }
                     {/* <h6>
                       <img
                         className="me-2 mb-1"
@@ -248,17 +252,19 @@ const SummaryRight = ({ professionDetails, dataValue, professiontypes }) => {
               )}
               {dataValue === 4 && (
                 <>
-                  <h2 className="intro_heading mb-3">Experience</h2>
+                <h2 className="intro_heading mb-3">Experience</h2>
+                {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.experience),
                     }}
                   />
+                }
                 </>
               )}
               {dataValue === 5 && (
                 <>
-                <h2 className="intro_heading mb-3">Knowledge</h2>
+                  <h2 className="intro_heading mb-3">Knowledge</h2>
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.knowledge),
@@ -269,31 +275,37 @@ const SummaryRight = ({ professionDetails, dataValue, professiontypes }) => {
               {dataValue === 6 && (
                 <>
                 <h2 className="intro_heading mb-3">Technical Skills</h2>
+                {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.technicalSkills),
                     }}
                   />
+                }
                 </>
               )}
               {dataValue === 7 && (
                 <>
                 <h2 className="intro_heading mb-3">Future Prospects</h2>
+                {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.futureProspects),
                     }}
                   />
+                }
                 </>
               )}
               {dataValue === 8 && (
                 <>
                 <h2 className="intro_heading mb-3">Certificates</h2>
+                {professionDetails[0]?.CMS && professionDetails[0]?.CMS?.length > 0 &&
                   <div
                     dangerouslySetInnerHTML={{
                       __html: DOMPurify.sanitize(professionDetails[0]?.CMS[0]?.certificates),
                     }}
                   />
+                }
                 </>
               )}
 
