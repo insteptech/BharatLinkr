@@ -16,7 +16,8 @@ const { sector,
   User,
   organisationCompany,
   organisationBrand,
-  organisationGroup } = require('../../models');
+  organisationGroup,
+  masterFilter } = require('../../models');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const path = require('path');
@@ -867,9 +868,41 @@ const organisationAddLikesAndViews = async (req) => {
 };
 
 
+// const addOrganisationPosts = async (req) => {
+//   try {
+//     const postData = JSON.parse(req.body.postData);
+
+//     const { imageFile } = req.files;
+
+//     await writeFiles({ imageFile });
+//     let result;
+
+//     await Promise.all(
+//       postData.payload.map(async (item) => {
+//         if (imageFile && imageFile.length > 0) {
+//           console.log(imageFile, '09090')
+//           const fileExist = imageFile.find((image1) => image1.originalname);
+//           if (fileExist) {
+//             item.image = fileExist.originalname;
+//           }
+//         }
+
+//         result = await organisationPost.create(item, { returning: true });
+//         return result;
+
+//       })
+//     );
+//     return { data: result, success: true };
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
+
+
 const addOrganisationPosts = async (req) => {
   try {
-    const postData = JSON.parse(req.body.postData);
+    const organisationPostData = JSON.parse(req.body.organisationPostData);
 
     const { imageFile } = req.files;
 
@@ -877,22 +910,67 @@ const addOrganisationPosts = async (req) => {
     let result;
 
     await Promise.all(
-      postData.payload.map(async (item) => {
+      organisationPostData.payload.map(async (item) => {
+
+        let objOrganisationPost = {
+          organisationId: item.organisationId,
+          postTypes: item.postTypes,
+          title: item.title,
+          description: item.description,
+          department: item.department,
+          subDepartment: item.subDepartment,
+          state: item.state,
+          city: item.city,
+          workMode: item.workMode,
+          jobType: item.jobType,
+          jobRole: item.jobRole,
+          eligibility: item.eligibility,
+          college: item.college,
+          course:item.course,
+          exam: item.exam,
+          corporate: item.corporate,
+          status: item.status,
+        }
+
+        
+
+     
+              let jR = item.jobRole
+            if(typeof jR==='string' ){
+              jobName= await masterFilter.create({name:jR, types:'jobrole',statusId:1})
+              const jobRoleId = await masterFilter.findOne({
+                where:{name:jR}
+              }) 
+              if(jobRoleId.id){
+                objOrganisationPost.jobRole= jobRoleId.id
+              }
+            }
+
+       
+      7
+
         if (imageFile && imageFile.length > 0) {
-          console.log(imageFile, '09090')
           const fileExist = imageFile.find((image1) => image1.originalname);
           if (fileExist) {
-            item.image = fileExist.originalname;
+            objOrganisationPost.image = fileExist.originalname;
           }
         }
 
-        result = await organisationPost.create(item, { returning: true });
-        return result;
+    
 
+        result = await organisationPost.create(objOrganisationPost, { returning: true });
+
+
+       
+
+       
+
+        return result;
       })
     );
     return { data: result, success: true };
   } catch (error) {
+    console.log(error,'8989989889')
     throw new Error(error);
   }
 };
