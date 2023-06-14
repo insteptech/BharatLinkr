@@ -196,6 +196,8 @@ db.organisationPost.belongsTo(db.exam,{as:"Exams", foreignKey: "exam"})
 db.organisationPost.belongsTo(db.course,{as:"Course", foreignKey: "course"})
 db.organisationPost.belongsTo(db.corporateRegister,{as:"Corporate", foreignKey: "corporate"})
 db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
+db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
+
 
 
 

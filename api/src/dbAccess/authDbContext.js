@@ -132,6 +132,7 @@ const register = async (req) => {
     if (profileData.password) {
       userObj.password = await bcrypt.hash(profileData.password, 12);
     }
+    // this for confirmation from bharatlinker after it will active true 
     if (profileData.userType === "College") {
       userObj.active = false;
     }
