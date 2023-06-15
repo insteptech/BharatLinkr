@@ -14,6 +14,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   organisationPost.init({
+
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'User',
+        key: 'id',
+      },
+    },
+    
     organisationId: {
       type: DataTypes.INTEGER,
       allowNull: true,

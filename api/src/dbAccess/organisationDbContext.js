@@ -888,6 +888,7 @@ const addOrganisationPosts = async (req) => {
       organisationPostData.payload.map(async (item) => {
 
         let objOrganisationPost = {
+          userId: item.userId,
           organisationId: item.organisationId,
           postTypes: item.postTypes,
           title: item.title,
@@ -945,7 +946,6 @@ const addOrganisationPosts = async (req) => {
     );
     return { data: result, success: true };
   } catch (error) {
-    console.log(error, '8989989889')
     throw new Error(error);
   }
 };
@@ -1004,6 +1004,11 @@ const organisationPostList = async (req) => {
     const result = await organisationPost.findAndCountAll({
       where: whrCondition,
       include: [
+        {
+          model: User,
+          required: false,
+          as: 'Users'
+        },
         {
           model: organisation,
           required: false,
