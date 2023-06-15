@@ -57,7 +57,10 @@ function QuestionsPallete({
               boxShadow: "0px 6px 6.5px rgba(0, 0, 0, 0.0588235)",
               width: "30px",
             }}
-            onClick={() => setQuesno(index)}
+            onClick={(e) => {
+              e.preventDefault()
+              setQuesno(index)
+            }}
           >
             {index + 1}
           </button>

@@ -94,6 +94,7 @@ const ShortTricks = () => {
       setModalShow(true);
     }
   }
+  
   useEffect(() => {
     dispatch(getCorporateData(pagination));
     if (isloggedin) {
