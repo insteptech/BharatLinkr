@@ -1228,9 +1228,11 @@ const userScoreCountList = async (req) => {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
     const size = req.body.pageSize ? req.body.pageSize : 10;
     let whrCondition = { deleted: false };
+    let scoreWhrCondtiion
 
     if (req.body.attemptId && req.body.mockTestId && req.body.userId) {
       whrCondition = { attemptId: req.body.attemptId, mockTestId: req.body.mockTestId, userId: req.body.userId }
+      scoreWhrCondtiion = { id: req.body.attemptId, mockTestId: req.body.mockTestId, userId: req.body.userId }
     }
 
 
@@ -1244,6 +1246,21 @@ const userScoreCountList = async (req) => {
     }
 
 
+    const testScoreDetail = await mockTestScore.findOne({
+      where: { [Op.and]: [scoreWhrCondtiion] },
+      include:[
+          {
+            model:mockTest,
+            required:false,
+            as:'MockTest'
+          }
+      ],
+
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+      order: [['id', 'ASC']],
+    });
     const result = await mockTestUserAnswer.findAndCountAll({
       where: { [Op.and]: [whrCondition, whrCondition1, whrCondition2] },
 
@@ -1253,9 +1270,17 @@ const userScoreCountList = async (req) => {
       order: [['id', 'ASC']],
     });
 
+    const correctCountDetail = result.rows.reduce((acc, item) => {
+      const key = item.correct;
+      if (!acc[key]) {
+        acc[key] = { correct: key, count: 1 };
+      } else {
+        acc[key].count++;
+      }
+      return acc;
+    }, {});
 
-
-    return { data: result, success: true };
+    return { data: result, testScoreDetail,correctCountDetail, success: true };
   } catch (error) {
     throw new Error(error);
   }
