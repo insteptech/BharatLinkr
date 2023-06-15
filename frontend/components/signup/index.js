@@ -71,11 +71,11 @@ function SignUpPage() {
     selectcompany: "",
     headorregofc: "",
   };
- 
+
   const stateList = useSelector(
     (item) => item?.stateList?.stateList?.data?.data?.rows
   );
-  
+
   const validate = (values) => {
     const errors = {};
 
@@ -204,13 +204,13 @@ function SignUpPage() {
       userType: values.userType,
 
       // college values
-      website : values.website,
-      college : values.college,
+      website: values.website,
+      college: values.college,
 
       //organization values
-      company : values.company,
-      orgcategory : values.orgcategory,
-      headregofc : values.headregofc,
+      company: values.company,
+      orgcategory: values.orgcategory,
+      headregofc: values.headregofc,
 
     }
 
@@ -500,7 +500,7 @@ function SignUpPage() {
                                         return (
                                           <option
                                             key={item.id}
-                                            value={item?.countryId}
+                                          // value={item?.countryId}
                                           >
                                             {item?.state}{" "}
                                           </option>
@@ -959,7 +959,6 @@ function SignUpPage() {
                                         return (
                                           <option
                                             key={item.id}
-                                            value={item?.countryId}
                                           >
                                             {item?.state}{" "}
                                           </option>
@@ -1371,10 +1370,19 @@ function SignUpPage() {
                                   </div>
                                   <select
                                     {...input}
-                                    className="form-control select-style signup_form_input"
+                                    className="form-control select-style signup_form_input "
                                   >
-                                    <option>state 1</option>
-                                    <option>state 2</option>
+                                    <option value="">Choose State</option>
+                                    {stateList &&
+                                      stateList?.map((item) => {
+                                        return (
+                                          <option
+                                            key={item.id}
+                                          >
+                                            {item?.state}{" "}
+                                          </option>
+                                        );
+                                      })}
                                   </select>
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
