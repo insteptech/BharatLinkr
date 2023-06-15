@@ -198,6 +198,9 @@ db.organisationPost.belongsTo(db.corporateRegister,{as:"Corporate", foreignKey: 
 db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
 db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
 
+db.mockTestScore.belongsTo(db.mockTest,{as:"MockTest", foreignKey: "mockTestId"})
+
+
 
 
 
