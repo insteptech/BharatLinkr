@@ -12,7 +12,7 @@ function Result() {
   console.log(router.query.ids);
   const { query } = router;
   const getResult = () => {
-    let x = query.ids.split("-");
+    let x = query?.ids?.split("-");
     let testdetails = {
       id: x[0],
       userId: x[2],
@@ -20,6 +20,7 @@ function Result() {
     };
     dispatch(mocktestResult(testdetails));
   };
+  
   const result = useSelector(
     (data) => data?.corporateMocktest?.mocktestResult?.rows
   );
@@ -51,7 +52,7 @@ function Result() {
                       </div>
                     </div>
                   </Col>
-                  <Col md={12} lg={7} >
+                  <Col md={12} lg={7}>
                     <div className="center_card">
                       <Card className="result_card">
                         <h1 className="total_score_h1 mobile_font_18">

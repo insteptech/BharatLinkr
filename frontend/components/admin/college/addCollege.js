@@ -84,12 +84,11 @@ function CreateCollege() {
   });
 
   const [collegeArr, setCollegeArr] = useState({
-    0: { substreamData: substreamSelectVal, colStreamData: colstreamSelectVal }
-  })
-
+    0: { substreamData: substreamSelectVal, colStreamData: colstreamSelectVal },
+  });
 
   const handleMainstreamselect = (form) => {
-    form.change('subStreamId', '')
+    form.change("subStreamId", "");
   };
 
   const handleDeleteAssociate = (deletecourse) => {
@@ -100,7 +99,7 @@ function CreateCollege() {
 
     dispatch(deleteAssociateCOllege(deletepayload)).then((res) => {
       if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
+        toast.success("Deleted", { autoClose: 1000 });
       }
     });
   };
@@ -162,7 +161,6 @@ function CreateCollege() {
         });
       }
     } else {
-
       if (dataValue == 0) {
         setDataValue(1);
       } else if (dataValue === 1) {
@@ -172,28 +170,36 @@ function CreateCollege() {
         let collegeUpdateObj = {};
         let formdata = new FormData();
 
-        Object.keys(x).map(key => {
+        Object.keys(x).map((key) => {
           if (key === "college") {
             Object.keys(x[key][0]).map((ele) => {
-              collegeUpdateObj[ele] = x[key][0][ele]
-            })
-          } if (key === "scholarShip" || key === "placements" || key === "distanceEducation" || key === "collegeAdmissions" || key === "collegeAbouts") {
-            collegeUpdateObj[key] = x[key][0]
-          } if (key === "collegeAgencies" || key === "faq") {
-            collegeUpdateObj[key] = x[key]
+              collegeUpdateObj[ele] = x[key][0][ele];
+            });
           }
-        })
+          if (
+            key === "scholarShip" ||
+            key === "placements" ||
+            key === "distanceEducation" ||
+            key === "collegeAdmissions" ||
+            key === "collegeAbouts"
+          ) {
+            collegeUpdateObj[key] = x[key][0];
+          }
+          if (key === "collegeAgencies" || key === "faq") {
+            collegeUpdateObj[key] = x[key];
+          }
+        });
 
         formdata.append("collegeData", JSON.stringify(collegeUpdateObj));
         if (formdata !== 0) {
           dispatch(updateCollege(formdata)).then((res) => {
             if (res?.payload?.data?.success) {
-              Router.push("/admin/college")
-              toast.success("College updated")
+              Router.push("/admin/college");
+              toast.success("College updated");
             } else {
-              toast.error("Error")
+              toast.error("Error");
             }
-          })
+          });
         }
       }
     }
@@ -335,7 +341,7 @@ function CreateCollege() {
             error["colStreamId"] = "*";
           }
           itemArray3.push(error);
-        })
+        });
         itemArray4.push(error);
 
         item?.courseFees?.map((itemss, index) => {
@@ -367,9 +373,9 @@ function CreateCollege() {
   const FormSteps = ["College Register", "Associate Course", "CMS"];
 
   const dispatchforStreams = (mainArray, subarray) => {
-    dispatch(getSubstreamData({ mainStreamId: mainArray }))
-    dispatch(getColStreamlist({ subStreamId: subarray }))
-  }
+    dispatch(getSubstreamData({ mainStreamId: mainArray }));
+    dispatch(getColStreamlist({ subStreamId: subarray }));
+  };
   const setInitialValues = (event) => {
     if (event && Object.keys(event).length > 0) {
       return event;
@@ -393,14 +399,16 @@ function CreateCollege() {
             collegeLogo: collegeDetails?.collegeLogo,
             collegeImage: collegeDetails?.collegeImage,
           },
-        ]
-        let mainStreamArray = []
-        let subStreamArray = []
+        ];
+        let mainStreamArray = [];
+        let subStreamArray = [];
         initialValues.collegeCourse = collegeDetails?.AssociateCourse?.map(
           (item) => {
             let x = item?.CourseAssociateStream?.map((ele) => {
-              if (!mainStreamArray.includes(ele.mainStreamId)) mainStreamArray.push(ele.mainStreamId)
-              if (!subStreamArray.includes(ele.subStreamId)) subStreamArray.push(ele.subStreamId)
+              if (!mainStreamArray.includes(ele.mainStreamId))
+                mainStreamArray.push(ele.mainStreamId);
+              if (!subStreamArray.includes(ele.subStreamId))
+                subStreamArray.push(ele.subStreamId);
               return {
                 id: ele?.mainStreamId,
                 mainStreamId: ele?.mainStreamId,
@@ -433,7 +441,7 @@ function CreateCollege() {
           }
         );
 
-        dispatchforStreams(mainStreamArray, subStreamArray)
+        dispatchforStreams(mainStreamArray, subStreamArray);
 
         collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
@@ -450,78 +458,78 @@ function CreateCollege() {
 
         collegeDetails?.CollegeAdmission?.map(
           (item) =>
-          (initialValues.collegeAdmissions = [
-            {
-              admissionIntro: item?.admissionIntro,
-              admissionAboutTest: item?.admissionAboutTest,
-              admissionImportantDates: item?.admissionImportantDates,
-              admissionHighLights: item?.admissionHighLights,
-              applicationProcess: item?.applicationProcess,
-              PHDadmissionProcess: item?.PHDadmissionProcess,
-            },
-          ])
+            (initialValues.collegeAdmissions = [
+              {
+                admissionIntro: item?.admissionIntro,
+                admissionAboutTest: item?.admissionAboutTest,
+                admissionImportantDates: item?.admissionImportantDates,
+                admissionHighLights: item?.admissionHighLights,
+                applicationProcess: item?.applicationProcess,
+                PHDadmissionProcess: item?.PHDadmissionProcess,
+              },
+            ])
         );
 
         collegeDetails?.DistanceEducation?.map(
           (item) =>
-          (initialValues.distanceEducation = [
-            {
-              basicInfo: item?.basicInfo,
-              courseDetails: item?.courseDetails,
-              honors: item?.honors,
-            },
-          ])
+            (initialValues.distanceEducation = [
+              {
+                basicInfo: item?.basicInfo,
+                courseDetails: item?.courseDetails,
+                honors: item?.honors,
+              },
+            ])
         );
 
         collegeDetails?.Placements?.map(
           (item) =>
-          (initialValues.placements = [
-            {
-              placeMentIntro: item?.placeMentIntro,
-              highLights2021: item?.highLights2021,
-              MBAhighLights: item?.MBAhighLights,
-              BTECHhighLights: item?.BTECHhighLights,
-              yearWisePlaceMents: item?.yearWisePlaceMents,
-              topRecruiters: item?.topRecruiters,
-            },
-          ])
+            (initialValues.placements = [
+              {
+                placeMentIntro: item?.placeMentIntro,
+                highLights2021: item?.highLights2021,
+                MBAhighLights: item?.MBAhighLights,
+                BTECHhighLights: item?.BTECHhighLights,
+                yearWisePlaceMents: item?.yearWisePlaceMents,
+                topRecruiters: item?.topRecruiters,
+              },
+            ])
         );
 
         collegeDetails?.Scholarship?.map(
           (item) =>
-          (initialValues.scholarShip = [
-            {
-              scholarShipIntro: item?.scholarShipIntro,
-              basedOnUniExams: item?.basedOnUniExams,
-              basedOnAdmissionTest: item?.basedOnAdmissionTest,
-              basedOnSportsQuota: item?.basedOnSportsQuota,
-              basedOnDiplomaGraduates: item?.basedOnDiplomaGraduates,
-            },
-          ])
+            (initialValues.scholarShip = [
+              {
+                scholarShipIntro: item?.scholarShipIntro,
+                basedOnUniExams: item?.basedOnUniExams,
+                basedOnAdmissionTest: item?.basedOnAdmissionTest,
+                basedOnSportsQuota: item?.basedOnSportsQuota,
+                basedOnDiplomaGraduates: item?.basedOnDiplomaGraduates,
+              },
+            ])
         );
 
         collegeDetails?.FAQ?.map(
           (item) =>
-          (initialValues.faq = [
-            {
-              question: item?.question,
-              answerType: item?.answerType,
-              answer: item?.answer,
-            },
-          ])
+            (initialValues.faq = [
+              {
+                question: item?.question,
+                answerType: item?.answerType,
+                answer: item?.answer,
+              },
+            ])
         );
 
         collegeDetails?.CollegeAgency?.map(
           (item) =>
-          (initialValues.collegeAgencies = [
-            {
-              id: item?.id,
-              collegeAgencyId: item?.collegeAgencyId,
-              collegeAgencyFor: item?.collegeAgencyFor,
-              totalAgency: item?.totalAgency,
-              totalAgencyForYears: item?.totalAgencyForYears,
-            },
-          ])
+            (initialValues.collegeAgencies = [
+              {
+                id: item?.id,
+                collegeAgencyId: item?.collegeAgencyId,
+                collegeAgencyFor: item?.collegeAgencyFor,
+                totalAgency: item?.totalAgency,
+                totalAgencyForYears: item?.totalAgencyForYears,
+              },
+            ])
         );
         return initialValues;
       }
@@ -635,8 +643,12 @@ function CreateCollege() {
     }
   };
 
-  const substreamfulllist = useSelector((state) => state?.subStreamList?.subStreamValue?.data?.data?.rows)
-  const colstreamfulllist = useSelector((state) => state?.colStreamList?.colStreamSlice?.data?.data?.rows)
+  const substreamfulllist = useSelector(
+    (state) => state?.subStreamList?.subStreamValue?.data?.data?.rows
+  );
+  const colstreamfulllist = useSelector(
+    (state) => state?.colStreamList?.colStreamSlice?.data?.data?.rows
+  );
 
   useEffect(() => {
     dispatch(getState());
@@ -668,8 +680,9 @@ function CreateCollege() {
                   FormSteps.map((steps, stepsIndex) => (
                     <li className="nav-item" key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
-                          }`}
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
+                        }`}
                         active="true"
                         onClick={() => handleTab(stepsIndex)}
                       >
@@ -1082,7 +1095,7 @@ function CreateCollege() {
                                                         </option>
                                                         {mainStreamlist &&
                                                           mainStreamlist.length >
-                                                          0 &&
+                                                            0 &&
                                                           mainStreamlist?.map(
                                                             (item, index) => (
                                                               <option
@@ -1180,7 +1193,9 @@ function CreateCollege() {
                                                     <div
                                                       className="add_remove_btn"
                                                       type="button"
-                                                      onClick={() => fields.remove(index)}
+                                                      onClick={() =>
+                                                        fields.remove(index)
+                                                      }
                                                     >
                                                       <img
                                                         className="add_remove_icon"
@@ -1416,90 +1431,69 @@ function CreateCollege() {
                                 index === displayIndex && (
                                   <div key={index}>
                                     <Row>
-                                      <FieldArray name={`${name}.collegeStreams`}>
+                                      <FieldArray
+                                        name={`${name}.collegeStreams`}
+                                      >
                                         {({ fields }) => (
                                           <div>
                                             <>
-                                              {fields.map((collegeStreamsname, collegeStreamsIndex) => (
-                                                <Row>
-                                                  <>
-                                                    <Col lg={4} md={8}>
-                                                      <label className="signup_form_label">
-                                                        Choose Streams
-                                                      </label>
-                                                      <Field name={`${collegeStreamsname}.mainStreamId`}>
-                                                        {({ input, meta }) => (
-                                                          <>
-                                                            <select
-                                                              {...input}
-                                                              className="form-control select-style signup_form_input"
-                                                              onChange={(e) => {
-                                                                input.onChange(e);
-                                                                handleMainstreamselect(form);
-                                                              }}>
-                                                              <option value="">
-                                                                Select Main Stream
-                                                              </option>
-                                                              {mainStreamlist &&
-                                                                mainStreamlist.length > 0 &&
-                                                                mainStreamlist.map((item, index) => (
-                                                                  <option
-                                                                    key={`MainStream_${index}`}
-                                                                    value={item?.id}>
-                                                                    {item.mainStreamName}
-                                                                  </option>
-                                                                )
-                                                                )}
-                                                            </select>
-                                                            <div className="text-end">
-                                                              <img
-                                                                className="select_down_icon"
-                                                                src="/images/down.png"
-                                                              />
-                                                            </div>
-                                                            <div className="d-flex">
-                                                              {meta.touched &&
-                                                                meta.error && (
-                                                                  <span className="text-danger required_msg">
-                                                                    {meta.error}
-                                                                  </span>
-                                                                )}
-                                                            </div>
-                                                          </>
-                                                        )}
-                                                      </Field>
-                                                    </Col>
-                                                    <Col lg={4} md={8}>
-                                                      <Field
-                                                        name={`${collegeStreamsname}.subStreamId`}
-                                                      >
-                                                        {({ input, meta }) => {
-                                                          let list = substreamfulllist?.filter((ele) => {
-                                                            return ele?.mainStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId
-                                                          })
-                                                          return (
+                                              {fields.map(
+                                                (
+                                                  collegeStreamsname,
+                                                  collegeStreamsIndex
+                                                ) => (
+                                                  <Row>
+                                                    <>
+                                                      <Col lg={4} md={8}>
+                                                        <label className="signup_form_label">
+                                                          Choose Streams
+                                                        </label>
+                                                        <Field
+                                                          name={`${collegeStreamsname}.mainStreamId`}
+                                                        >
+                                                          {({
+                                                            input,
+                                                            meta,
+                                                          }) => (
                                                             <>
                                                               <select
                                                                 {...input}
-                                                                className="form-control select-style signup_form_input margin_top"
-                                                                onChange={(e) => {
+                                                                className="form-control select-style signup_form_input"
+                                                                onChange={(
+                                                                  e
+                                                                ) => {
                                                                   input.onChange(
                                                                     e
                                                                   );
+                                                                  handleMainstreamselect(
+                                                                    form
+                                                                  );
                                                                 }}
-                                                                disabled={values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId ? false : true}
                                                               >
-                                                                <option
-                                                                  value={""}
-                                                                  hidden
-                                                                >
-                                                                  Select Sub
+                                                                <option value="">
+                                                                  Select Main
                                                                   Stream
                                                                 </option>
-                                                                {substreamfulllist?.map((ele, i) =>
-                                                                  ele?.mainStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.mainStreamId
-                                                                  && (<option key={i} value={ele?.id}>{ele?.subStreamName}</option>))}
-
+                                                                {mainStreamlist &&
+                                                                  mainStreamlist.length >
+                                                                    0 &&
+                                                                  mainStreamlist.map(
+                                                                    (
+                                                                      item,
+                                                                      index
+                                                                    ) => (
+                                                                      <option
+                                                                        key={`MainStream_${index}`}
+                                                                        value={
+                                                                          item?.id
+                                                                        }
+                                                                      >
+                                                                        {
+                                                                          item.mainStreamName
+                                                                        }
+                                                                      </option>
+                                                                    )
+                                                                  )}
                                                               </select>
                                                               <div className="text-end">
                                                                 <img
@@ -1511,112 +1505,258 @@ function CreateCollege() {
                                                                 {meta.touched &&
                                                                   meta.error && (
                                                                     <span className="text-danger required_msg">
-                                                                      {meta.error}
+                                                                      {
+                                                                        meta.error
+                                                                      }
                                                                     </span>
                                                                   )}
                                                               </div>
-                                                            </>)
-                                                        }
-                                                        }
-                                                      </Field>
-                                                    </Col>
-                                                    <Col
-                                                      lg={4}
-                                                      md={8}
-                                                      className="d-flex margin_top"
-                                                    >
-                                                      <Field
-                                                        name={`${collegeStreamsname}.colStreamId`}
+                                                            </>
+                                                          )}
+                                                        </Field>
+                                                      </Col>
+                                                      <Col lg={4} md={8}>
+                                                        <Field
+                                                          name={`${collegeStreamsname}.subStreamId`}
+                                                        >
+                                                          {({
+                                                            input,
+                                                            meta,
+                                                          }) => {
+                                                            let list =
+                                                              substreamfulllist?.filter(
+                                                                (ele) => {
+                                                                  return (
+                                                                    ele?.mainStreamId ==
+                                                                    values
+                                                                      ?.collegeCourse[
+                                                                      index
+                                                                    ]
+                                                                      ?.collegeStreams[
+                                                                      collegeStreamsIndex
+                                                                    ]
+                                                                      ?.mainStreamId
+                                                                  );
+                                                                }
+                                                              );
+                                                            return (
+                                                              <>
+                                                                <select
+                                                                  {...input}
+                                                                  className="form-control select-style signup_form_input margin_top"
+                                                                  onChange={(
+                                                                    e
+                                                                  ) => {
+                                                                    input.onChange(
+                                                                      e
+                                                                    );
+                                                                  }}
+                                                                  disabled={
+                                                                    values
+                                                                      ?.collegeCourse[
+                                                                      index
+                                                                    ]
+                                                                      ?.collegeStreams[
+                                                                      collegeStreamsIndex
+                                                                    ]
+                                                                      ?.mainStreamId
+                                                                      ? false
+                                                                      : true
+                                                                  }
+                                                                >
+                                                                  <option
+                                                                    value={""}
+                                                                    hidden
+                                                                  >
+                                                                    Select Sub
+                                                                    Stream
+                                                                  </option>
+                                                                  {substreamfulllist?.map(
+                                                                    (ele, i) =>
+                                                                      ele?.mainStreamId ==
+                                                                        values
+                                                                          ?.collegeCourse[
+                                                                          index
+                                                                        ]
+                                                                          ?.collegeStreams[
+                                                                          collegeStreamsIndex
+                                                                        ]
+                                                                          ?.mainStreamId && (
+                                                                        <option
+                                                                          key={
+                                                                            i
+                                                                          }
+                                                                          value={
+                                                                            ele?.id
+                                                                          }
+                                                                        >
+                                                                          {
+                                                                            ele?.subStreamName
+                                                                          }
+                                                                        </option>
+                                                                      )
+                                                                  )}
+                                                                </select>
+                                                                <div className="text-end">
+                                                                  <img
+                                                                    className="select_down_icon"
+                                                                    src="/images/down.png"
+                                                                  />
+                                                                </div>
+                                                                <div className="d-flex">
+                                                                  {meta.touched &&
+                                                                    meta.error && (
+                                                                      <span className="text-danger required_msg">
+                                                                        {
+                                                                          meta.error
+                                                                        }
+                                                                      </span>
+                                                                    )}
+                                                                </div>
+                                                              </>
+                                                            );
+                                                          }}
+                                                        </Field>
+                                                      </Col>
+                                                      <Col
+                                                        lg={4}
+                                                        md={8}
+                                                        className="d-flex margin_top"
                                                       >
-                                                        {({ input, meta }) => (
-                                                          <>
-                                                            <select
-                                                              {...input}
-                                                              disabled={values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId ? false : true}
-                                                              className="form-control select-style signup_form_input margin_bottom"
-                                                              onChange={(e) => {
-                                                                input.onChange(
+                                                        <Field
+                                                          name={`${collegeStreamsname}.colStreamId`}
+                                                        >
+                                                          {({
+                                                            input,
+                                                            meta,
+                                                          }) => (
+                                                            <>
+                                                              <select
+                                                                {...input}
+                                                                disabled={
+                                                                  values
+                                                                    ?.collegeCourse[
+                                                                    index
+                                                                  ]
+                                                                    ?.collegeStreams[
+                                                                    collegeStreamsIndex
+                                                                  ]?.subStreamId
+                                                                    ? false
+                                                                    : true
+                                                                }
+                                                                className="form-control select-style signup_form_input margin_bottom"
+                                                                onChange={(
                                                                   e
-                                                                );
-
-                                                              }}
-                                                            >
-                                                              <option
-                                                                value={""}
-                                                                hidden
+                                                                ) => {
+                                                                  input.onChange(
+                                                                    e
+                                                                  );
+                                                                }}
                                                               >
-                                                                Select Col
-                                                                Stream
-                                                              </option>
+                                                                <option
+                                                                  value={""}
+                                                                  hidden
+                                                                >
+                                                                  Select Col
+                                                                  Stream
+                                                                </option>
 
-                                                              {colstreamfulllist?.map((ele, i) =>
-                                                                ele?.subStreamId == values?.collegeCourse[index]?.collegeStreams[collegeStreamsIndex]?.subStreamId
-                                                                && (<option key={i} value={ele?.id}>{ele?.colStreamName}</option>))}
-
-                                                            </select>
-                                                            <div className="">
-                                                              <img
-                                                                className="select_down_icon_second"
-                                                                src="/images/down.png"
-                                                              />
-                                                            </div>
-                                                            <div className="d-flex">
-                                                              {meta.touched &&
-                                                                meta.error && (
-                                                                  <span className="text-danger required_msg">
-                                                                    {meta.error}
-                                                                  </span>
+                                                                {colstreamfulllist?.map(
+                                                                  (ele, i) =>
+                                                                    ele?.subStreamId ==
+                                                                      values
+                                                                        ?.collegeCourse[
+                                                                        index
+                                                                      ]
+                                                                        ?.collegeStreams[
+                                                                        collegeStreamsIndex
+                                                                      ]
+                                                                        ?.subStreamId && (
+                                                                      <option
+                                                                        key={i}
+                                                                        value={
+                                                                          ele?.id
+                                                                        }
+                                                                      >
+                                                                        {
+                                                                          ele?.colStreamName
+                                                                        }
+                                                                      </option>
+                                                                    )
                                                                 )}
-                                                            </div>
-                                                          </>
-                                                        )}
-                                                      </Field>
+                                                              </select>
+                                                              <div className="">
+                                                                <img
+                                                                  className="select_down_icon_second"
+                                                                  src="/images/down.png"
+                                                                />
+                                                              </div>
+                                                              <div className="d-flex">
+                                                                {meta.touched &&
+                                                                  meta.error && (
+                                                                    <span className="text-danger required_msg">
+                                                                      {
+                                                                        meta.error
+                                                                      }
+                                                                    </span>
+                                                                  )}
+                                                              </div>
+                                                            </>
+                                                          )}
+                                                        </Field>
 
-                                                      <div className="d-flex mt-2 margin_bottom">
-                                                        <div
-                                                          type="button"
-                                                          className="add_remove_btn ms-2"
-                                                          onClick={() => {
-                                                            fields.push({
-                                                              mainStreamId: "",
-                                                              subStreamId: "",
-                                                              colStreamId: "",
-                                                            })
-                                                            setCollegeArr({
-                                                              ...collegeArr,
-                                                              [fields.length]: {
-                                                                substreamData: substreamSelectVal,
-                                                                colStreamData: colstreamSelectVal
-                                                              }
-                                                            });
-                                                          }
-                                                          }>
-                                                          <img
-                                                            className="add_remove_icon"
-                                                            src="/images/plus.png"
-                                                          />
-                                                        </div>
-                                                        {fields.length > 1 ? (
+                                                        <div className="d-flex plus_btn_margin_bottom_top">
                                                           <div
-                                                            className="add_remove_btn ms-2"
                                                             type="button"
-                                                            onClick={() =>
-                                                              fields.remove(
-                                                                collegeStreamsIndex
-                                                              )} >
+                                                            className="add_remove_btn ms-2"
+                                                            onClick={() => {
+                                                              fields.push({
+                                                                mainStreamId:
+                                                                  "",
+                                                                subStreamId: "",
+                                                                colStreamId: "",
+                                                              });
+                                                              setCollegeArr({
+                                                                ...collegeArr,
+                                                                [fields.length]:
+                                                                  {
+                                                                    substreamData:
+                                                                      substreamSelectVal,
+                                                                    colStreamData:
+                                                                      colstreamSelectVal,
+                                                                  },
+                                                              });
+                                                            }}
+                                                          >
                                                             <img
                                                               className="add_remove_icon"
-                                                              src="/images/minus.png"
+                                                              src="/images/plus.png"
                                                             />
                                                           </div>
-                                                        ) : (
-                                                          <></>
-                                                        )}
-                                                      </div>
-                                                    </Col>
-                                                  </>
-                                                </Row>
-                                              ))}
+                                                          {fields.length > 1 ? (
+                                                            <div
+                                                              className="add_remove_btn ms-2"
+                                                              type="button"
+                                                              onClick={() =>
+                                                                fields.remove(
+                                                                  collegeStreamsIndex
+                                                                )
+                                                              }
+                                                            >
+                                                              <img
+                                                                className="add_remove_icon"
+                                                                src="/images/minus.png"
+                                                              />
+                                                            </div>
+                                                          ) : (
+                                                            <></>
+                                                          )}
+                                                        </div>
+                                                      </Col>
+                                                    </>
+                                                  </Row>
+                                                )
+                                              )}
                                             </>
                                           </div>
                                         )}
@@ -1687,9 +1827,9 @@ function CreateCollege() {
                                                 type="text"
                                                 className="form-control select-style signup_form_input margin_bottom"
                                                 placeholder="Enter Course Name"
-                                              // onChange={(e) =>
-                                              //   input.onChange(e)
-                                              // }
+                                                // onChange={(e) =>
+                                                //   input.onChange(e)
+                                                // }
                                               />
                                             </>
                                           )}
@@ -1783,7 +1923,7 @@ function CreateCollege() {
                                                           </div>
                                                         )}
                                                       </Field>
-                                                      <div className="d-flex mt-2 margin_bottom">
+                                                      <div className="d-flex plus_btn_margin_bottom_top">
                                                         <div
                                                           type="button"
                                                           className="add_remove_btn ms-2 margin_top"
@@ -2069,7 +2209,7 @@ function CreateCollege() {
                                                   masterFilterData.coursecategory &&
                                                   masterFilterData
                                                     .coursecategory.length >
-                                                  0 &&
+                                                    0 &&
                                                   masterFilterData.coursecategory.map(
                                                     (item, index) => (
                                                       <option
@@ -2501,7 +2641,7 @@ function CreateCollege() {
                                           <>
                                             <CKeditorGenerator
                                               input={input}
-                                              onReady={(editor) => { }}
+                                              onReady={(editor) => {}}
                                             />
                                           </>
                                         )}
@@ -2509,7 +2649,10 @@ function CreateCollege() {
                                       <Field name={`${name}.answerType`}>
                                         {({ input, meta }) => (
                                           <>
-                                            <select {...input}>
+                                            <select
+                                              {...input}
+                                              className="signup_form_input"
+                                            >
                                               <option value="">
                                                 select Answer Type
                                               </option>
@@ -2524,6 +2667,7 @@ function CreateCollege() {
                                           <>
                                             <input
                                               {...input}
+                                              className="signup_form_input"
                                               type="text"
                                               placeholder="Type Your Answer"
                                             />
@@ -2576,7 +2720,7 @@ function CreateCollege() {
                         </Row>
                       </>
                       <Row>
-                        <Col>
+                        <Col className="text-center">
                           <button
                             className="admin_signup_btn admin_signup_btn_mobile"
                             type="submit"

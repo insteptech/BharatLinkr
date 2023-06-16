@@ -178,6 +178,10 @@ optgroup {
   border: 0;
   font-size: 13px;
 }
+.blue_bg{
+  background: var(--admin-btn-bg) !important;
+}
+
 /* -------------------------------modal-end-------------------------- */
 /* -------------------------------login-css-start-------------------------- */
 .login_bg {
@@ -568,6 +572,7 @@ optgroup {
   max-width: 1.125rem;
 }
 .add_remove_btn {
+  max-height: 45px;
   width: 100%;
   border-radius: 0.3125rem;
   border: 0.0625rem solid #c8c1df;
@@ -643,6 +648,9 @@ input::-webkit-inner-spin-button {
 .add_main_stream_btn_input {
   display: flex;
   align-items: center;
+}
+.plus_btn_margin_bottom_top{
+  margin-top: 7px;
 }
 
 /* ------------------------master-form css end-------------------------- */
@@ -1336,7 +1344,7 @@ input::-webkit-inner-spin-button {
   }
   .add_remove_btn {
     padding: 0.625rem;
-    margin: 0.625rem;
+    /* margin: 0.625rem; */
   }
   /* .admin_home_tabs_row {
     padding-bottom: 0 !important;
@@ -1345,7 +1353,7 @@ input::-webkit-inner-spin-button {
     height: 10rem;
   }
   .margin_top {
-    margin-top: 2rem;
+    margin-top: 23px;
   }
   .signup_form_label {
     font-size: 0.9375rem;
