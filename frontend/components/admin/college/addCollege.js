@@ -2718,5 +2718,5 @@ const CreateCollegeAdd = () => {
     </>
   );
 };
-
-export default CreateCollegeAdd
+}
+export default CreateCollegeAdd;
