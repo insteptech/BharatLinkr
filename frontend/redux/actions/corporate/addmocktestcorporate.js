@@ -47,7 +47,7 @@ export const updateMocktest = createAsyncThunk(
 
 // corporate delete api
 export const deleteMocktestCorporate = createAsyncThunk(
-  "deleteMocktestCorporate/corporate/deleteCorporate",
+  "corporate/deleteCorporate",
   async (id) => {
     return apiRequest
       .delete(`corporate/deleteMockTest/${id}`)
@@ -56,24 +56,30 @@ export const deleteMocktestCorporate = createAsyncThunk(
   }
 );
 
-export const submitmocktest = createAsyncThunk(
-  "submitmocktest/corporate/addAnswer",
+export const submitMockTest = createAsyncThunk(
+  "corporate/addAnswer",
   async (data) => {
     return apiRequest
       .post(`corporate/addAnswer`, data)
-      .then((req) => req)
+      .then((req) => req.data)
       .catch((err) => err);
   }
 );
 
-export const mocktestResult = createAsyncThunk("mocktestResult/corporate/userScore", async (data) => {
+export const mocktestResult = createAsyncThunk("corporate/userScore", async (data) => {
   return apiRequest
     .post(`corporate/userScore`, data)
-    .then((req) => req)
+    .then((req) => req.data)
+    .catch((err) => err);
+});
+export const mocktestScoreCount = createAsyncThunk("corporate/userScoreCount", async (data) => {
+  return apiRequest
+    .post(`corporate/userScoreCount`, data)
+    .then((req) => req.data)
     .catch((err) => err);
 });
 
-export const deleteMockQuestion = createAsyncThunk("deleteMockQuestion/corporate/mockTestQuestionDelete", async (data) => {
+export const deleteMockQuestion = createAsyncThunk("corporate/mockTestQuestionDelete", async (data) => {
   return apiRequest
     .post(`corporate/mockTestQuestionDelete`, data)
     .then((req) => req)

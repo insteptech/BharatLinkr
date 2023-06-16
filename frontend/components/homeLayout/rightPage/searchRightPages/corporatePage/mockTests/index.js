@@ -1,31 +1,24 @@
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useState } from "react";
-import { Accordion, Button, Col, Image, Row } from "react-bootstrap";
+import { Button, Col, Image, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getCorporateData } from "../../../../../../redux/actions/corporate/addcorporate";
 import { getMockTestCorporatelist } from "../../../../../../redux/actions/corporate/addmocktestcorporate";
-import { getTokenDecode } from "../../../../../utils";
+import { isUserLogined } from "../../../../../utils";
 import { toast } from "react-toastify";
-// import Modal from "react-bootstrap/Modal";
 
 const MockTests = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const mocktestlist = useSelector((state) => state?.corporateMocktest?.mocktestcorporatelist);
   useEffect(() => {
     dispatch(getMockTestCorporatelist());
   }, []);
 
-  const mocktestlist = useSelector(
-    (state) => state?.corporateMocktest?.mocktestcorporatelist
-  );
-  const handleCheck =(item) =>{
-    if(getTokenDecode()){
-      router.push(
-        `/corporate/mocktest/instructions/${item?.id}`
-      )
-    }else {
+  const startTest = (item) => {
+    if (isUserLogined()) {
+      router.push(`/corporate/mocktest/${item?.id}`)
+    } else {
       toast.info("Login first!")
     }
   }
@@ -34,14 +27,14 @@ const MockTests = (props) => {
     <>
       <div>
         <h6 className="corporate_master_heading">
-          mock tests for practice / <span>reasoning</span>
+          Mock Tests For Practice / <span>Reasoning</span>
         </h6>
       </div>
       {mocktestlist &&
         mocktestlist?.rows?.map((item, index) => {
           return (
             <div key={index} className="profile_sec_c post_bar py-2">
-              <div className="w-100" eventKey="1">
+              <div className="w-100">
                 <Row>
                   <Col md={6}>
                     <div>
@@ -76,9 +69,7 @@ const MockTests = (props) => {
                   </Col>
                   <Col md={6} className="corporate_card_btn_col mobile_item_center">
                     <Button
-                      onClick={() =>
-                        handleCheck(item)
-                      }
+                      onClick={() => startTest(item)}
                       className="corporate_card_btn download_btn"
                     >
                       Start Now
