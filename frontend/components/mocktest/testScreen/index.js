@@ -107,11 +107,11 @@ function TestScreen(props) {
                           value="optionA"
                         />
                         <Image
-                          height={20}
-                          width={20}
+                          height={15}
+                          width={15}
                           // className="question_img"
-                          alt=""
-                          src={`${apibasePath}documents/corporate/${activeQuestionDetail?.optionAImage}`}
+                          alt="icon"
+                          src={activeQuestionDetail?.optionAImage?`${apibasePath}documents/corporate/${activeQuestionDetail?.optionAImage}`:"/images/A..svg"}
                         />
                         {activeQuestionDetail?.optionA}
                       </div>
@@ -130,11 +130,11 @@ function TestScreen(props) {
                           value="optionB"
                         />
                         <Image
-                          height={20}
-                          width={20}
+                          height={13}
+                          width={13}
                           // className="question_img"
                           alt=""
-                          src={`${apibasePath}documents/corporate/${activeQuestionDetail?.optionBImage}`}
+                          src={activeQuestionDetail?.optionBImage?`${apibasePath}documents/corporate/${activeQuestionDetail?.optionBImage}`:"/images/B..svg"}
                         />
                         {activeQuestionDetail?.optionB}
                       </div>
@@ -153,11 +153,11 @@ function TestScreen(props) {
                           value="optionC"
                         />
                         <Image
-                          height={20}
-                          width={20}
+                          height={15}
+                          width={15}
                           // className="question_img"
                           alt=""
-                          src={`${apibasePath}documents/corporate/${activeQuestionDetail?.optionCImage}`}
+                          src={activeQuestionDetail?.optionBImage?`${apibasePath}documents/corporate/${activeQuestionDetail?.optionBImage}`:"/images/C..svg"}
                         />
                         {activeQuestionDetail?.optionC}
                       </div>
@@ -176,11 +176,11 @@ function TestScreen(props) {
                           value="optionD"
                         />
                         <Image
-                          height={20}
-                          width={20}
+                          height={13}
+                          width={13}
                           // className="question_img"
                           alt=""
-                          src={`${apibasePath}documents/corporate/${activeQuestionDetail?.optionDImage}`}
+                          src={activeQuestionDetail?.optionBImage?`${apibasePath}documents/corporate/${activeQuestionDetail?.optionBImage}`:"/images/D..svg"}
                         />
                         {activeQuestionDetail?.optionD}
                       </div>
