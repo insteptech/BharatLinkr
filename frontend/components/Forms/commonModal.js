@@ -11,7 +11,7 @@ function CommonModal(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton></Modal.Header>
+      <Modal.Header className="blue_bg" closeButton></Modal.Header>
       <Modal.Body>{props.components}</Modal.Body>
     </Modal>
   );

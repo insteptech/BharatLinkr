@@ -50,6 +50,8 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
     setModalShow(false);
   };
 
+  const date = new Date().getFullYear();
+
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
@@ -61,12 +63,12 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
           <Col md={12} className="heading_align ">
             <h2 className="edit_profile_h2 mobile_margin_bottom">
               {dataValue == 0
-                ? "List of top Jobs in india based on 2022 ranking"
+                ? `List of top Jobs in india based on ${date} ranking`
                 : dataValue == 1
-                  ? "List of top Profession in india based on 2022 ranking"
+                  ? `List of top Profession in india based on ${date} ranking`
                   : dataValue == 2
-                    ? "List of top Inernship in india based on 2022 ranking"
-                    : "List of top Company in india based on 2022 ranking"}
+                    ? `List of top Inernship in india based on ${date} ranking`
+                    : `List of top Company in india based on ${date} ranking`}
             </h2>
           </Col>
           <Col
