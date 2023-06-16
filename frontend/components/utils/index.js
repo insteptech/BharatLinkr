@@ -56,3 +56,10 @@ export const LikedContent = {
   organisation: 'organisation',
   corporate: 'corporate'
 }
+
+export const mocktestQuestionStatus = {
+  notAttempted: 'notattempted',
+  answered: 'answered',
+  notAnswered: 'notAnswered',
+  forReview: 'forReview'
+}

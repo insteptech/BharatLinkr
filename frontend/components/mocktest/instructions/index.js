@@ -3,18 +3,11 @@ import React, { useEffect } from "react";
 import { Button, Col, Container, Image, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getMockTestbyid } from "../../../redux/actions/corporate/addmocktestcorporate";
+import { getUserDetailsByToken } from "../../../redux/actions/user/userActions";
 
-function Instructions() {
-  const router = useRouter();
-  const dispatch = useDispatch();
-  const { Id } = router.query;
-  const mocktestdata = useSelector(
-    (data) => data?.corporateMocktest?.mocktest?.rows
-  );
-  useEffect(() => {
-    dispatch(getMockTestbyid(Id));
-  }, [Id]);
-  console.log(mocktestdata);
+function Instructions(props) {
+  const { setIsTestStarted } = props
+  const mocktestdata = useSelector((data) => data?.corporateMocktest?.mocktest?.rows);
 
   return (
     <div className="">
@@ -62,14 +55,10 @@ function Instructions() {
                       <Button
                         className="location_search_btn start_test_btn"
                         onClick={() =>
-                          router.push(`/corporate/mocktest/${item?.id}`)
+                          setIsTestStarted(true)
                         }
                       >
                         {`Start Test >`}
-                        {/* <Image
-                          className="blue_right_arrow green_right_arrow test_arrow"
-                          src="/images/right-blue-arrow.svg"
-                        /> */}
                       </Button>
                     </div>
                   </Col>

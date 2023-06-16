@@ -7,7 +7,10 @@ import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import CollegeLeftPage from "../collegeLeftPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { CollegeLikesList, getColleges } from "../../../redux/actions/college/college";
+import {
+  CollegeLikesList,
+  getColleges,
+} from "../../../redux/actions/college/college";
 import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
 import { getTokenDecode } from "../../utils";
@@ -88,6 +91,7 @@ const CollegeRightPage = (props) => {
   const collegeList = useSelector(
     (data) => data?.collegelist?.collegelist?.rows
   );
+  const date = new Date().getFullYear();
 
   const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
 
@@ -95,8 +99,7 @@ const CollegeRightPage = (props) => {
     dispatch(getMainStream());
     dispatch(getColleges());
     if (getTokenDecode()) {
-
-      dispatch(CollegeLikesList(getTokenDecode()?.userId))
+      dispatch(CollegeLikesList(getTokenDecode()?.userId));
     }
   }, []);
   // useEffect(() => {
@@ -109,7 +112,7 @@ const CollegeRightPage = (props) => {
         <Row>
           <Col md={12} className="text-center">
             <h2 className="edit_profile_h2 mobile_margin_bottom">
-              List of top colleges in india based on 2022 ranking
+              List of top colleges in india based on {date} ranking
             </h2>
           </Col>
           <Col

@@ -199,6 +199,11 @@ optgroup {
   font-size: 13px;
 }
 
+.blue_bg{
+  /* background: var(--admin-btn-bg) !important; */
+}
+
+
 /* -------------------------------modal-end-------------------------- */
 /* -------------------------------login-css-start-------------------------- */
 .login_bg {
@@ -651,6 +656,7 @@ optgroup {
 }
 
 .add_remove_btn {
+  max-height: 45px;
   width: 100%;
   border-radius: 0.3125rem;
   border: 0.0625rem solid #c8c1df;
@@ -737,6 +743,9 @@ input::-webkit-inner-spin-button {
 .add_main_stream_btn_input {
   display: flex;
   align-items: center;
+}
+.plus_btn_margin_bottom_top{
+  margin-top: 7px;
 }
 
 /* ------------------------master-form css end-------------------------- */
@@ -1578,7 +1587,7 @@ input::-webkit-inner-spin-button {
 
   .add_remove_btn {
     padding: 0.625rem;
-    margin: 0.625rem;
+    /* margin: 0.625rem; */
   }
 
   /* .admin_home_tabs_row {
@@ -1589,7 +1598,7 @@ input::-webkit-inner-spin-button {
   }
 
   .margin_top {
-    margin-top: 2rem;
+    margin-top: 23px;
   }
 
   .signup_form_label {
@@ -4687,12 +4696,20 @@ img {
 }
 
 .ans_four_p_div {
-  display: flex;
+  /* width: 300px; */
+  /* display: flex; */
   align-items: center;
+  justify-content: flex-start;
   margin-bottom: 5px;
 }
-
+.four_dot_text_div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .ans_four_p {
+  display: flex;
+  align-items: center;
   font-weight: 500;
   font-size: 12px;
   line-height: 20px;
@@ -4702,7 +4719,7 @@ img {
 }
 
 .color_dot {
-  min-width: 12px;
+  width: 12px;
   height: 12px;
   border-radius: 100%;
   margin-right: 5px;

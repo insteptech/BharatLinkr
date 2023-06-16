@@ -4,74 +4,36 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getMockTestbyid,
-  submitmocktest,
-} from "../../redux/actions/corporate/addmocktestcorporate";
-import { getToken } from "../utils";
+import { submitMockTest } from "../../redux/actions/corporate/addmocktestcorporate";
 import QuestionsPallete from "./questionPallete";
 import TestScreen from "./testScreen";
 import arrayMutators from "final-form-arrays";
+import ConfirmModal from "../modals/confirmModal";
 
-function Mocktest() {
-  const [userId, setUserId] = useState(null);
-  const questionslist = useSelector((data) => {
-    if (data?.corporateMocktest?.mocktest?.rows?.length > 0) {
-      return data?.corporateMocktest?.mocktest?.rows[0].Questions;
-    }
+function Mocktest(props) {
+  const { questionpalletedata, setQuestionpalletedata } = props
+
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { Id } = router.query;
+
+  const currentUser = useSelector(state => state.userSlice.currentUser)
+  const questionslist = useSelector(state => state.corporateMocktest.questionList);
+  const totalTime = useSelector((state) => {
+    if (state?.corporateMocktest?.mocktest?.rows?.length > 0) return state?.corporateMocktest?.mocktest?.rows[0]?.totalTime;
   });
 
-  const totalTime = useSelector((data) => {
-    if (data?.corporateMocktest?.mocktest?.rows?.length > 0) {
-      return data?.corporateMocktest?.mocktest?.rows[0]?.totalTime;
-    }
-  });
   const time = new Date();
   time.setSeconds(time.getSeconds() + totalTime * 60);
 
-  const [attemptData, setAttempData] = useState({
-    answered: 0,
-    notanswered: 0,
-    notattempted: 0,
-    markedforreview: 0,
-  });
-  const [quesno, setQuesno] = useState(0);
-  const dispatch = useDispatch();
-  const router = useRouter();
-  const getTokenid = () => {
-    let token = getToken();
-    setUserId(jwtDecode(token).userId);
-  };
-  const { Id } = router.query;
-  const [questionpalletedata, setQuestionpalletedata] = useState(null);
-
-  useEffect(() => {
-    getTokenid();
-    if (Id) {
-      dispatch(getMockTestbyid(Id)).then((res) => {
-        if (res?.payload?.data?.success === true) {
-          setQuestionpalletedata(
-            res?.payload?.data?.data?.rows[0]?.Questions?.map((item) => {
-              return {
-                answered: false,
-                notanswered: false,
-                notattempted: true,
-                markedforreview: false,
-                active: true,
-              };
-            })
-          );
-        }
-      });
-    }
-  }, [Id, dispatch]);
+  const [activeQuestion, setActiveQuestion] = useState(0);
+  const [confirmModal, setConfirmModal] = useState(false)
 
   const handleSubmit = (values) => {
-    console.log(values);
-    let userId = values.AnswerData[0].userId;
-    dispatch(submitmocktest(values)).then((res) => {
-      if (res?.payload?.data?.success) {
-        let resultId = res?.payload?.data?.data?.MockTest[1][0]?.id;
+    let userId = currentUser.id
+    dispatch(submitMockTest(values)).then((res) => {
+      if (res?.payload?.success) {
+        let resultId = res?.payload?.data?.MockTest[1][0]?.id;
         router.push(
           `/corporate/mocktest/result?ids=${resultId}-${Id}-${userId}`
         );
@@ -79,25 +41,6 @@ function Mocktest() {
     });
   };
 
-  const init = (event) => {
-    if (event && Object.keys(event).length > 0) {
-      return event;
-    } else {
-      let initialvalues = { AnswerData: [] };
-      questionslist?.map((item, index) => {
-        initialvalues.AnswerData.push({
-          questionId: item?.id,
-          answer: "",
-          mockTestId: Number(Id),
-          userId: userId,
-        });
-      });
-      return initialvalues;
-    }
-  };
-
-
-  // const mocktestData = useSelector((data) => data?.corporateMocktest?.mocktest?.rows)
 
   return (
     <>
@@ -124,40 +67,53 @@ function Mocktest() {
                   ...arrayMutators,
                 }}
                 keepDirtyOnReinitialize
-                initialValues={useMemo((e) => init(e))}
+                initialValues={{
+                  AnswerData: questionslist?.map((item, index) => {
+                    return {
+                      questionId: item?.id,
+                      answer: null,
+                      mockTestId: Number(Id),
+                      userId: Number(currentUser.id),
+                    }
+                  })
+                }}
                 render={({ handleSubmit, values, form }) => (
                   <form onSubmit={handleSubmit}>
                     <Row>
                       <Col lg={9} className="search_right_page_bg">
                         <TestScreen
-                          attemptData={attemptData}
-                          setAttempData={setAttempData}
-                          quesno={quesno}
-                          setQuesno={setQuesno}
+                          activeQuestion={activeQuestion}
+                          setActiveQuestion={setActiveQuestion}
                           questionpalletedata={questionpalletedata}
                           setQuestionpalletedata={setQuestionpalletedata}
-                          Id={Id}
-                          userId={userId}
                           values={values}
                           form={form}
                           handleSubmit={handleSubmit}
                           expiryTimestamp={time}
                           questionslist1={questionslist}
+                          setConfirmModal={setConfirmModal}
                         />
                       </Col>
                       <Col lg={3} className="search_left_page_bg hide_box ps-4">
                         <QuestionsPallete
-                          attemptData={attemptData}
-                          quesno={quesno}
-                          setQuesno={setQuesno}
+                          activeQuestion={activeQuestion}
+                          setActiveQuestion={setActiveQuestion}
                           values={values}
                           questionpalletedata={questionpalletedata}
                           handleSubmit={handleSubmit}
                           expiryTimestamp={time}
                           questionslist={questionslist}
+                          setConfirmModal={setConfirmModal}
                         />
                       </Col>
                     </Row>
+                    {confirmModal &&
+                      <ConfirmModal
+                        confirmModal={confirmModal}
+                        handleConfirmClose={() => setConfirmModal(false)}
+                        questionpalletedata={questionpalletedata}
+                        handleSubmit={handleSubmit}
+                      />}
                   </form>
                 )}
               />

@@ -11,6 +11,7 @@ import { getState } from "../../redux/actions/location/createState";
 import { signupAsync } from "../../redux/signup/signupSlice";
 import { FieldTypes, inputFieldTypes } from "../../utils/helper";
 import FormGenerator from "../common-components/Form/FormGenerator";
+import { cityDropdown } from "../../redux/actions/location/createCity";
 
 function SignUpPage() {
   const [dataValue, setDataValue] = useState(0);
@@ -71,11 +72,10 @@ function SignUpPage() {
     selectcompany: "",
     headorregofc: "",
   };
- 
-  const stateList = useSelector(
-    (item) => item?.stateList?.stateList?.data?.data?.rows
-  );
-  
+
+  const stateList = useSelector((state) => state?.stateList?.stateList?.data?.data?.rows);
+  const cityListByState = useSelector(state => state.cityList?.cityList?.data?.result)
+
   const validate = (values) => {
     const errors = {};
 
@@ -103,11 +103,11 @@ function SignUpPage() {
       values?.usertype === "College" ||
       values?.usertype === "Organization"
     ) {
-      errors.mobileNumber = "*";
+      errors.mobileNumber = { ...errors.mobileNumber, required: "*" };
     }
 
     if (values.mobileNumber && !values.mobileNumber.match(/^[0-9]{10}$/)) {
-      errors.mobileNumber = "Mobile Number should be of 10 digits";
+      errors.mobileNumber = { ...errors.mobileNumber, fieldError: "Mobile Number should be of 10 digits" };
     }
     if (
       !values.state ||
@@ -204,13 +204,13 @@ function SignUpPage() {
       userType: values.userType,
 
       // college values
-      website : values.website,
-      college : values.college,
+      website: values.website,
+      college: values.college,
 
       //organization values
-      company : values.company,
-      orgcategory : values.orgcategory,
-      headregofc : values.headregofc,
+      company: values.company,
+      orgcategory: values.orgcategory,
+      headregofc: values.headregofc,
 
     }
 
@@ -256,8 +256,11 @@ function SignUpPage() {
     }
   }
 
+  const handleCityDropdown = ({ target: { value } }) => {
+    dispatch(cityDropdown({ stateId: value }))
 
-  let r;
+  }
+
   return (
     <>
       <Container className="p-3">
@@ -300,7 +303,6 @@ function SignUpPage() {
                   <Col lg={12}>
                     <div className="text-center otp_div">
                       <OtpInput
-                        placeholder="-"
                         className="otp_input"
                         value={otp}
                         onChange={(e) => setOtp(e)}
@@ -327,7 +329,7 @@ function SignUpPage() {
               keepDirtyOnReinitialize
               validate={validate}
               initialValues={(e) => memoizedInitialValue(e)}
-              render={({ handleSubmit, values }) => dataValue === 0 && (
+              render={({ handleSubmit, values, form: { change } }) => dataValue === 0 && (
                 <form onSubmit={handleSubmit}>
                   <>
                     <Row>
@@ -1335,7 +1337,7 @@ function SignUpPage() {
                                     </label>
                                     {meta.error && meta.touched && (
                                       <span className="text-danger required_msg">
-                                        {meta.error}
+                                        {meta.error.required}
                                       </span>
                                     )}
                                   </div>
@@ -1346,11 +1348,11 @@ function SignUpPage() {
                                     className="form-control signup_form_input margin_bottom"
                                     placeholder="Enter Mobile Number"
                                   />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
+                                  {meta.error && meta.touched && (
+                                    <span className="text-danger">
+                                      {meta.error.fieldError}
+                                    </span>
+                                  )}
                                 </div>
                               )}
                             </Field>
@@ -1372,9 +1374,23 @@ function SignUpPage() {
                                   <select
                                     {...input}
                                     className="form-control select-style signup_form_input"
+                                    onChange={(e) => {
+                                      input.onChange(e)
+                                      change('city', "")
+                                      handleCityDropdown(e)
+                                    }}
                                   >
-                                    <option>state 1</option>
-                                    <option>state 2</option>
+                                    <option value=" ">Select State</option>
+                                    {stateList &&
+                                      stateList?.map((item) => {
+                                        return (
+                                          <option
+                                            key={item.id}
+                                            value={item?.id}
+                                          >{item?.state}{" "}
+                                          </option>
+                                        );
+                                      })}
                                   </select>
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
@@ -1409,8 +1425,10 @@ function SignUpPage() {
                                     {...input}
                                     className="form-control select-style signup_form_input"
                                   >
-                                    <option>city 1</option>
-                                    <option>city 2</option>
+                                    <option value="">Select City</option>
+                                    {cityListByState &&
+                                      cityListByState?.map((item) => <option key={`CityItem_${item.id}`} value={item?.id} > {item?.name}</option>
+                                      )}
                                   </select>
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">

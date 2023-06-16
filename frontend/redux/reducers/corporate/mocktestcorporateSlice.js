@@ -1,15 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMockTestbyid, getMockTestCorporatelist, mocktestResult } from "../../actions/corporate/addmocktestcorporate";
+import { getMockTestbyid, getMockTestCorporatelist, mocktestResult, mocktestScoreCount, submitMockTest } from "../../actions/corporate/addmocktestcorporate";
 
 const mockTestCorporateSlice = createSlice({
   name: "mocktestcorporate",
   initialState: {
+    isMockTestLoading: false,
     value: 0,
     mocktestcorporatelist: [],
     mocktest: [],
     mocktestResult: [],
     questionList: [],
     status: "",
+    wrongQuestionCount: 0,
+    correctQuestionCount: 0,
+    testResult: {},
   },
   extraReducers: (builder) => {
     builder.addCase(getMockTestCorporatelist.rejected, (state, action) => {
@@ -22,9 +26,15 @@ const mockTestCorporateSlice = createSlice({
     });
     builder.addCase(getMockTestbyid.rejected, (state, action) => {
       state.status = action?.status?.message;
+      state.isMockTestLoading = false
+    });
+    builder.addCase(getMockTestbyid.pending, (state, action) => {
+      state.isMockTestLoading = true
     });
     builder.addCase(getMockTestbyid.fulfilled, (state, action) => {
+      console.log(action.payload.data.data.rows[0], 'payload')
       state.mocktest = action?.payload?.data?.data
+      state.isMockTestLoading = false
       state.questionList = action?.payload?.data?.data.rows[0].Questions
     });
     builder.addCase(mocktestResult.rejected, (state, action) => {
@@ -32,8 +42,20 @@ const mockTestCorporateSlice = createSlice({
       state.status = action?.status?.message;
     });
     builder.addCase(mocktestResult.fulfilled, (state, action) => {
-      state.mocktestResult = action?.payload?.data?.data;
-      state.status = "";
+      state.testResult = action?.payload?.data.rows[0]
+    });
+    builder.addCase(mocktestScoreCount.fulfilled, (state, action) => {
+      state.userAnswersList = action.payload.data.rows
+      state.testResult = action.payload.testScoreDetail
+      state.correctQuestionCount = action.payload.correctCountDetail.true ? action?.payload?.correctCountDetail.true.count : 0
+      state.wrongQuestionCount = action.payload.correctCountDetail.false ? action?.payload?.correctCountDetail.false.count : 0
+      state.isMockTestLoading = false;
+    });
+    builder.addCase(mocktestScoreCount.pending, (state, action) => {
+      state.isMockTestLoading = true;
+    });
+    builder.addCase(mocktestScoreCount.rejected, (state, action) => {
+      state.isMockTestLoading = false;
     });
   },
 });
