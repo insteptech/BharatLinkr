@@ -22,8 +22,7 @@ const ShortTricks = () => {
   });
   const [alreadyViewed, setAlreadyViewed] = useState([])
   const likedList = useSelector((state) => state?.corporateData?.corplikeslist)
-
-  const [userId, setUserId] = useState(null)
+  const currentUser = useSelector(state => state.userSlice.currentUser)
 
   const handleShow = (data) => {
     setShow(true);
@@ -62,7 +61,7 @@ const ShortTricks = () => {
         dispatch(corporateLikes({
           "corporateId": id,
           "update": "views",
-          "userId": userId
+          "userId": currentUser.id
         })).then((res) => {
           if (res?.payload?.data?.success) {
             dispatch(getCorporateData(pagination))
@@ -83,10 +82,10 @@ const ShortTricks = () => {
       dispatch(corporateLikes({
         "corporateId": item.id,
         "update": value,
-        "userId": userId
+        "userId": currentUser.id
       })).then((res) => {
         if (res?.payload?.data?.success) {
-          dispatch(corporatelikesList(getTokenDecode().userId))
+          dispatch(corporatelikesList(currentUser.id))
           dispatch(getCorporateData(pagination))
         }
       })
@@ -94,13 +93,9 @@ const ShortTricks = () => {
       setModalShow(true);
     }
   }
-  
   useEffect(() => {
     dispatch(getCorporateData(pagination));
-    if (isloggedin) {
-      setUserId(getTokenDecode().userId)
-      dispatch(corporatelikesList(getTokenDecode().userId))
-    }
+    if (isloggedin && currentUser.id) dispatch(corporatelikesList(currentUser?.id))
   }, [pagination]);
 
   return (
@@ -120,9 +115,7 @@ const ShortTricks = () => {
             <div
               key={index}
               className="profile_sec_c w-100 pb-0 pt-2"
-            // eventKey={item.eventKey}
             >
-              {/* <Accordion.Header> */}
               <Row>
                 <Col md={6}>
                   <div>
