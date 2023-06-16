@@ -2408,7 +2408,6 @@ function CreateCollege() {
                                                     <CKeditorGenerator
                                                       input={input}
                                                       onReady={(editor) => {
-                                                        // console.log(editor, 'editor')
                                                       }}
                                                     />
                                                   </>
