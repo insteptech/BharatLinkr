@@ -67,24 +67,33 @@ function QuestionsPallete(props) {
           </div>
         </div>
       </Card>
-      <div className="ans_four_p_div mt-4">
-        <div className="green_dot color_dot"></div>
-        <p className="ans_four_p me-4">Answered-{getCount(mocktestQuestionStatus.answered)}</p>
+      <div className="four_dot_text_div">
+          <div className="ans_four_p_div mt-3 mx-2">
+            <div className="ans_four_p me-4">
+              <div className="green_dot color_dot"></div>
+              Answered-{getCount(mocktestQuestionStatus.answered)}
+            </div>
 
-        <div className="light_dot color_dot"></div>
-        <p className="ans_four_p">Not Answered-{getCount(mocktestQuestionStatus.notAnswered)}</p>
-      </div>
-      <div className="ans_four_p_div">
-        <div className="orange_dot color_dot"></div>
-        <p className="ans_four_p me-4">
-          Not attempted-{getCount(mocktestQuestionStatus.notAttempted)}
-        </p>
+            
+            <p className="ans_four_p">
+            <div className="light_dot color_dot"></div>
+              Not Answered-{getCount(mocktestQuestionStatus.notAnswered)}
+            </p>
+          </div>
+          <div className="ans_four_p_div mt-3 mx-2">
+            
+            <p className="ans_four_p me-4">
+            <div className="orange_dot color_dot"></div>
+              Not attempted-{getCount(mocktestQuestionStatus.notAttempted)}
+            </p>
 
-        <div className="dark_blue_dot color_dot"></div>
-        <p className="ans_four_p">
-          Marked for review-{getCount(mocktestQuestionStatus.forReview)}
-        </p>
-      </div>
+            
+            <p className="ans_four_p">
+            <div className="dark_blue_dot color_dot"></div>
+              Marked for review-{getCount(mocktestQuestionStatus.forReview)}
+            </p>
+          </div>
+        </div>
       <Row>
         <Col className="item_center">
           <div className="question_grid_btn_box">
