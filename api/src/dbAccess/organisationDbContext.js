@@ -16,7 +16,15 @@ const { sector,
   User,
   organisationCompany,
   organisationBrand,
-  organisationGroup } = require('../../models');
+  organisationGroup,
+  masterFilter,
+  mainStream,
+  subStream,
+  college,
+  exam,
+  corporateRegister,
+  Status,
+course } = require('../../models');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const path = require('path');
@@ -304,50 +312,50 @@ const addOrganisation = async (req) => {
           stateId: item.stateId,
           cityId: item.cityId,
           plotNumber: item.plotNumber,
-          streetAddress:item.streetAddress,
+          streetAddress: item.streetAddress,
           contactNumber: item.contactNumber,
           email: item.email,
           yourRole: item.yourRole,
         }
 
-        
 
-     
-              let brand = item.brandId
-            if(typeof brand==='string' ){
-              brandName= await organisationBrand.create({brandName:brand})
-              const brandid = await organisationBrand.findOne({
-                where:{brandName:brand}
-              }) 
-              if(brandid.id){
-                objOrganisation.brandId= brandid.id
-              }
-            }
 
-            let company = item.companyId
-            if( typeof company === 'string' ){
-              companyName= await organisationCompany.create({companyName:company})
-              const companyid = await organisationCompany.findOne({
-                where:{companyName:company}
-              }) 
-              if(companyid.id){
-                objOrganisation.companyId= companyid.id
-                
-              }
-            }
 
-            let group = item.groupId
-            if( typeof group === 'string' ){
-              groupName= await organisationGroup.create({groupName:group})
-              const groupid = await organisationGroup.findOne({
-                where:{groupName:group}
-              }) 
-              if(groupid.id){
-                objOrganisation.groupId= groupid.id
-                
-              }
-              
-            }
+        let brand = item.brandId
+        if (typeof brand === 'string') {
+          brandName = await organisationBrand.create({ brandName: brand })
+          const brandid = await organisationBrand.findOne({
+            where: { brandName: brand }
+          })
+          if (brandid.id) {
+            objOrganisation.brandId = brandid.id
+          }
+        }
+
+        let company = item.companyId
+        if (typeof company === 'string') {
+          companyName = await organisationCompany.create({ companyName: company })
+          const companyid = await organisationCompany.findOne({
+            where: { companyName: company }
+          })
+          if (companyid.id) {
+            objOrganisation.companyId = companyid.id
+
+          }
+        }
+
+        let group = item.groupId
+        if (typeof group === 'string') {
+          groupName = await organisationGroup.create({ groupName: group })
+          const groupid = await organisationGroup.findOne({
+            where: { groupName: group }
+          })
+          if (groupid.id) {
+            objOrganisation.groupId = groupid.id
+
+          }
+
+        }
 
         if (companyLogoFile && companyLogoFile.length > 0) {
           const fileExist = companyLogoFile.find((image1) => image1.originalname);
@@ -481,7 +489,7 @@ const organisationList = async (req) => {
 
     }
 
-     result = await organisation.findAndCountAll({
+    result = await organisation.findAndCountAll({
       where: {
         [Op.and]: [whrCondition,
           companyType,
@@ -492,7 +500,7 @@ const organisationList = async (req) => {
           levelComapany,
           search]
       },
-      
+
       subQuery: false,
       include: [
         {
@@ -503,7 +511,7 @@ const organisationList = async (req) => {
         {
           model: organisationLinksData,
           required: false,
-          where:{approval:true},
+          where: { approval: true },
           as: 'Followers',
         },
         {
@@ -515,7 +523,7 @@ const organisationList = async (req) => {
 
           model: organisationSector,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'orgSector',
 
           include: [
@@ -530,7 +538,7 @@ const organisationList = async (req) => {
         {
           model: organisationIndustry,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'orgIndustry',
           include: [{
             model: industry,
@@ -541,31 +549,31 @@ const organisationList = async (req) => {
         {
           model: organisationNatureOfBusiness,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'BusinessNature'
         },
         {
           model: organisationCompanyLevel,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'CompanyLevel'
         },
         {
           model: organisationCompany,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'OrganisationCompany'
         },
         {
           model: organisationBrand,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'OrganisationBrand'
         },
         {
           model: organisationGroup,
           required: false,
-          where:{deleted:false},
+          where: { deleted: false },
           as: 'OrganisationGroup'
         },
 
@@ -602,9 +610,9 @@ const organisationList = async (req) => {
       return row;
     });
 
-  
 
-    return { data: result,success: true };
+
+    return { data: result, success: true };
   } catch (error) {
     throw new Error(error);
   }
@@ -672,42 +680,42 @@ const updateOrgaisation = async (req) => {
 
 
     let brand = organisationData.brandId
-    if(typeof brand === 'string' ){
-      brandName= await organisationBrand.create({brandName:brand})
+    if (typeof brand === 'string') {
+      brandName = await organisationBrand.create({ brandName: brand })
       const brandid = await organisationBrand.findOne({
-        where:{brandName:brand}
-      }) 
-      if(brandid.id){
-        organisationData.brandId= brandid.id
-        
+        where: { brandName: brand }
+      })
+      if (brandid.id) {
+        organisationData.brandId = brandid.id
+
       }
     }
 
     let company = organisationData.companyId
-    if(typeof company === 'string' ){
-      companyName= await organisationCompany.create({companyName:company})
+    if (typeof company === 'string') {
+      companyName = await organisationCompany.create({ companyName: company })
       const companyid = await organisationCompany.findOne({
-        where:{companyName:company}
-      }) 
-      if(companyid.id){
-        organisationData.companyId= companyid.id
-        
+        where: { companyName: company }
+      })
+      if (companyid.id) {
+        organisationData.companyId = companyid.id
+
       }
     }
 
 
     let group = organisationData.groupId
-    if(typeof group === 'string' ){
-      groupName= await organisationGroup.create({groupName:group})
+    if (typeof group === 'string') {
+      groupName = await organisationGroup.create({ groupName: group })
       const groupid = await organisationGroup.findOne({
-        where:{groupName:group}
-      }) 
-      if(groupid.id){
-        organisationData.groupId= groupid.id
-        
+        where: { groupName: group }
+      })
+      if (groupid.id) {
+        organisationData.groupId = groupid.id
+
       }
     }
-      
+
 
     const updateData = await organisation.update(organisationData, { where: { id: organisationData.id }, returning: true })
 
@@ -823,7 +831,7 @@ const organisationAddLikesAndViews = async (req) => {
       const likeUser = await listOfUsersLikes.findOne({
         where: { userId: req.body.userId, categoryId: req.body.organisationId, categoryTypes: 'organisation' }
       })
-      if (likeUser&& !req.body.update=="sahre"|| req.body.update == "dislikes") {
+      if (likeUser && !req.body.update == "sahre" || req.body.update == "dislikes") {
         await listOfUsersLikes.destroy({ where: { categoryTypes: 'organisation', userId: req.body.userId, categoryId: req.body.organisationId, } })
       } else {
         let userObj = {
@@ -831,8 +839,8 @@ const organisationAddLikesAndViews = async (req) => {
           categoryId: obj.organisationId,
           categoryTypes: 'organisation'
         };
-        if(req.body.update=="likes"){
-        await listOfUsersLikes.create(userObj)
+        if (req.body.update == "likes") {
+          await listOfUsersLikes.create(userObj)
         }
       }
     } else {
@@ -869,7 +877,7 @@ const organisationAddLikesAndViews = async (req) => {
 
 const addOrganisationPosts = async (req) => {
   try {
-    const postData = JSON.parse(req.body.postData);
+    const organisationPostData = JSON.parse(req.body.organisationPostData);
 
     const { imageFile } = req.files;
 
@@ -877,18 +885,63 @@ const addOrganisationPosts = async (req) => {
     let result;
 
     await Promise.all(
-      postData.payload.map(async (item) => {
-        if (imageFile && imageFile.length > 0) {
-          console.log(imageFile, '09090')
-          const fileExist = imageFile.find((image1) => image1.originalname);
-          if (fileExist) {
-            item.image = fileExist.originalname;
+      organisationPostData.payload.map(async (item) => {
+
+        let objOrganisationPost = {
+          userId: item.userId,
+          organisationId: item.organisationId,
+          postTypes: item.postTypes,
+          title: item.title,
+          description: item.description,
+          department: item.department,
+          subDepartment: item.subDepartment,
+          state: item.state,
+          city: item.city,
+          workMode: item.workMode,
+          jobType: item.jobType,
+          jobRole: item.jobRole,
+          eligibility: item.eligibility,
+          college: item.college,
+          course: item.course,
+          exam: item.exam,
+          corporate: item.corporate,
+          status: item.status,
+        }
+
+
+
+
+        let jR = item.jobRole
+        if (typeof jR === 'string') {
+          jobName = await masterFilter.create({ name: jR, types: 'jobrole', statusId: 1 })
+          const jobRoleId = await masterFilter.findOne({
+            where: { name: jR }
+          })
+          if (jobRoleId.id) {
+            objOrganisationPost.jobRole = jobRoleId.id
           }
         }
 
-        result = await organisationPost.create(item, { returning: true });
-        return result;
 
+        7
+
+        if (imageFile && imageFile.length > 0) {
+          const fileExist = imageFile.find((image1) => image1.originalname);
+          if (fileExist) {
+            objOrganisationPost.image = fileExist.originalname;
+          }
+        }
+
+
+
+        result = await organisationPost.create(objOrganisationPost, { returning: true });
+
+
+
+
+
+
+        return result;
       })
     );
     return { data: result, success: true };
@@ -903,13 +956,13 @@ const updateOrganisationPost = async (req) => {
   try {
 
 
-    const postData = JSON.parse(req.body.postData);
+    const organisationPostData = JSON.parse(req.body.organisationPostData);
     const { imageFile } = req.files;
     await writeFiles(req.files);
 
     if (imageFile && imageFile.length > 0) {
       const fileExist = imageFile.find(
-        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == postData.uniqueId
+        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == organisationPostData.uniqueId
       );
       if (fileExist) {
         if (imageFile && imageFile.image)
@@ -917,17 +970,16 @@ const updateOrganisationPost = async (req) => {
             fs.unlinkSync(path.resolve(dir, `${imageFile.image}`));
           }
 
-        postData.image = fileExist.originalname;
+        organisationPostData.image = fileExist.originalname;
       }
     }
 
-    const updateData = await organisationPost.update(postData, { where: { id: postData.id }, returning: true });
+    const updateData = await organisationPost.update(organisationPostData, { where: { id: organisationPostData.id }, returning: true });
 
 
 
     return { data: updateData, success: true };
   } catch (error) {
-    console.log(error, '98989898989')
     return { data: null, message: error.message, success: false };
   }
 };
@@ -938,20 +990,86 @@ const organisationPostList = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
     const size = req.body.pageSize ? req.body.pageSize : 10;
-    let whrCondition = { deleted: false };
+    let whrCondition = { deleted: false, status:1 };
     if (req.body.search) {
       const obj = {
-        posts: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('posts')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+        title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
       };
       whrCondition = { ...obj, ...whrCondition };
     }
     if (req.body.id) {
-      whrCondition = { id: req.body.id, deleted: false }
+      whrCondition = { id: req.body.id, deleted: false,status:1 }
     }
 
     const result = await organisationPost.findAndCountAll({
       where: whrCondition,
-
+      include: [
+        {
+          model: User,
+          required: false,
+          as: 'Users'
+        },
+        {
+          model: organisation,
+          required: false,
+          as: 'Organisation'
+        },
+        {
+          model: mainStream,
+          required: false,
+          as: 'DepartMent'
+        },
+        {
+          model: subStream,
+          required: false,
+          as: 'SubDepartment'
+        },
+        {
+          model: State,
+          required: false,
+          as: 'States'
+        },
+        {
+          model: City,
+          required: false,
+          as: 'Cities'
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'JobRole'
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'Eligibility'
+        },
+        {
+          model: college,
+          required: false,
+          as: 'College'
+        },
+        {
+          model: course,
+          required: false,
+          as: 'Course'
+        },
+        {
+          model: exam,
+          required: false,
+          as: 'Exams'
+        },
+        {
+          model: corporateRegister,
+          required: false,
+          as: 'Corporate'
+        },
+        {
+          model: Status,
+          required: false,
+          as: 'Status'
+        },
+      ],
 
       offset: (pageNo - 1) * size,
       limit: size,
@@ -1088,10 +1206,10 @@ const organisationPendingRequestList = async (req) => {
 const organisationSectorDelete = async (req) => {
   try {
     const collg = await organisationSector.findOne({
-      where: { organisationId:req.body.organisationId, id:req.body.id},
+      where: { organisationId: req.body.organisationId, id: req.body.id },
     });
 
-    await collg.update({ deleted: true },{where:{id:collg.id}});
+    await collg.update({ deleted: true }, { where: { id: collg.id } });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1101,10 +1219,10 @@ const organisationSectorDelete = async (req) => {
 const organisationIndustryDelete = async (req) => {
   try {
     const collg = await organisationIndustry.findOne({
-      where: { organisationId:req.body.organisationId, id:req.body.id},
+      where: { organisationId: req.body.organisationId, id: req.body.id },
     });
 
-    await collg.update({ deleted: true },{where:{id:collg.id}});
+    await collg.update({ deleted: true }, { where: { id: collg.id } });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1114,10 +1232,10 @@ const organisationIndustryDelete = async (req) => {
 const organisationBusinessDelete = async (req) => {
   try {
     const collg = await organisationNatureOfBusiness.findOne({
-      where: { organisationId:req.body.organisationId, id:req.body.id},
+      where: { organisationId: req.body.organisationId, id: req.body.id },
     });
 
-    await collg.update({ deleted: true },{where:{id:collg.id}});
+    await collg.update({ deleted: true }, { where: { id: collg.id } });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1127,10 +1245,10 @@ const organisationBusinessDelete = async (req) => {
 const organisationcompanyLevelDelete = async (req) => {
   try {
     const collg = await organisationCompanyLevel.findOne({
-      where: { organisationId:req.body.organisationId, id:req.body.id},
+      where: { organisationId: req.body.organisationId, id: req.body.id },
     });
 
-    await collg.update({ deleted: true },{where:{id:collg.id}});
+    await collg.update({ deleted: true }, { where: { id: collg.id } });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1141,37 +1259,37 @@ const organisationcompanyLevelDelete = async (req) => {
 
 //------------------------------ organisation comapny crud----------------------------//
 
-const addCompany = async(req) =>{
-try{
-let company;
-  await Promise.all(
-    req.body.companyData.map(async(item)=>{
-      company = await  organisationCompany.create(item)
-    })
+const addCompany = async (req) => {
+  try {
+    let company;
+    await Promise.all(
+      req.body.companyData.map(async (item) => {
+        company = await organisationCompany.create(item)
+      })
 
-  )
-  return {data:company, success:true};
+    )
+    return { data: company, success: true };
 
-}catch(error){
-  throw new Error(error);
+  } catch (error) {
+    throw new Error(error);
+  }
 }
-}
 
 
-const updateCompany = async(req) =>{
-try{
+const updateCompany = async (req) => {
+  try {
 
 
-let company;
-  await Promise.all(
-req.body.companyData.map(async(item)=>{
-company = await organisationCompany.update(item,{where:{id:item.id},returning:true})
-})
-  )
-  return {data:company, success:true}
-}catch(error){
-  throw new Error(error);
-}
+    let company;
+    await Promise.all(
+      req.body.companyData.map(async (item) => {
+        company = await organisationCompany.update(item, { where: { id: item.id }, returning: true })
+      })
+    )
+    return { data: company, success: true }
+  } catch (error) {
+    throw new Error(error);
+  }
 
 }
 
@@ -1207,10 +1325,10 @@ const companyList = async (req) => {
 const companyDelete = async (req) => {
   try {
     const collg = await organisationCompany.findOne({
-      where: { id:req.id},
+      where: { id: req.id },
     });
 
-    await collg.update({ deleted: true },{where:{id:req.id}});
+    await collg.update({ deleted: true }, { where: { id: req.id } });
     return { success: true };
   } catch (error) {
     throw new Error(error);
@@ -1221,159 +1339,159 @@ const companyDelete = async (req) => {
 
 //---------------------------------organisation group crud -----------------------------//
 
-const addOrganisationGroup = async(req) =>{
-  try{
-  let group;
+const addOrganisationGroup = async (req) => {
+  try {
+    let group;
     await Promise.all(
-      req.body.groupData.map(async(item)=>{
-        group = await  organisationGroup.create(item)
+      req.body.groupData.map(async (item) => {
+        group = await organisationGroup.create(item)
       })
-  
+
     )
-    return {data:group, success:true};
-  
-  }catch(error){
+    return { data: group, success: true };
+
+  } catch (error) {
     throw new Error(error);
   }
-  }
-  
-  const updateOrganisationGroup = async(req) =>{
-  try{
-  
-  
-  let group;
+}
+
+const updateOrganisationGroup = async (req) => {
+  try {
+
+
+    let group;
     await Promise.all(
-  req.body.groupData.map(async(item)=>{
-  group = await organisationGroup.update(item,{where:{id:item.id},returning:true})
-  })
+      req.body.groupData.map(async (item) => {
+        group = await organisationGroup.update(item, { where: { id: item.id }, returning: true })
+      })
     )
-    return {data:group, success:true}
-  }catch(error){
+    return { data: group, success: true }
+  } catch (error) {
     throw new Error(error);
   }
-  
+
+}
+
+const organisationGroupList = async (req) => {
+  try {
+    const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+    const size = req.body.pageSize ? req.body.pageSize : 10;
+    let whrCondition = { deleted: false };
+    if (req.body.search) {
+      const obj = {
+        groupName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('groupName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+      };
+      whrCondition = { ...obj, ...whrCondition };
+    }
+    if (req.body.id) {
+      whrCondition = { id: req.body.id, deleted: false }
+    }
+
+    const result = await organisationGroup.findAndCountAll({
+      where: whrCondition,
+
+
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
   }
-  
-  const organisationGroupList = async (req) => {
-    try {
-      const pageNo = req.body.pageNo ? req.body.pageNo : 1;
-      const size = req.body.pageSize ? req.body.pageSize : 10;
-      let whrCondition = { deleted: false };
-      if (req.body.search) {
-        const obj = {
-          groupName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('groupName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
-        };
-        whrCondition = { ...obj, ...whrCondition };
-      }
-      if (req.body.id) {
-        whrCondition = { id: req.body.id, deleted: false }
-      }
-  
-      const result = await organisationGroup.findAndCountAll({
-        where: whrCondition,
-  
-  
-        offset: (pageNo - 1) * size,
-        limit: size,
-        distinct: true,
-      });
-      return { data: result, success: true };
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
-  
-  const organisationGroupDelete = async (req) => {
-    try {
-      const collg = await organisationGroup.findOne({
-        where: { id:req.id},
-      });
-  
-      await collg.update({ deleted: true },{where:{id:req.id}});
-      return { success: true };
-    } catch (error) {
-      throw new Error(error);
-    }
-  };
+};
+
+const organisationGroupDelete = async (req) => {
+  try {
+    const collg = await organisationGroup.findOne({
+      where: { id: req.id },
+    });
+
+    await collg.update({ deleted: true }, { where: { id: req.id } });
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 //---------------------------------organisation group crud -----------------------------//
 
 
 //---------------------------------organisation brand crud -----------------------------//
 
-const addOrganisationBrand = async(req) =>{
-  try{
-  let brand;
+const addOrganisationBrand = async (req) => {
+  try {
+    let brand;
     await Promise.all(
-      req.body.brandData.map(async(item)=>{
-        brand = await  organisationBrand.create(item)
+      req.body.brandData.map(async (item) => {
+        brand = await organisationBrand.create(item)
       })
-  
-    )
-    return {data:brand, success:true};
-  
-  }catch(error){
-    throw new Error(error);
-  }
-  }
-  
-  const updateOrganisationBrand = async(req) =>{
-  try{
-  let brand;
-    await Promise.all(
-  req.body.brandData.map(async(item)=>{
-  brand = await organisationBrand.update(item,{where:{id:item.id},returning:true})
-  })
-    )
-    return {data:brand, success:true}
-  }catch(error){
-    throw new Error(error);
-  }
-  
-  }
-  
 
-  const organisationBrandList = async (req) => {
-    try {
-      const pageNo = req.body.pageNo ? req.body.pageNo : 1;
-      const size = req.body.pageSize ? req.body.pageSize : 10;
-      let whrCondition = { deleted: false };
-      if (req.body.search) {
-        const obj = {
-          brandName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('brandName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
-        };
-        whrCondition = { ...obj, ...whrCondition };
-      }
-      if (req.body.id) {
-        whrCondition = { id: req.body.id, deleted: false }
-      }
-  
-      const result = await organisationBrand.findAndCountAll({
-        where: whrCondition,
-  
-  
-        offset: (pageNo - 1) * size,
-        limit: size,
-        distinct: true,
-      });
-      return { data: result, success: true };
-    } catch (error) {
-      throw new Error(error);
+    )
+    return { data: brand, success: true };
+
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+const updateOrganisationBrand = async (req) => {
+  try {
+    let brand;
+    await Promise.all(
+      req.body.brandData.map(async (item) => {
+        brand = await organisationBrand.update(item, { where: { id: item.id }, returning: true })
+      })
+    )
+    return { data: brand, success: true }
+  } catch (error) {
+    throw new Error(error);
+  }
+
+}
+
+
+const organisationBrandList = async (req) => {
+  try {
+    const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+    const size = req.body.pageSize ? req.body.pageSize : 10;
+    let whrCondition = { deleted: false };
+    if (req.body.search) {
+      const obj = {
+        brandName: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('brandName')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+      };
+      whrCondition = { ...obj, ...whrCondition };
     }
-  };
-  
-  const organisationBrandDelete = async (req) => {
-    try {
-      const collg = await organisationBrand.findOne({
-        where: { id:req.id},
-      });
-  
-      await collg.update({ deleted: true },{where:{id:req.id}});
-      return { success: true };
-    } catch (error) {
-      throw new Error(error);
+    if (req.body.id) {
+      whrCondition = { id: req.body.id, deleted: false }
     }
-  };
+
+    const result = await organisationBrand.findAndCountAll({
+      where: whrCondition,
+
+
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const organisationBrandDelete = async (req) => {
+  try {
+    const collg = await organisationBrand.findOne({
+      where: { id: req.id },
+    });
+
+    await collg.update({ deleted: true }, { where: { id: req.id } });
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 
 //---------------------------------organisation brand crud -----------------------------//

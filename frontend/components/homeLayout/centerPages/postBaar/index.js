@@ -1,57 +1,31 @@
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
-import React, { useState } from "react";
-import { Accordion, Button, Col, Form, Image } from "react-bootstrap";
+import React, { useMemo, useState } from "react";
+import { Accordion, Button, Col, Form as Bootform, Image, Row } from "react-bootstrap";
 import Select, { components } from "react-select";
+import { Form, Field } from 'react-final-form';
+import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Navigation } from "swiper";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
 
 const categoryopt = [
-  {
-    value: "category",
-    label: "category",
-    icon: "/images/script-icon.png",
-  },
-  {
-    value: "Script",
-    label: "Script",
-    icon: "/images/script-icon.png",
-  },
-  {
-    value: "Announcement",
-    label: "Announcement",
-    icon: "/images/announcement-icon.png",
-  },
-  { value: "Job", label: "Job", icon: "/images/job-icon.png" },
-  { value: "Internship", label: "Internship", icon: "/images/intern.png" },
-  { value: "Mentoring", label: "Mentoring", icon: "/images/more-icon.png" },
-  { value: "Question", label: "Question", icon: "/images/more-icon.png" },
-  { value: "Services", label: "Services", icon: "/images/more-icon.png" },
-  {
-    value: "College festives",
-    label: "College festives",
-    icon: "/images/more-icon.png",
-  },
+  { value: "", label: "category", icon: "/images/script-icon.png" },
+  { value: "script", label: "Script", icon: "/images/script-icon.png", },
+  { value: "announcement", label: "Announcement", icon: "/images/announcement-icon.png", },
+  { value: "job", label: "Job", icon: "/images/job-icon.png" },
+  { value: "internship", label: "Internship", icon: "/images/intern.png" },
+  { value: "mentoring", label: "Mentoring", icon: "/images/more-icon.png" },
+  { value: "question", label: "Question", icon: "/images/more-icon.png" },
+  { value: "services", label: "Services", icon: "/images/more-icon.png" },
+  { value: "collegefestives", label: "College festives", icon: "/images/more-icon.png" },
   { value: "scholarship", label: "scholarship", icon: "/images/more-icon.png" },
-  {
-    value: "cultural events",
-    label: "cultural events",
-    icon: "/images/more-icon.png",
-  },
+  { value: "culturalevents ", label: "cultural events", icon: "/images/more-icon.png" },
   { value: "conferences", label: "conferences", icon: "/images/more-icon.png" },
-  {
-    value: "competitions",
-    label: "competitions",
-    icon: "/images/more-icon.png",
-  },
+  { value: "competitions", label: "competitions", icon: "/images/more-icon.png", },
   { value: "hackathon", label: "hackathon", icon: "/images/more-icon.png" },
-  {
-    value: "Hiring Challenges",
-    label: "Hiring Challenges",
-    icon: "/images/more-icon.png",
-  },
-  {
-    value: "Campus Recruitment",
-    label: "Campus Recruitment",
-    icon: "/images/more-icon.png",
-  },
+  { value: "hiringchallenges", label: "Hiring Challenges", icon: "/images/more-icon.png", },
+  { value: "campusrecruitment", label: "Campus Recruitment", icon: "/images/more-icon.png", },
 ];
 
 const Option = (props) => (
@@ -63,12 +37,39 @@ const Option = (props) => (
 
 const PostBaar = () => {
   const [selectedlist, setSelectedlist] = useState(categoryopt[0]);
-  const [show, setShow] = useState(null);
 
   const handleChange = (value) => {
     setSelectedlist(value);
     console.log(value.value, "sdfsdfsdf");
   };
+
+  const handleSubmit = (values) => {
+    console.log(values)
+  }
+
+  const handleinit = (e) => {
+    let initialvalues
+    initialvalues = {
+      organisationId: '',
+      postTypes: "",
+      title: "",
+      description: "",
+      department: "",
+      subDepartment: "",
+      state: "",
+      city: "",
+      workMode: "",
+      jobType: "",
+      jobRole: "",
+      eligibility: "",
+      college: "",
+      course: "",
+      exam: "",
+      corporate: "",
+      status: ""
+    }
+    return initialvalues
+  }
 
   const SingleValue = ({ children, ...props }) => (
     <components.SingleValue {...props}>
@@ -80,6 +81,36 @@ const PostBaar = () => {
       {children}
     </components.SingleValue>
   );
+
+  const list1 = [
+    "hello", 'select1', 'instep'
+  ]
+  const list2 = [
+    "hello2", 'select2', 'instep2'
+  ]
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      maxWidth: 160,
+      borderRadius: '40px',
+      fontFamily: 'Inter',
+      fontSize: '16px',
+      lineHeight: '22px',
+      color: '#22242c',
+      border: '0.0313rem solid #45319697',
+      // border: '1px solid #8e8ea1',
+      padding: ' 1px 10px',
+    }),
+    option: (styles, { isFocused }) => {
+      return {
+        ...styles,
+        backgroundColor: isFocused ? '#463196' : null,
+        color: isFocused ? '#fff' : null,
+      };
+    },
+  };
+
 
   return (
     <>
@@ -120,27 +151,334 @@ const PostBaar = () => {
             </div>
           </Accordion.Header>
           <Accordion.Body className="post_bar_accordion_body">
-            <Select
-            className="font_13"
-              value={selectedlist}
-              options={categoryopt}
-              onChange={handleChange}
-              components={{
-                Option,
-                SingleValue,
-              }}
+            <Form
+              onSubmit={handleSubmit}
+              initialValues={useMemo((e) => handleinit(e), [])}
+              render={({ handleSubmit, values }) => (
+                <form onSubmit={handleSubmit}>
+                  <Row>
+                    <Col md={12}>
+                      <Field name="postTypes">
+                        {({ input, meta }) => (
+                          <>
+                            {/* <Select
+                          {...input}
+                          className="font_13"
+                          value={selectedlist}
+                          options={categoryopt}
+                          onChange={handleChange}
+                          components={{
+                            Option,
+                            SingleValue,
+                          }}
+                        /> */}
+                            <select className="font_13 w-100 input_padding" {...input}>
+                              {categoryopt?.map((item, index) => {
+                                return <option key={index} value={item?.value}>{item?.label}</option>
+                              })}
+                            </select>
+                          </>
+                        )}
+                      </Field>
+                    </Col>
+                    <Col md={12}>
+                      <div>
+                        {values.postTypes !== "script" &&
+                          <>
+                            <Field name="title">
+                              {({ input, meta }) => (
+                                <>
+                                  {console.log(values, 'ooooooooooooo')}
+                                  <input
+                                    {...input}
+                                    className=" input_padding"
+                                    type="text"
+                                    placeholder="Write Title here..."
+                                  />
+                                </>
+                              )}
+                            </Field>
+                          </>
+                        }
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div>
+                        <Field name="description">
+                          {({ input, meta }) => (
+                            <>
+                              <Bootform.Control
+                                {...input}
+                                className="form-control  input_padding post_summary_input margin_bottom"
+                                as="textarea"
+                                placeholder="Write Description here.."
+                                aria-label="With textarea"
+                              />
+                            </>
+                          )}
+                        </Field>
+                      </div>
+                    </Col>
+                    <Col md={12} className="">
+                      <div className="">
+                        {values?.postTypes === "collegefestives" || values?.postTypes === "" && (
+                          <>
+                            {/* <ScrollingCarousel show={5.5} slide={4} swiping={true}> */}
+                            <div className="me-2">
+                              <label>{values?.postTypes === "job" || values?.postTypes === "internship" ?'Department': "Streams"}</label>
+                              <Select
+                                styles={customStyles}
+                                isSearchable={true}
+                                options={list1.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                            {/* </ScrollingCarousel> */}
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>State</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>City</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>work mode</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>job type</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>job role</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "collegefestives" || values?.postTypes === "services" || values?.postTypes === "question" || values?.postTypes === "mentoring" && (
+                          <>
+                            <div className="me-2">
+                              <label>Eligibility</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "job" ||
+                          values?.postTypes === "internship" ||
+                          values?.postTypes === "mentoring" ||
+                          values?.postTypes === "question" ||
+                          values?.postTypes === "services" ||
+                          values?.postTypes === "scholarship" ||
+                          values?.postTypes === "culturalevents" ||
+                          values?.postTypes === "conferences" ||
+                          values?.postTypes === "competitions" ||
+                          values?.postTypes === "hackathon" ||
+                          values?.postTypes === "hiringchallenges" ||
+                          values?.postTypes === "campusrecruitment"
+                          && (
+                          <>
+                            <div className="me-2">
+                              <label>{values?.postTypes === "job" || values?.postTypes === "internship" ? 'Sub Department': "Sub Streams"}</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "question" && (
+                          <>
+                            <div className="me-2">
+                              <label>Organization</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "question"  && (
+                          <>
+                            <div className="me-2">
+                              <label>College</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "question" && (
+                          <>
+                            <div className="me-2">
+                              <label>Course</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "question" && (
+                          <>
+                            <div className="me-2">
+                              <label>Exam</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "question"  && (
+                          <>
+                            <div className="me-2">
+                              <label>Corporate</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>Course</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </Col>
+                  </Row>
+
+                </form>
+              )}
             />
-            {selectedlist.value === "Script" ? (
+
+            {/* {selectedlist.value === "script" ? (
               ""
             ) : (
               <input
                 className=" input_padding"
                 type="text"
-                placeholder="Write Titile here..."
+                placeholder="Write Title here..."
               />
             )}
             <div>
-              <Form.Control
+              <Bootform.Control
                 className="form-control  input_padding post_summary_input margin_bottom"
                 as="textarea"
                 placeholder="Write Description here.."
@@ -150,404 +488,404 @@ const PostBaar = () => {
             <div className="dropdown_row">
               <ScrollingCarousel show={5.5} slide={4} swiping={true}>
                 {selectedlist.value === "Announcement" && (
-                  <Form.Select aria-label="Default select example">
+                  <Bootform.Select aria-label="Default select example">
                     <option>Status</option>
                     <option value="1">Active</option>
                     <option value="2">Expired</option>
-                  </Form.Select>
-                )}
-                {selectedlist.value === "Job" && (
+                  </Bootform.Select>
+                )} */}
+            {/* {selectedlist.value === "job" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Documents</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Location</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>work mode</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>job type</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>job role</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Sub Department</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
-                )}
-                {selectedlist.value === "Internship" && (
+                )} */}
+            {/* {selectedlist.value === "internship" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Documents</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Location</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>work mode</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>job type</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>job role</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Sub Department</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                {selectedlist.value === "Mentoring" && (
+                {selectedlist.value === "mentoring" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                {selectedlist.value === "Question" && (
+                {selectedlist.value === "question" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Organization</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>College</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Course</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Exam</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Corporate</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                {selectedlist.value === "Services" && (
+                {selectedlist.value === "services" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                {selectedlist.value === "College festives" && (
-                  <Form.Select aria-label="Default select example">
+                {selectedlist.value === "collegefestives" && (
+                  <Bootform.Select aria-label="Default select example">
                     <option>Status</option>
                     <option value="1">Active</option>
                     <option value="2">Expired</option>
-                  </Form.Select>
+                  </Bootform.Select>
                 )}
                 {selectedlist.value === "scholarship" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "cultural events" && (
+                {selectedlist.value === "culturalevents " && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "conferences" && (
+                {selectedlist.value === "conferences" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "competitions" && (
+                {selectedlist.value === "competitions" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "hackathon" && (
+                {selectedlist.value === "hackathon" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "Hiring Challenge" && (
+                {selectedlist.value === "hiringchallenges" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
-                 {selectedlist.value === "Campus Recruitment" && (
+                {selectedlist.value === "campusrecruitment" && (
                   <>
-                    <Form.Select aria-label="Default select example">
+                    <Bootform.Select aria-label="Default select example">
                       <option>Status</option>
                       <option value="1">Active</option>
                       <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>Eligibility</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sub streams</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
+                    </Bootform.Select>
+                    <Bootform.Select aria-label="Default select example">
                       <option>sort by</option>
                       <option value="1">1</option>
                       <option value="2">2</option>
-                    </Form.Select>
+                    </Bootform.Select>
                   </>
                 )}
               </ScrollingCarousel>
-            </div>
+            </div> */}
 
             <div className="text-center">
               <Button className="border_btn user_header_login_btn post_bar_post_btn">

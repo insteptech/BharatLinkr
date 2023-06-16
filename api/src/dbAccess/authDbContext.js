@@ -132,6 +132,7 @@ const register = async (req) => {
     if (profileData.password) {
       userObj.password = await bcrypt.hash(profileData.password, 12);
     }
+    // this for confirmation from bharatlinker after it will active true 
     if (profileData.userType === "College") {
       userObj.active = false;
     }
@@ -142,7 +143,6 @@ const register = async (req) => {
     }
 
     const otp = generateOTP();
-    console.log(otp, '900090')
     userObj.otp = otp;
     userObj.ExpiresAt = Date.now() + 120000;
 
@@ -162,53 +162,27 @@ const register = async (req) => {
     } else {
 
       result = await User.create(userObj);
+
+      const mailOptions = {
+        from: process.env.EMAIL,
+        to: profileData.email,
+        subject: "Email Verification",
+        text: `Hi your OTP for verification is ${userObj.otp}. Please note that this OTP will get expired after 2 minutes`,
+        // html: '<a href="www.google.com">Click this link to verify your account</a>',
+      };
+  
+      transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+          // do something useful
+        }
+      });
+
     }
 
-
-    const mailOptions = {
-      from: process.env.EMAIL,
-      to: profileData.email,
-      subject: "Email Verification",
-      text: `Hi your OTP for verification is ${userObj.otp}. Please note that this OTP will get expired after 2 minutes`,
-      // html: '<a href="www.google.com">Click this link to verify your account</a>',
-    };
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log("Email sent: " + info.response);
-        // do something useful
-      }
-    });
-
-    const userResult = await User.findOne({
-      where: { id: result.id },
-      attributes: ['id',
-        'isNumberVerified',
-        'userType',
-        'name',
-        'designation',
-        'email',
-        'mobileNumber',
-        'stateId',
-        'cityId',
-        'school_college_company',
-        'highestEducation',
-        'summary',
-        'areaOfExpertise',
-        'accomplishments',
-        'totalExperience',
-        'profilePhoto',
-        'coverPhoto',
-        'password',
-        'collegeWebsite',
-        'collegeId',
-        'roleId'
-      ]
-    })
-
-    return { success: true, user: userResult, roleDetail };
+    return { success: true, user: result, roleDetail };
   } catch (error) {
     throw new Error(error);
   }

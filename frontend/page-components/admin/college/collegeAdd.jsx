@@ -1,10 +1,38 @@
-import React from 'react';
-import dynamic from 'next/dynamic';
-// import withAuth from 'redux/services/withAuth';
-
-const CreateCollege = dynamic(() => import('../../../page-components/admin/college/collegeAdd'), {
-  ssr: false,
-});
+import React, { useEffect, useMemo, useState } from "react";
+import { Col, Container, placeholder, Row, Tab, Tabs } from "react-bootstrap";
+import { Field, Form } from "react-final-form";
+import { FieldArray } from "react-final-form-arrays";
+import arrayMutators from "final-form-arrays";
+import { useDispatch, useSelector } from "react-redux";
+import { cityDropdown } from "../../../redux/actions/location/createCity";
+import { getState } from "../../../redux/actions/location/createState";
+import {
+  addCollege,
+  deleteAssociateCOllege,
+  deleteAssociateCourse,
+  getCollegebyId,
+  updateCollege,
+} from "../../../redux/actions/college/college";
+import {
+  getAllMasterFilter,
+  getMasterFilter,
+} from "../../../redux/actions/masterfilter/createmasterfilter";
+import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
+import {
+  getColStream,
+  getColStreamlist,
+} from "../../../redux/actions/streams/addColStream";
+import {
+  getSubStream,
+  getSubstreamData,
+} from "../../../redux/actions/streams/addSubStream";
+import { getAllExams } from "../../../redux/actions/exams/createExam";
+import dynamic from "next/dynamic";
+import Router, { useRouter } from "next/router";
+import { toast } from "react-toastify";
+// const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
+//   ssr: false,
+// });
 
 import { Table } from "react-bootstrap";
 import {
@@ -15,6 +43,7 @@ import {
   distanceeducation,
 } from "../../../utils/helper";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import CKeditorGenerator from "../../../components/admin/CKeditor";
 
 function CreateCollege() {
   const dispatch = useDispatch();
@@ -641,11 +670,8 @@ function CreateCollege() {
     dispatch(cityDropdown(e.target.value));
   };
 
-
-const CreateCollegeAdd = () => {
   return (
     <>
-
       {/* <Container> */}
       <div className="admin_home_tabs_row">
         <Row>
@@ -1681,7 +1707,7 @@ const CreateCollegeAdd = () => {
                                                           )}
                                                         </Field>
 
-                                                        <div className="d-flex plus_btn_margin_bottom_top">
+                                                        <div className="d-flex mt-2 margin_bottom">
                                                           <div
                                                             type="button"
                                                             className="add_remove_btn ms-2"
@@ -1899,7 +1925,7 @@ const CreateCollegeAdd = () => {
                                                           </div>
                                                         )}
                                                       </Field>
-                                                      <div className="d-flex plus_btn_margin_bottom_top">
+                                                      <div className="d-flex mt-2 margin_bottom">
                                                         <div
                                                           type="button"
                                                           className="add_remove_btn ms-2 margin_top"
@@ -2625,10 +2651,7 @@ const CreateCollegeAdd = () => {
                                       <Field name={`${name}.answerType`}>
                                         {({ input, meta }) => (
                                           <>
-                                            <select
-                                              {...input}
-                                              className="signup_form_input"
-                                            >
+                                            <select {...input}>
                                               <option value="">
                                                 select Answer Type
                                               </option>
@@ -2643,7 +2666,6 @@ const CreateCollegeAdd = () => {
                                           <>
                                             <input
                                               {...input}
-                                              className="signup_form_input"
                                               type="text"
                                               placeholder="Type Your Answer"
                                             />
@@ -2696,7 +2718,7 @@ const CreateCollegeAdd = () => {
                         </Row>
                       </>
                       <Row>
-                        <Col className="text-center">
+                        <Col>
                           <button
                             className="admin_signup_btn admin_signup_btn_mobile"
                             type="submit"
@@ -2714,9 +2736,8 @@ const CreateCollegeAdd = () => {
           />
         </Col>
       </Row>
-
     </>
   );
-};
+}
 
-export default CreateCollegeAdd
+export default CreateCollege;

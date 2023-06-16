@@ -184,6 +184,36 @@ db.professionRegister.belongsTo(db.course,{as:"Courses", foreignKey:"courseId"})
 db.professionRegister.hasMany(db.professionCMS,{as:"CMS", foreignKey:"professionRegisterId"})
 
 
+db.organisationPost.belongsTo(db.organisation,{as:"Organisation", foreignKey: "organisationId"})
+db.organisationPost.belongsTo(db.mainStream,{as:"DepartMent", foreignKey: "department"})
+db.organisationPost.belongsTo(db.subStream,{as:"SubDepartment", foreignKey: "subDepartment"})
+db.organisationPost.belongsTo(db.State,{as:"States", foreignKey: "state"})
+db.organisationPost.belongsTo(db.City,{as:"Cities", foreignKey: "city"})
+db.organisationPost.belongsTo(db.masterFilter,{as:"JobRole", foreignKey: "jobRole"})
+db.organisationPost.belongsTo(db.masterFilter,{as:"Eligibility", foreignKey: "eligibility"})
+db.organisationPost.belongsTo(db.college,{as:"College", foreignKey: "college"})
+db.organisationPost.belongsTo(db.exam,{as:"Exams", foreignKey: "exam"})
+db.organisationPost.belongsTo(db.course,{as:"Course", foreignKey: "course"})
+db.organisationPost.belongsTo(db.corporateRegister,{as:"Corporate", foreignKey: "corporate"})
+db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
+db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
+
+db.mockTestScore.belongsTo(db.mockTest,{as:"MockTest", foreignKey: "mockTestId"})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

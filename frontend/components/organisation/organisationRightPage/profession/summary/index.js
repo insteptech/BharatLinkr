@@ -16,10 +16,12 @@ const Summary = () => {
   const professiontypes = useSelector((state) => state?.sectorData?.professionList)
 
   useEffect(() => {
-    dispatch(getProfessionById(Number(Id)))
-    if (professionDetails && !professionDetails[0]?.ProfessionCode) {
-      dispatch(professionlist({familyId:Number(professionDetails[0]?.FamilyCode?.id)}))
-    }
+    if (Id) {
+      dispatch(getProfessionById(Number(Id)))
+      if (professionDetails && !professionDetails[0]?.ProfessionCode) {
+          dispatch(professionlist({familyId:Number(professionDetails[0]?.FamilyCode?.id)}))
+        }
+      }
   }, [Id])
 
   const [dataValue, setDataValue] = useState(0);

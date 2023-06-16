@@ -7,7 +7,8 @@ const mockTestCorporateSlice = createSlice({
     value: 0,
     mocktestcorporatelist: [],
     mocktest: [],
-    mocktestResult : [],
+    mocktestResult: [],
+    questionList: [],
     status: "",
   },
   extraReducers: (builder) => {
@@ -24,6 +25,7 @@ const mockTestCorporateSlice = createSlice({
     });
     builder.addCase(getMockTestbyid.fulfilled, (state, action) => {
       state.mocktest = action?.payload?.data?.data
+      state.questionList = action?.payload?.data?.data.rows[0].Questions
     });
     builder.addCase(mocktestResult.rejected, (state, action) => {
       state.mocktestResult = [];

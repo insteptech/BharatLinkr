@@ -15,8 +15,7 @@ import { useRouter } from "next/router";
 const EditProfile = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-
-  const userDetials = useSelector((detais) => detais?.loginUser?.userDetails);
+  const userDetials = useSelector((item) => item?.userSlice.currentUser);
   useEffect(() => {
     if (!getToken() && router.pathname.includes("editprofile")) {
       router.push("/"); // redirect to the home page when user not logged in
@@ -27,47 +26,43 @@ const EditProfile = () => {
     const payload = {
       id: userDetials.id,
       name: values.name,
-      area: values.area,
-      Designation: values.Designation,
-      Email: values.Email,
+      areaOfExpertise: values.area,
+      designation: values.Designation,
+      email: values.Email,
       number: values.number,
-      Expirence: values.Expirence,
-      Accomplishments: values.Accomplishments,
+      totalExperience: values.Expirence,
+      accomplishments: values.Accomplishments,
       education: values.education,
-      Summary: values.Summary,
+      summary: values.Summary,
     };
-
     const formData = new FormData();
     formData.append("profileData", JSON.stringify(payload));
-    if (values > 0) {
-      dispatch(getUsers(formData)).then((res) => {
-        if (res.payload?.success === true) {
-          toast.success("Profile updated successfully!");
-        }
-      });
-    }
+    dispatch(getUsers(formData)).then((res) => {
+      if (res.payload?.success === true) {
+        toast.success("Profile updated successfully!");
+      }
+    });
   };
   return (
     <>
       <Form
         onSubmit={onSubmit}
-        // keepDirtyOnReinitialize
         initialValues={
           userDetials
             ? userDetials && {
-                name: userDetials.name,
-                area: userDetials.areaOfExpertise,
-                Designation: userDetials.designation,
-                Email: userDetials.email,
-                number: userDetials.mobileNumber,
-                Expirence: userDetials.totalExperience,
-                Accomplishments: userDetials.accomplishments,
-                education: userDetials.highestEducation,
-                Summary: userDetials.summary,
-              }
+              name: userDetials.name,
+              area: userDetials.areaOfExpertise,
+              Designation: userDetials.designation,
+              Email: userDetials.email,
+              number: userDetials.mobileNumber,
+              Expirence: userDetials.totalExperience,
+              Accomplishments: userDetials.accomplishments,
+              education: userDetials.highestEducation,
+              Summary: userDetials.summary,
+            }
             : ""
         }
-        render={({ handleSubmit }) => {
+        render={({ handleSubmit, pristine }) => {
           return (
             <form onSubmit={handleSubmit}>
               <Container className="result_container_padding">
@@ -198,7 +193,8 @@ const EditProfile = () => {
                                 type="password"
                                 {...input}
                                 className="form-control signup_form_input margin_bottom"
-                                placeholder="Enter Password"
+                                placeholder="*****************"
+                                disabled={true}
                               />
                               {meta.touched && meta.error && (
                                 <p className="alert alert-danger  position-absolute w-100 mt-1 py-1 text-danger">
@@ -356,10 +352,10 @@ const EditProfile = () => {
                   </Row>
                   <Row>
                     <Col lg={12} className="text-center">
-                      <Button className="admin_signup_btn me-4" type="btn">
+                      <Button className="admin_signup_btn me-4" type="btn" disabled={pristine}>
                         Save Changes
                       </Button>
-                      <Button className="admin_signup_btn" type="btn">
+                      <Button className="admin_signup_btn" type="btn" disabled={pristine}>
                         Account Activate
                       </Button>
                     </Col>

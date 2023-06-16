@@ -38,6 +38,7 @@ function Organisation() {
   const [modalShow, setModalShow] = useState(false);
   const [deleteItem, setDeleteItem] = useState();
   const [displayProfessions, setDisplayProfessions] = useState("Family code");
+  const [displayCompanies, setDisplayCompanies] = useState("Sector")
   const handleHide = () => {
     setModalShow(false);
   };
@@ -61,7 +62,7 @@ function Organisation() {
     "Prep Level",
     "Action",
   ];
-  const FormSteps = ["Sector", "Industry", "Companies", "Professions"];
+  const FormSteps = ["Companies", "Professions"];
   const sectorheading = ["No.", "Sector", "Action"];
   const industryheading = ["No.", "Industry", "Action"];
   const [dataValue, setDataValue] = useState(0);
@@ -106,6 +107,7 @@ function Organisation() {
   );
 
   const professionTabs = ["Family code", "Profession Code", "Profession list"];
+  const companyTabs = ["Sector", "Industry", "Companies"]
   const familyCodeTablehead = [
     "Sr. no",
     "Family Name",
@@ -117,49 +119,6 @@ function Organisation() {
     "Profession Name",
     "Profession Code",
     "Action",
-  ];
-
-  const organisationData = [
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
-    {
-      image: "/images/card-logo1.png",
-      logo: "/images/card-logo2.png",
-      name: "Tesla",
-      city: "Panchkula",
-      state: "Haryana",
-      level: "0",
-    },
   ];
 
   const handleDeleteOrganisation = (item) => {
@@ -187,6 +146,8 @@ function Organisation() {
       }
     });
   };
+
+  {console.log(companyTabs,dataValue,'pppppppp')}
 
   const handleProfessionCodeDelete = (item) => {
     dispatch(deleteProfessioncode(item?.id)).then((res) => {
@@ -236,9 +197,8 @@ function Organisation() {
                     FormSteps?.map((steps, stepsIndex) => (
                       <li className="nav-item " key={stepsIndex}>
                         <a
-                          className={`nav-link admin_tabs_name ${
-                            dataValue === stepsIndex && "head-active"
-                          }`}
+                          className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                            }`}
                           active={true}
                           onClick={() => {
                             setDataValue(stepsIndex);
@@ -263,40 +223,41 @@ function Organisation() {
             className="text-end admin_table_header_smallscreen hide_btn_row"
           >
             {dataValue === 0 && (
-              <div>
-                <Button
-                  className="border_btn"
-                  onClick={() => router.push("organisation/sector/add")}
-                >
-                  Add new sector
-                </Button>
-                <Button
-                  className="border_btn green"
-                  onClick={() => router.push("organisation/industry/add")}
-                >
-                  Add new industry
-                </Button>
-              </div>
-            )}
-            {dataValue === 1 && (
-              <div>
-                <Button
-                  className="border_btn"
-                  onClick={() => router.push("organisation/sector/add")}
-                >
-                  Add new sector
-                </Button>
-                <Button
-                  className="border_btn green"
-                  onClick={() => router.push("organisation/industry/add")}
-                >
-                  Add new industry
-                </Button>
-              </div>
-            )}
-            {dataValue === 2 && (
               <>
-                <div>
+                {displayCompanies === "Sector" && (
+                  <div>
+                    <Button
+                      className="border_btn"
+                      onClick={() => router.push("organisation/sector/add")}
+                    >
+                      Add new sector
+                    </Button>
+                    <Button
+                      className="border_btn green"
+                      onClick={() => router.push("organisation/industry/add")}
+                    >
+                      Add new industry
+                    </Button>
+                  </div>
+                )}
+                {displayCompanies === "Industry" && (
+                  <div>
+                  <Button
+                    className="border_btn"
+                    onClick={() => router.push("organisation/sector/add")}
+                  >
+                    Add new sector
+                  </Button>
+                  <Button
+                    className="border_btn green"
+                    onClick={() => router.push("organisation/industry/add")}
+                  >
+                    Add new industry
+                  </Button>
+                </div>
+                )}
+                {displayCompanies === "Companies" && (
+                  <div>
                   <Button className="border_btn">Upload CSV</Button>
                   <Button className="border_btn">Download CSV</Button>
                   <Button
@@ -306,9 +267,10 @@ function Organisation() {
                     Add New
                   </Button>
                 </div>
+                )}
               </>
             )}
-            {dataValue === 3 && (
+            {dataValue === 1 && (
               <>
                 {displayProfessions === "Family code" && (
                   <>
@@ -434,9 +396,7 @@ function Organisation() {
                     <Button
                       className="border_btn margin_top_none green"
                       onClick={() =>
-                        router.push("organisation/professioncode/add")
-                      }
-                    >
+                        router.push("organisation/professioncode/add")}>
                       Add New
                     </Button>
                   </div>
@@ -459,227 +419,271 @@ function Organisation() {
         </Col>
       </Row>
 
-      {/* sector table */}
-      {dataValue === 0 && (
-        <>
-          <div className="admin_stream_table">
-            <Row>
-              <Table responsive className="admin_table" bordered hover>
-                <thead>
-                  <tr>
-                    {sectorheading.map((hd, index) => {
-                      return (
-                        <th className="table_head" key={index}>
-                          {hd}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {loadergetSectorlist ? (
-                    <LoaderPage />
-                  ) : (
-                    getSectorList?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_serial">
-                            {/* {pagination.pageSize * (pagination.pageNo-1) + (index + 1)} */}
-                            {index + 1}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item.name}
-                          </td>
-
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/edit-icon-blue.png"}
-                              onClick={() => handleEditSector(item)}
-                            />
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/delete-icon-blue.png"}
-                              onClick={() => handleDeleteSector(item)}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </Table>
-            </Row>
-          </div>
-        </>
-      )}
-
-      {/* industry table */}
-      {dataValue === 1 && (
-        <>
-          <div className="admin_stream_table">
-            <Row>
-              <Table responsive className="admin_table" bordered hover>
-                <thead>
-                  <tr>
-                    {industryheading.map((hd, index) => {
-                      return (
-                        <th className="table_head" key={index}>
-                          {hd}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {loadergetIndustrylist ? (
-                    <LoaderPage />
-                  ) : (
-                    getIndustrylist?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_serial">
-                            {/* {pagination.pageSize * (pagination.pageNo-1) + (index + 1)} */}
-                            {index + 1}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.name}
-                          </td>
-                          {/* <td className="text-center admin_table_data">
-                        {item.subStreamName}
-                      </td> */}
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/edit-icon-blue.png"}
-                              onClick={() => handleEditIndustry(item)}
-                            />
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/delete-icon-blue.png"}
-                              onClick={() => handleDeleteIndustry(item)}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
-                </tbody>
-              </Table>
-            </Row>
-          </div>
-        </>
-      )}
-
       {/* Organisation Table */}
-      {dataValue === 2 && (
-        <>
-          <div className="admin_stream_table">
-            <Row>
-              <Table responsive className="admin_table" bordered hover>
-                <thead>
-                  <tr>
-                    {Heading.map((hd, index) => {
-                      return (
-                        <th className="table_head" key={index}>
-                          {hd}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {organisationlist &&
-                    organisationlist?.rows?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_data">
-                            {pagination.pageSize * (pagination.pageNo - 1) +
-                              (index + 1)}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <Image
-                              height={75}
-                              width={75}
-                              // className="college_card_img img-fluid"
-                              alt=""
-                              src={`${apibasePath}documents/organisation/${item?.companyLogo}`}
-                            />
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <Image
-                              height={75}
-                              width={75}
-                              // className="college_card_img img-fluid"
-                              alt=""
-                              src={`${apibasePath}documents/organisation/${item?.companyCover}`}
-                            />
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.companyName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.Cities?.name}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.States?.state}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.CompanyLevel.length > 0 &&
-                              item?.CompanyLevel[0]?.companyLevel}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src="/images/edit-icon-blue.png"
-                              onClick={() => handleOrgEdit(item?.id)}
-                            ></img>
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src="/images/delete-icon-blue.png"
-                              onClick={() => {
-                                setModalShow(true);
-                                setDeleteItem(item);
-                              }}
-                            ></img>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                </tbody>
-              </Table>
-            </Row>
-            <div className="admin_table_footer">
-              <Pagination
-                pagination={pagination}
-                setPagination={setPagination}
-                list={organisationlist}
-              />
-            </div>
-            <DeleteModal
-              show={modalShow}
-              onHide={() => handleHide()}
-              handleDelete={handleDeleteOrganisation}
-              deleteItem={deleteItem}
-            />
-          </div>
-        </>
-      )}
-
-      {/* Professions Table */}
-      {dataValue === 3 && (
+      {dataValue === 0 && (
         <>
           <div className="  p-0">
             <ScrollingCarousel show={5.5} slide={4} swiping={true}>
               <ul className="nav ">
+                {companyTabs.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      onClick={() => setDisplayCompanies(item)}
+                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayCompanies && "active_btn_tabs"
+                        }`}
+                    >
+                      {item}
+                    </li>
+                  );
+                })}
+              </ul>
+            </ScrollingCarousel>
+          </div>
+          {displayCompanies === "Sector" && (
+            <>
+              <div className="admin_stream_table">
+                <Row>
+                  <Table responsive className="admin_table" bordered hover>
+                    <thead>
+                      <tr>
+                        {sectorheading.map((hd, index) => {
+                          return (
+                            <th className="table_head" key={index}>
+                              {hd}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {loadergetSectorlist ? (
+                        <LoaderPage />
+                      ) : (
+                        getSectorList?.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="text-center admin_table_serial">
+                                {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                {item.name}
+                              </td>
+
+                              <td className="text-center admin_table_data">
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src={"/images/edit-icon-blue.png"}
+                                  onClick={() => handleEditSector(item)}
+                                />
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src={"/images/delete-icon-blue.png"}
+                                  onClick={() => {
+                                    setModalShow(true);
+                                    setDeleteItem(item);
+                                  }}
+                                />
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </Table>
+                </Row>
+              </div>
+              <div className="admin_table_footer">
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                  list={getSectorList}
+                />
+              </div>
+              <DeleteModal
+                show={modalShow}
+                onHide={() => handleHide()}
+                handleDelete={handleDeleteSector}
+                deleteItem={deleteItem}
+              />
+            </>
+          )}
+
+          {displayCompanies === "Industry" && (
+            <>
+              <div className="admin_stream_table">
+                <Row>
+                  <Table responsive className="admin_table" bordered hover>
+                    <thead>
+                      <tr>
+                        {industryheading.map((hd, index) => {
+                          return (
+                            <th className="table_head" key={index}>
+                              {hd}
+                            </th>
+                          );
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {loadergetIndustrylist ? (
+                        <LoaderPage />
+                      ) : (
+                        getIndustrylist?.map((item, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="text-center admin_table_serial">
+                                {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                {item?.name}
+                              </td>
+                              <td className="text-center admin_table_data">
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src={"/images/edit-icon-blue.png"}
+                                  onClick={() => handleEditIndustry(item)}
+                                />
+                                <img
+                                  className="mx-1 admin_table_action_icon"
+                                  src={"/images/delete-icon-blue.png"}
+                                  onClick={() => {
+                                    setModalShow(true);
+                                    setDeleteItem(item);
+                                  }}
+                                />
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </Table>
+                </Row>
+                <div className="admin_table_footer">
+                  <Pagination
+                    pagination={pagination}
+                    setPagination={setPagination}
+                    list={getIndustrylist}
+                  />
+                </div>
+                <DeleteModal
+                  show={modalShow}
+                  onHide={() => handleHide()}
+                  handleDelete={handleDeleteIndustry}
+                  deleteItem={deleteItem}
+                />
+              </div>
+            </>
+          )}
+
+          {displayCompanies === "Companies" && (
+            <div className="admin_stream_table">
+              <Row>
+                <Table responsive className="admin_table" bordered hover>
+                  <thead>
+                    <tr>
+                      {Heading.map((hd, index) => {
+                        return (
+                          <th className="table_head" key={index}>
+                            {hd}
+                          </th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {organisationlist &&
+                      organisationlist?.rows?.map((item, index) => {
+                        return (
+                          <tr key={index}>
+                            <td className="text-center admin_table_data">
+                              {pagination.pageSize * (pagination.pageNo - 1) +
+                                (index + 1)}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              <Image
+                                height={75}
+                                width={75}
+                                // className="college_card_img img-fluid"
+                                alt=""
+                                src={`${apibasePath}documents/organisation/${item?.companyLogo}`}
+                              />
+                            </td>
+                            <td className="text-center admin_table_data">
+                              <Image
+                                height={75}
+                                width={75}
+                                // className="college_card_img img-fluid"
+                                alt=""
+                                src={`${apibasePath}documents/organisation/${item?.companyCover}`}
+                              />
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.companyName}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.Cities?.name}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.States?.state}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              {item?.CompanyLevel.length > 0 &&
+                                item?.CompanyLevel[0]?.companyLevel}
+                            </td>
+                            <td className="text-center admin_table_data">
+                              <img
+                                className="mx-1 admin_table_action_icon"
+                                src="/images/edit-icon-blue.png"
+                                onClick={() => handleOrgEdit(item?.id)}
+                              ></img>
+                              <img
+                                className="mx-1 admin_table_action_icon"
+                                src="/images/delete-icon-blue.png"
+                                onClick={() => {
+                                  setModalShow(true);
+                                  setDeleteItem(item);
+                                }}
+                              ></img>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </Table>
+              </Row>
+              <div className="admin_table_footer">
+                <Pagination
+                  pagination={pagination}
+                  setPagination={setPagination}
+                  list={organisationlist}
+                />
+              </div>
+              <DeleteModal
+                show={modalShow}
+                onHide={() => handleHide()}
+                handleDelete={handleDeleteOrganisation}
+                deleteItem={deleteItem}
+              />
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Professions Table */}
+      {dataValue === 1 && (
+        <>
+          <div className="  p-0">
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav">
                 {professionTabs.map((item, index) => {
                   return (
                     <li
                       key={index}
                       onClick={() => setDisplayProfessions(item)}
-                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${
-                        item === displayProfessions && "active_btn_tabs"
-                      }`}
+                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayProfessions && "active_btn_tabs"
+                        }`}
                     >
                       {item}
                     </li>
@@ -700,7 +704,7 @@ function Organisation() {
                           <th className="table_head" key={index}>
                             {hd}
                           </th>
-                        );
+                        )
                       })}
                     </tr>
                   </thead>
@@ -724,11 +728,7 @@ function Organisation() {
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/edit-icon-blue.png"
                                 onClick={() =>
-                                  router.push(
-                                    `/admin/organisation/familycode/update/${item?.id}`
-                                  )
-                                }
-                              ></img>
+                                  router.push(`/admin/organisation/familycode/update/${item?.id}`)}></img>
                               <img
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/delete-icon-blue.png"
