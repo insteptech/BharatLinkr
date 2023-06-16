@@ -223,7 +223,6 @@ const PostBaar = () => {
                       <div className="">
                         {values?.postTypes === "collegefestives" || values?.postTypes === "" && (
                           <>
-                            {/* <ScrollingCarousel show={5.5} slide={4} swiping={true}> */}
                             <div className="me-2">
                               <label>{values?.postTypes === "job" || values?.postTypes === "internship" ?'Department': "Streams"}</label>
                               <Select
@@ -237,7 +236,6 @@ const PostBaar = () => {
                                 })}
                               />
                             </div>
-                            {/* </ScrollingCarousel> */}
                           </>
                         )}
                         {values?.postTypes === "internship" || values?.postTypes === "job" && (

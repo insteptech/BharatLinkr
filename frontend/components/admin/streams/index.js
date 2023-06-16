@@ -50,7 +50,7 @@ function StreamsPage() {
   };
 
   const handleDelete = (item) => {
-    if (item.mainStreamName) {
+    if (item.mainStreamName || item.mainStreamName=="") {
       dispatch(deleteMainStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
@@ -66,7 +66,7 @@ function StreamsPage() {
         console.log(res);
         if (res?.payload?.data?.success) {
           toast.success("Deleted");
-          dispatch(GetSubStream());
+          dispatch(getSubStream());
         } else {
           toast.error(res?.payload?.response?.data?.message);
         }
@@ -86,7 +86,7 @@ function StreamsPage() {
       dispatch(deleteSubStream(item.id)).then((res) => {
         if (res?.payload?.data?.success) {
           toast.success("Delete");
-          dispatch(GetSubStream());
+          dispatch(getSubStream());
         } else {
           toast.error("Error");
         }
