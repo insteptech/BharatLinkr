@@ -609,7 +609,9 @@ optgroup {
   outline: 0;
   box-shadow: 0 0 0 0.25rem #c8c1df;
 }
-
+.Profession_btn{
+  max-width: 260px !important;
+}
 .admin_signup_btn {
   width: 100%;
   background: var(--admin-btn-bg);
@@ -1524,7 +1526,7 @@ input::-webkit-inner-spin-button {
   }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
   .item_hide_768 {
     display: none;
   }
@@ -6998,13 +7000,13 @@ a:hover {
 
 
 
-.css-t3ipsp-control {
+.react_select .css-t3ipsp-control {
   border-color: transparent !important;
   box-shadow: 0 0 0 1px var(--admin-bg) !important;
   border-radius: 25px !important;
 }
 
-.css-13cymwt-control {
+.react_select .css-13cymwt-control {
   /* background-color: #1ba643 !important; */
   max-width: 160px;
   border-radius: 25px !important;
@@ -7012,7 +7014,7 @@ a:hover {
   font-size: 14px;
 }
 
-.css-13cymwt-control:active {
+.react_select .css-13cymwt-control:active {
   /* all: unset; */
   max-width: 160px;
   /* background-color: #1ba643 !important; */
@@ -7020,45 +7022,48 @@ a:hover {
   /* font-size: 14px; */
 }
 
-.css-13cymwt-control:focus {
+.react_select .css-13cymwt-control:focus {
   box-shadow: none;
   max-width: 160px;
   all: unset;
 }
 
-.css-1nmdiq5-menu {
+.react_select .css-1nmdiq5-menu {
   /* background-color: var(--admin-bg) !important; */
   /* border-radius: 25px !important; */
 }
 
-.css-t3ipsp-control:hover {
+.react_select .css-t3ipsp-control:hover {
   border-color: transparent !important;
   /* box-shadow: 0 0 0 1px var(--admin-bg) !important; */
 }
 
-.react-select__menu-list {
+.react_select .react-select__menu-list {
   background-color: orange !important;
 }
 
-.react-select__option {
+.react_select .react-select__option {
   color: #1ba643 !important;
   font-size: 20px !important;
 }
 
-.post_bar_accordion_body .css-13cymwt-control {
+.react_select .post_bar_accordion_body .css-13cymwt-control {
   margin-top: 0 !important;
 }
 
-.css-qbdosj-Input {
+.react_select .css-qbdosj-Input {
   font-size: 14px;
 }
 
 
-.select_scroll_div{
+.react_select .select_scroll_div{
   width: 540px;
   overflow: auto;
   display: flex;
   overflow-y: hidden;
+}
+.col_padding_top{
+  padding-top: 32px;
 }
 /* .mithesh {
   display: flex;

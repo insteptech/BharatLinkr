@@ -134,6 +134,7 @@ function Organisation() {
   const handleDeleteSector = (item) => {
     dispatch(deleteSector(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
         dispatch(getlistSector(pagination));
       }
     });
@@ -142,16 +143,16 @@ function Organisation() {
   const handleFamilyCodeDelete = (item) => {
     dispatch(deleteFamilycode(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
         dispatch(familycodeList(pagination));
       }
     });
   };
 
-  {console.log(companyTabs,dataValue,'pppppppp')}
-
   const handleProfessionCodeDelete = (item) => {
     dispatch(deleteProfessioncode(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
         dispatch(professioncodeList(pagination));
       }
     });
@@ -160,21 +161,23 @@ function Organisation() {
   const handleDeleteProfession = (item) => {
     dispatch(deleteProfession(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
         dispatch(professionlist(pagination));
+      }
+    });
+  };
+
+  const handleDeleteIndustry = (item) => {
+    dispatch(deleteIndustry(item.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        toast.success("Deleted", { autoClose: 1000 })
+        dispatch(getIndustryList(pagination));
       }
     });
   };
 
   const handleEditSector = (item) => {
     router.push(`/admin/organisation/sector/update/${item.id}`);
-  };
-
-  const handleDeleteIndustry = (item) => {
-    dispatch(deleteIndustry(item.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        dispatch(getIndustryList(pagination));
-      }
-    });
   };
 
   const handleEditIndustry = (item) => {
@@ -242,31 +245,31 @@ function Organisation() {
                 )}
                 {displayCompanies === "Industry" && (
                   <div>
-                  <Button
-                    className="border_btn"
-                    onClick={() => router.push("organisation/sector/add")}
-                  >
-                    Add new sector
-                  </Button>
-                  <Button
-                    className="border_btn green"
-                    onClick={() => router.push("organisation/industry/add")}
-                  >
-                    Add new industry
-                  </Button>
-                </div>
+                    <Button
+                      className="border_btn"
+                      onClick={() => router.push("organisation/sector/add")}
+                    >
+                      Add new sector
+                    </Button>
+                    <Button
+                      className="border_btn green"
+                      onClick={() => router.push("organisation/industry/add")}
+                    >
+                      Add new industry
+                    </Button>
+                  </div>
                 )}
                 {displayCompanies === "Companies" && (
                   <div>
-                  <Button className="border_btn">Upload CSV</Button>
-                  <Button className="border_btn">Download CSV</Button>
-                  <Button
-                    className="border_btn green"
-                    onClick={() => router.push("organisation/company/add")}
-                  >
-                    Add New
-                  </Button>
-                </div>
+                    <Button className="border_btn">Upload CSV</Button>
+                    <Button className="border_btn">Download CSV</Button>
+                    <Button
+                      className="border_btn green"
+                      onClick={() => router.push("organisation/company/add")}
+                    >
+                      Add New
+                    </Button>
+                  </div>
                 )}
               </>
             )}
@@ -460,7 +463,7 @@ function Organisation() {
                       {loadergetSectorlist ? (
                         <LoaderPage />
                       ) : (
-                        getSectorList?.map((item, index) => {
+                        getSectorList?.rows?.map((item, index) => {
                           return (
                             <tr key={index}>
                               <td className="text-center admin_table_serial">
@@ -529,7 +532,7 @@ function Organisation() {
                       {loadergetIndustrylist ? (
                         <LoaderPage />
                       ) : (
-                        getIndustrylist?.map((item, index) => {
+                        getIndustrylist?.rows?.map((item, index) => {
                           return (
                             <tr key={index}>
                               <td className="text-center admin_table_serial">
@@ -620,7 +623,7 @@ function Organisation() {
                               />
                             </td>
                             <td className="text-center admin_table_data">
-                              {item?.companyName}
+                              {item?.OrganisationCompany?.companyName}
                             </td>
                             <td className="text-center admin_table_data">
                               {item?.Cities?.name}

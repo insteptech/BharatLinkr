@@ -47,10 +47,10 @@ const NewIndusty = () => {
       ).then((res) => {
         if (res?.payload?.data?.success) {
           const status = res?.payload?.data?.data?.org[0]?.status;
-          if (status == "duplicate") {
+          if (res?.payload?.data?.data?.org[0]?.status == "duplicate") {
             toast.error(`Industry is ${status}`, { autoClose: 1000 });
-          } else {
-            router.push("/admin/organisation", { autoClose: 1000 });
+          } if (res?.payload?.data?.data?.org[0]?.active) {
+            router.push("/admin/organisation");
             toast.success("Industry added successfuly", { autoClose: 1000 });
           }
         }
@@ -103,6 +103,23 @@ const NewIndusty = () => {
     }
   }, [Id]);
 
+  const validate = (values) => {
+    let errors = {}
+    let itemArray = []
+    if (!values?.sectorId) {
+      errors["sectorId"] = "*"
+    }
+    values?.industryData?.map((item) => {
+      let error = {}
+      if (!item?.name) {
+        error["name"] = "*"
+      }
+      itemArray.push(error)
+    })
+    errors["industryData"] = itemArray
+    return errors;
+  }
+
   return (
     <>
       <Row className="my-3 padding_top">
@@ -119,8 +136,8 @@ const NewIndusty = () => {
             mutators={{
               ...arrayMutators,
             }}
-            // validate={validate}
-            initialValues={useMemo(() => handleInit())}
+            validate={validate}
+            initialValues={useMemo(() => handleInit(), [getIndustryList])}
             render={({ handleSubmit, values }) => (
               <form onSubmit={handleSubmit}>
                 <Row>
@@ -218,7 +235,7 @@ const NewIndusty = () => {
                                     <></>
                                   )}
                                 </div>
-                                
+
                               </div>
                             </Col>
                           </Row>

@@ -50,7 +50,7 @@ function StreamsPage() {
   };
 
   const handleDelete = (item) => {
-    if (item.mainStreamName) {
+    if (item?.mainStreamName || item.mainStreamName=="") {
       dispatch(deleteMainStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
@@ -61,18 +61,18 @@ function StreamsPage() {
         }
       });
     }
-    if (item.subStreamName) {
+    if (item?.subStreamName) {
       dispatch(deleteSubStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
           toast.success("Deleted");
-          dispatch(GetSubStream());
+          dispatch(getSubStream());
         } else {
           toast.error(res?.payload?.response?.data?.message);
         }
       });
     }
-    if (item.colStreamName) {
+    if (item?.colStreamName) {
       dispatch(deleteColStream(item.id)).then((res) => {
         if (res?.payload?.data?.success) {
           toast.success("Deleted");
@@ -82,26 +82,26 @@ function StreamsPage() {
         }
       });
     }
-    if (item.subStreamName) {
-      dispatch(deleteSubStream(item.id)).then((res) => {
-        if (res?.payload?.data?.success) {
-          toast.success("Delete");
-          dispatch(GetSubStream());
-        } else {
-          toast.error("Error");
-        }
-      });
-    }
-    if (item.colStreamName) {
-      dispatch(deleteColStream(item.id)).then((res) => {
-        if (res?.payload?.data?.success) {
-          toast.success("Deleted");
-          dispatch(getColStream());
-        } else {
-          toast.error("Error");
-        }
-      });
-    }
+    // if (item?.subStreamName) {
+    //   dispatch(deleteSubStream(item.id)).then((res) => {
+    //     if (res?.payload?.data?.success) {
+    //       toast.success("Delete");
+    //       dispatch(getSubStream());
+    //     } else {
+    //       toast.error("Error");
+    //     }
+    //   });
+    // }
+    // if (item?.colStreamName) {
+    //   dispatch(deleteColStream(item.id)).then((res) => {
+    //     if (res?.payload?.data?.success) {
+    //       toast.success("Deleted");
+    //       dispatch(getColStream());
+    //     } else {
+    //       toast.error("Error");
+    //     }
+    //   });
+    // }
   };
 
   const handleEdit = (item) => {
@@ -115,6 +115,7 @@ function StreamsPage() {
       router.push(`/admin/streams/updatecolstream/${item.id}`);
     }
   };
+  
   useEffect(() => {
     dispatch(getSubStream(pagination));
     dispatch(getMainStream(pagination));
@@ -148,6 +149,9 @@ function StreamsPage() {
               </ul>
             </ScrollingCarousel>
           </Col>
+          <Col>
+            <Pagesize setPagination={setPagination} />
+          </Col>
         </Row>
       </div>
       {dataValue === 0 && (
@@ -158,7 +162,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Main Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  {/* <Pagesize setPagination={setPagination} /> */}
                 </div>
               </div>
             </Col>
@@ -247,7 +251,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Sub Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  
                 </div>
               </div>
             </Col>
@@ -339,7 +343,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Col Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  {/* <Pagesize setPagination={setPagination} /> */}
                 </div>
               </div>
             </Col>

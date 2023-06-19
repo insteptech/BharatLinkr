@@ -17,7 +17,7 @@ export const getCourse = createAsyncThunk("getCourse", async (data) => {
 
 export const deleteCourse = createAsyncThunk("deleteCourse", async (id) => {
   return apiRequest
-    .delete(`/courseDelete/${id}`)
+    .delete(`Course/courseDelete/${id}`)
     .then((res) => res)
     .catch((err) => err);
 });
@@ -31,7 +31,7 @@ export const getCoursebyId = createAsyncThunk("getCoursebyId", async (data) => {
 
 export const editCourse = createAsyncThunk("editCourse", async (data) => {
   return apiRequest
-    .post("")
+    .post("Course/courseUpdate",data)
     .then((res) => res)
     .catch((err) => err);
 });

@@ -167,7 +167,6 @@ export default function AddExams() {
   ];
 
   const handleSubmit = (values) => {
-    console.log(values, "values");
     if (Id) {
       if (dataValue === 0) {
         setDataValue(1);
@@ -258,37 +257,40 @@ export default function AddExams() {
 
   const validate = (values) => {
     let errors = {};
+    const itemArray = [];
     if (dataValue === 0) {
-      if (!values.mainStream) {
-        errors["mainStream"] = "*";
-      }
-      if (!values.courseType) {
-        errors["courseType"] = "*";
-      }
-      if (!values.examName) {
-        errors["examName"] = "*";
-      }
-      if (!values.examType) {
-        errors["examType"] = "*";
-      }
-      if (!values.examMode) {
-        errors["examMode"] = "*";
-      }
-      if (!values.applicationMode) {
-        errors["applicationMode"] = "*";
-      }
-      if (!values.applicationDate) {
-        errors["applicationDate"] = "*";
-      }
-      if (!values.examDate) {
-        errors["examDate"] = "*";
-      }
-      if (!values.resultDate) {
-        errors["resultDate"] = "*";
-      }
-      if (!values.examLogo) {
-        errors["examLogo"] = "*";
-      }
+      values.exam.map((ele, index) => {
+        let error = {};
+        if (!ele.mainStreamId) {
+          error['mainStreamId'] = "*"
+        }
+        if (!ele.courseTypeId) {
+          error['courseTypeId'] = "*"
+        }
+        if (!ele.examName) {
+          error['examName'] = "*"
+        }
+        if (!ele.examTypeId) {
+          error['examTypeId'] = "*"
+        }
+        if (!ele.examModeId) {
+          error['examModeId'] = "*"
+        }
+        if (!ele.applicationModeId) {
+          error['applicationModeId'] = "*"
+        }
+        if (!ele.examApplicationDate) {
+          error['examApplicationDate'] = "*"
+        }
+        if (!ele.examDate) {
+          error['examDate'] = "*"
+        }
+        if (!ele.resultAnnouncementDate) {
+          error['resultAnnouncementDate'] = "*"
+        }
+        itemArray.push(error)
+      })
+      errors["exam"] = itemArray
     }
     return errors;
   };
@@ -1092,7 +1094,7 @@ export default function AddExams() {
                             <Col className="text-center">
                               <button
                                 className="admin_signup_btn admin_signup_btn_mobile"
-                                onClick={() => setDataValue(1)}
+                                type="submit"
                               >
                                 Add Category
                               </button>
