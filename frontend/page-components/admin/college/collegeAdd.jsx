@@ -1446,7 +1446,7 @@ function CreateCollege() {
                                                 ) => (
                                                   <Row>
                                                     <>
-                                                      <Col lg={4} md={8}>
+                                                      <Col lg={4} md={12}>
                                                         <label className="signup_form_label">
                                                           Choose Streams
                                                         </label>
@@ -1517,7 +1517,7 @@ function CreateCollege() {
                                                           )}
                                                         </Field>
                                                       </Col>
-                                                      <Col lg={4} md={8}>
+                                                      <Col lg={4} md={12}>
                                                         <Field
                                                           name={`${collegeStreamsname}.subStreamId`}
                                                         >
@@ -1622,7 +1622,7 @@ function CreateCollege() {
                                                       </Col>
                                                       <Col
                                                         lg={4}
-                                                        md={8}
+                                                        md={12}
                                                         className="d-flex margin_top"
                                                       >
                                                         <Field

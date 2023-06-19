@@ -67,7 +67,7 @@ function CollegeAdminPage(props) {
             </div>
           </div>
         </Col>
-        <Col xl={6} lg={12} md={12} className="text-end">
+        <Col xl={6} lg={12} md={12} className="text-end mt-2">
           <div>
             <Button className="border_btn">Upload CSV</Button>
             <Button className="border_btn">Download CSV</Button>
