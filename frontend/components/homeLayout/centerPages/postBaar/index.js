@@ -254,141 +254,121 @@ const PostBaar = () => {
                     </Col>
                     <Col md={12} className="">
                       <div className="">
-                        {values?.postTypes === "collegefestives" ||
-                          (values?.postTypes === "" && (
-                            <>
-                              {/* <ScrollingCarousel show={5.5} slide={4} swiping={true}> */}
-                              <div className="me-2 react_select">
-                                <label>
-                                  {values?.postTypes === "job" ||
-                                  values?.postTypes === "internship"
-                                    ? "Department"
-                                    : "Streams"}
-                                </label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list1.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                              {/* </ScrollingCarousel> */}
-                            </>
-                          ))}
-                        {values?.postTypes === "internship" ||
-                          (values?.postTypes === "job" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>State</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
-                        {values?.postTypes === "internship" ||
-                          (values?.postTypes === "job" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>City</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
-                        {values?.postTypes === "internship" ||
-                          (values?.postTypes === "job" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>work mode</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
-                        {values?.postTypes === "internship" ||
-                          (values?.postTypes === "job" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>job type</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
-                        {values?.postTypes === "internship" ||
-                          (values?.postTypes === "job" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>job role</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
-                        {values?.postTypes === "collegefestives" ||
-                          values?.postTypes === "services" ||
-                          values?.postTypes === "question" ||
-                          (values?.postTypes === "mentoring" && (
-                            <>
-                              <div className="me-2 react_select">
-                                <label>Eligibility</label>
-                                <Select
-                                  styles={customStyles}
-                                  isSearchable={true}
-                                  options={list2.map((item) => {
-                                    return {
-                                      label: item,
-                                      value: item,
-                                    };
-                                  })}
-                                />
-                              </div>
-                            </>
-                          ))}
+
+                        {values?.postTypes === "collegefestives" || values?.postTypes === "" && (
+                          <>
+                            <div className="me-2">
+                              <label>{values?.postTypes === "job" || values?.postTypes === "internship" ?'Department': "Streams"}</label>
+                              <Select
+                                styles={customStyles}
+                                isSearchable={true}
+                                options={list1.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>State</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>City</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>work mode</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>job type</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "internship" || values?.postTypes === "job" && (
+                          <>
+                            <div className="me-2">
+                              <label>job role</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+                        {values?.postTypes === "collegefestives" || values?.postTypes === "services" || values?.postTypes === "question" || values?.postTypes === "mentoring" && (
+                          <>
+                            <div className="me-2">
+                              <label>Eligibility</label>
+                              <Select
+                                isSearchable={true}
+                                options={list2.map(item => {
+                                  return {
+                                    label: item,
+                                    value: item
+                                  }
+                                })}
+                              />
+                            </div>
+                          </>
+                        )}
+
                         {values?.postTypes === "job" ||
                           values?.postTypes === "internship" ||
                           values?.postTypes === "mentoring" ||

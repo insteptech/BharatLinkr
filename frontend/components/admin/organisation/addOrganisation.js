@@ -62,17 +62,15 @@ function AddOrganisation() {
         values.CMS = values.cms[0];
         delete values.cms;
 
-        console.log(values);
-
         formData.append("organisationData", JSON.stringify(values));
-        // dispatch(updateOrganisation(formData)).then((res) => {
-        //     if (res?.payload?.data?.success) {
-        //         router.push('/admin/organisation')
-        //         toast.success('updated')
-        //     } else {
-        //         toast.error('error')
-        //     }
-        // })
+        dispatch(updateOrganisation(formData)).then((res) => {
+            if (res?.payload?.data?.success) {
+                router.push('/admin/organisation')
+                toast.success('updated')
+            } else {
+                toast.error('error')
+            }
+        })
       } else {
         let data = { payload: [], CMS: {} };
         data.CMS = values.cms[0];
@@ -104,7 +102,8 @@ function AddOrganisation() {
       dispatch(getOrganisationbyid(Id));
     }
     dispatch(getlistSector());
-    dispatch(getIndustryList(selectSectorids));
+    // dispatch(getIndustryList(selectSectorids));
+    dispatch(getIndustryList());
     dispatch(getState());
     dispatch(cityDropdown(""));
     dispatch(companyGroupList());
@@ -117,12 +116,12 @@ function AddOrganisation() {
   };
 
   const handleSectorSelect = (e, values) => {
-    let x = selectSectorids;
-    if (!x.sectorId.includes(Number(e.target.value))) {
-      x.sectorId.push(Number(e.target.value));
-    }
-    setSelectSectorids(x);
-    dispatch(getIndustryList(selectSectorids));
+    // let x = selectSectorids;
+    // if (!x.sectorId.includes(Number(e.target.value))) {
+    //   x.sectorId.push(Number(e.target.value));
+    // }
+    // setSelectSectorids(x);
+    // dispatch(getIndustryList(selectSectorids));
   };
 
   const handleSectorremove = (values, Id) => {
@@ -191,8 +190,8 @@ function AddOrganisation() {
     { title: "Company Address", key: "companyAddress" },
   ];
 
-  const sectorlist = useSelector((data) => data?.sectorData?.sectorlist);
-  const industrylist = useSelector((data) => data?.sectorData?.industrylist);
+  const sectorlist = useSelector((data) => data?.sectorData?.sectorlist?.rows);
+  const industrylist = useSelector((data) => data?.sectorData?.industrylist?.rows);
   const statelist = useSelector(
     (data) => data?.stateList?.stateList?.data?.data?.rows
   );
@@ -661,18 +660,14 @@ function AddOrganisation() {
                                               Select Industry
                                             </option>
                                             {industrylist &&
-                                              industrylist?.map(
-                                                (item, index) => {
-                                                  return (
-                                                    <option
-                                                      key={index}
-                                                      value={item.id}
-                                                    >
-                                                      {item.name}
-                                                    </option>
-                                                  );
-                                                }
-                                              )}
+                                              industrylist?.map((ele, i) => {
+                                                return(values?.sector?.map((item, index) => {
+                                                  if (item.sectorId == ele?.sectorId) {
+                                                      return (<option value={ele?.id} key={index}>{ele?.name}</option>)
+                                                    }
+                                                }))
+                                              })
+                                            }
                                           </select>
                                         </div>
                                         <div className="text-end">

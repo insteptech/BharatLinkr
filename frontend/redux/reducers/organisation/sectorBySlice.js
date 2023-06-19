@@ -44,7 +44,7 @@ const sectorBySlice = createSlice({
       state.isLoading = false
     });
     builder.addCase(getlistSector.fulfilled, (state, action) => {
-      state.sectorlist = action?.payload?.data?.data?.rows;
+      state.sectorlist = action?.payload?.data?.data;
       state.isLoading = false
     });
 
@@ -57,7 +57,7 @@ const sectorBySlice = createSlice({
       state.isLoading = false
     });
     builder.addCase(getIndustryList.fulfilled, (state, action) => {
-      state.industrylist = action?.payload?.data?.data?.rows;
+      state.industrylist = action?.payload?.data?.data;
       state.isLoading = false
     });
 

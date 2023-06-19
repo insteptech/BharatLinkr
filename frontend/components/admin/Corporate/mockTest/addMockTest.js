@@ -53,6 +53,8 @@ function AddMockTest() {
       FileState.map((item, i) => {
         let name = item?.name;
         let uid = item?.file?.name.split("_")[0];
+        var formData = new FormData();
+
         value.MocktestQuestions[item.index][name].uniqueId = uid;
         if (name === "OptionAData") {
           formData.append("optionAFile", item.file);
@@ -70,8 +72,6 @@ function AddMockTest() {
           formData.append("questionFile", item.file);
         }
       });
-
-      var formData = new FormData();
 
       let data = {
         payload: [value],
@@ -259,31 +259,31 @@ function AddMockTest() {
 
     values?.MockTest?.forEach((item) => {
       const error = {};
-      if (!item.mainCategoryId) {
+      if (!item?.mainCategoryId) {
         error["mainCategoryId"] = "Required";
       }
-      if (!item.subCategoryId) {
+      if (!item?.subCategoryId) {
         error["subCategoryId"] = "Required";
       }
-      if (!item.topicName) {
+      if (!item?.topicName) {
         error["topicName"] = "Required";
       }
-      if (!item.feildName) {
+      if (!item?.feildName) {
         error["feildName"] = "Required";
       }
-      if (!item.subTopic) {
+      if (!item?.subTopic) {
         error["subTopic"] = "Required";
       }
-      if (!item.totalMarksOfTest) {
+      if (!item?.totalMarksOfTest) {
         error["totalMarksOfTest"] = "Required";
       }
-      if (!item.questionMarks) {
+      if (!item?.questionMarks) {
         error["questionMarks"] = "Required";
       }
-      if (!item.totalTime) {
+      if (!item?.totalTime) {
         error["totalTime"] = "Required";
       }
-      if (!item.totalQuestions) {
+      if (!item?.totalQuestions) {
         error["totalQuestions"] = "Required";
       }
       itemArray1.push(error);
@@ -292,30 +292,30 @@ function AddMockTest() {
 
     values?.MocktestQuestions?.map((item) => {
       const error = {};
-      if (!item.QuestionData.question) {
+      if (!item?.QuestionData?.question) {
         error["QuestionData"] = {};
         error["QuestionData"]["question"] = "Required";
       }
-      if (!item.type) {
+      if (!item?.type) {
         error["type"] = "Required";
       }
-      if (!item.OptionAData.optionA) {
+      if (!item?.OptionAData?.optionA) {
         error["OptionAData"] = {};
         error["OptionAData"]["optionA"] = "Required";
       }
-      if (!item.OptionBData.optionB) {
+      if (!item?.OptionBData?.optionB) {
         error["OptionBData"] = {};
         error["OptionBData"]["optionB"] = "Required";
       }
-      if (!item.OptionCData.optionC) {
+      if (!item?.OptionCData?.optionC) {
         error["OptionCData"] = {};
         error["OptionCData"]["optionC"] = "Required";
       }
-      if (!item.OptionDData.optionD) {
+      if (!item?.OptionDData?.optionD) {
         error["OptionDData"] = {};
         error["OptionDData"]["optionD"] = "Required";
       }
-      if (!item.answer) {
+      if (!item?.answer) {
         error["answer"] = "Required";
       }
       itemArray2.push(error);

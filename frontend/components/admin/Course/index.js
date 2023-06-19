@@ -34,10 +34,10 @@ function CourseTable() {
   const handleDelete = (item) => {
     dispatch(deleteCourse(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        toast.success("Deleted");
+        toast.success("Deleted",{autoClose:1000});
         dispatch(getCourse(pagination));
       } else {
-        toast.error("error");
+        toast.error("error",{autoClose:1000});
       }
     });
   };

@@ -8,9 +8,9 @@ export const CreateColStream = createAsyncThunk("addcolstream", async (data) => 
     .catch((err) => err);
 });
 
-export const getColStream = createAsyncThunk("getColStream", async () => {
+export const getColStream = createAsyncThunk("getColStream", async (body) => {
   return apiRequest
-    .post("colStream/colStreamList")
+    .post("colStream/colStreamList",body)
     .then((res) => res)
     .catch((err) => err);
 })
