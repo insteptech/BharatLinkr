@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Button, Col, Form, Pagination, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteCorporate,
@@ -11,10 +11,22 @@ import { toast } from "react-toastify";
 import { getSubCategory } from "../../redux/actions/corporate/addsubcategory";
 import LoaderPage from "../common-components/loader";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import DeleteModal from "../modals/deleteModal";
+import Pagesize from "../admin/pagination/pagesize";
 
 function CorporateTable() {
   const FormSteps = ["Corporate List", "Categories"];
   const [dataValue, setDataValue] = React.useState(0);
+  const [pagination, setPagination] = useState({
+    pageNo: 1,
+    pageSize: 10
+  })
+  const [modalShow, setModalShow] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
+  const handleHide = () => {
+    setModalShow(false)
+  }
+
   const router = useRouter();
 
   const dispatch = useDispatch();
@@ -37,17 +49,23 @@ function CorporateTable() {
   const handleDelete = (item) => {
     dispatch(deleteCorporate(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        dispatch(getCorporateData());
+        toast.success('Deleted', {autoClose: 1000})
+        dispatch(getCorporateData(pagination))
+      } else {
+        toast.error('Error', {autoClose: 1000})
       }
-    });
-  };
+    })
+  }
 
   const handleEdit = (item) => {
     router.push(`/admin/corporate/update/${item.id}`);
   };
 
   useEffect(() => {
-    dispatch(getCorporateData());
+    dispatch(getCorporateData(Pagination));
+  }, [Pagination]);
+
+  useEffect(() => {
     dispatch(getSubCategory());
   }, []);
 
@@ -77,9 +95,8 @@ function CorporateTable() {
                     FormSteps?.map((steps, stepsIndex) => (
                       <li className="nav-item " key={stepsIndex}>
                         <a
-                          className={`nav-link admin_tabs_name ${
-                            dataValue === stepsIndex && "head-active"
-                          }`}
+                          className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                            }`}
                           active={true}
                           onClick={() => setDataValue(stepsIndex)}
                         >
@@ -140,6 +157,7 @@ function CorporateTable() {
         <Col md={6} className="display_btn_row">
           <div className="d-flex mt-0 ">
             <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+            <Pagesize setPagination={setPagination} />
             <Form.Select aria-label="Default select example">
               <option>10</option>
               <option value="1">3</option>
@@ -209,7 +227,7 @@ function CorporateTable() {
                       return (
                         <tr key={index}>
                           <td className="text-center admin_table_data">
-                            {index + 1}
+                            {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
                           </td>
                           <td className="text-center admin_table_data">
                             {item?.MainCategory?.mainCategory}
@@ -231,13 +249,13 @@ function CorporateTable() {
                             }
                           </td>
                           <td className="text-center admin_table_data">
-                            {item?.views}
+                            {item?.views || "1"}
                           </td>
                           <td className="text-center admin_table_data">
-                            {item?.downloads}
+                            {item?.downloads || "1"}
                           </td>
                           <td className="text-center admin_table_data">
-                            {item?.likes}
+                            {item?.likes || "1"}
                           </td>
                           <td className="text-center admin_table_data">
                             <img
@@ -248,7 +266,11 @@ function CorporateTable() {
                             <img
                               className="mx-1 admin_table_action_icon"
                               src="/images/delete-icon-blue.png"
-                              onClick={() => handleDelete(item)}
+                              // onClick={() => handleDelete(item)}
+                              onClick={() => {
+                                setModalShow(true)
+                                setDeleteItem(item)
+                              }}
                             ></img>
                           </td>
                         </tr>
@@ -257,10 +279,17 @@ function CorporateTable() {
                   )}
                 </tbody>
               </Table>
+              <Pagination pagination={pagination} setPagination={setPagination} list={corporateRegisterlist} />
+              <DeleteModal
+                show={modalShow}
+                onHide={() => handleHide()}
+                handleDelete={handleDelete}
+                deleteItem={deleteItem}
+              />
             </div>
           </Row>
           <div className="admin_table_footer">
-            <Row>
+            {/* <Row>
               <Col md={6} className="table_footer_start">
                 <h6>Showing {corporateRegisterlist?.length} enteries</h6>
               </Col>
@@ -270,13 +299,13 @@ function CorporateTable() {
 
                   <Button
                     className="border_btn green"
-                    // onClick={handlePagenation}
+                  // onClick={handlePagenation}
                   >
                     Next
                   </Button>
                 </div>
               </Col>
-            </Row>
+            </Row> */}
           </div>
         </div>
       )}
@@ -344,7 +373,7 @@ function CorporateTable() {
 
                   <Button
                     className="border_btn green"
-                    // onClick={handlePagenation}
+                  // onClick={handlePagenation}
                   >
                     Next
                   </Button>
