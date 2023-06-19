@@ -1,77 +1,79 @@
-import React, { useEffect } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import React, { useEffect, useMemo } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+import { buttonTypes, FieldTypes, inputFieldTypes } from '../../../utils/helper'
+import FormGenerator from '../../common-components/Form/FormGenerator'
+import Select from 'react-select'
+import { FieldArray } from 'react-final-form-arrays'
+import { Field, Form } from 'react-final-form'
+import arrayMutators from 'final-form-arrays'
+import { getMainStream } from '../../../redux/actions/streams/addMainStreams'
+import { useRouter } from 'next/router'
+import { useDispatch, useSelector } from 'react-redux'
+import { getSubStream } from '../../../redux/actions/streams/addSubStream'
 import {
-  buttonTypes,
-  FieldTypes,
-  inputFieldTypes,
-} from "../../../utils/helper";
-import FormGenerator from "../../common-components/Form/FormGenerator";
-import Select from "react-select";
-import { FieldArray } from "react-final-form-arrays";
-import { Field, Form } from "react-final-form";
-import arrayMutators from "final-form-arrays";
-import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { useRouter } from "next/router";
-import { useDispatch, useSelector } from "react-redux";
-import { getSubStream } from "../../../redux/actions/streams/addSubStream";
-import { CreateColStream, editColStream, getColStreamById } from "../../../redux/actions/streams/addColStream";
-import { toast } from "react-toastify";
+  CreateColStream,
+  editColStream,
+  getColStreamById
+} from '../../../redux/actions/streams/addColStream'
+import { toast } from 'react-toastify'
 
-export default function AddColStream() {
-  const router = useRouter();
-  const dispatch = useDispatch();
+export default function AddColStream () {
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   const mainData = useSelector(
-    (data) => data?.mainStreamList?.mainStreamValue?.data?.data
-  );
-  const subData = useSelector(
-    (data) => data?.subStreamList?.subStreamValue?.data?.data
-  );
-  const colStream = useSelector(
-    (data) => data?.colStreamById?.colStreamByIdValue?.data?.stream
+    data => data?.mainStreamList?.mainStreamValue?.data?.data
   )
-  // console.log(subData, "mainDtatatat");
+  const subData = useSelector(
+    data => data?.subStreamList?.subStreamValue?.data?.data
+  )
+  const colStream = useSelector(
+    data => data?.colStreamById?.colStreamByIdValue?.data?.stream
+  )
 
   useEffect(() => {
-    dispatch(getMainStream());
-    dispatch(getSubStream());
+    dispatch(getMainStream())
+    dispatch(getSubStream())
     if (router?.query.Id) {
-      dispatch(getColStreamById(router.query.Id));
+      dispatch(getColStreamById(router.query.Id))
     }
-  }, [router.query.Id]);
+  }, [router.query.Id])
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     let updatedValue = {}
-    // console.log(values, "mainDtatatat");
     if (!router.query.Id) {
-      dispatch(CreateColStream(values)).then((res) => {
-        console.log(res, "mainDtatatat");
+      dispatch(CreateColStream(values)).then(res => {
+        console.log(res, 'mainDtatatat')
         if (res?.payload?.data?.success) {
-          const status = res?.payload?.data?.data?.stream[0]?.status;
-          if (status == "duplicate") {
-            toast.error(`Col Stream is ${status}`);
+          const status = res?.payload?.data?.data?.stream[0]?.status
+          if (status == 'duplicate') {
+            toast.error(`Col Stream is ${status}`, { autoClose: 1000 })
           } else {
-            toast.success("Col Stream added successfuly");
-            router.push("/admin/streams");
+            toast.success('Col Stream added successfuly', { autoClose: 1000 })
+            router.push('/admin/streams')
           }
         }
-      });
+      })
     } else {
       updatedValue = {
-        colStreamName: values?.colstream[0]?.colStreamName,
-        id: colStream?.id
+        colStream: [
+          {
+            colStreamName: values?.colstream[0]?.colStreamName,
+            id: colStream?.id
+          }
+        ]
       }
-      dispatch(editColStream(updatedValue)).then((res) => {
+      dispatch(editColStream(updatedValue)).then(res => {
         console.log(res)
         if (res?.payload?.data?.success) {
-          toast.success("Updated")
-          router.push("/admin/streams")
+          toast.success('Updated', { autoClose: 1000 })
+          router.push('/admin/streams')
         } else {
-          toast.error("error")
+          toast.error('error', { autoClose: 1000 })
         }
       })
     }
-  };
+  }
 
   const handleInit = () => {
     let initialValue = {}
@@ -88,44 +90,38 @@ export default function AddColStream() {
         colstream: [{ colStreamName: '' }]
       }
     }
-    console.log(initialValue)
     return initialValue
   }
 
-  const onSubmit = (values) => {
-    console.log("colStream", values);
-  };
-  const validate = (values) => {
-    const errors = {};
-    const itemArray = [];
-    values.colstream.map((item, index) => {
-      const error = {};
-      if (!item.stream) {
-        error["stream"] = "Col Stream is Required";
-        itemArray.push(error);
+  const validate = values => {
+    const errors = {}
+    const itemArray = []
+    values?.colstream?.map(item => {
+      const error = {}
+      if (!item.colStreamName) {
+        error['colStreamName'] = '*'
       }
-      errors["colStream"] = itemArray;
-    });
-    if (!values.mainStream) {
-      errors["mainStream"] = "Main Stream is Required";
+      itemArray.push(error)
+      errors['colstream'] = itemArray
+    })
+    if (!values.mainStreamId) {
+      errors['mainStreamId'] = '*'
     }
-    if (!values.subStream) {
-      errors["subStream"] = "Sub Stream is Required";
+    if (!values.subStreamId) {
+      errors['subStreamId'] = '*'
     }
-    console.log(errors, values, "kllllllllllll");
-    return errors;
-  };
-  const initialValues = {
-    mainStream: "",
-    subStream: "",
-    colStream: [{ name: "" }],
-  };
+    return errors
+  }
+
+  const handleMainStream = (e) => {
+    dispatch(getSubStream({mainStreamId:Number(e.target.value)}))
+  }
 
   return (
     <>
-      <Row className="my-3 padding_top">
+      <Row className='my-3 padding_top'>
         <Col>
-          <h3 className="fw-bold">Col Stream Name</h3>
+          <h3 className='fw-bold'>Col Stream Name</h3>
           <hr />
         </Col>
       </Row>
@@ -134,89 +130,106 @@ export default function AddColStream() {
           <Form
             onSubmit={handleSubmit}
             mutators={{
-              // potentially other mutators could be merged here
-              ...arrayMutators,
+              ...arrayMutators
             }}
-            // validate={validate}
-            initialValues={() => handleInit()}
+            validate={validate}
+            initialValues={useMemo(() => handleInit(), [colStream])}
             render={({ handleSubmit, values }) => (
               <form onSubmit={handleSubmit}>
                 <Row>
                   <Col lg={12}>
-                    <label className="signup_form_label">
-                      Main Stream Name
-                    </label>
-                    <Field name="mainStreamId">
+                    <Field name='mainStreamId'>
                       {({ input, meta }) => (
                         <>
+                          <div>
+                            <label className='signup_form_label'>
+                              Main Stream Name
+                            </label>
+                            {meta.error && meta.touched && (
+                              <span className='text-danger required_msg'>
+                                {meta.error}
+                              </span>
+                            )}
+                          </div>
                           <select
                             {...input}
-                            className="form-control signup_form_input "
+                            className='form-control signup_form_input'
                             disabled={router.query.Id ? true : false}
+                            onChange={e => {
+                              input.onChange(e)
+                              handleMainStream(e)
+                            }}
                           >
-                            {router.query.Id ?
-                              <option>{colStream?.MainStream?.mainStreamName}</option>
-                              :
+                            {router.query.Id ? (
+                              <option>
+                                {colStream?.MainStream?.mainStreamName}
+                              </option>
+                            ) : (
                               <option>Select main stream</option>
-                            }
+                            )}
                             {mainData &&
-                              mainData?.rows?.map((item) => (
+                              mainData?.rows?.map(item => (
                                 <option key={item.id} value={item.id}>
-                                  {item.mainStreamName}{" "}
+                                  {item.mainStreamName}{' '}
                                 </option>
                               ))}
                           </select>
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
                         </>
                       )}
                     </Field>
-                    <div className="text-end">
+                    <div className='text-end'>
                       <img
-                        className="select_down_icon"
-                        src="/images/down.png"
+                        className='select_down_icon'
+                        src='/images/down.png'
                       />
                     </div>
                   </Col>
                 </Row>
                 <Row>
                   <Col lg={12}>
-                    <label className="signup_form_label">Sub Stream Name</label>
                     <Field
-                      name="subStreamId"
-                      component="select"
-                      placeholder="Choose Exam Accepted"
+                      name='subStreamId'
+                      component='select'
+                      placeholder='Choose Exam Accepted'
                     >
                       {({ input, meta }) => (
                         <>
+                          <div>
+                            <label className='signup_form_label'>
+                              Sub Stream Name
+                            </label>
+                            {meta.error && meta.touched && (
+                              <span className='text-danger required_msg'>
+                                {meta.error}
+                              </span>
+                            )}
+                          </div>
                           <select
                             {...input}
-                            className="form-control signup_form_input"
+                            className='form-control signup_form_input'
                             disabled={router.query.Id ? true : false}
                           >
-                            {router.query.Id ?
-                              <option>{colStream?.SubStream?.subStreamName}</option>
-                              :
+                            {router.query.Id ? (
+                              <option>
+                                {colStream?.SubStream?.subStreamName}
+                              </option>
+                            ) : (
                               <option>Select sub stream</option>
-                            }
+                            )}
                             {subData &&
-                              subData?.rows?.map((item) => (
+                              subData?.rows?.map(item => (
                                 <option key={item.id} value={item.id}>
-                                  {item.subStreamName}{" "}
+                                  {item.subStreamName}{' '}
                                 </option>
                               ))}
                           </select>
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
                         </>
                       )}
                     </Field>
-                    <div className="text-end">
+                    <div className='text-end'>
                       <img
-                        className="select_down_icon"
-                        src="/images/down.png"
+                        className='select_down_icon'
+                        src='/images/down.png'
                       />
                     </div>
                   </Col>
@@ -224,54 +237,56 @@ export default function AddColStream() {
 
                 <div>
                   <Col lg={12}>
-                    <label className="signup_form_label">Col Stream Name</label>
+                    <label className='signup_form_label'>Col Stream Name</label>
                   </Col>
-                  <FieldArray name="colstream">
+                  <FieldArray name='colstream'>
                     {({ fields }) => (
                       <>
                         {fields.map((name, index) => (
                           <Row>
                             <Col lg={12} md={12}>
-                              <div className="d-flex margin_bottom">
+                              <div className='d-flex margin_bottom'>
                                 <Field name={`${name}.colStreamName`}>
                                   {({ input, meta }) => (
-                                    <div className="w-100">
+                                    <div className='w-100'>
                                       <input
                                         {...input}
-                                        type="text"
-                                        className="form-control signup_form_input"
-                                        placeholder="Enter Col Stream"
+                                        type='text'
+                                        className='form-control signup_form_input'
+                                        placeholder='Enter Col Stream'
                                       />
                                       {meta.error && meta.touched && (
-                                        <span>{meta.error}</span>
+                                        <span className='text-danger required_msg'>
+                                          {meta.error}
+                                        </span>
                                       )}
                                     </div>
                                   )}
                                 </Field>
-                                <div className="d-flex mt-2 ">
-                                  {!router.query.Id &&
+                                <div className='d-flex mt-2 '>
+                                  {!router.query.Id && (
                                     <div
-                                      type="button"
-                                      className="add_remove_btn"
+                                      type='button'
+                                      className='add_remove_btn'
                                       onClick={() =>
-                                        fields.push({ colStreamName: "" })
+                                        fields.push({ colStreamName: '' })
                                       }
                                     >
                                       <img
-                                        className="add_remove_icon"
-                                        src="/images/plus.png"
+                                        className='add_remove_icon'
+                                        src='/images/plus.png'
                                       />
                                     </div>
-                                  }
+                                  )}
                                   {fields.length > 1 ? (
                                     <div
-                                      className="add_remove_btn"
-                                      type="button"
+                                      className='add_remove_btn'
+                                      type='button'
                                       onClick={() => fields.remove(index)}
                                     >
                                       <img
-                                        className="add_remove_icon"
-                                        src="/images/minus.png"
+                                        className='add_remove_icon'
+                                        src='/images/minus.png'
                                       />
                                     </div>
                                   ) : (
@@ -287,8 +302,8 @@ export default function AddColStream() {
                   </FieldArray>
                 </div>
                 <Row>
-                  <Col className="text-center">
-                    <button className="admin_signup_btn  mt-3" type="submit">
+                  <Col className='text-center'>
+                    <button className='admin_signup_btn  mt-3' type='submit'>
                       Add Col Stream
                     </button>
                   </Col>
@@ -299,5 +314,5 @@ export default function AddColStream() {
         </Col>
       </Row>
     </>
-  );
+  )
 }
