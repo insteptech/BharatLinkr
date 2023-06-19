@@ -17,9 +17,9 @@ export const createNewSector = createAsyncThunk(
 // get list action of sectors
 export const getlistSector = createAsyncThunk(
   "getlistSector/organisation/sectorList",
-  async () => {
+  async (body) => {
     return apiRequest
-      .post("organisation/sectorList")
+      .post("organisation/sectorList", body)
       .then((res) => res)
       .catch((err) => err);
   }

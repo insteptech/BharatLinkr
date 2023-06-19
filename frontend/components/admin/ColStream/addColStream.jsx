@@ -47,25 +47,29 @@ export default function AddColStream () {
         if (res?.payload?.data?.success) {
           const status = res?.payload?.data?.data?.stream[0]?.status
           if (status == 'duplicate') {
-            toast.error(`Col Stream is ${status}`,{autoClose:1000})
+            toast.error(`Col Stream is ${status}`, { autoClose: 1000 })
           } else {
-            toast.success('Col Stream added successfuly',{autoClose:1000})
+            toast.success('Col Stream added successfuly', { autoClose: 1000 })
             router.push('/admin/streams')
           }
         }
       })
     } else {
       updatedValue = {
-        colStreamName: values?.colstream[0]?.colStreamName,
-        id: colStream?.id
+        colStream: [
+          {
+            colStreamName: values?.colstream[0]?.colStreamName,
+            id: colStream?.id
+          }
+        ]
       }
       dispatch(editColStream(updatedValue)).then(res => {
         console.log(res)
         if (res?.payload?.data?.success) {
-          toast.success('Updated',{autoClose:1000})
+          toast.success('Updated', { autoClose: 1000 })
           router.push('/admin/streams')
         } else {
-          toast.error('error',{autoClose:1000})
+          toast.error('error', { autoClose: 1000 })
         }
       })
     }
@@ -92,7 +96,7 @@ export default function AddColStream () {
   const validate = values => {
     const errors = {}
     const itemArray = []
-    values?.colstream?.map((item, index) => {
+    values?.colstream?.map(item => {
       const error = {}
       if (!item.colStreamName) {
         error['colStreamName'] = '*'
@@ -107,6 +111,10 @@ export default function AddColStream () {
       errors['subStreamId'] = '*'
     }
     return errors
+  }
+
+  const handleMainStream = (e) => {
+    dispatch(getSubStream({mainStreamId:Number(e.target.value)}))
   }
 
   return (
@@ -145,8 +153,12 @@ export default function AddColStream () {
                           </div>
                           <select
                             {...input}
-                            className='form-control signup_form_input '
+                            className='form-control signup_form_input'
                             disabled={router.query.Id ? true : false}
+                            onChange={e => {
+                              input.onChange(e)
+                              handleMainStream(e)
+                            }}
                           >
                             {router.query.Id ? (
                               <option>

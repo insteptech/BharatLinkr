@@ -15,9 +15,9 @@ export const CreateSubStream = createAsyncThunk("addsubstream", async (data) => 
 }
 );
 
-export const getSubStream = createAsyncThunk("getsubstream", async () => {
+export const getSubStream = createAsyncThunk("getsubstream", async (body) => {
   return apiRequest
-    .post("subStream/subStreamList")
+    .post("subStream/subStreamList",body)
     .then((res) => {
       return res;
     })

@@ -27,13 +27,16 @@ const AddnewSector = () => {
 
     if (!Id) {
       dispatch(createNewSector(values)).then((res) => {
+        console.log(res,res?.payload?.data?.success)
         if (res?.payload?.data?.success) {
-          const status = res?.payload?.data?.data?.corp[0]?.status;
-          if (status == "duplicate") {
-            toast.error(`Sector is ${status}`, { autoClose: 1000 });
-          } else {
+          let status = res?.payload?.data?.data?.corp[0]?.status;
+          if (status) {
+            if (status == "duplicate") { 
+              toast.error(`Sector is ${status}`, { autoClose: 1000 });
+            }
+          } if (res?.payload?.data?.data?.corp[0]?.active) { 
             toast.success("Sector added successfuly", { autoClose: 1000 });
-            router.push("/admin/organisation", { autoClose: 1000 });
+            router.push("/admin/organisation");
           }
         }
       });
@@ -67,8 +70,21 @@ const AddnewSector = () => {
     return initialValues;
   };
 
+  const validate = (values) => {
+    let errors = {}
+    let itemArray = []
+    values?.sectorData?.map((item) => {
+      let error = {}
+      if (!item?.name) {
+        error["name"]="*"
+      }
+      itemArray.push(error)
+    })
+    errors["sectorData"] = itemArray
+    return errors;
+  }
+
   useEffect(() => {
-    // handleInit()
     if (Id) {
       dispatch(getSectorById({ id: Number(Id) }));
     }
@@ -90,8 +106,8 @@ const AddnewSector = () => {
               ...arrayMutators,
             }}
             keepDirtyOnReinitialize
-            // validate={validate}
-            initialValues={useMemo(() => setInitial())}
+            validate={validate}
+            initialValues={useMemo(() => setInitial(),[InitialValSector])}
             render={({ handleSubmit, values }) => (
               <form onSubmit={handleSubmit}>
                 <Row>
@@ -113,7 +129,9 @@ const AddnewSector = () => {
                                           placeholder="Enter Sector Name"
                                         />
                                         {meta.error && meta.touched && (
-                                          <span>{meta.error}</span>
+                                          <span className='text-danger required_msg'>
+                                            {meta.error}
+                                          </span>
                                         )}
                                       </div>
                                     )}
