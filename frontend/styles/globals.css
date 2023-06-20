@@ -494,7 +494,13 @@ optgroup {
   top: 0;
   left: 10.3125rem;
 }
-
+.react_select_lable{
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: #463196;
+  margin-bottom: 5px;
+  margin-left: 20px;
+}
 .signup_form_label {
   font-weight: 600;
   font-size: 1.125rem;
@@ -3010,7 +3016,6 @@ input::-webkit-inner-spin-button {
 .input_padding {
   width: 100%;
   padding: 0.625rem 1.25rem !important;
-  font-style: normal;
   font-weight: 500;
   font-size: 0.6875rem;
   line-height: 1rem;
@@ -6027,7 +6032,7 @@ a:hover {
   color: #555;
   display: flex;
   padding: 0.125rem;
-  border: 0.0625rem solid currentColor;
+  /* border: 0.0625rem solid currentColor; */
   border-radius: 0.3125rem;
   margin: 0 0 1.875rem;
 }
@@ -6048,7 +6053,7 @@ a:hover {
   color: #bbb;
 }
 
-.top_input button[type="submit"] {
+.top_input .type_submit {
   text-indent: -62.4375rem;
   overflow: hidden;
   width: 2.5rem;
@@ -6061,11 +6066,11 @@ a:hover {
   opacity: 0.7;
 }
 
-.top_input button[type="submit"]:hover {
+.top_input .type_submit:hover {
   opacity: 1;
 }
 
-.top_input button[type="submit"]:focus,
+.top_input .type_submit:focus,
 .top_input input[type="search"]:focus {
   box-shadow: none;
   border-color: #fff;
@@ -7029,8 +7034,8 @@ a:hover {
 }
 
 .react_select .css-1nmdiq5-menu {
-  /* background-color: var(--admin-bg) !important; */
-  /* border-radius: 25px !important; */
+ position: relative;
+ z-index: 999;
 }
 
 .react_select .css-t3ipsp-control:hover {
@@ -7056,22 +7061,14 @@ a:hover {
 }
 
 
-.react_select .select_scroll_div{
-  width: 540px;
-  overflow: auto;
-  display: flex;
-  overflow-y: hidden;
-}
+
 .col_padding_top{
   padding-top: 32px;
 }
-/* .mithesh {
-  display: flex;
-  flex-wrap: nowrap;
-  width: 400px;
-  overflow-x: scroll;
-}
+.wrap_select_div{
+  /* display: flex; */
+  /* align-items: center; */
+  max-width: 550px;
+  /* overflow-y: auto; */
 
-.mithesh::-webkit-scrollbar {
-  display: none;
-} */
+}
