@@ -38,6 +38,7 @@ const {
   collegeAgency,
 
   collegeAssociateStream,
+  collegeAssociateFees,
 
   exam,
 
@@ -149,14 +150,24 @@ const addCollege = async (req) => {
             await Promise.all(item.collegeCourse.map(async (cllgCourse) => {
               cllgCourse['collegeId'] = result.id;
               courses = await collegeAssociateCourse.create(cllgCourse, { returning: true }, { transaction: t });
+        
+
+              if (cllgCourse.collegeStreams && cllgCourse.collegeStreams.length > 0) {
+                await Promise.all(cllgCourse.collegeStreams.map(async (cllgStream) => {
+                  cllgStream['collegeAssociateId'] = courses.id;
+                  await collegeAssociateStream.create(cllgStream, { returning: true }, { transaction: t });
+                }))
+              }
+
+              if (cllgCourse.courseFees && cllgCourse.courseFees.length > 0) {
+                await Promise.all(cllgCourse.courseFees.map(async (cllgFees) => {
+                  cllgFees['collegeAssociateId'] = courses.id;
+                  await collegeAssociateFees.create(cllgFees, { returning: true }, { transaction: t });
+                }))
+              }
             }))
           }
-          if (item.collegeStreams && item.collegeStreams.length > 0) {
-            await Promise.all(item.collegeStreams.map(async (cllgStream) => {
-              cllgStream['collegeAssociateId'] = courses.id;
-              await collegeAssociateStream.create(cllgStream, { returning: true }, { transaction: t });
-            }))
-          }
+    
           if (item.collegeAbouts && item.collegeAbouts.length > 0) {
             await Promise.all(item.collegeAbouts.map(async (cllgAbout) => {
               cllgAbout['collegeId'] = result.id;
@@ -380,9 +391,19 @@ const collegeList = async (req) => {
                   required: false,
                   as: 'ColStream',
                 },
+          
+              ]
+            },
+            {
+              model: collegeAssociateFees,
+              required: false,
+              where: { deleted: false },
+              as: 'CourseFees',
+              include:[
                 {
                   model: masterFilter,
                   required: false,
+                  where: { deleted: false },
                   as: 'FeeDetails',
                 }
               ]
@@ -461,9 +482,7 @@ const collegeDelete = async (req) => {
     await collegeAgency.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
-    await collegeAssociateStream.update({ deleted: true }, {
-      where: { collegeId: collg.id },
-    });
+
     await collegeAdmission.update({ deleted: true }, {
       where: { collegeId: collg.id },
     });
@@ -610,30 +629,59 @@ const updateCollege = async (req) => {
       const updateData = await college.update(collegeData, { where: { id: collegeData.id }, returning: true })
 
       if (collegeData.collegeCourse) {
-        if (collegeData.collegeCourse.id) {
-          await collegeAssociateCourse.update(collegeData.collegeCourse, { where: { id: collegeData.collegeCourse.id }, returning: true })
-        } else {
-          collegeData.collegeCourse['collegeId'] = collegeData.id;
-          await collegeAssociateCourse.create(collegeData.collegeCourse)
-        }
-      };
+       await Promise.all(
+        collegeData.collegeCourse.map(async(courseItem)=>{
+          if(courseItem.id){
+            await collegeAssociateCourse.update(courseItem,{where:{id:courseItem.id}})
+          }else{
+            collegeData.collegeCourse['collegeId'] = collegeData.id;
+            await collegeAssociateCourse.create(courseItem)
+          }
 
-      if (collegeData.collegeAgencies) {
-        if (collegeData.collegeAgencies.id) {
-          await collegeAgency.update(collegeData.collegeAgencies, { where: { id: collegeData.collegeAgencies.id }, returning: true })
-        } else {
-          collegeData.collegeAgencies['collegeId'] = collegeData.id;
-          await collegeAgency.create(collegeData.collegeAgencies)
-        }
+          if (courseItem.collegeStreams) {
+            courseItem.collegeStreams.map(async(cllgStreams)=>{
+              if(cllgStreams.id){
+          await collegeAssociateStream.update(cllgStreams, { where: { id: cllgStreams.id }, returning: true })
+              }else{
+                cllgStreams['collegeAssociateId'] = courseItem.id;
+                    await collegeAssociateStream.create(cllgStreams)
+              }
+            })
+          };
+
+          if (courseItem.collegeFees) {
+            courseItem.collegeFees.map(async(cllgFees)=>{
+              if(cllgFees.id){
+          await collegeAssociateFees.update(cllgFees, { where: { id: cllgFees.id }, returning: true })
+              }else{
+                cllgFees['collegeAssociateId'] = courseItem.id;
+                    await collegeAssociateFees.create(cllgFees)
+              }
+            })
+          };
+
+        })
+       )
       };
-      if (collegeData.collegeStreams) {
-        if (collegeData.collegeStreams.id) {
-          await collegeAssociateStream.update(collegeData.collegeStreams, { where: { id: collegeData.collegeStreams.id }, returning: true })
+ 
+     
+
+  if(collegeData.collegeAgencies){
+    await Promise.all(
+      collegeData.collegeAgencies.map(async (agencyItem) => {
+        if (agencyItem.id) {
+          await collegeAgency.update(agencyItem, { where: { id: agencyItem.id }, returning: true })
         } else {
-          collegeData.collegeStreams['collegeId'] = collegeData.id;
-          await collegeAssociateStream.create(collegeData.collegeStreams)
+
+          agencyItem['collegeId'] = collegeData.id;
+          await collegeAgency.create(agencyItem)
         }
-      };
+      })
+    )
+
+  }
+    
+    
 
       if (collegeData.collegeAbouts) {
         if (collegeData.collegeAbouts.id) {
@@ -680,47 +728,56 @@ const updateCollege = async (req) => {
           await collegePlacements.create(collegeData.placements)
         }
       }
-      await Promise.all(
-        collegeData.faq.map(async (faqItem) => {
-          let faqCollege;
-          if (cllg && cllg.collegeFAQ) {
-            await Promise.all(
 
-              cllg.collegeFAQ.map(async (item3) => {
-                faqCollege = await collegeFAQ.findOne({ where: { id: item3.id } })
+if(collegeData.faq){
 
-              })
-            )
-          }
-          await writeFiles(req.files);
+  await Promise.all(
+    collegeData.faq.map(async (faqItem) => {
+      let faqCollege;
+      if (cllg && cllg.collegeFAQ) {
+        await Promise.all(
 
-          if (imageFile && imageFile.length > 0) {
+          cllg.collegeFAQ.map(async (item3) => {
+            faqCollege = await collegeFAQ.findOne({ where: { id: item3.id } })
 
-            const fileExist = imageFile.find(
-              (image) => image.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == faqItem.uniqueId
-            );
+          })
+        )
+      }
+      await writeFiles(req.files);
 
-            if (fileExist) {
+      if (imageFile && imageFile.length > 0) {
 
-              if (faqCollege && faqCollege.image)
+        const fileExist = imageFile.find(
+          (image) => image.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == faqItem.uniqueId
+        );
 
-                if (fs.existsSync(path.resolve(dir, `${faqCollege.image}`)))
-                  fs.unlinkSync(path.resolve(dir, `${faqCollege.image}`));
+        if (fileExist) {
 
-              faqItem.image = fileExist.originalname;
-            }
+          if (faqCollege && faqCollege.image)
 
-            if (imageFile) faqItem['image'] = faqItem.image;
-          }
-          if (faqItem.id) {
-            await collegeFAQ.update(faqItem, { where: { id: faqItem.id }, returning: true })
-          } else {
+            if (fs.existsSync(path.resolve(dir, `${faqCollege.image}`)))
+              fs.unlinkSync(path.resolve(dir, `${faqCollege.image}`));
 
-            faqItem['collegeId'] = collegeData.id;
-            await collegeFAQ.create(faqItem)
-          }
-        })
-      )
+          faqItem.image = fileExist.originalname;
+        }
+
+        if (imageFile) faqItem['image'] = faqItem.image;
+      }
+      if (faqItem.id) {
+        await collegeFAQ.update(faqItem, { where: { id: faqItem.id }, returning: true })
+      } else {
+
+        faqItem['collegeId'] = collegeData.id;
+        await collegeFAQ.create(faqItem)
+      }
+    })
+  )
+
+
+}
+
+
+     
 
 
       result.push(updateData)
@@ -787,7 +844,7 @@ const allCollegeList = async (req) => {
       }
 
       if (req.body.id) {
-        whrCondition = req.body.id
+        whrCondition = {id:req.body.id}
       }
       if (req.body.mainStreamId) {
         wherecond = { ['$AssociateCourse.CourseAssociateStream.mainStreamId$']: req.body.mainStreamId }
@@ -882,8 +939,55 @@ const allCollegeList = async (req) => {
             where: { deleted: false },
             as: 'AssociateCourse',
             include: [
-
-
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseType',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'Place',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'Eligibility',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseLevel',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'ProgramType',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseCategory',
+  
+              },
+              {
+  
+                model: exam,
+                required: false,
+                as: 'ExamAccepted',
+  
+              },
               {
                 model: collegeAssociateStream,
                 required: false,
@@ -905,67 +1009,25 @@ const allCollegeList = async (req) => {
                     required: false,
                     as: 'ColStream',
                   },
+            
+                ]
+              },
+              {
+                model: collegeAssociateFees,
+                required: false,
+                where: { deleted: false },
+                as: 'CourseFees',
+                include:[
                   {
                     model: masterFilter,
                     required: false,
+                    where: { deleted: false },
                     as: 'FeeDetails',
                   }
                 ]
-              },
-
-
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseType',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'Place',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'Eligibility',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseLevel',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'ProgramType',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseCategory',
-
-              },
-              {
-
-                model: exam,
-                required: false,
-                as: 'ExamAccepted',
-
-              },
-
+              }
             ]
-
+  
           },
           {
             model: masterFilter,
@@ -1061,7 +1123,7 @@ const allCollegeList = async (req) => {
     ////////////////else part ///////////////////
     else {
       result = await college.findAndCountAll({
-
+          where:wherecond,
         include: [
           {
             model: collegeLikesCount,
@@ -1086,8 +1148,55 @@ const allCollegeList = async (req) => {
             where: { deleted: false },
             as: 'AssociateCourse',
             include: [
-
-
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseType',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'Place',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'Eligibility',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseLevel',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'ProgramType',
+  
+              },
+              {
+  
+                model: masterFilter,
+                required: false,
+                as: 'CourseCategory',
+  
+              },
+              {
+  
+                model: exam,
+                required: false,
+                as: 'ExamAccepted',
+  
+              },
               {
                 model: collegeAssociateStream,
                 required: false,
@@ -1109,67 +1218,25 @@ const allCollegeList = async (req) => {
                     required: false,
                     as: 'ColStream',
                   },
+            
+                ]
+              },
+              {
+                model: collegeAssociateFees,
+                required: false,
+                where: { deleted: false },
+                as: 'CourseFees',
+                include:[
                   {
                     model: masterFilter,
                     required: false,
+                    where: { deleted: false },
                     as: 'FeeDetails',
                   }
                 ]
-              },
-
-
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseType',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'Place',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'Eligibility',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseLevel',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'ProgramType',
-
-              },
-              {
-
-                model: masterFilter,
-                required: false,
-                as: 'CourseCategory',
-
-              },
-              {
-
-                model: exam,
-                required: false,
-                as: 'ExamAccepted',
-
-              },
-
+              }
             ]
-
+  
           },
           {
             model: masterFilter,
@@ -1445,7 +1512,6 @@ const collegeLinkApproval = async (req) => {
     throw new Error(error);
   }
 };
-
 
 const addCollegePosts = async (req) => {
   try {

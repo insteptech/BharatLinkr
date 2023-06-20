@@ -4,12 +4,13 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { apibasePath } from "../../../config";
-import { getColleges } from "../../../redux/actions/college/college";
+import { deleteCollege, getColleges } from "../../../redux/actions/college/college";
 import CommonHead from "../../common-components/UserHead/CommonHead";
 import DeleteModal from "../../modals/deleteModal";
 import AdminTable from "../AdminTable";
 import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
+import { toast } from "react-toastify";
 
 function CollegeAdminPage(props) {
   const [pagination, setPagination] = useState({
@@ -28,7 +29,9 @@ function CollegeAdminPage(props) {
   };
   
   const handleDelete = (item) => {
+    console.log(item, "rtr434444")
     dispatch(deleteCollege(item.id)).then((res) => {
+      console.log(res, "rtertert2123123")
       if (res?.payload?.data?.success ) {
         toast.success("Deleted");
         dispatch(getColleges(pagination));
@@ -64,7 +67,7 @@ function CollegeAdminPage(props) {
             </div>
           </div>
         </Col>
-        <Col xl={6} lg={12} md={12} className="text-end">
+        <Col xl={6} lg={12} md={12} className="text-end mt-2">
           <div>
             <Button className="border_btn">Upload CSV</Button>
             <Button className="border_btn">Download CSV</Button>
@@ -96,6 +99,7 @@ function CollegeAdminPage(props) {
             <tbody>
               {collegeList?.rows &&
                 collegeList?.rows?.map((item, index) => {
+                  console.log(item, "werwerwerwer")
                   return (
                     <tr key={index}>
                       <td className="text-center admin_table_data">
@@ -127,7 +131,7 @@ function CollegeAdminPage(props) {
                         {item?.States?.state}
                       </td>
                       <td className="text-center admin_table_data">
-                        {item?.collegeCourse?.length}
+                        {item?.AssociateCourse?.length}
                       </td>
                       <td className="text-center admin_table_data">
                         <img

@@ -32,18 +32,34 @@ export const isUserLogined = () => {
   let token = false
   if (typeof window !== 'undefined') {
     if (localStorage.getItem('token')) {
-      token=true
+      token = true
     }
   }
   return token
 };
 
 export const getTokenDecode = () => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    const decodedToken = jwtDecode(token);
-    return decodedToken;
-  } else {
-    return false
+  let token
+  if (typeof window !== 'undefined') {
+    token = localStorage.getItem('token')
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      return decodedToken;
+    } else {
+      return false
+    }
   }
 };
+
+export const LikedContent = {
+  college: 'college',
+  organisation: 'organisation',
+  corporate: 'corporate'
+}
+
+export const mocktestQuestionStatus = {
+  notAttempted: 'notattempted',
+  answered: 'answered',
+  notAnswered: 'notAnswered',
+  forReview: 'forReview'
+}

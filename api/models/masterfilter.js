@@ -90,7 +90,8 @@ module.exports = (sequelize, DataTypes) => {
           'eligibility',
           'coursefeedetails',
           'corporatemaincategory',
-          'corporatesubcategory'
+          'corporatesubcategory',
+          'jobrole'
          
         ),
       },

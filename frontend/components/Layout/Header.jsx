@@ -59,7 +59,7 @@ function Header() {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1 header_btn">
+            <Nav className="justify-content-end flex-grow-1 header_btn item_align">
               <Nav.Link className="logout_btn" href="" onClick={handleLogout}>
                 <Image src="/images/log-out-blue.svg" /> Log Out
               </Nav.Link>

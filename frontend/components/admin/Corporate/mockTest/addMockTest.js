@@ -9,6 +9,7 @@ import { getMainCategory } from "../../../../redux/actions/corporate/addmaincate
 import { getSubCategory } from "../../../../redux/actions/corporate/addsubcategory";
 import {
   addMockTestCorporate,
+  deleteMockQuestion,
   getMockTestbyid,
   updateMocktest,
 } from "../../../../redux/actions/corporate/addmocktestcorporate";
@@ -52,6 +53,8 @@ function AddMockTest() {
       FileState.map((item, i) => {
         let name = item?.name;
         let uid = item?.file?.name.split("_")[0];
+        var formData = new FormData();
+
         value.MocktestQuestions[item.index][name].uniqueId = uid;
         if (name === "OptionAData") {
           formData.append("optionAFile", item.file);
@@ -69,8 +72,6 @@ function AddMockTest() {
           formData.append("questionFile", item.file);
         }
       });
-
-      var formData = new FormData();
 
       let data = {
         payload: [value],
@@ -101,42 +102,42 @@ function AddMockTest() {
           answer: getMocktestDetails?.Questions[0]?.Answerss[0]?.answer,
         };
       });
-    
 
-    let datamocktest = value.MockTest.map((item) => {
-      return {
-        id: getMocktestDetails?.id,
-        mainCategoryId: item.mainCategoryId,
-        subCategoryId: item.subCategoryId,
-        topicName: item.topicName,
-        subTopic: item?.subTopic,
-        feildName: item?.feildName,
-        totalMarksOfTest: item?.totalMarksOfTest,
-        questionMarks: item?.questionMarks,
-        totalTime: item?.totalTime,
-        totalQuestions: item?.totalQuestions,
-        MocktestQuestions: datamocktestquestion,
-      };
-    });
 
-    var formdata = new FormData();
-
-    let dataval = {
-      payload: datamocktest,
-    };
-
-    formdata.append("mockTestData", JSON.stringify(dataval));
-
-    if (formData != 0 && dataval) {
-      dispatch(updateMocktest(formdata)).then((res) => {
-        if (res?.payload?.data?.success) {
-          router.push("/admin/corporate/addcorporate");
-          toast.success("Updated");
-        }
+      let datamocktest = value.MockTest.map((item) => {
+        return {
+          id: getMocktestDetails?.id,
+          mainCategoryId: item.mainCategoryId,
+          subCategoryId: item.subCategoryId,
+          topicName: item.topicName,
+          subTopic: item?.subTopic,
+          feildName: item?.feildName,
+          totalMarksOfTest: item?.totalMarksOfTest,
+          questionMarks: item?.questionMarks,
+          totalTime: item?.totalTime,
+          totalQuestions: item?.totalQuestions,
+          MocktestQuestions: datamocktestquestion,
+        };
       });
+
+      var formdata = new FormData();
+
+      let dataval = {
+        payload: datamocktest,
+      };
+
+      formdata.append("mockTestData", JSON.stringify(dataval));
+
+      if (formData != 0 && dataval) {
+        dispatch(updateMocktest(formdata)).then((res) => {
+          if (res?.payload?.data?.success) {
+            router.push("/admin/corporate/addcorporate");
+            toast.success("Updated");
+          }
+        });
+      }
     }
   }
-}
 
   const handlefileremoval = (i) => {
     if (FileState.length > 0) {
@@ -185,6 +186,7 @@ function AddMockTest() {
       const initialValues = {
         MockTest: [
           {
+            id: getMocktestDetails?.id,
             mainCategoryId: getMocktestDetails?.MainCategory?.id,
             subCategoryId: getMocktestDetails?.SubCategory?.id,
             topicName: getMocktestDetails?.topicName,
@@ -257,31 +259,31 @@ function AddMockTest() {
 
     values?.MockTest?.forEach((item) => {
       const error = {};
-      if (!item.mainCategoryId) {
+      if (!item?.mainCategoryId) {
         error["mainCategoryId"] = "Required";
       }
-      if (!item.subCategoryId) {
+      if (!item?.subCategoryId) {
         error["subCategoryId"] = "Required";
       }
-      if (!item.topicName) {
+      if (!item?.topicName) {
         error["topicName"] = "Required";
       }
-      if (!item.feildName) {
+      if (!item?.feildName) {
         error["feildName"] = "Required";
       }
-      if (!item.subTopic) {
+      if (!item?.subTopic) {
         error["subTopic"] = "Required";
       }
-      if (!item.totalMarksOfTest) {
+      if (!item?.totalMarksOfTest) {
         error["totalMarksOfTest"] = "Required";
       }
-      if (!item.questionMarks) {
+      if (!item?.questionMarks) {
         error["questionMarks"] = "Required";
       }
-      if (!item.totalTime) {
+      if (!item?.totalTime) {
         error["totalTime"] = "Required";
       }
-      if (!item.totalQuestions) {
+      if (!item?.totalQuestions) {
         error["totalQuestions"] = "Required";
       }
       itemArray1.push(error);
@@ -290,30 +292,30 @@ function AddMockTest() {
 
     values?.MocktestQuestions?.map((item) => {
       const error = {};
-      if (!item.QuestionData.question) {
+      if (!item?.QuestionData?.question) {
         error["QuestionData"] = {};
         error["QuestionData"]["question"] = "Required";
       }
-      if (!item.type) {
+      if (!item?.type) {
         error["type"] = "Required";
       }
-      if (!item.OptionAData.optionA) {
+      if (!item?.OptionAData?.optionA) {
         error["OptionAData"] = {};
         error["OptionAData"]["optionA"] = "Required";
       }
-      if (!item.OptionBData.optionB) {
+      if (!item?.OptionBData?.optionB) {
         error["OptionBData"] = {};
         error["OptionBData"]["optionB"] = "Required";
       }
-      if (!item.OptionCData.optionC) {
+      if (!item?.OptionCData?.optionC) {
         error["OptionCData"] = {};
         error["OptionCData"]["optionC"] = "Required";
       }
-      if (!item.OptionDData.optionD) {
+      if (!item?.OptionDData?.optionD) {
         error["OptionDData"] = {};
         error["OptionDData"]["optionD"] = "Required";
       }
-      if (!item.answer) {
+      if (!item?.answer) {
         error["answer"] = "Required";
       }
       itemArray2.push(error);
@@ -332,7 +334,7 @@ function AddMockTest() {
         keepDirtyOnReinitialize
         validate={validate}
         initialValues={useMemo(() => setInitials())}
-        render={({ handleSubmit, submitFailed }) => (
+        render={({ handleSubmit, submitFailed, values }) => (
           <form onSubmit={handleSubmit}>
             <FieldArray name="MockTest">
               {({ fields }) => (
@@ -616,9 +618,8 @@ function AddMockTest() {
                         FormSteps?.map((steps, stepsIndex) => (
                           <li className="nav-item " key={stepsIndex}>
                             <a
-                              className={`nav-link admin_tabs_name ${
-                                dataValue === stepsIndex && "head-active"
-                              }`}
+                              className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                                }`}
                               active={true}
                               onClick={() => setDataValue(stepsIndex)}
                             >
@@ -641,13 +642,14 @@ function AddMockTest() {
                         backgroundColor: "#FFF",
                       }}
                       eventKey={0}
-                      // title="General"
+                    // title="General"
                     >
                       <FieldArray name="MocktestQuestions">
                         {({ fields }) => (
                           <>
                             {fields?.map((name, index) => (
                               <div key={index}>
+                                <h1>Question no. {index + 1}</h1>
                                 <Field name={`${name}.QuestionData.question`}>
                                   {({ input, meta }) => (
                                     <>
@@ -761,13 +763,24 @@ function AddMockTest() {
                                       <>
                                         <img
                                           onClick={() => {
-                                            fields.remove(index);
-                                            handlefileremoval(index);
+                                            if (Id && values?.MocktestQuestions[index]?.id) {
+                                              dispatch(deleteMockQuestion({
+                                                mockTestId: Number(values?.MockTest[0]?.id),
+                                                id: Number(values?.MocktestQuestions[index]?.id)
+                                              })).then((res) => {
+                                                if (res?.payload?.data?.success) {
+                                                  fields.remove(index);
+                                                  handlefileremoval(index);
+                                                }
+                                              })
+                                            } else {
+                                              fields.remove(index);
+                                              handlefileremoval(index);
+                                            }
                                           }}
                                           className="add_remove_icon"
                                           src="/images/delete-icon-blue.png"
                                         />
-                                        {index}
                                       </>
                                     )}
                                   </Col>
@@ -1116,6 +1129,7 @@ function AddMockTest() {
                                 </Row>
 
                                 <hr></hr>
+                              
                               </div>
                             ))}
                           </>

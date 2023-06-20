@@ -21,6 +21,7 @@ import AdminTable from "../AdminTable";
 import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
 import LoaderPage from "../../common-components/loader";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function StreamsPage() {
   const [pagination, setPagination] = useState({
@@ -49,10 +50,10 @@ function StreamsPage() {
   };
 
   const handleDelete = (item) => {
-    if (item.mainStreamName) {
+    if (item?.mainStreamName || item.mainStreamName=="") {
       dispatch(deleteMainStream(item.id)).then((res) => {
         console.log(res);
-        if (res?.payload?.data?.success ) {
+        if (res?.payload?.data?.success) {
           toast.success("Delete");
           dispatch(getMainStream());
         } else {
@@ -60,18 +61,18 @@ function StreamsPage() {
         }
       });
     }
-    if (item.subStreamName) {
+    if (item?.subStreamName) {
       dispatch(deleteSubStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
           toast.success("Deleted");
-          dispatch(GetSubStream());
+          dispatch(getSubStream());
         } else {
           toast.error(res?.payload?.response?.data?.message);
         }
       });
     }
-    if (item.colStreamName) {
+    if (item?.colStreamName) {
       dispatch(deleteColStream(item.id)).then((res) => {
         if (res?.payload?.data?.success) {
           toast.success("Deleted");
@@ -81,26 +82,26 @@ function StreamsPage() {
         }
       });
     }
-    if (item.subStreamName) {
-      dispatch(deleteSubStream(item.id)).then((res) => {
-        if (res?.payload?.data?.success ) {
-          toast.success("Delete");
-          dispatch(GetSubStream());
-        } else {
-          toast.error("Error");
-        }
-      });
-    }
-    if (item.colStreamName) {
-      dispatch(deleteColStream(item.id)).then((res) => {
-        if (res?.payload?.data?.success ) {
-          toast.success("Deleted");
-          dispatch(getColStream());
-        } else {
-          toast.error("Error");
-        }
-      });
-    }
+    // if (item?.subStreamName) {
+    //   dispatch(deleteSubStream(item.id)).then((res) => {
+    //     if (res?.payload?.data?.success) {
+    //       toast.success("Delete");
+    //       dispatch(getSubStream());
+    //     } else {
+    //       toast.error("Error");
+    //     }
+    //   });
+    // }
+    // if (item?.colStreamName) {
+    //   dispatch(deleteColStream(item.id)).then((res) => {
+    //     if (res?.payload?.data?.success) {
+    //       toast.success("Deleted");
+    //       dispatch(getColStream());
+    //     } else {
+    //       toast.error("Error");
+    //     }
+    //   });
+    // }
   };
 
   const handleEdit = (item) => {
@@ -114,6 +115,7 @@ function StreamsPage() {
       router.push(`/admin/streams/updatecolstream/${item.id}`);
     }
   };
+  
   useEffect(() => {
     dispatch(getSubStream(pagination));
     dispatch(getMainStream(pagination));
@@ -125,25 +127,30 @@ function StreamsPage() {
       <div className="admin_home_tabs_row">
         <Row>
           <Col className="p-0 ">
-            <ul className="nav tabs_scroll ">
-              {FormSteps &&
-                FormSteps?.map((steps, stepsIndex) => (
-                  <li className="nav-item " key={stepsIndex}>
-                    <a
-                      className={`nav-link admin_tabs_name ${
-                        dataValue === stepsIndex && "head-active"
-                      }`}
-                      active={true}
-                      onClick={() => {
-                        setDataValue(stepsIndex);
-                        setPagination({ ...pagination, pageNo: 1 });
-                      }}
-                    >
-                      {steps}
-                    </a>
-                  </li>
-                ))}
-            </ul>
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll ">
+                {FormSteps &&
+                  FormSteps?.map((steps, stepsIndex) => (
+                    <li className="nav-item " key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
+                        }`}
+                        active={true}
+                        onClick={() => {
+                          setDataValue(stepsIndex);
+                          setPagination({ ...pagination, pageNo: 1 });
+                        }}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
+          </Col>
+          <Col>
+            <Pagesize setPagination={setPagination} />
           </Col>
         </Row>
       </div>
@@ -155,7 +162,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Main Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  {/* <Pagesize setPagination={setPagination} /> */}
                 </div>
               </div>
             </Col>
@@ -184,15 +191,15 @@ function StreamsPage() {
                   <tr>
                     {mainsTreamHeading.map((hd, index) => {
                       return (
-                          <th className="table_head" key={index}>
-                            {hd}
-                          </th>
+                        <th className="table_head" key={index}>
+                          {hd}
+                        </th>
                       );
                     })}
                   </tr>
                 </thead>
                 <tbody>
-                  {loadingMainTreamData  ? (
+                  {loadingMainTreamData ? (
                     <LoaderPage />
                   ) : (
                     mainsTreamData?.rows?.map((item, index) => {
@@ -244,7 +251,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Sub Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  
                 </div>
               </div>
             </Col>
@@ -336,7 +343,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Col Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  <Pagesize setPagination={setPagination} />
+                  {/* <Pagesize setPagination={setPagination} /> */}
                 </div>
               </div>
             </Col>
@@ -373,7 +380,7 @@ function StreamsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {loadingColStreamData  ? (
+                  {loadingColStreamData ? (
                     <LoaderPage />
                   ) : (
                     colStreamData?.rows?.map((item, index) => {

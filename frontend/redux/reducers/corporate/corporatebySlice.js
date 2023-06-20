@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
   CorporateData,
+  corporatelikesList,
   getCorporateById,
   getCorporateData,
 } from "../../actions/corporate/addcorporate";
@@ -12,6 +13,7 @@ const corporateDataSlice = createSlice({
     corporatelist: [],
     getListCorporate: [],
     getCorporateId: [],
+    corplikeslist:[],
     status: "",
     isLoading:false
   },
@@ -43,8 +45,14 @@ const corporateDataSlice = createSlice({
       state.getCorporateId = action?.payload?.data?.data?.rows
       state.status = "";
     });
-
-
+    builder.addCase(corporatelikesList.rejected, (state, action) => {
+      state.corplikeslist = [];
+      state.status = action?.status?.message;
+    });
+    builder.addCase(corporatelikesList.fulfilled, (state, action) => {
+      state.corplikeslist = action?.payload?.data?.data?.rows
+      state.status = "";
+    });
   },
 });
 

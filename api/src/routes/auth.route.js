@@ -34,6 +34,13 @@ router.post('/userActive', authController.userActive);
 
 router.post('/userLikesList', authController.userPostLikeList);
 
+router.post('/userPasswordUpdate', authController.updateUserPassword);
+router.post('/userForgotPassword', authController.forgotUserPassword);
+
+
+
+
+
 
 
 module.exports = router;

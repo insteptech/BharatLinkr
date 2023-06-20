@@ -27,9 +27,13 @@ import corporateListReducer from "./reducers/corporate/addmaincategorybySlice";
 import corporatesubcategoryReducer from "./reducers/corporate/addsubcategorybySlice";
 import corporateMocktestReducer from "./reducers/corporate/mocktestcorporateSlice";
 import sectorReducer from "./reducers/organisation/sectorBySlice"
+import userSlice from "./reducers/User/userSlice";
+import postSlice from "./reducers/organisation/postSlice";
 
 const store = configureStore({
   reducer: {
+    userSlice: userSlice,
+    postSlice: postSlice,
     signUp: signupReducer,
     loginUser: LoginUserReducer,
     verifyotp: verifyOtpReducer,

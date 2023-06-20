@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('organisationPosts', {
+    await queryInterface.createTable('organisationCMs', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -16,11 +16,29 @@ module.exports = {
           key: 'id',
         },
       },
-      posts: {
+      glance: {
         type: Sequelize.STRING(10485760)
       },
-      image: {
-        type: Sequelize.STRING
+      cultureAndValues: {
+        type: Sequelize.STRING(10485760)
+      },
+      department: {
+        type: Sequelize.STRING(10485760)
+      },
+      awardsAndRecognisations: {
+        type: Sequelize.STRING(10485760)
+      },
+      clients: {
+        type: Sequelize.STRING(10485760)
+      },
+      csr: {
+        type: Sequelize.STRING(10485760)
+      },
+      testimonials: {
+        type: Sequelize.STRING(10485760)
+      },
+      companyAddress: {
+        type: Sequelize.STRING(10485760)
       },
       active: {
         type: Sequelize.BOOLEAN,
@@ -41,6 +59,6 @@ module.exports = {
     });
   },
   async down(queryInterface) {
-    await queryInterface.dropTable('organisationPosts');
+    await queryInterface.dropTable('organisationCMs');
   }
 };

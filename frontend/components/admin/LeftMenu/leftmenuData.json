@@ -50,8 +50,8 @@
   {
     "name": "Location",
     "path": "/location",
-    "logo": "/images/location-icon.png",
-    "whitelogo": "/images/white-location.png"
+    "logo": "/images/location.svg",
+    "whitelogo": "/images/white-location.svg"
   },
   {
     "name": "Corporate",

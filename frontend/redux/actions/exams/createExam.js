@@ -62,3 +62,13 @@ export const filterExamByStreamCourse = createAsyncThunk(
       .catch((err) => err);
   }
 );
+
+export const examFaqDelete = createAsyncThunk(
+  "examFaqDelete/exam/examFAQDelete",
+  async (data) => {
+    return apiRequest
+      .post("exam/examFAQDelete", data)
+      .then((req) => req)
+      .catch((err) => err);
+  }
+);

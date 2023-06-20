@@ -17,6 +17,8 @@ import { useRouter } from "next/router";
 import { getMainCategory } from "../../../redux/actions/corporate/addmaincategory";
 import { getSubCategory } from "../../../redux/actions/corporate/addsubcategory";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import { toast } from "react-toastify";
 
 const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
   ssr: false,
@@ -51,10 +53,10 @@ export default function AddCorporate() {
   const { Id } = router.query;
 
   const handleSubmit = (value) => {
-    if (dataValue == 0) {
-      setDataValue(1);
-    } else {
-      if (!Id) {
+    if (!Id) {
+      if (dataValue == 0) {
+        setDataValue(1);
+      } else if (dataValue == 1) {
         const applyData = {
           payload: [
             {
@@ -65,9 +67,9 @@ export default function AddCorporate() {
                   subTopic: value?.subTopic,
                   subCategoryId: value?.subCategory,
                   mainCategoryId: value?.mainCategory,
-                  views: 21,
-                  downloads: 12,
-                  likes: 2,
+                  //           views: 21,
+                  //           downloads: 12,
+                  //           likes: 2,
                 },
               ],
               CorporateCMS: [
@@ -85,29 +87,32 @@ export default function AddCorporate() {
         }
         if (formData != 0) {
           dispatch(CorporateData(formData)).then((res) => {
-            if (
-              res?.payload?.status === 200 &&
-              res?.payload?.data?.success
-            ) {
-              router.push("/admin/corporate");
+            if (res?.payload?.status === 200 && res?.payload?.data?.success) {
+              toast.success("success", { autoClose: 1000 });
+              router.push("/admin/corporate", { autoClose: 1000 });
             } else {
-              // toast.error('something went wrong');
+              toast.error("something went wrong", { autoClose: 1000 });
             }
           });
         }
-      } else {
+      }
+    } else {
+      if (dataValue == 0) {
+        setDataValue(1);
+      } else if (dataValue === 1) {
         const applyEdit = {
-          id: router.query.Id,
+          id: Id,
           topicName: value?.topicName,
           subTopic: value?.subTopic,
           feildName: value?.feildName,
-          // CorporateCMS: value?.CorporateCMS[0]?.about
+          CorporateCMS: value?.CorporateCMS[0]?.about,
         };
         let formdata = new FormData();
         formdata.append("corporateData", JSON.stringify(applyEdit));
         if (formdata != 0) {
           dispatch(updateCorporate(formdata)).then((res) => {
             if (res?.payload?.request?.status === 200) {
+              toast.success("Updated", { autoClose: 1000 });
               router.push("/admin/corporate");
             } else {
             }
@@ -138,6 +143,7 @@ export default function AddCorporate() {
 
   const validate = (values) => {
     let errors = {};
+
     if (!values.mainCategory) {
       errors["mainCategory"] = "*";
     }
@@ -150,9 +156,6 @@ export default function AddCorporate() {
     if (!values.subTopic) {
       errors["subTopic"] = "*";
     }
-    if (!values.pdf) {
-      errors["pdf"] = "*";
-    }
     if (!values.feildName) {
       errors["feildName"] = "*";
     }
@@ -163,23 +166,24 @@ export default function AddCorporate() {
     dispatch(getAllExams());
     dispatch(getSubCategory());
     dispatch(getMainCategory());
-    if (router.query.Id) {
-      dispatch(getCorporateById({ id: Number(router.query.Id) }));
+    if (Id) {
+      dispatch(getCorporateById({ id: Number(Id) }));
     }
-  }, [router.query.Id]);
+  }, [Id]);
 
-
-
-  const init = () => {
+  const init = (event) => {
+    if (event && Object.keys(event).length > 0) {
+      return event;
+    }
     let initialvalues;
-    if (router.query.Id) {
+    if (Id) {
       initialvalues = {
         mainCategory: updateCorporateList[0]?.mainCategoryId,
         subCategory: updateCorporateList[0]?.subCategoryId,
         topicName: updateCorporateList[0]?.topicName,
         subTopic: updateCorporateList[0]?.subTopic,
         feildName: updateCorporateList[0]?.feildName,
-      //  CorporateCMS: updateCorporateList[0]?.CMS[0]?.about,
+        CorporateCMS: updateCorporateList[0]?.CMS,
       };
       return initialvalues;
     } else {
@@ -199,22 +203,24 @@ export default function AddCorporate() {
       <div className="admin_home_tabs_row">
         <Row>
           <Col lg={6} md={12} className="p-0">
-            <ul className="nav tabs_scroll">
-              {FormSteps &&
-                FormSteps?.map((steps, stepsIndex) => (
-                  <li className="nav-item " key={stepsIndex}>
-                    <a
-                      className={`nav-link admin_tabs_name ${
-                        dataValue === stepsIndex && "head-active"
-                      }`}
-                      active={true}
-                      onClick={() => setDataValue(stepsIndex)}
-                    >
-                      {steps}
-                    </a>
-                  </li>
-                ))}
-            </ul>
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className="nav tabs_scroll">
+                {FormSteps &&
+                  FormSteps?.map((steps, stepsIndex) => (
+                    <li className="nav-item " key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && "head-active"
+                        }`}
+                        active={true}
+                        onClick={() => setDataValue(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
           </Col>
           <Col lg={6} md={12} className="text-end p-0">
             {dataValue === 0 && (
@@ -249,11 +255,11 @@ export default function AddCorporate() {
           ...arrayMutators,
         }}
         keepDirtyOnReinitialize
-        //  validate={validate}
+        validate={validate}
         initialValues={useMemo((e) => init(e), [updateCorporateList])}
         render={({ handleSubmit, values, form: { mutators } }) => (
           <form onSubmit={handleSubmit}>
-            {dataValue === 0 && (
+            {dataValue == 0 && (
               <>
                 <Row>
                   <Col md={12} lg={6}>
@@ -444,7 +450,7 @@ export default function AddCorporate() {
                 </Row>
               </>
             )}
-            {dataValue === 1 && (
+            {dataValue == 1 && (
               <>
                 <Row>
                   <Col>

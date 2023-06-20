@@ -92,6 +92,29 @@ const userPostLikeList = async function (req, res) {
     });
 };
 
+const updateUserPassword = async function (req, res) {
+  await authManager
+    .updateUserPassword(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+const forgotUserPassword = async function (req, res) {
+  await authManager
+    .forgotUserPassword(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+
 
 module.exports = {
   register,
@@ -101,5 +124,7 @@ module.exports = {
   verificationOtp,
   resendOtp,
   userActive,
-  userPostLikeList
+  userPostLikeList,
+  updateUserPassword,
+  forgotUserPassword
 };

@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import CourseFeesCard from "./courseFeesCard";
 
 const CourseFeeRightBars = [
   "All",
@@ -38,7 +39,7 @@ function CourseFee() {
       </div>
       <Row>
         <Col md={12}>
-          {dataValue === 0 && "qqqqqqqqq"}
+          {dataValue === 0 && <CourseFeesCard />}
           {dataValue === 1 && "wwwwwwwww"}
 
           {dataValue === 2 && "eeeeeeeeeee"}

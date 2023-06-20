@@ -7,9 +7,13 @@ import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import CollegeLeftPage from "../collegeLeftPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { getColleges } from "../../../redux/actions/college/college";
+import {
+  CollegeLikesList,
+  getColleges,
+} from "../../../redux/actions/college/college";
 import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
+import { getTokenDecode } from "../../utils";
 
 const streamData = [
   {
@@ -87,13 +91,20 @@ const CollegeRightPage = (props) => {
   const collegeList = useSelector(
     (data) => data?.collegelist?.collegelist?.rows
   );
+  const date = new Date().getFullYear();
 
   const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
 
   useEffect(() => {
     dispatch(getMainStream());
     dispatch(getColleges());
+    if (getTokenDecode()) {
+      dispatch(CollegeLikesList(getTokenDecode()?.userId));
+    }
   }, []);
+  // useEffect(() => {
+
+  // }, [])
 
   return (
     <>
@@ -101,7 +112,7 @@ const CollegeRightPage = (props) => {
         <Row>
           <Col md={12} className="text-center">
             <h2 className="edit_profile_h2 mobile_margin_bottom">
-              List of top colleges in india based on 2022 ranking
+              List of top colleges in india based on {date} ranking
             </h2>
           </Col>
           <Col
@@ -251,7 +262,7 @@ const CollegeRightPage = (props) => {
           </Row>
         </div>
         <div>
-          <Row xs={1} sm={2} md={3} className="g-3">
+          <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-3">
             {loadercollegecard === true ? (
               <LoaderPage />
             ) : (

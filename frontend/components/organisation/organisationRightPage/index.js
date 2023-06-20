@@ -3,69 +3,14 @@ import { useEffect } from "react";
 import { useState } from "react";
 import { Button, Col, Form, Offcanvas, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrganisationlist } from "../../../redux/actions/organisation/addorganisation";
+import { companyLike, companyLikeslist, getOrganisationlist } from "../../../redux/actions/organisation/addorganisation";
 import OrganisationLeftPage from "../organisationLeftPage";
 import CompanyCard from "./companyCard";
 import Profession from "./profession";
 import Internship from "./Internship";
-
-const streamData = [
-  {
-    itemName: "Hello",
-    itemCount: 12,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "notification",
-    itemCount: 125,
-    courseItem: "B.tech",
-  },
-  {
-    itemName: "extra",
-    itemCount: 124,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "technology",
-    itemCount: 123,
-    courseItem: "Bba",
-  },
-  {
-    itemName: "Hello4",
-    itemCount: 122,
-    courseItem: "mbbs",
-  },
-  {
-    itemName: "Hello5",
-    itemCount: 121,
-    courseItem: "b.sc",
-  },
-  {
-    itemName: "Hello1",
-    itemCount: 125,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello2",
-    itemCount: 124,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello3",
-    itemCount: 123,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello4",
-    itemCount: 122,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello5",
-    itemCount: 121,
-    courseItem: "B.ed",
-  },
-];
+import { getTokenDecode, isUserLogined } from "../../utils";
+import SignupModal from "../../modals/signupmodal";
+import JobCard from "./jobCard";
 
 const dropData = [
   {
@@ -86,16 +31,26 @@ const dropData = [
   },
 ];
 
-function OrganisationRightPage({ dataValue, setDataValue }, props) {
-  const { show, setshow } = props;
+function OrganisationRightPage({ dataValue, setDataValue }) {
   const dispatch = useDispatch();
 
-  const orgList = useSelector((state) => state?.sectorData?.organisationList);
+  const [modalShow, setModalShow] = useState(false);
+
+  // const userId = getTokenDecode().userId
+  
+
+  
 
   const searchOrganisation = (e) => {
     let data = e.target.value;
     dispatch(getOrganisationlist({ search: data }));
   };
+
+  const handleHide = () => {
+    setModalShow(false);
+  };
+
+  const date = new Date().getFullYear();
 
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
@@ -108,12 +63,12 @@ function OrganisationRightPage({ dataValue, setDataValue }, props) {
           <Col md={12} className="heading_align ">
             <h2 className="edit_profile_h2 mobile_margin_bottom">
               {dataValue == 0
-                ? "List of top Jobs in india based on 2022 ranking"
+                ? `List of top Jobs in india based on ${date} ranking`
                 : dataValue == 1
-                ? "List of top Profession in india based on 2022 ranking"
-                : dataValue == 2
-                ? "List of top Inernship in india based on 2022 ranking"
-                : "List of top Company in india based on 2022 ranking"}
+                  ? `List of top Profession in india based on ${date} ranking`
+                  : dataValue == 2
+                    ? `List of top Inernship in india based on ${date} ranking`
+                    : `List of top Company in india based on ${date} ranking`}
             </h2>
           </Col>
           <Col
@@ -154,35 +109,60 @@ function OrganisationRightPage({ dataValue, setDataValue }, props) {
             </div>
           </Col>
 
-          <Col xs={6} lg={2} className="ps-0">
-            <div className="company_jobs_select margin_bottom">
-              <Form.Select
-                aria-label="Default select example"
-                onChange={(e) => setDataValue(e.target.value)}
-              >
-                {dropData &&
-                  dropData?.map((steps, stepsIndex) => {
-                    return (
-                      <>
-                        <option
-                          active={true}
-                          key={stepsIndex}
-                          value={stepsIndex}
-                        >
-                          {steps.page}
-                        </option>
-                      </>
-                    );
-                  })}
-              </Form.Select>
-            </div>
-          </Col>
+          {dataValue == 1 ? (
+            <Col xs={6} lg={7} className="ps-0 profession_drop_col">
+              <div className="company_jobs_select margin_bottom w-50">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setDataValue(e.target.value)}
+                >
+                  {dropData &&
+                    dropData?.map((steps, stepsIndex) => {
+                      return (
+                        <>
+                          <option
+                            active={true}
+                            key={stepsIndex}
+                            value={stepsIndex}
+                          >
+                            {steps.page}
+                          </option>
+                        </>
+                      );
+                    })}
+                </Form.Select>
+              </div>
+            </Col>
+          ) : (
+            <Col xs={6} lg={2} className="ps-0">
+              <div className="company_jobs_select margin_bottom">
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) => setDataValue(e.target.value)}
+                >
+                  {dropData &&
+                    dropData?.map((steps, stepsIndex) => {
+                      return (
+                        <>
+                          <option
+                            active={true}
+                            key={stepsIndex}
+                            value={stepsIndex}
+                          >
+                            {steps.page}
+                          </option>
+                        </>
+                      );
+                    })}
+                </Form.Select>
+              </div>
+            </Col>
+          )}
           <Col
             xs={12}
             lg={5}
-            className={`"pading_left_0" ${
-              dataValue == 1 ? "click_hide" : "pading_left_0"
-            }`}
+            className={`"pading_left_0" ${dataValue == 1 ? "click_hide" : "pading_left_0"
+              }`}
           >
             <div className="d-flex pe-1">
               <div className="search_profile_search_bar company_right_search_bar2">
@@ -197,15 +177,14 @@ function OrganisationRightPage({ dataValue, setDataValue }, props) {
             </div>
           </Col>
         </Row>
-        {dataValue == 0 && <CompanyCard />}
+        {dataValue == 0 && <JobCard />}
         {dataValue == 1 && <Profession />}
 
         {dataValue == 2 && <Internship />}
 
         {dataValue == 3 &&
-          orgList?.rows?.map((item, index) => {
-            return <CompanyCard data={item} dataValue={dataValue} />;
-          })}
+             <CompanyCard dataValue={dataValue} setModalShow={setModalShow} />
+        }
       </div>
 
       {/* --------------------------mobile-screen------------------------- */}
@@ -241,6 +220,11 @@ function OrganisationRightPage({ dataValue, setDataValue }, props) {
           </Offcanvas.Body>
         </Offcanvas>
       </div>
+      <SignupModal
+        show={modalShow}
+        // setModalShow={setModalShow}
+        onHide={() => handleHide()}
+      />
     </>
   );
 }

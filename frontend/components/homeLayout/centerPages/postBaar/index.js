@@ -1,89 +1,134 @@
-import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import React, { useState } from "react";
-import { Accordion, Button, Col, Form, Image } from "react-bootstrap";
-import Select, { components } from "react-select";
-
-const categoryopt = [
-  {
-    value: "category",
-    label: "category",
-    icon: "/images/script-icon.png",
-  },
-  {
-    value: "Script",
-    label: "Script",
-    icon: "/images/script-icon.png",
-  },
-  {
-    value: "Announcement",
-    label: "Announcement",
-    icon: "/images/announcement-icon.png",
-  },
-  { value: "Job", label: "Job", icon: "/images/job-icon.png" },
-  { value: "Internship", label: "Internship", icon: "/images/intern.png" },
-  { value: "Mentoring", label: "Mentoring", icon: "/images/more-icon.png" },
-  { value: "Question", label: "Question", icon: "/images/more-icon.png" },
-  { value: "Services", label: "Services", icon: "/images/more-icon.png" },
-  {
-    value: "College festives",
-    label: "College festives",
-    icon: "/images/more-icon.png",
-  },
-  { value: "scholarship", label: "scholarship", icon: "/images/more-icon.png" },
-  {
-    value: "cultural events",
-    label: "cultural events",
-    icon: "/images/more-icon.png",
-  },
-  { value: "conferences", label: "conferences", icon: "/images/more-icon.png" },
-  {
-    value: "competitions",
-    label: "competitions",
-    icon: "/images/more-icon.png",
-  },
-  { value: "hackathon", label: "hackathon", icon: "/images/more-icon.png" },
-  {
-    value: "Hiring Challenges",
-    label: "Hiring Challenges",
-    icon: "/images/more-icon.png",
-  },
-  {
-    value: "Campus Recruitment",
-    label: "Campus Recruitment",
-    icon: "/images/more-icon.png",
-  },
-];
-
-const Option = (props) => (
-  <components.Option {...props} className="country-option">
-    <img className="post_card_icons" src={props.data.icon} />
-    {props.data.label}
-  </components.Option>
-);
+import { useDispatch, useSelector } from "react-redux";
+import { Accordion, Button, Col, Form as Bootform, Image, Row } from "react-bootstrap";
+import Select from "react-select";
+import Creatable from "react-select/creatable";
+import { Form, Field } from 'react-final-form';
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { postFiltersArray, postCategoryOptions, offlineData } from "../../../utils/allJson";
+import { addOrganisationPost, cityByStateIdForPost, getDepartmentForJob, subStreamByMainStreamForPost } from "../../../../redux/actions/organisation/postActions";
 
 const PostBaar = () => {
-  const [selectedlist, setSelectedlist] = useState(categoryopt[0]);
-  const [show, setShow] = useState(null);
+  const dispatch = useDispatch();
+  const [activeKey, setActiveKey] = useState(0)
+  const filterListForPost = useSelector(state => state.postSlice.postFilterList);
 
-  const handleChange = (value) => {
-    setSelectedlist(value);
-    console.log(value.value, "sdfsdfsdf");
+  const actionCallByPostCategory = {
+    script: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    announcement: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    jobs: (types) => {
+      dispatch(getDepartmentForJob())
+      console.log(types, 'types From ActionCallBycategory')
+    },
+    internship: (types) => {
+      dispatch(getDepartmentForJob())
+      console.log(types, 'types From ActionCallBycategory')
+    },
+    mentoring: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    question: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    services: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    collegefestives: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    scholarship: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    culturalevents: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    conferences: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    competitions: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    hackathon: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    hiringchallenges: (types) => { console.log(types, 'types From ActionCallBycategory') },
+    campusrecruitment: (types) => { console.log(types, 'types From ActionCallBycategory') },
+  }
+
+  const listData = {
+    status: { list: offlineData['status'], value: 'id', label: 'name' },
+    department: { list: filterListForPost['department'], value: 'id', label: 'mainStreamName' },
+    subDepartment: { list: filterListForPost['subDepartment'], value: 'id', label: 'subStreamName' },
+    streams: { list: filterListForPost['streams'], value: 'id', label: 'name' },
+    subStreams: { list: filterListForPost['subStreams'], value: 'id', label: 'name' },
+    state: { list: filterListForPost['state'], value: 'id', label: 'state' },
+    city: { list: filterListForPost['city'], value: 'id', label: 'name' },
+    workMode: { list: offlineData['workMode'], value: 'modeName', label: 'modeName' },
+    jobType: { list: offlineData['jobType'], value: 'jobTypeName', label: 'jobTypeName' },
+    jobRole: { list: filterListForPost['jobRole'], value: 'id', label: 'name' },
+    eligibility: { list: filterListForPost['eligibility'], value: 'id', label: 'name' },
+    organization: { list: filterListForPost['organization'], value: 'id', label: 'orgCatgeory' },
+    college: { list: filterListForPost['college'], value: 'id', label: 'name' },
+    course: { list: filterListForPost['course'], value: 'id', label: 'name' },
+    exam: { list: filterListForPost['exam'], value: 'id', label: 'name' },
+    corporate: { list: filterListForPost['corporate'], value: 'id', label: 'name' },
+  }
+
+  const handleSubmit = (values, form) => {
+    let formData = new FormData()
+    let tempValues = { ...values }
+    tempValues.status = values.status.value
+    tempValues.state = values.state.value
+    tempValues.city = values.city.value
+    tempValues.department = values.department.value
+    tempValues.subDepartment = values.subDepartment.value
+    tempValues.workMode = values.workMode.value
+    tempValues.jobType = values.jobType.value
+    tempValues.jobRole = values.jobRole.value
+    let data = { payload: [tempValues] }
+    formData.append('organisationPostData', JSON.stringify(data))
+    dispatch(addOrganisationPost(formData)).then(res => {
+      if (res.payload.success) {
+        setActiveKey(0)
+        form.reset()
+      }
+    })
+  }
+
+  const customStyles = {
+    control: (provided) => ({
+      ...provided,
+      maxWidth: 160,
+      borderRadius: '40px',
+      fontFamily: 'Inter',
+      fontSize: '16px',
+      lineHeight: '22px',
+      color: '#22242c',
+      border: '0.0313rem solid #45319697',
+      // border: '1px solid #8e8ea1',
+      padding: ' 1px 10px',
+    }),
+    option: (styles, { isFocused }) => {
+      return {
+        ...styles,
+        backgroundColor: isFocused ? '#463196' : null,
+        color: isFocused ? '#fff' : null,
+      };
+    },
   };
 
-  const SingleValue = ({ children, ...props }) => (
-    <components.SingleValue {...props}>
-      <img
-        src={selectedlist.icon}
-        alt="s-logo"
-        className="selected-logo post_card_icons"
-      />
-      {children}
-    </components.SingleValue>
-  );
+  const handlePostCategory = ({ target: { value } }) => {
+    actionCallByPostCategory[value](value)
+  }
+
+  const renderFilterOptions = (types) => {
+    const { list, label, value } = listData[types]
+    return list.map((item) => { return { label: item[label], value: item[value] } })
+  }
+
+  const handleListApi = (key, value, form) => {
+    switch (key) {
+      case 'state': {
+        form.change('city', '')
+        dispatch(cityByStateIdForPost({ stateId: value.value }))
+        break;
+      }
+      case 'department': {
+        form.change('subDepartment', '')
+        dispatch(subStreamByMainStreamForPost({ mainStreamId: value.value }))
+        break;
+      }
+      default: break;
+    }
+  }
 
   return (
     <>
-      <Accordion className=" post_bar">
+      <Accordion className=" post_bar" activeKey={activeKey} onSelect={key => setActiveKey(key)}>
         <Accordion.Item className="w-100" eventKey="1">
           <Accordion.Header>
             <div className="acc_bar">
@@ -98,11 +143,7 @@ const PostBaar = () => {
                   What's in your mind, Argha?
                 </h2>
               </div>
-
               <div className="post_bar_col_right ms-0">
-                {/* <div className=" w-100">
-                 
-                </div> */}
                 <label className="" for="actual-btn">
                   <Image
                     className="ms-3 post_bar_icon"
@@ -110,7 +151,6 @@ const PostBaar = () => {
                   />
                 </label>
                 <input type="file" id="actual-btn" hidden />
-
                 <Image
                   className="ms-3 post_bar_icon"
                   src="/images/addimg-post-icon.svg"
@@ -120,440 +160,117 @@ const PostBaar = () => {
             </div>
           </Accordion.Header>
           <Accordion.Body className="post_bar_accordion_body">
-            <Select
-            className="font_13"
-              value={selectedlist}
-              options={categoryopt}
-              onChange={handleChange}
-              components={{
-                Option,
-                SingleValue,
-              }}
+            <Form
+              onSubmit={handleSubmit}
+              // initialValues={initialState}
+              render={({ handleSubmit, values, form }) => (
+                <form onSubmit={handleSubmit}>
+                  <Row>
+                    <Col md={12}>
+                      <Field name="postTypes">
+                        {({ input, meta }) => (
+                          <>
+                            <select
+                              {...input}
+                              onChange={(e) => {
+                                input.onChange(e)
+                                handlePostCategory(e)
+                              }}
+                              className="font_13 w-100 input_padding"
+                            >
+                              {postCategoryOptions?.map((item, index) => {
+                                return <option key={`postTypes_${index}`} value={item?.value}>{item?.label}</option>
+                              })}
+                            </select>
+                          </>
+                        )}
+                      </Field>
+                    </Col>
+                    <Col md={12}>
+                      <div>
+                        {values.postTypes !== "script" &&
+                          <>
+                            <Field name="title">
+                              {({ input, meta }) => (
+                                <>
+                                  <input
+                                    {...input}
+                                    className=" input_padding"
+                                    type="text"
+                                    placeholder="Write Title here..."
+                                  />
+                                </>
+                              )}
+                            </Field>
+                          </>
+                        }
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      <div>
+                        <Field name="description">
+                          {({ input, meta }) => (
+                            <>
+                              <Bootform.Control
+                                {...input}
+                                className="form-control  input_padding post_summary_input margin_bottom"
+                                as="textarea"
+                                placeholder="Write Description here.."
+                                aria-label="With textarea"
+                              />
+                            </>
+                          )}
+                        </Field>
+                      </div>
+                    </Col>
+                    <Col md={12}>
+                      {postFiltersArray.map((filterItems, filterIndex) =>
+                        filterItems.key === "jobRole" ?
+                          filterItems.postTypes.includes(values.postTypes) && (
+                            <div className="me-2 react_select" key={`postFilter_${filterItems.key}_${filterIndex}`}>
+                              <label>{filterItems.displayName}</label>
+                              <Field name={filterItems.key}>
+                                {({ input, meta }) => (
+                                  <Creatable
+                                    {...input}
+                                    styles={customStyles}
+                                    placeholder="Select JobRole"
+                                    isDisabled={filterItems.isDisabled(values)}
+                                    options={renderFilterOptions(filterItems.key)}
+                                  />
+                                )}
+                              </Field>
+                            </div>
+                          ) : filterItems.postTypes.includes(values.postTypes) && (
+                            <div className="me-2 react_select" key={`postFilter_${filterItems.key}_${filterIndex}`}>
+                              <label>{filterItems.displayName}</label>
+                              <Field name={filterItems.key}>
+                                {({ input, meta }) => (
+                                  <Select
+                                    {...input}
+                                    styles={customStyles}
+                                    options={renderFilterOptions(filterItems.key)}
+                                    placeholder={`Select ${filterItems.displayName}`}
+                                    isDisabled={filterItems.isDisabled(values)}
+                                    onChange={(e) => {
+                                      input.onChange(e)
+                                      handleListApi(filterItems.key, e, form)
+                                    }}
+                                  />
+                                )}
+                              </Field>
+                            </div>
+                          ))}
+                    </Col>
+                    <div className="text-center">
+                      <Button className="border_btn user_header_login_btn post_bar_post_btn" type="submit">
+                        Post
+                      </Button>
+                    </div>
+                  </Row>
+                </form>
+              )}
             />
-            {selectedlist.value === "Script" ? (
-              ""
-            ) : (
-              <input
-                className=" input_padding"
-                type="text"
-                placeholder="Write Titile here..."
-              />
-            )}
-            <div>
-              <Form.Control
-                className="form-control  input_padding post_summary_input margin_bottom"
-                as="textarea"
-                placeholder="Write Description here.."
-                aria-label="With textarea"
-              />
-            </div>
-            <div className="dropdown_row">
-              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                {selectedlist.value === "Announcement" && (
-                  <Form.Select aria-label="Default select example">
-                    <option>Status</option>
-                    <option value="1">Active</option>
-                    <option value="2">Expired</option>
-                  </Form.Select>
-                )}
-                {selectedlist.value === "Job" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Documents</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Location</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>work mode</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>job type</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>job role</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Sub Department</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                {selectedlist.value === "Internship" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Documents</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Location</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>work mode</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>job type</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>job role</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Sub Department</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                {selectedlist.value === "Mentoring" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                {selectedlist.value === "Question" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Organization</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>College</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Course</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Exam</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Corporate</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                {selectedlist.value === "Services" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                {selectedlist.value === "College festives" && (
-                  <Form.Select aria-label="Default select example">
-                    <option>Status</option>
-                    <option value="1">Active</option>
-                    <option value="2">Expired</option>
-                  </Form.Select>
-                )}
-                {selectedlist.value === "scholarship" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "cultural events" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "conferences" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "competitions" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "hackathon" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "Hiring Challenge" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-                 {selectedlist.value === "Campus Recruitment" && (
-                  <>
-                    <Form.Select aria-label="Default select example">
-                      <option>Status</option>
-                      <option value="1">Active</option>
-                      <option value="2">Expired</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>Eligibility</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sub streams</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                    <Form.Select aria-label="Default select example">
-                      <option>sort by</option>
-                      <option value="1">1</option>
-                      <option value="2">2</option>
-                    </Form.Select>
-                  </>
-                )}
-              </ScrollingCarousel>
-            </div>
-
-            <div className="text-center">
-              <Button className="border_btn user_header_login_btn post_bar_post_btn">
-                Post
-              </Button>
-            </div>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>

@@ -89,61 +89,61 @@ function CreateMasterFilter() {
     return errors;
   };
   const neData = [
-    'courselevel',
-    'programtype',
-    'discipline',
-    'schoolaffilation',
-    'gradesystem',
-    'schoollevel',
-    'schooldesignation',
-    'schoolmedium',
-    'teacherlevels',
-    'programduration',
-    'collegetype',
-    'accreditation',
-    'affilation',
-    'examaccepted',
-    'facilities',
-    'coursecategory',
-    'coursetype',
-    'collegecategory',
-    'category',
-    'collegeuniversitytype',
-    'examtype',
-    'applicationmode',
-    'exammode',
-    'examother',
-    'ranking',
-    'institutetype',
-    'internationalcollaboration',
-    'exampattern',
-    'applicationexamstatus',
-    'academiclevel',
-    'qualification',
-    'fieldofstudy',
+    "courselevel",
+    "programtype",
+    "discipline",
+    "schoolaffilation",
+    "gradesystem",
+    "schoollevel",
+    "schooldesignation",
+    "schoolmedium",
+    "teacherlevels",
+    "programduration",
+    "collegetype",
+    "accreditation",
+    "affilation",
+    "examaccepted",
+    "facilities",
+    "coursecategory",
+    "coursetype",
+    "collegecategory",
+    "category",
+    "collegeuniversitytype",
+    "examtype",
+    "applicationmode",
+    "exammode",
+    "examother",
+    "ranking",
+    "institutetype",
+    "internationalcollaboration",
+    "exampattern",
+    "applicationexamstatus",
+    "academiclevel",
+    "qualification",
+    "fieldofstudy",
     // 'specialization',
-    'entranceexamaccepted',
-    'courseduration',
-    'studymode',
-    'eligbilitycriteria',
-    'examduration',
-    'rankingtype',
-    'examdurationtype',
-    'qualificationcriteria',
-    'headofinstitute',
-    'campus',
-    'preparatoryexams',
-    'agency',
-    'ratings',
-    'department',
-    'coursetype',
-    'coursefeetype',
-    'courseplace',
-    'approvals',
-    'eligibility',
-    'coursefeedetails',
-    'corporatemaincategory',
-    'corporatesubcategory'
+    "entranceexamaccepted",
+    "courseduration",
+    "studymode",
+    "eligbilitycriteria",
+    "examduration",
+    "rankingtype",
+    "examdurationtype",
+    "qualificationcriteria",
+    "headofinstitute",
+    "campus",
+    "preparatoryexams",
+    "agency",
+    "ratings",
+    "department",
+    "coursetype",
+    "coursefeetype",
+    "courseplace",
+    "approvals",
+    "eligibility",
+    "coursefeedetails",
+    "corporatemaincategory",
+    "corporatesubcategory",
   ];
 
   return (
@@ -201,29 +201,31 @@ function CreateMasterFilter() {
                         <Field key={index} name={`${name}.FieldName`}>
                           {({ input, meta }) => (
                             <>
-                              <div className="d-flex">
-                                <label className="signup_form_label">
-                                  Enter Field
-                                </label>
-                                {meta.error && meta.touched && (
-                                  <span className="text-danger required_msg">
-                                    {meta.error}
-                                  </span>
-                                )}
+                              <div className="w-100">
+                                <div className="d-flex">
+                                  <label className="signup_form_label">
+                                    Enter Field
+                                  </label>
+                                  {meta.error && meta.touched && (
+                                    <span className="text-danger required_msg">
+                                      {meta.error}
+                                    </span>
+                                  )}
+                                </div>
+                                <input
+                                  {...input}
+                                  className="form-control signup_form_input "
+                                  placeholder="Enter Field"
+                                />
                               </div>
-                              <input
-                                {...input}
-                                className="form-control signup_form_input "
-                                placeholder="Enter Field"
-                              />
                             </>
                           )}
                         </Field>
                         {!ID && (
-                          <div className="d-flex mt-2 margin_bottom">
+                          <div className="d-flex plus_minus_btn_margin">
                             <div
                               type="button"
-                              className="add_remove_btn ms-2"
+                              className="add_remove_btn ms-2 m-0"
                               onClick={() =>
                                 fields.push({
                                   fieldName: "",
@@ -237,7 +239,7 @@ function CreateMasterFilter() {
                             </div>
                             {fields.length > 1 ? (
                               <div
-                                className="add_remove_btn ms-2"
+                                className="add_remove_btn ms-2 m-0"
                                 type="button"
                                 onClick={() => fields.remove(index)}
                               >

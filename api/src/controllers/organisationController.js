@@ -233,6 +233,183 @@ const organisationPendingRequestList = async function (req, res) {
 };
 
 
+const organisationSectorDelete = async function (req, res) {
+  await organisationManager
+    .organisationSectorDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
+const organisationIndustryDelete = async function (req, res) {
+  await organisationManager
+    .organisationIndustryDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationBusinessDelete = async function (req, res) {
+  await organisationManager
+    .organisationBusinessDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
+const organisationcompanyLevelDelete = async function (req, res) {
+  await organisationManager
+    .organisationcompanyLevelDelete(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const addCompany = async function (req, res) {
+  await organisationManager
+    .addCompany(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const updateCompany = async function (req, res) {
+  await organisationManager
+    .updateCompany(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const companyList = async function (req, res) {
+  await organisationManager
+    .companyList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const companyDelete = async function (req, res) {
+  await organisationManager
+    .companyDelete(req.params)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const addOrganisationGroup = async function (req, res) {
+  await organisationManager
+    .addOrganisationGroup(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const updateOrganisationGroup = async function (req, res) {
+  await organisationManager
+    .updateOrganisationGroup(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationGroupList = async function (req, res) {
+  await organisationManager
+    .organisationGroupList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationGroupDelete = async function (req, res) {
+  await organisationManager
+    .organisationGroupDelete(req.params)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const addOrganisationBrand = async function (req, res) {
+  await organisationManager
+    .addOrganisationBrand(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const updateOrganisationBrand = async function (req, res) {
+  await organisationManager
+    .updateOrganisationBrand(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationBrandList = async function (req, res) {
+  await organisationManager
+    .organisationBrandList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const organisationBrandDelete = async function (req, res) {
+  await organisationManager
+    .organisationBrandDelete(req.params)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 module.exports = {
   addSector,
@@ -254,6 +431,22 @@ module.exports = {
   organisationPostDelete,
   addOrganisationLinksData,
   organisationLinkApproval,
-  organisationPendingRequestList
+  organisationPendingRequestList,
+  organisationSectorDelete,
+  organisationIndustryDelete,
+  organisationBusinessDelete,
+  organisationcompanyLevelDelete,
+  addCompany,
+  updateCompany,
+  companyList,
+  companyDelete,
+  addOrganisationGroup,
+  updateOrganisationGroup,
+  organisationGroupList,
+  organisationGroupDelete,
+  addOrganisationBrand,
+  updateOrganisationBrand,
+  organisationBrandList,
+  organisationBrandDelete
 
 };

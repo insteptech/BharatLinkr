@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
+import { companyBrandList, companyGroupList, companyLikeslist, companyNameList, getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
 import {
   getIndustryById,
   getIndustryList,
   getSectorById,
   getlistSector,
 } from "../../actions/organisation/addsector";
+import { familyCodeById, familycodeList, professioncodeList,professionCodeById, professionlist, getProfessionById, professioncodeDropdownlist } from "../../actions/organisation/profession";
 
 const sectorBySlice = createSlice({
   name: "sector",
@@ -18,7 +19,18 @@ const sectorBySlice = createSlice({
     sectorByIdlist: [],
     industryBylist: [],
     organisationList: [],
-    organisation:[],
+    organisation: [],
+    orglikedlist: [],
+    companyNamelist: [],
+    grouplist: [],
+    brandlist: [],
+    familyCodelist: [],
+    familycodeById: [],
+    professionCodeList: [],
+    professionCodeById: [],
+    professionList: [],
+    professionById: [],
+    professionCodeDropdown:[],
     error: ""
   },
 
@@ -32,7 +44,7 @@ const sectorBySlice = createSlice({
       state.isLoading = false
     });
     builder.addCase(getlistSector.fulfilled, (state, action) => {
-      state.sectorlist = action?.payload?.data?.data?.rows;
+      state.sectorlist = action?.payload?.data?.data;
       state.isLoading = false
     });
 
@@ -45,7 +57,7 @@ const sectorBySlice = createSlice({
       state.isLoading = false
     });
     builder.addCase(getIndustryList.fulfilled, (state, action) => {
-      state.industrylist = action?.payload?.data?.data?.rows;
+      state.industrylist = action?.payload?.data?.data;
       state.isLoading = false
     });
 
@@ -83,6 +95,105 @@ const sectorBySlice = createSlice({
     builder.addCase(getOrganisationbyid.fulfilled, (state, action) => {
       (state.status = ""),
         (state.organisation = action.payload?.data?.data);
+    });
+
+    //liked
+    builder.addCase(companyLikeslist.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyLikeslist.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.orglikedlist = action.payload?.data?.data?.rows);
+    });
+
+    //companyNameList
+    builder.addCase(companyNameList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyNameList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.companyNamelist = action.payload?.data?.data?.rows);
+    });
+
+    //Brandlist
+    builder.addCase(companyBrandList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyBrandList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.brandlist = action.payload?.data?.data?.rows);
+    });
+
+    //grouplist
+    builder.addCase(companyGroupList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(companyGroupList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.grouplist = action.payload?.data?.data?.rows);
+    });
+
+    //familycodelist
+    builder.addCase(familycodeList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(familycodeList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.familyCodelist = action.payload?.data?.data);
+    });
+
+    //familycodeById
+    builder.addCase(familyCodeById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(familyCodeById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.familycodeById = action.payload?.data?.data?.rows);
+    });
+
+    //professioncodelist
+    builder.addCase(professioncodeList.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professioncodeList.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionCodeList = action.payload?.data?.data);
+    });
+    
+    // //profession code dropdown
+    // builder.addCase(professioncodeDropdownlist.pending, (state, action) => {
+    //   (state.status = action.payload?.status);
+    // });
+    // builder.addCase(professioncodeDropdownlist.fulfilled, (state, action) => {
+    //   (state.status = ""),
+    //     (state.professionCodeDropdown = action.payload?.data?.data?.rows);
+    // });
+
+    //profession code by id
+    builder.addCase(professionCodeById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professionCodeById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionCodeById = action.payload?.data?.data?.rows);
+    });
+
+    //profession list
+    builder.addCase(professionlist.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(professionlist.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionList = action.payload?.data?.data);
+    });
+
+    //profession by id
+    builder.addCase(getProfessionById.pending, (state, action) => {
+      (state.status = action.payload?.status);
+    });
+    builder.addCase(getProfessionById.fulfilled, (state, action) => {
+      (state.status = ""),
+        (state.professionById = action.payload?.data?.data?.rows);
     });
   },
 });

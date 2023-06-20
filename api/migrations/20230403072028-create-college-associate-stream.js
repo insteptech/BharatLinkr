@@ -40,15 +40,7 @@ module.exports = {
           key: 'id',
         },
       },
-      courseFeeDetailsId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'masterFilters',
-          key: 'id',
-        },
-      },
-      courseFee: Sequelize.INTEGER,
+
       active: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,

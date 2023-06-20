@@ -148,7 +148,7 @@ const OrganisationsearchCard = () => {
           ))}
       </Row> */}
 
-      <Row xs={1} md={3} className="g-4">
+      <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-4">
         {OrganisationData &&
           OrganisationData.map((item) => (
             <Col className="flip-card">
@@ -208,12 +208,12 @@ const OrganisationsearchCard = () => {
                   <div className="text-center">
                     <Button
                       onClick={() => handleShow(item)}
-                      className=" card_btn"
+                      className="card_btn"
                     >
                       Linked
                     </Button>
-                    <Button className=" card_btn">Message</Button>
-                    <Button className=" card_btn">Activities</Button>
+                    <Button className="card_btn">Message</Button>
+                    <Button className="card_btn">Activities</Button>
                   </div>
                 </Card.Body>
                 <div

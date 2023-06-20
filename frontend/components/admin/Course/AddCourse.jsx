@@ -1,32 +1,49 @@
-import dynamic from "next/dynamic";
-import React, { useEffect, useMemo, useState } from "react";
-import { Col, Row, Tab, Tabs } from "react-bootstrap";
-import { Field, Form } from "react-final-form";
-import { useDispatch, useSelector } from "react-redux";
-import Select from "react-select";
-import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { getAllMasterFilter } from "../../../redux/actions/masterfilter/createmasterfilter"
-import { FieldTypes, inputFieldTypes } from "../../../utils/helper";
-import { FieldArray } from "react-final-form-arrays";
-import arrayMutators from "final-form-arrays";
-import { addCourse, editCourse, getCoursebyId } from "../../../redux/actions/course/addcourse";
-import Router, { useRouter } from "next/router";
-import { toast } from "react-toastify";
-import { getAllExams } from "../../../redux/actions/exams/createExam";
+import dynamic from 'next/dynamic'
+import React, { useEffect, useMemo, useState } from 'react'
+import { Col, Row, Tab, Tabs } from 'react-bootstrap'
+import { Field, Form } from 'react-final-form'
+import { useDispatch, useSelector } from 'react-redux'
+import Select from 'react-select'
+import { getMainStream } from '../../../redux/actions/streams/addMainStreams'
+import { getAllMasterFilter } from '../../../redux/actions/masterfilter/createmasterfilter'
+import { FieldTypes, inputFieldTypes } from '../../../utils/helper'
+import { FieldArray } from 'react-final-form-arrays'
+import arrayMutators from 'final-form-arrays'
+import {
+  addCourse,
+  editCourse,
+  getCoursebyId
+} from '../../../redux/actions/course/addcourse'
+import Router, { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+import { getAllExams } from '../../../redux/actions/exams/createExam'
+import { ScrollingCarousel } from '@trendyol-js/react-carousel'
 
 const CKeditorGenerator = dynamic(() => import('../CKeditor'), {
-  ssr: false,
-});
+  ssr: false
+})
 
-export default function AddCourse() {
-  const [dataValue, setDataValue] = useState(0);
-  const FormSteps = ["Course Register", "CMS"];
+export default function AddCourse () {
+  const [dataValue, setDataValue] = useState(0)
+  const FormSteps = ['Course Register', 'CMS']
   const [durationState, setDurationState] = useState('Year')
+
   const dispatch = useDispatch()
-  const mainStreamData = useSelector((data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows)
-  const masterFilterData = useSelector((data) => data?.allMasterFilterList?.masterfilterlist?.data?.data)
-  const examData = useSelector((data) => data?.examList?.examlist?.data?.data?.rows)
-  const prevData = useSelector((data) => data?.coursebyId?.course?.data?.data?.rows[0])
+  const router = useRouter()
+
+  const mainStreamData = useSelector(
+    data => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
+  )
+  const masterFilterData = useSelector(
+    data => data?.allMasterFilterList?.masterfilterlist?.data?.data
+  )
+  const examData = useSelector(
+    data => data?.examList?.examlist?.data?.data?.rows
+  )
+  const prevData = useSelector(
+    data => data?.coursebyId?.course?.data?.data?.rows[0]
+  )
+
   const courseCMS = [
     { title: 'About', key: 'about' },
     { title: 'Specialization', key: 'specialization' },
@@ -36,21 +53,25 @@ export default function AddCourse() {
     { title: 'Avg. Fees', key: 'avgFees' },
     { title: 'Salary Trends', key: 'salaryTrends' }
   ]
-  const router = useRouter()
-  const handleSubmit = (values) => {
+
+  const handleSubmit = values => {
     if (router.query.Id) {
       if (dataValue == 0) {
         setDataValue(1)
-      } if (dataValue == 1) {
-        values.courseDuration = values.courseDuration + ` ` + durationState;
+      }
+      if (dataValue == 1) {
+        // values.courseDuration = values.courseDuration + ` ` + durationState;
         values.id = prevData.id
         if (values.courseName === prevData.courseName) {
           delete values.courseName
         }
-        dispatch(editCourse(values)).then((res) => {
+        values.cms = []
+        values.cms.push(values.CMS[0])
+        delete values.CMS
+        dispatch(editCourse(values)).then(res => {
           if (res?.payload?.data?.success) {
-            toast.success("Updated")
-            router.push("/admin/courses")
+            toast.success('Updated')
+            router.push('/admin/courses')
           } else {
             toast.error('error')
           }
@@ -59,19 +80,20 @@ export default function AddCourse() {
     } else {
       if (dataValue === 0) {
         setDataValue(1)
-      } if (dataValue === 1) {
-        values.courseDuration = values.courseDuration + ` ` + durationState;
+      }
+      if (dataValue === 1) {
+        // values.courseDuration = values.courseDuration + ` ` + durationState;
         let data = { Course: [values] }
-    
-        dispatch(addCourse(data)).then((res) => {
-          if (res?.payload?.data?.success ) {
+
+        dispatch(addCourse(data)).then(res => {
+          if (res?.payload?.data?.success) {
             let status = res?.payload?.data?.data?.stream[0].status
-            if (status === "duplicate") {
+            if (status === 'duplicate') {
               toast.error('Duplicate')
               values.courseDuration = values.courseDuration.split(' ')[0]
             } else {
               toast.success('Course added')
-              Router.push("/admin/courses")
+              Router.push('/admin/courses')
             }
           } else {
             toast.error('error')
@@ -80,156 +102,156 @@ export default function AddCourse() {
         })
       }
     }
-  };
+  }
 
-  const validate = (values) => {
-    const errors = {};
+  const validate = values => {
+    const errors = {}
     if (dataValue === 0) {
       if (!values.mainStreamId) {
-        errors["mainStreamId"] = "Required";
+        errors['mainStreamId'] = '*'
       }
       if (!values.courseTypeId) {
-        errors["courseTypeId"] = "Required";
+        errors['courseTypeId'] = '*'
       }
       if (!values.courseName) {
-        errors["courseName"] = "Required";
+        errors['courseName'] = '*'
       }
       if (!values.courseCategoryId) {
-        errors["courseCategoryId"] = "Required";
+        errors['courseCategoryId'] = '*'
       }
       if (!values.eligibility) {
-        errors["eligibility"] = "Required";
+        errors['eligibility'] = '*'
       }
       if (!values.courseDuration) {
-        errors["courseDuration"] = "Required";
+        errors['courseDuration'] = '*'
       }
       if (!values.averageFees) {
-        errors["averageFees"] = "Required";
+        errors['averageFees'] = '*'
       }
       if (!values.averageSalary) {
-        errors["averageSalary"] = "Required";
+        errors['averageSalary'] = '*'
       }
       if (!values.entranceExamId) {
-        errors["entranceExamId"] = "Required";
+        errors['entranceExamId'] = '*'
       }
       if (!values.courseLevelId) {
-        errors["courseLevelId"] = "Required";
+        errors['courseLevelId'] = '*'
       }
     }
 
-    return errors;
-  };
+    return errors
+  }
 
   const MainStreamOptions = [
-    { values: "1", label: "Medical" },
-    { values: "2", label: "Non-medical" },
-  ];
+    { values: '1', label: 'Medical' },
+    { values: '2', label: 'Non-medical' }
+  ]
 
   const masterValues = 'coursetype,coursecategory,courselevel,eligibility'
 
-  const handledurationChange = (e) => {
+  const handledurationChange = e => {
     setDurationState(e.target.value)
-  };
+  }
 
   const fields = [
     {
       fieldType: FieldTypes.fields,
-      name: "mainStream",
-      component: (input) => (
+      name: 'mainStream',
+      component: input => (
         <Select
           {...input}
           options={MainStreamOptions}
           placeholder={`Select Main Stream`}
         />
       ),
-      label: "Main Stream Name",
-      col: "6",
+      label: 'Main Stream Name',
+      col: '6'
     },
     {
       fieldType: FieldTypes.fields,
-      name: "courseType",
-      component: (input) => (
+      name: 'courseType',
+      component: input => (
         <Select
           {...input}
           options={MainStreamOptions}
-          placeholder="Choose Course Type"
+          placeholder='Choose Course Type'
         />
       ),
       type: inputFieldTypes.text,
-      label: "Course Type",
-      placeholder: "Select College Type",
-      col: "6",
-      disabled: false,
+      label: 'Course Type',
+      placeholder: 'Select College Type',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "courseName",
-      component: "",
+      name: 'courseName',
+      component: '',
       type: inputFieldTypes.text,
-      label: "Course Name",
-      placeholder: "Choose Course Name",
-      col: "6",
-      disabled: false,
+      label: 'Course Name',
+      placeholder: 'Choose Course Name',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "courseCategory",
-      component: (input) => (
+      name: 'courseCategory',
+      component: input => (
         <Select
           {...input}
           options={MainStreamOptions}
-          placeholder="Enter Course Category"
+          placeholder='Enter Course Category'
         />
       ),
-      label: "Course Category",
-      placeholder: "Enter College Status",
-      col: "6",
-      disabled: false,
+      label: 'Course Category',
+      placeholder: 'Enter College Status',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "eligibility",
-      component: "",
+      name: 'eligibility',
+      component: '',
       type: inputFieldTypes.text,
-      label: "Course Elegibility",
-      placeholder: "Enter Course Eligibility",
-      col: "6",
-      disabled: false,
+      label: 'Course Elegibility',
+      placeholder: 'Enter Course Eligibility',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "courseDuration",
-      component: (input) => <Select {...input} options={MainStreamOptions} />,
+      name: 'courseDuration',
+      component: input => <Select {...input} options={MainStreamOptions} />,
       type: inputFieldTypes.date,
-      label: "Course Duration (Years/Months)",
-      placeholder: "Enter course duration",
-      col: "6",
-      disabled: false,
+      label: 'Course Duration (Years/Months)',
+      placeholder: 'Enter course duration',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "averageFee",
-      col: "6",
+      name: 'averageFee',
+      col: '6',
       type: inputFieldTypes.text,
-      placeholder: "Enter Average Fee",
-      label: "Average Fee",
-      className: "",
-      disabled: false,
+      placeholder: 'Enter Average Fee',
+      label: 'Average Fee',
+      className: '',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "averageSalary",
-      col: "6",
+      name: 'averageSalary',
+      col: '6',
       type: inputFieldTypes.text,
-      placeholder: "Enter Average Salary",
-      label: "Average Salary",
-      className: "",
-      disabled: false,
+      placeholder: 'Enter Average Salary',
+      label: 'Average Salary',
+      className: '',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "entranceExam",
-      component: (input) => (
+      name: 'entranceExam',
+      component: input => (
         <Select
           {...input}
           options={MainStreamOptions}
@@ -237,14 +259,14 @@ export default function AddCourse() {
         />
       ),
       type: inputFieldTypes.date,
-      label: "Entrance Exa,",
-      col: "6",
-      disabled: false,
+      label: 'Entrance Exa,',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.fields,
-      name: "courseType",
-      component: (input) => (
+      name: 'courseType',
+      component: input => (
         <Select
           {...input}
           options={MainStreamOptions}
@@ -252,25 +274,25 @@ export default function AddCourse() {
         />
       ),
       type: inputFieldTypes.date,
-      label: "Type Of Course",
-      col: "6",
-      disabled: false,
+      label: 'Type Of Course',
+      col: '6',
+      disabled: false
     },
     {
       fieldType: FieldTypes.actions,
       buttons: [
         {
-          type: "submit",
-          body: "Next",
-          variant: "outline-primary",
-          className: "w-25 mx-auto",
+          type: 'submit',
+          body: 'Next',
+          variant: 'outline-primary',
+          className: 'w-25 mx-auto',
           activeCondition: false,
-          size: "lg",
-          col: "12",
-        },
-      ],
-    },
-  ];
+          size: 'lg',
+          col: '12'
+        }
+      ]
+    }
+  ]
 
   useEffect(() => {
     dispatch(getMainStream())
@@ -282,12 +304,12 @@ export default function AddCourse() {
     }
   }, [router.query.Id])
 
-  const init = (e) => {
+  const init = e => {
     if (e && Object.keys(e).length > 0) {
-      return e;
-    };
-    let initialValues = {};
-    if (router.query.Id) {
+      return e
+    }
+    let initialValues = {}
+    if (router.query.Id && prevData) {
       initialValues = {
         mainStreamId: prevData?.mainStreamId,
         courseTypeId: prevData?.courseTypeId,
@@ -334,34 +356,39 @@ export default function AddCourse() {
             salaryTrends: null
           }
         ]
-      };
+      }
     }
 
-    return initialValues;
-  };
+    return initialValues
+  }
 
   return (
     <>
-      <div className="admin_home_tabs_row">
+      <div className='admin_home_tabs_row'>
         <Row>
-          <ul className="nav tabs_scroll">
-            {FormSteps &&
-              FormSteps.map((steps, stepsIndex) => (
-                <li className="nav-item" key={stepsIndex}>
-                  <a
-                    className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
-                      }`}
-                    active='true'
-                    onClick={() => setDataValue(stepsIndex)}
-                  >
-                    {steps}
-                  </a>
-                </li>
-              ))}
-          </ul>
+          <Col className='p-0'>
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              <ul className='nav tabs_scroll'>
+                {FormSteps &&
+                  FormSteps.map((steps, stepsIndex) => (
+                    <li className='nav-item' key={stepsIndex}>
+                      <a
+                        className={`nav-link admin_tabs_name ${
+                          dataValue === stepsIndex && 'head-active'
+                        }`}
+                        active='true'
+                        onClick={() => setDataValue(stepsIndex)}
+                      >
+                        {steps}
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            </ScrollingCarousel>
+          </Col>
         </Row>
       </div>
-      <Row className="mt-5">
+      <Row className='mt-5'>
         <Col>
           <Form
             onSubmit={handleSubmit}
@@ -370,62 +397,92 @@ export default function AddCourse() {
             }}
             keepDirtyOnReinitialize
             validate={validate}
-            initialValues={useMemo((e) => (init(e)), [])}
+            initialValues={useMemo(e => init(e), [prevData])}
             render={({ handleSubmit }) => (
               <form onSubmit={handleSubmit}>
-                {dataValue === 0 ?
+                {dataValue === 0 ? (
                   <>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Main Stream</label>
-                        <Field name="mainStreamId">
+                        <Field name='mainStreamId'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Main Stream
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control signup_form_input"
+                                className='form-control signup_form_input'
                               >
-                                {!router.query.Id && <option value={null}>Select Mainstream</option>}
-                                {mainStreamData && mainStreamData.map((item, index) => {
-                                  return <option key={index} value={item.id}>{item?.mainStreamName}</option>
-                                })}
+                                {!router.query.Id && (
+                                  <option value={null}>
+                                    Select Mainstream
+                                  </option>
+                                )}
+                                {mainStreamData &&
+                                  mainStreamData.map((item, index) => {
+                                    return (
+                                      <option key={index} value={item.id}>
+                                        {item?.mainStreamName}
+                                      </option>
+                                    )
+                                  })}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Type</label>
-                        <Field name="courseTypeId">
+                        <Field name='courseTypeId'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Course Type
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control signup_form_input"
+                                className='form-control signup_form_input'
                               >
-                                {!router?.query?.Id && <option>Select Coursetype</option>}
-                                {masterFilterData && masterFilterData?.coursetype?.map((item, index) => {
-                                  return <option key={index} value={item.id}>{item?.name}</option>
-                                })}
+                                {!router?.query?.Id && (
+                                  <option>Select Coursetype</option>
+                                )}
+                                {masterFilterData &&
+                                  masterFilterData?.coursetype?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      )
+                                    }
+                                  )}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
@@ -433,46 +490,65 @@ export default function AddCourse() {
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Name</label>
-                        <Field name="courseName">
+                        <Field name='courseName'>
                           {({ input, meta }) => (
                             <div>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Course Name
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <input
                                 {...input}
-                                type="text"
-                                className="form-control signup_form_input margin_bottom"
-                                placeholder="Enter Course Name"
+                                type='text'
+                                className='form-control signup_form_input margin_bottom'
+                                placeholder='Enter Course Name'
                               />
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </div>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Category</label>
-                        <Field name="courseCategoryId">
+                        <Field name='courseCategoryId'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Course Category
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control signup_form_input"
+                                className='form-control signup_form_input'
                               >
-                                <option value="">Select Course category</option>
-                                {masterFilterData?.coursecategory && masterFilterData?.coursecategory?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.name}</option>)
-                                })}
+                                <option value=''>Select Course category</option>
+                                {masterFilterData?.coursecategory &&
+                                  masterFilterData?.coursecategory?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      )
+                                    }
+                                  )}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
@@ -480,128 +556,139 @@ export default function AddCourse() {
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Eligibility</label>
-                        <Field name="eligibility">
+                        <Field name='eligibility'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Eligibility
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control signup_form_input"
+                                className='form-control signup_form_input'
                               >
-                                <option value="">Select Eligibility</option>
-                                {masterFilterData?.eligibility && masterFilterData?.eligibility?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.name}</option>)
-                                })}
+                                <option value=''>Select Eligibility</option>
+                                {masterFilterData?.eligibility &&
+                                  masterFilterData?.eligibility?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item?.name}
+                                        </option>
+                                      )
+                                    }
+                                  )}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">
-                          Course Duration (Years/Months)
-                        </label>
-                        <div className=" year_div">
-                          <div className="year_1st">
-                            <Field name="courseDuration">
+                        <div className='year_div'>
+                          <div className='year_1st'>
+                            <Field name='courseDuration'>
                               {({ input, meta }) => (
+                                <>
                                 <div>
+                                  <div>
+                                    <label className='signup_form_label'>
+                                      Course Duration(years)
+                                    </label>
+                                    {meta.error && meta.touched && (
+                                      <span className='text-danger required_msg'>
+                                        {meta.error}
+                                      </span>
+                                    )}
+                                  </div>
                                   <input
                                     {...input}
-                                    type="text"
-                                    className="form-control signup_form_input input_right_border"
-                                    placeholder="Enter Course Duration"
+                                    type='text'
+                                    className='form-control signup_form_input input_right_border'
+                                    placeholder='Enter Course Duration'
                                   />
-                                  {/* <select {...input}
-                                    className="form-control select-style signup_form_input input_bg">
-                                  <option value="">Select Course Duration</option>
-                                  {masterFilterData?.map((item) => {
-                                    if (item.types === "courseduration") {
-                                      return <option value={item.id}>{item.name}</option>
-                                    }
-                                  })}
-                                  </select> */}
-                                  {meta.error && meta.touched && (
-                                    <span className="text-danger">
-                                      {meta.error}
-                                    </span>
-                                  )}
                                 </div>
+                                <div className='year_2nd'>
+                                <>
+                                  <select
+                                    value={durationState}
+                                    onChange={e => handledurationChange(e)}
+                                    className='form-control select-style signup_form_input input_bg'
+                                  >
+                                    <option>year</option>
+                                  </select>
+                                  <div className='text-end'>
+                                    <img
+                                      className='select_down_icon'
+                                      src='/images/down.png'
+                                    />
+                                  </div>
+                                </>
+                                  </div>
+                                </>
                               )}
                             </Field>
                           </div>
-                          <div className="year_2nd">
-                            {/* <Field name="courseDurationType"> */}
-                            {/* {({ input, meta }) => ( */}
-                            <>
-                              <select
-                                value={durationState}
-                                onChange={(e) => handledurationChange(e)}
-                                className="form-control select-style signup_form_input input_bg"
-                              >
-                                <option>year</option>
-                                <option>month</option>
-                              </select>
-                              <div className="text-end">
-                                <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
-                                />
-                              </div>
-                              {/* {meta.error && meta.touched && ( */}
-                              {/* <span className="text-danger"> */}
-                              {/* {meta.error} */}
-                              {/* </span> */}
-                              {/* )} */}
-                            </>
-                            {/* )} */}
-                            {/* </Field> */}
-                          </div>
+                          
                         </div>
                       </Col>
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Average Fees</label>
-                        <Field name="averageFees">
+                        <Field name='averageFees'>
                           {({ input, meta }) => (
                             <div>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Average Fees
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <input
                                 {...input}
-                                type="text"
-                                className="form-control signup_form_input margin_bottom"
-                                placeholder="Enter Average Fees"
+                                type='text'
+                                className='form-control signup_form_input margin_bottom'
+                                placeholder='Enter Average Fees'
                               />
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </div>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Average Salary</label>
-                        <Field name="averageSalary">
+                        <Field name='averageSalary'>
                           {({ input, meta }) => (
                             <div>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Average Salary
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <input
                                 {...input}
-                                type="text"
-                                className="form-control input-style signup_form_input margin_bottom"
-                                placeholder="Enter Average Salary"
+                                type='text'
+                                className='form-control input-style signup_form_input margin_bottom'
+                                placeholder='Enter Average Salary'
                               />
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </div>
                           )}
                         </Field>
@@ -609,64 +696,88 @@ export default function AddCourse() {
                     </Row>
                     <Row>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Entrance Exam</label>
-                        <Field name="entranceExamId">
+                        <Field name='entranceExamId'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                  Entrance Exam
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control select-style signup_form_input"
+                                className='form-control select-style signup_form_input'
                               >
-                                <option value="">Select Exam</option>
-                                {examData && examData.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item?.examName}</option>)
-                                })}
+                                <option value=''>Select Exam</option>
+                                {examData &&
+                                  examData.map((item, index) => {
+                                    return (
+                                      <option key={index} value={item.id}>
+                                        {item?.examName}
+                                      </option>
+                                    )
+                                  })}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
                       </Col>
                       <Col md={12} lg={6}>
-                        <label className="signup_form_label">Course Level</label>
-                        <Field name="courseLevelId">
+                        <Field name='courseLevelId'>
                           {({ input, meta }) => (
                             <>
+                              <div>
+                                <label className='signup_form_label'>
+                                Course Level
+                                </label>
+                                {meta.error && meta.touched && (
+                                  <span className='text-danger required_msg'>
+                                    {meta.error}
+                                  </span>
+                                )}
+                              </div>
                               <select
                                 {...input}
-                                className="form-control select-style signup_form_input"
+                                className='form-control select-style signup_form_input'
                               >
-                                <option value="">Select Course level</option>
-                                {masterFilterData?.courselevel && masterFilterData?.courselevel?.map((item, index) => {
-                                  return (<option key={index} value={item.id}>{item.name}</option>)
-                                })}
+                                <option value=''>Select Course level</option>
+                                {masterFilterData?.courselevel &&
+                                  masterFilterData?.courselevel?.map(
+                                    (item, index) => {
+                                      return (
+                                        <option key={index} value={item.id}>
+                                          {item.name}
+                                        </option>
+                                      )
+                                    }
+                                  )}
                               </select>
-                              <div className="text-end">
+                              <div className='text-end'>
                                 <img
-                                  className="select_down_icon"
-                                  src="/images/down.png"
+                                  className='select_down_icon'
+                                  src='/images/down.png'
                                 />
                               </div>
-                              {meta.error && meta.touched && (
-                                <span className="text-danger">{meta.error}</span>
-                              )}
                             </>
                           )}
                         </Field>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="text-center">
+                      <Col className='text-center'>
                         <button
-                          className="admin_signup_btn admin_signup_btn_mobile"
+                          className='admin_signup_btn admin_signup_btn_mobile'
                           onClick={handleSubmit}
                         >
                           Add Category
@@ -674,33 +785,39 @@ export default function AddCourse() {
                       </Col>
                     </Row>
                   </>
-                  :
-                  null
-                }
-                {dataValue === 1 ?
+                ) : null}
+                {dataValue === 1 ? (
                   <>
                     <Row>
                       <Col>
-                        <FieldArray name="CMS">
+                        <FieldArray name='CMS'>
                           {({ fields }) => (
                             <>
                               {fields.map((name, index) => (
                                 <Tabs
                                   key={index}
                                   defaultActiveKey={0}
-                                  className="mb-3"
+                                  className='mb-3'
                                 >
                                   {courseCMS.map((item, index) => {
                                     return (
-                                      <Tab style={{ padding: '10px', border: "1px solid black", borderRadius: '5px', backgroundColor: '#FFF' }} key={index} eventKey={index} title={item.title}>
+                                      <Tab
+                                        style={{
+                                          padding: '10px',
+                                          border: '1px solid black',
+                                          borderRadius: '5px',
+                                          backgroundColor: '#FFF'
+                                        }}
+                                        key={index}
+                                        eventKey={index}
+                                        title={item.title}
+                                      >
                                         <Field name={`${name}.${item.key}`}>
                                           {({ input, meta }) => (
                                             <>
                                               <CKeditorGenerator
                                                 input={input}
-                                                onReady={(editor) => {
-                                                 
-                                                }}
+                                                onReady={editor => {}}
                                               />
                                             </>
                                           )}
@@ -708,16 +825,17 @@ export default function AddCourse() {
                                       </Tab>
                                     )
                                   })}
-                                </Tabs>))}
+                                </Tabs>
+                              ))}
                             </>
                           )}
                         </FieldArray>
                       </Col>
                     </Row>
                     <Row>
-                      <Col className="text-center">
+                      <Col className='text-center'>
                         <button
-                          className="admin_signup_btn admin_signup_btn_mobile"
+                          className='admin_signup_btn admin_signup_btn_mobile'
                           onClick={handleSubmit}
                         >
                           Add Category
@@ -725,15 +843,12 @@ export default function AddCourse() {
                       </Col>
                     </Row>
                   </>
-                  :
-                  null
-                }
-
+                ) : null}
               </form>
             )}
           />
         </Col>
       </Row>
     </>
-  );
+  )
 }

@@ -91,7 +91,8 @@ module.exports = {
           'coursefeedetails',
           'courseplace',
           'corporatemaincategory',
-          'corporatesubcategory'
+          'corporatesubcategory',
+          'jobrole'
           
          
           

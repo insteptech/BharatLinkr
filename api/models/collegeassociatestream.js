@@ -46,15 +46,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
-    courseFeeDetailsId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'masterFilters',
-        key: 'id',
-      },
-    },
-    courseFee: DataTypes.INTEGER,
+
     active: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

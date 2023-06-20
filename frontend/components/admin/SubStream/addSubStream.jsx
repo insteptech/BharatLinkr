@@ -1,100 +1,110 @@
-import React, { useEffect } from "react";
-import { Col, Container, Row } from "react-bootstrap";
-import { Field, Form } from "react-final-form";
-import { FieldArray } from "react-final-form-arrays";
-import arrayMutators from "final-form-arrays";
-import { useDispatch, useSelector } from "react-redux";
-import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
-import { CreateSubStream, editSubStream, getSubStreamById } from "../../../redux/actions/streams/addSubStream";
-import { toast } from "react-toastify";
-import { useRouter } from "next/router";
+import React, { useEffect, useMemo } from 'react'
+import { Col, Container, Row } from 'react-bootstrap'
+import { Field, Form } from 'react-final-form'
+import { FieldArray } from 'react-final-form-arrays'
+import arrayMutators from 'final-form-arrays'
+import { useDispatch, useSelector } from 'react-redux'
+import { getMainStream } from '../../../redux/actions/streams/addMainStreams'
+import {
+  CreateSubStream,
+  editSubStream,
+  getSubStreamById
+} from '../../../redux/actions/streams/addSubStream'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
 
-export default function AddSubStream() {
-  const router = useRouter();
-  const subStream = useSelector((data) => data?.subStreamById?.subStreamByIdValue?.data?.stream)
-  const dispatch = useDispatch();
+export default function AddSubStream () {
+  const router = useRouter()
+  const subStream = useSelector(
+    data => data?.subStreamById?.subStreamByIdValue?.data?.stream
+  )
+  const dispatch = useDispatch()
 
-  const handleSubmit = (values) => {
+  const handleSubmit = values => {
     let updatedData = {}
 
     if (!router.query.Id) {
-      dispatch(CreateSubStream(values)).then((res) => {
-    
+      dispatch(CreateSubStream(values)).then(res => {
         if (res?.payload?.data?.success) {
-          const status = res?.payload?.data?.data?.stream[0]?.status;
-          if (status == "duplicate") {
-            toast.error(`Sub Stream is ${status}`);
+          const status = res?.payload?.data?.data?.stream[0]?.status
+          if (status == 'duplicate') {
+            toast.error(`Sub Stream is ${status}`)
           } else {
-            toast.success("Sub Stream added successfuly");
-            router.push("/admin/streams");
+            toast.success('Sub Stream added successfuly')
+            router.push('/admin/streams')
           }
         }
-      });
+      })
     } else {
       updatedData = {
-        subStreamName: values?.substream[0].subStreamName,
-        id: subStream?.id
+        subStream: [
+          {
+            subStreamName: values?.substream[0].subStreamName,
+            id: subStream?.id
+          }
+        ]
       }
-      dispatch(editSubStream(updatedData)).then((res) => {
+      dispatch(editSubStream(updatedData)).then(res => {
         if (res?.payload?.data?.success) {
-          router.push("/admin/streams")
-          toast.success("Updated")
+          router.push('/admin/streams')
+          toast.success('Updated')
         } else {
-          toast.error("error")
+          toast.error('error')
         }
       })
     }
-  };
-  const validate = (values) => {
-    const errors = {};
-    const itemArray = [];
-    values.subStream.map((item, index) => {
-      const error = {};
-      if (!item.stream) {
-        error["stream"] = "Sub stream is Required";
-        itemArray.push(error);
+  }
+
+  const validate = values => {
+    const errors = {}
+    const itemArray = []
+    values?.substream?.map(item => {
+      let error = {}
+      if (!item.subStreamName) {
+        error['subStreamName'] = '*'
       }
-      errors["subStream"] = itemArray;
-    });
-    if (!values.mainStream || !values.mainStream === "") {
-      errors["mainStream"] = "Main stream is Required";
+      itemArray.push(error)
+      errors['substream'] = itemArray
+    })
+    if (!values.mainStreamId || !values.mainStreamId === '') {
+      errors['mainStreamId'] = '*'
     }
-    return errors;
-  };
+    console.log(errors, 'errrrrrrrrr')
+    return errors
+  }
 
   const mainData = useSelector(
-    (data) => data?.mainStreamList?.mainStreamValue?.data?.data
-  );
+    data => data?.mainStreamList?.mainStreamValue?.data?.data
+  )
 
   const handleInit = () => {
     let initialValue = {}
     if (router.query.Id) {
       initialValue = {
-        mainStreamId: subStream?.MainStream?.mainStreamName,
-        substream: [{ subStreamName: subStream?.subStreamName }],
+        mainStreamId: subStream?.MainStream?.id,
+        substream: [{ subStreamName: subStream?.subStreamName }]
       }
     } else {
-      initialValue =
-      {
-        mainStreamId: "",
-        substream: [{ subStreamName: "" }],
+      initialValue = {
+        mainStreamId: '',
+        substream: [{ subStreamName: '' }]
       }
     }
     return initialValue
   }
 
   useEffect(() => {
-    dispatch(getMainStream());
+    dispatch(getMainStream())
     if (router.query.Id) {
       dispatch(getSubStreamById(router.query.Id))
     }
-  }, [router.query.Id]);
-  
+  }, [router.query.Id])
+
   return (
     <>
-      <Row className="my-3 padding_top">
+      <Row className='my-3 padding_top'>
         <Col>
-          <h3 className="fw-bold">Sub Stream Name</h3>
+          <h3 className='fw-bold'>Sub Stream Name</h3>
           <hr></hr>
         </Col>
       </Row>
@@ -104,47 +114,53 @@ export default function AddSubStream() {
           <Form
             onSubmit={handleSubmit}
             mutators={{
-              ...arrayMutators,
+              ...arrayMutators
             }}
-            // validate={validate}
-            initialValues={() => handleInit()}
+            validate={validate}
+            initialValues={useMemo(() => handleInit(), [subStream])}
             render={({ handleSubmit, values }) => (
               <form onSubmit={handleSubmit}>
                 <Row>
                   <Col lg={12}>
-                    <label className="signup_form_label">
-                      Main Stream Name
-                    </label>
-                    <Field name="mainStreamId">
+                    <Field name='mainStreamId'>
                       {({ input, meta }) => (
                         <>
+                          <div>
+                            <label className='signup_form_label'>
+                              Main Stream Name
+                            </label>
+                            {meta.error && meta.touched && (
+                              <span className='text-danger required_msg'>
+                                {meta.error}
+                              </span>
+                            )}
+                          </div>
                           <select
                             {...input}
-                            className="form-control signup_form_input"
+                            className='form-control signup_form_input'
                             disabled={router.query.Id ? true : false}
                           >
-                            {router.query.Id ?
-                              <option>{subStream?.MainStream?.mainStreamName}</option>
-                              :
+                            {router.query.Id ? (
+                              <option>
+                                {subStream?.MainStream?.mainStreamName}
+                              </option>
+                            ) : (
                               <option>Select main stream</option>
-                            }
+                            )}
                             {mainData &&
-                              mainData?.rows?.map((item) => (
+                              mainData?.rows?.map(item => (
                                 <option key={item.id} value={item.id}>
-                                  {item.mainStreamName}{" "}
+                                  {item.mainStreamName}{' '}
                                 </option>
                               ))}
                           </select>
-                          {meta.error && meta.touched && (
-                            <span>{meta.error}</span>
-                          )}
                         </>
                       )}
                     </Field>
-                    <div className="text-end">
+                    <div className='text-end'>
                       <img
-                        className="select_down_icon"
-                        src="/images/down.png"
+                        className='select_down_icon'
+                        src='/images/down.png'
                       />
                     </div>
                   </Col>
@@ -152,52 +168,56 @@ export default function AddSubStream() {
 
                 <div>
                   <Col lg={12}>
-                    <label className="signup_form_label">Sub Stream Name</label>
+                    <label className='signup_form_label'>Sub Stream Name</label>
                   </Col>
-                  <FieldArray name="substream">
+                  <FieldArray name='substream'>
                     {({ fields }) => (
                       <>
                         {fields.map((name, index) => (
                           <Row>
                             <Col lg={12} md={12}>
-                              <div className="add_main_stream_btn_input margin_bottom">
+                              <div className='add_main_stream_btn_input margin_bottom'>
                                 <Field name={`${name}.subStreamName`}>
                                   {({ input, meta }) => (
-                                    <div className="w-100">
+                                    <div className='w-100'>
                                       <input
                                         {...input}
-                                        type="text"
-                                        className="form-control signup_form_input"
-                                        placeholder="Enter sub Stream"
+                                        type='text'
+                                        className='form-control signup_form_input'
+                                        placeholder='Enter sub Stream'
                                       />
                                       {meta.error && meta.touched && (
-                                        <span>{meta.error}</span>
+                                        <span className='text-danger required_msg'>
+                                          {meta.error}
+                                        </span>
                                       )}
                                     </div>
                                   )}
                                 </Field>
-                                <div className="d-flex mt-2 ">
-                                  {!router.query.Id &&
+                                <div className='d-flex mt-2 '>
+                                  {!router.query.Id && (
                                     <div
-                                      type="button"
-                                      className="add_remove_btn"
-                                      onClick={() => fields.push({ stream: "" })}
+                                      type='button'
+                                      className='add_remove_btn'
+                                      onClick={() =>
+                                        fields.push({ stream: '' })
+                                      }
                                     >
                                       <img
-                                        className="add_remove_icon"
-                                        src="/images/plus.png"
+                                        className='add_remove_icon'
+                                        src='/images/plus.png'
                                       />
                                     </div>
-                                  }
+                                  )}
                                   {fields.length > 1 ? (
                                     <div
-                                      className="add_remove_btn"
-                                      type="button"
+                                      className='add_remove_btn'
+                                      type='button'
                                       onClick={() => fields.remove(index)}
                                     >
                                       <img
-                                        className="add_remove_icon"
-                                        src="/images/minus.png"
+                                        className='add_remove_icon'
+                                        src='/images/minus.png'
                                       />
                                     </div>
                                   ) : (
@@ -213,13 +233,9 @@ export default function AddSubStream() {
                   </FieldArray>
                 </div>
                 <Row>
-                  <Col className="text-center">
-                    <button className="admin_signup_btn  mt-3" type="submit">
-                      {router.query.Id ?
-                        'Update'
-                        :
-                        'submit'
-                      }
+                  <Col className='text-center'>
+                    <button className='admin_signup_btn  mt-3' type='submit'>
+                      {router.query.Id ? 'Update' : 'submit'}
                     </button>
                   </Col>
                 </Row>
@@ -229,5 +245,5 @@ export default function AddSubStream() {
         </Col>
       </Row>
     </>
-  );
+  )
 }
