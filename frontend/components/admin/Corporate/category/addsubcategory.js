@@ -27,8 +27,8 @@ function Addsubcategory() {
         //       toast.success("Sub Stream added successfuly");
         router.push("/admin/corporate/addcorporate");
       }
-    });
-  };
+    })
+  }
 
   const handleInit = () => {
     let initialValue = {};
@@ -50,7 +50,7 @@ function Addsubcategory() {
   const setInitial = () => {
     let initialValues = {};
     // if (Id) {
-    //   initialValues.mainCategory = [{ mainCategory: mainCategory }];
+    initialValues.mainCategoryId = '';
     // } else {
     initialValues.subcategory = [{}];
     // }
@@ -61,13 +61,30 @@ function Addsubcategory() {
     dispatch(getMainCategory())
   }, [])
 
+  const validate = (values) => {
+    let errors = {}
+    let itemArray = []
+    if (!values?.mainCategoryId) {
+      errors['mainCategoryId'] = "*"
+    }
+    values?.subcategory?.map((item) => {
+      let error = {}
+      if (!item?.subCategory) {
+        error['subCategory'] = "*"
+      }
+      itemArray.push(error)
+    })
+    errors['subcategory'] = itemArray
+    return errors
+  }
+
   const maincategoryData = useSelector(
     (state) => state?.corporateCategory?.addmaincategory?.rows
-  );
+  )
+
   return (
     <div>
       <Container className="p-0">
-        {/* <button onClick={() => console.log(mainStream)}>hhh</button> */}
         <Row className="my-3 padding_top">
           <Col>
             <h3 className="master_heading">Sub Category</h3>
@@ -82,8 +99,7 @@ function Addsubcategory() {
                 // potentially other mutators could be merged here
                 ...arrayMutators,
               }}
-              // validate={validate}
-              //    initialValues={() => handleInit()}
+              validate={validate}
               initialValues={setInitial()}
               render={({ handleSubmit, values }) => (
                 <form onSubmit={handleSubmit}>
@@ -112,18 +128,20 @@ function Addsubcategory() {
                                   </option>
                                 ))}
                             </select>
+
+                            <div className="text-end">
+                              <img
+                                className="select_down_icon"
+                                src="/images/down.png"
+                              />
+                            </div>
                             {meta.error && meta.touched && (
-                              <span>{meta.error}</span>
+                              <span className="text-danger required_msg">{meta.error}</span>
                             )}
                           </>
                         )}
                       </Field>
-                      <div className="text-end">
-                        <img
-                          className="select_down_icon"
-                          src="/images/down.png"
-                        />
-                      </div>
+
                     </Col>
                   </Row>
 
@@ -150,7 +168,7 @@ function Addsubcategory() {
                                               placeholder="Enter Sub Category"
                                             />
                                             {meta.error && meta.touched && (
-                                              <span>{meta.error}</span>
+                                              <span className="text-danger required_msg">{meta.error}</span>
                                             )}
                                           </div>
                                         )}

@@ -34,10 +34,24 @@ function Addmaincategory() {
     // } else {
     initialValues.mainCategory = [{ mainCategory: "" }];
     // }
-
-    console.log(initialValues, "initialValues");
     return initialValues;
   };
+
+  const validate=(values)=>{
+    let errors = {}
+    let itemArray = []
+    values?.mainCategory?.map((item) => {
+      let error = {}
+      if(!item?.mainCategory){
+        error['mainCategory'] = "*"
+      }
+      itemArray.push(error)
+    })
+    errors['mainCategory'] = itemArray
+    return errors
+  }
+
+
   return (
     <div>
       <Container className="p-0">
@@ -56,7 +70,7 @@ function Addmaincategory() {
                 // potentially other mutators could be merged here
                 ...arrayMutators,
               }}
-              // validate={validate}
+              validate={validate}
               initialValues={setInitial()}
               render={({ handleSubmit, values }) => (
                 <form onSubmit={handleSubmit}>
@@ -79,7 +93,7 @@ function Addmaincategory() {
                                             placeholder="Enter Main Category"
                                           />
                                           {meta.error && meta.touched && (
-                                            <span>{meta.error}</span>
+                                            <span className="text-danger required_msg">{meta.error}</span>
                                           )}
                                         </div>
                                       )}
