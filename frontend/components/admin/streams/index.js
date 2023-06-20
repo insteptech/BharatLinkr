@@ -136,7 +136,7 @@ function StreamsPage() {
                         className={`nav-link admin_tabs_name ${
                           dataValue === stepsIndex && "head-active"
                         }`}
-                        active={true}
+                        active='true'
                         onClick={() => {
                           setDataValue(stepsIndex);
                           setPagination({ ...pagination, pageNo: 1 });
@@ -204,7 +204,7 @@ function StreamsPage() {
                   ) : (
                     mainsTreamData?.rows?.map((item, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td className="text-center admin_table_serial">
                             {pagination.pageSize * (pagination.pageNo - 1) +
                               (index + 1)}
@@ -293,7 +293,7 @@ function StreamsPage() {
                   ) : (
                     subStreamData?.rows?.map((item, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td className="text-center admin_table_serial">
                             {pagination.pageSize * (pagination.pageNo - 1) +
                               (index + 1)}
@@ -385,7 +385,7 @@ function StreamsPage() {
                   ) : (
                     colStreamData?.rows?.map((item, index) => {
                       return (
-                        <tr>
+                        <tr key={index}>
                           <td className="text-center admin_table_serial">
                             {pagination.pageSize * (pagination.pageNo - 1) +
                               (index + 1)}

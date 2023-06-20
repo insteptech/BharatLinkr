@@ -56,6 +56,37 @@ function LocationPage() {
     } else router.push(`/admin/location/updatecountry/${item?.id}`);
   };
 
+  const handlecityDelete = (item) => {
+    dispatch(deleteCity(item?.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(getCityList(pagination));
+        toast.success("Deleted");
+      } else {
+        toast.error("Error");
+      }
+    });
+  }
+  const handlestateDelete = (item) => {
+    dispatch(deleteState(item?.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(getState(pagination));
+        toast.success("Deleted");
+      } else {
+        toast.error("Error");
+      }
+    });
+  }
+  const handlecountryDelete = (item) => {
+    dispatch(deleteCountry(item?.id)).then((res) => {
+      if (res?.payload?.data?.success) {
+        dispatch(getCountry(pagination));
+        toast.success("Deleted", { autoClose: 1000 });
+      } else {
+        toast.error("Error");
+      }
+    });
+  }
+
   const handleDelete = (item) => {
     if (item?.stateId) {
       dispatch(deleteCity(item?.id)).then((res) => {
@@ -131,26 +162,25 @@ function LocationPage() {
         <Row>
           <Col xl={6} lg={12} md={12} className="p-0">
             <div className="d-flex table_heading_header p-0">
-            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-              <ul className="nav tabs_scroll">
-                {json &&
-                  json?.map((steps, stepsIndex) => (
-                    <li className="nav-item" key={stepsIndex}>
-                      <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
-                        active={true}
-                        onClick={() => {
-                          handleTab(steps.key, stepsIndex);
-                          setPagination({ ...pagination, pageNo: 1 });
-                        }}
-                      >
-                        {steps.DisplayName}
-                      </a>
-                    </li>
-                  ))}
-              </ul>
+              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                <ul className="nav tabs_scroll">
+                  {json &&
+                    json?.map((steps, stepsIndex) => (
+                      <li className="nav-item" key={stepsIndex}>
+                        <a
+                          className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                            }`}
+                          active='true'
+                          onClick={() => {
+                            handleTab(steps.key, stepsIndex);
+                            setPagination({ ...pagination, pageNo: 1 });
+                          }}
+                        >
+                          {steps.DisplayName}
+                        </a>
+                      </li>
+                    ))}
+                </ul>
               </ScrollingCarousel>
               <div className="enteries_input user_lead_entery_input location_enteries hide_btn_row">
                 <h6 className="enteries_input_label">Show Enteries</h6>
@@ -184,32 +214,32 @@ function LocationPage() {
       </div>
       <Row>
         <Col sm={6} className="display_btn_row">
-        <div className=" user_lead_entery_input d-flex ">
-                <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
-                <Pagesize setPagination={setPagination} />
-              </div>
+          <div className=" user_lead_entery_input d-flex ">
+            <h6 className="enteries_input_label mb-0 pt-2">Show Enteries</h6>
+            <Pagesize setPagination={setPagination} />
+          </div>
         </Col>
         <Col sm={6} className="display_btn_row">
-        <div className="text-end">
-              <Button
-                className="border_btn btn_margin"
-                onClick={() => router.push("location/addcity")}
-              >
-                Add New City
-              </Button>
-              <Button
-                className="border_btn btn_margin"
-                onClick={() => router.push("location/addstate")}
-              >
-                Add New State
-              </Button>
-              <Button
-                className="border_btn btn_margin "
-                onClick={() => router.push("location/addcountry")}
-              >
-                Add New Country
-              </Button>
-            </div>
+          <div className="text-end">
+            <Button
+              className="border_btn btn_margin"
+              onClick={() => router.push("location/addcity")}
+            >
+              Add New City
+            </Button>
+            <Button
+              className="border_btn btn_margin"
+              onClick={() => router.push("location/addstate")}
+            >
+              Add New State
+            </Button>
+            <Button
+              className="border_btn btn_margin "
+              onClick={() => router.push("location/addcountry")}
+            >
+              Add New Country
+            </Button>
+          </div>
         </Col>
       </Row>
 
@@ -222,11 +252,9 @@ function LocationPage() {
                   {tableHeading1 &&
                     tableHeading1?.map((i, index) => {
                       return (
-                        <>
                           <th className="table_head" key={index}>
                             {i}
                           </th>
-                        </>
                       );
                     })}
                 </tr>
@@ -238,12 +266,11 @@ function LocationPage() {
                   cityList?.rows &&
                   cityList?.rows?.map((item, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td className="text-center admin_table_data">
                           {pagination.pageSize * (pagination.pageNo - 1) +
                             (index + 1)}
                         </td>
-
                         <td className="text-center admin_table_data">
                           {item?.State?.state}
                         </td>
@@ -257,17 +284,16 @@ function LocationPage() {
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/edit-icon-blue.png"
-                            onClick={() => handleEdit(item)}
-                          ></img>
+                            onClick={() => router.push(`/admin/location/updatecity/${item?.id}`)}
+                          />
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/delete-icon-blue.png"
                             onClick={() => {
-                              // handleDelete(item)
                               setModalShow(true);
                               setDeleteItem(item);
                             }}
-                          ></img>
+                          />
                         </td>
                       </tr>
                     );
@@ -280,6 +306,12 @@ function LocationPage() {
               setPagination={setPagination}
               list={cityList}
             />
+            <DeleteModal
+              show={modalShow}
+              onHide={() => handleHide()}
+              handleDelete={handlecityDelete}
+              deleteItem={deleteItem}
+            />
           </>
         )}
         {dataValue === 1 && (
@@ -290,11 +322,9 @@ function LocationPage() {
                   {tableHeading2 &&
                     tableHeading2?.map((i, index) => {
                       return (
-                        <>
                           <th className="table_head" key={index}>
                             {i}
                           </th>
-                        </>
                       );
                     })}
                 </tr>
@@ -303,7 +333,7 @@ function LocationPage() {
                 {stateList?.rows &&
                   stateList?.rows?.map((item, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td className="text-center admin_table_data">
                           {pagination.pageSize * (pagination.pageNo - 1) +
                             (index + 1)}
@@ -321,17 +351,16 @@ function LocationPage() {
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/edit-icon-blue.png"
-                            onClick={() => handleEdit(item)}
-                          ></img>
+                            onClick={() => router.push(`/admin/location/updatestate/${item?.id}`)}
+                          />
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/delete-icon-blue.png"
                             onClick={() => {
-                              // handleDelete(item)
                               setModalShow(true);
                               setDeleteItem(item);
                             }}
-                          ></img>
+                          />
                         </td>
                       </tr>
                     );
@@ -343,6 +372,12 @@ function LocationPage() {
               setPagination={setPagination}
               list={stateList}
             />
+            <DeleteModal
+              show={modalShow}
+              onHide={() => handleHide()}
+              handleDelete={handlestateDelete}
+              deleteItem={deleteItem}
+            />
           </>
         )}
         {dataValue === 2 && (
@@ -353,11 +388,9 @@ function LocationPage() {
                   {tableHeading3 &&
                     tableHeading3?.map((i, index) => {
                       return (
-                        <>
                           <th className="table_head" key={index}>
                             {i}
                           </th>
-                        </>
                       );
                     })}
                 </tr>
@@ -366,7 +399,7 @@ function LocationPage() {
                 {countryList?.rows &&
                   countryList?.rows?.map((item, index) => {
                     return (
-                      <tr>
+                      <tr key={index}>
                         <td className="text-center admin_table_data">
                           {pagination.pageSize * (pagination.pageNo - 1) +
                             (index + 1)}
@@ -381,17 +414,16 @@ function LocationPage() {
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/edit-icon-blue.png"
-                            onClick={() => handleEdit(item)}
-                          ></img>
+                            onClick={() => router.push(`/admin/location/updatecountry/${item?.id}`)}
+                          />
                           <img
                             className="mx-1 admin_table_action_icon"
                             src="/images/delete-icon-blue.png"
                             onClick={() => {
-                              // handleDelete(item)
                               setModalShow(true);
                               setDeleteItem(item);
                             }}
-                          ></img>
+                          />
                         </td>
                       </tr>
                     );
@@ -403,14 +435,20 @@ function LocationPage() {
               setPagination={setPagination}
               list={countryList}
             />
+            <DeleteModal
+              show={modalShow}
+              onHide={() => handleHide()}
+              handleDelete={handlecountryDelete}
+              deleteItem={deleteItem}
+            />
           </>
         )}
-        <DeleteModal
+        {/* <DeleteModal
           show={modalShow}
           onHide={() => handleHide()}
           handleDelete={handleDelete}
           deleteItem={deleteItem}
-        />
+        /> */}
       </div>
     </>
   );

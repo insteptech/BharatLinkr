@@ -120,11 +120,12 @@ function Organisation() {
   ];
 
   const handleDeleteOrganisation = (item) => {
-    dispatch(deleteOrganisation(item)).then((res) => {
+    dispatch(deleteOrganisation(Number(item.id))).then((res) => {
       if (res?.payload?.data?.success) {
-        toast.success("Deleted");
+        toast.success("Deleted", { autoClose: 1000 });
+        dispatch(getOrganisationlist(pagination));
       } else {
-        toast.error("Error");
+        toast.error("Error", { autoClose: 1000 });
       }
     });
   };
@@ -200,7 +201,7 @@ function Organisation() {
                         <a
                           className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
                             }`}
-                          active={true}
+                          active='true'
                           onClick={() => {
                             setDataValue(stepsIndex);
                             //     setPagination({ ...pagination, pageNo: 1 });
@@ -514,23 +515,23 @@ function Organisation() {
             <>
               <div className="admin_stream_table">
                 <Row>
-                  <Table responsive className="admin_table" bordered hover>
-                    <thead>
-                      <tr>
-                        {industryheading.map((hd, index) => {
-                          return (
-                            <th className="table_head" key={index}>
-                              {hd}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {loadergetIndustrylist ? (
-                        <LoaderPage />
-                      ) : (
-                        getIndustrylist?.rows?.map((item, index) => {
+                  {loadergetIndustrylist ? (
+                    <LoaderPage />
+                  ) : (
+                    <Table responsive className="admin_table" bordered hover>
+                      <thead>
+                        <tr>
+                          {industryheading.map((hd, index) => {
+                            return (
+                              <th className="table_head" key={index}>
+                                {hd}
+                              </th>
+                            );
+                          })}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {getIndustrylist?.rows?.map((item, index) => {
                           return (
                             <tr key={index}>
                               <td className="text-center admin_table_serial">
@@ -557,9 +558,10 @@ function Organisation() {
                             </tr>
                           );
                         })
-                      )}
-                    </tbody>
-                  </Table>
+                        }
+                      </tbody>
+                    </Table>
+                  )}
                 </Row>
                 <div className="admin_table_footer">
                   <Pagination
@@ -638,7 +640,7 @@ function Organisation() {
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/edit-icon-blue.png"
                                 onClick={() => handleOrgEdit(item?.id)}
-                              ></img>
+                              />
                               <img
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/delete-icon-blue.png"
@@ -646,7 +648,7 @@ function Organisation() {
                                   setModalShow(true);
                                   setDeleteItem(item);
                                 }}
-                              ></img>
+                              />
                             </td>
                           </tr>
                         );
@@ -729,7 +731,7 @@ function Organisation() {
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/edit-icon-blue.png"
                                 onClick={() =>
-                                  router.push(`/admin/organisation/familycode/update/${item?.id}`)}></img>
+                                  router.push(`/admin/organisation/familycode/update/${item?.id}`)} />
                               <img
                                 className="mx-1 admin_table_action_icon"
                                 src="/images/delete-icon-blue.png"
@@ -737,7 +739,7 @@ function Organisation() {
                                   setModalShow(true);
                                   setDeleteItem(item);
                                 }}
-                              ></img>
+                              />
                             </td>
                           </tr>
                         );
@@ -803,7 +805,7 @@ function Organisation() {
                                         `/admin/organisation/professioncode/update/${item?.id}`
                                       )
                                     }
-                                  ></img>
+                                  />
                                   <img
                                     className="mx-1 admin_table_action_icon"
                                     src="/images/delete-icon-blue.png"
@@ -811,7 +813,7 @@ function Organisation() {
                                       setModalShow(true);
                                       setDeleteItem(item);
                                     }}
-                                  ></img>
+                                  />
                                 </td>
                               </tr>
                             );
@@ -890,7 +892,7 @@ function Organisation() {
                                       `organisation/profession/update/${item?.id}`
                                     )
                                   }
-                                ></img>
+                                />
                                 <img
                                   className="mx-1 admin_table_action_icon"
                                   src="/images/delete-icon-blue.png"
@@ -898,7 +900,7 @@ function Organisation() {
                                     setModalShow(true);
                                     setDeleteItem(item);
                                   }}
-                                ></img>
+                                />
                               </td>
                             </tr>
                           );
