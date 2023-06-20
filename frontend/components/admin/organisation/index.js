@@ -91,11 +91,9 @@ function Organisation() {
   const getIndustrylist = useSelector(
     (state) => state?.sectorData?.industrylist
   );
-
   const loadergetIndustrylist = useSelector(
     (state) => state?.sectorData?.isLoading
   );
-
   const familycodelist = useSelector(
     (state) => state?.sectorData?.familyCodelist
   );

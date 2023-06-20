@@ -234,10 +234,19 @@ function AddOrganisation() {
       initialValues = {
         id: Id,
         orgCatgeory: orgdata?.orgCatgeory,
-        groupName: orgdata?.groupName,
+        groupId: {
+          value: orgdata?.OrganisationGroup?.id,
+          label: orgdata?.OrganisationGroup?.groupName
+        },
         industryId: orgdata?.industryId,
-        brandName: orgdata?.brandName,
-        companyName: orgdata?.companyName,
+        brandId: {
+          value: orgdata?.OrganisationBrand?.id,
+          label: orgdata?.OrganisationBrand?.brandName
+        },
+        companyId: {
+          value: orgdata?.OrganisationCompany?.id,
+          label: orgdata?.OrganisationCompany?.companyName
+        },
         companyLevel: orgdata?.companyLevel,
         natureOfBuisness: orgdata?.natureOfBuisness,
         typeOfCompany: orgdata?.typeOfCompany,
