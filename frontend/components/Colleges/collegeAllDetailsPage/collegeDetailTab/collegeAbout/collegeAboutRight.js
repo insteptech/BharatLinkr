@@ -16,7 +16,7 @@ const CollegeAboutRight = (props) => {
   const { dataValue, setDataValue } = props;
 
   return (
-    <>
+    <div className="search_right_page_bg ">
       <div className="admin_home_tabs_row top_padding_none big_screen_none">
         <Row>
           <Col lg={12} className="p-0">
@@ -104,7 +104,7 @@ const CollegeAboutRight = (props) => {
           </div>
         );
       })}
-    </>
+    </div>
   );
 };
 

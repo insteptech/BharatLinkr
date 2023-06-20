@@ -28,9 +28,9 @@ function CollegeDetailTabs() {
         <Container>
           <Row>
             <Col lg={12} md={12} className="">
-              <div className="blue_row_tabs px-3 mt-0">
+              <div className="blue_row_tabs mt-0">
                 <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                  <ul className="nav ">
+                  <ul className="nav line_height">
                     {FormSteps &&
                       FormSteps?.map((steps, stepsIndex) => (
                         <>

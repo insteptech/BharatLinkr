@@ -7,25 +7,29 @@ import CollegeBanner from "./collegeBanner";
 import CollegeDetailTabs from "./collegeDetailTab";
 
 const CompanyAllDetail = () => {
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const { Id } = router.query
-  
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { Id } = router.query;
+
   useEffect(() => {
-    if (Id) { 
-      dispatch(getOrganisationbyid(Number(Id)))
+    if (Id) {
+      dispatch(getOrganisationbyid(Number(Id)));
     }
-  }, [Id])
+  }, [Id]);
 
   const orgdata = useSelector((state) => {
     if (state?.sectorData?.organisation?.rows?.length > 0) {
-      return state?.sectorData?.organisation?.rows[0]
+      return state?.sectorData?.organisation?.rows[0];
     }
-  })
+  });
 
   return (
     <>
       <div className="user_dashboard_bg mobile_white_bg">
+        <Col
+          lg={1}
+          className="p-0 white_bg hide_box white_bg_fixed position-fixed right-0  w-50"
+        ></Col>
         <Container fluid>
           <Row>
             <Col lg={1} className="p-0 hide_box"></Col>
@@ -41,7 +45,6 @@ const CompanyAllDetail = () => {
                 </Col>
               </Row>
             </Col>
-            <Col lg={1} className="p-0 white_bg hide_box"></Col>
           </Row>
         </Container>
       </div>

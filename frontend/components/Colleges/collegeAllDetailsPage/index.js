@@ -7,21 +7,27 @@ import CollegeBanner from "./collegeBanner";
 import CollegeDetailTabs from "./collegeDetailTab";
 
 const CollegeAllDetailsPage = (props) => {
-  const dispatch = useDispatch()
-  const router = useRouter()
-  const collegeDetails = useSelector((data) => data?.collegelist?.college?.rows)
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const collegeDetails = useSelector(
+    (data) => data?.collegelist?.college?.rows
+  );
 
-  console.log(props, "Asdasdasd")
-  
+  console.log(props, "Asdasdasd");
+
   useEffect(() => {
     if (router.query.Id) {
-      dispatch(getCollegebyId({id:Number(router.query.Id)}))
+      dispatch(getCollegebyId({ id: Number(router.query.Id) }));
     }
-  }, [router.query.Id])
-  
+  }, [router.query.Id]);
+
   return (
     <>
       <div className="user_dashboard_bg mobile_white_bg">
+        <Col
+          lg={1}
+          className="p-0 white_bg hide_box white_bg_fixed position-fixed right-0  w-50"
+        ></Col>
         <Container fluid>
           <Row>
             <Col lg={1} className="p-0  hide_box"></Col>
@@ -37,7 +43,6 @@ const CollegeAllDetailsPage = (props) => {
                 </Col>
               </Row>
             </Col>
-            <Col lg={1} className="p-0 white_bg hide_box"></Col>
           </Row>
         </Container>
       </div>
