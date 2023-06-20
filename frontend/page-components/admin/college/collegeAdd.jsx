@@ -1903,10 +1903,10 @@ function CreateCollege() {
                                                       >
                                                         {({ input, meta }) => (
                                                           <div className="w-100">
-                                                            <label className="signup_form_label">
-                                                              Course Fee
-                                                            </label>
                                                             <div className="d-flex">
+                                                              <label className="signup_form_label">
+                                                                Course Fee
+                                                              </label>
                                                               {meta.touched &&
                                                                 meta.error && (
                                                                   <span className="text-danger required_msg">
@@ -2297,7 +2297,7 @@ function CreateCollege() {
                                               </div>
                                               <select
                                                 {...input}
-                                                className="form-control signup_form_input margin_bottom"
+                                                className="form-control signup_form_input "
                                               >
                                                 <option value="">
                                                   True/False
@@ -2309,6 +2309,12 @@ function CreateCollege() {
                                                   False
                                                 </option>
                                               </select>
+                                              <div className="text-end">
+                                                <img
+                                                  className="select_down_icon"
+                                                  src="/images/down.png"
+                                                />
+                                              </div>
                                             </>
                                           )}
                                         </Field>
@@ -2407,8 +2413,7 @@ function CreateCollege() {
                                                   <>
                                                     <CKeditorGenerator
                                                       input={input}
-                                                      onReady={(editor) => {
-                                                      }}
+                                                      onReady={(editor) => {}}
                                                     />
                                                   </>
                                                 )}
