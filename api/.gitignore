@@ -1,5 +1,7 @@
 # Dependencies
 node_modules
+custom.log
+customer-error.log
 
 # yarn error logs
 yarn-error.log
