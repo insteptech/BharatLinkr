@@ -70,7 +70,7 @@ const CenterPage = () => {
             <div className="top_input">
               <form>
                 <input type="search" placeholder="Search..." />
-                <button type="submit">Search</button>
+                <button className="type_submit" type="submit">Search</button>
               </form>
               {/* ---------post-card-start-------------- */}
               <StoryCard />
