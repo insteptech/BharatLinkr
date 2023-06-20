@@ -68,7 +68,7 @@ const CenterPage = () => {
         <div className="col">
           <div className="social_sec_main">
             <div className="top_input">
-              <form>
+              <form className="form_border">
                 <input type="search" placeholder="Search..." />
                 <button className="type_submit" type="submit">Search</button>
               </form>

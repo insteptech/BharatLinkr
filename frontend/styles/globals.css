@@ -6054,6 +6054,9 @@ a:hover {
   border-radius: 0.3125rem;
   margin: 0 0 1.875rem;
 }
+.top_input .form_border{
+   border: 0.0625rem solid currentColor;
+}
 
 .top_input input[type="search"] {
   border: none;
