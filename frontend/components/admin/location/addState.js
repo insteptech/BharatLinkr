@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,6 +10,8 @@ import {
   editState,
   getStateById,
 } from "../../../redux/actions/location/createState";
+import { FieldArray } from "react-final-form-arrays";
+import arrayMutators from "final-form-arrays";
 
 function AddStatePage() {
   const dispatch = useDispatch();
@@ -20,37 +22,42 @@ function AddStatePage() {
     if (router.query.Id) {
       initialValue = {
         countryId: `${state?.result?.Countries?.id}`,
-        state: state?.result?.state,
+        state: [{ state: state?.result?.state, id: state?.result?.id }],
       };
     } else {
       initialValue = {
         countryId: "",
-        state: "",
+        state: [{ state: '' }],
       };
     }
-    console.log(initialValue, "eeeeeeeeeeee");
     return initialValue;
   };
   const countryList = useSelector(
     (data) => data?.countrylist?.countrylist?.data?.data?.rows
   );
-  let stateId;
+
   useEffect(() => {
     dispatch(getCountry());
     initialdata();
     if (router.query.Id) {
       const stateId = router.query.Id;
       dispatch(getStateById(stateId));
-      console.log(stateId, "gggggggggg1");
     }
   }, [router.query.Id]);
+
   const handleSubmit = (values) => {
-    const data = { state: [values] };
+    // const data = { state: [values] };
     let updatedData = {};
     if (!router.query.Id) {
+      let data = { state: [] }
+      data.state = values.state.map((item, index) => {
+        return {
+          countryId: values?.countryId,
+          state: item?.state
+        }
+      })
       dispatch(createState(data)).then((res) => {
         if (res?.payload?.data?.success) {
-          console.log(res, "resssss");
           const status = res?.payload?.data?.data?.state[0]?.status;
           if (status == "duplicate") {
             toast.error(`State is ${status}`);
@@ -64,56 +71,131 @@ function AddStatePage() {
       updatedData = {
         state: [
           {
-            state: data?.state[0].state,
-            id: state.result.id,
-          },
-        ],
-      };
-      console.log();
+            state: values?.state[0]?.state,
+            id: values?.state[0]?.id,
+          }
+        ]
+      }
       dispatch(editState(updatedData)).then((res) => {
         if (res?.payload?.data?.success) {
           toast.success("Done");
           router.push("/admin/location");
         } else {
-          alert("errrrr");
+          toast.error('Error');
         }
       });
     }
   };
 
+  const validate = (values) => {
+    let errors = {};
+    let itemArray = []
+    if (!values.countryId) {
+      errors['countryId'] = "*"
+    }
+    values?.state?.map((item, index) => {
+      let error = {}
+      if (!item?.state) {
+        error['state'] = '*'
+      }
+      itemArray.push(error)
+      errors['state'] = itemArray
+    })
+    console.log(errors)
+    return errors;
+  }
+
   return (
     <>
-      {/* <button onClick={() => console.log(stateId, 'gggggggg')}>dddddd</button> */}
       <Form
         onSubmit={handleSubmit}
-        initialValues={() => initialdata()}
+        validate={validate}
+        mutators={...arrayMutators}
+        initialValues={useMemo(() => initialdata(), [state])}
         render={({ handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <Row className="padding_top mt-3">
               <Col lg={6} md={12}>
                 <label className="signup_form_label">Country Name</label>
-                <Field
-                  name="countryId"
-                  component="select"
-                  className="form-control select-style signup_form_input margin_bottom"
-                  placeholder="wrfw"
-                  disabled={router.query.Id ? true : false}
-                >
-                  {!router.query.Id && <option value="">Select</option>}
-                  {countryList &&
-                    countryList?.map((item) => (
-                      <option value={item.id}>{item.name}</option>
-                    ))}
+                <Field name="countryId">
+                  {({ input, meta }) => (
+                    <>
+                      <select
+                        {...input}
+                        className="form-control select-style signup_form_input margin_bottom"
+                        disabled={router.query.Id ? true : false}
+                      >
+                        {!router.query.Id && <option value="">Select</option>}
+                        {countryList &&
+                          countryList?.map((item) => (
+                            <option value={item.id}>{item.name}</option>
+                          ))}
+                      </select>
+                      {meta.touched && meta.error && <span>{meta.error}</span>}
+                    </>
+                  )}
+
                 </Field>
               </Col>
               <Col lg={6} md={12}>
                 <label className="signup_form_label">State Name</label>
-                <Field
+                <FieldArray name="state">
+                  {({ fields }) => (
+                    <>
+                      {fields.map((name, index) => (
+                        <>
+                          <Field name={`${name}.state`}>
+                            {({ input, meta }) => (
+                              <>
+                                <input
+                                  {...input}
+                                  className="form-control select-style signup_form_input margin_bottom"
+                                  placeholder="Enter State" />
+                                {meta.touched && meta.error && <span>{meta.error}</span>}
+                              </>
+                            )}
+                          </Field>
+                          <div className='d-flex mt-2 '>
+                            {!router.query.Id && (
+                              <div
+                                type='button'
+                                className='add_remove_btn'
+                                onClick={() =>
+                                  fields.push({ state: '' })
+                                }
+                              >
+                                <img
+                                  className='add_remove_icon'
+                                  src='/images/plus.png'
+                                />
+                              </div>
+                            )}
+                            {fields.length > 1 ? (
+                              <div
+                                className='add_remove_btn'
+                                type='button'
+                                onClick={() => fields.remove(index)}
+                              >
+                                <img
+                                  className='add_remove_icon'
+                                  src='/images/minus.png'
+                                />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                        </>
+                      ))}
+                    </>
+                  )}
+                </FieldArray>
+                {/* <Field
                   name="state"
                   component="input"
                   className="form-control select-style signup_form_input margin_bottom"
                   placeholder="Enter State"
-                />
+                /> */}
               </Col>
             </Row>
             <Row>
