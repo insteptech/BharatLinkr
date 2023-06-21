@@ -21,11 +21,31 @@ export const getSubCategory = createAsyncThunk(
   }
 );
 
+export const getSubCategoryById = createAsyncThunk(
+  "getSubCategoryById/corporate/SubCategoriesList",
+  async (data) => {
+    return apiRequest
+      .post("corporate/SubCategoriesList", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+
+export const updateSubCategoryById = createAsyncThunk(
+  "updateSubCategory/corporate/updateSubCategories",
+  async (data) => {
+    return apiRequest
+      .post("corporate/updateSubCategories", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
+
 export const deleteSubCategory = createAsyncThunk(
-  "deleteSubCategory/deleteSubCategories/:id",
+  "deleteSubCategory/deleteSubCategories",
   async (id) => {
     return apiRequest
-      .post(`deleteSubCategories/${id}`)
+      .delete(`corporate/deleteSubCategories/${id}`)
       .then((res) => res)
       .catch((err) => err);
   }

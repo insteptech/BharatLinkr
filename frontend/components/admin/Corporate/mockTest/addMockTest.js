@@ -83,8 +83,9 @@ function AddMockTest() {
         dispatch(addMockTestCorporate(formData)).then((res) => {
           if (res?.payload?.status === 200 && res?.payload?.data?.success) {
             router.push("/admin/corporate/mocktest/table");
+            toast.success('Added successfully', {autoClose: 1000})
           } else {
-            toast.error("something went wrong");
+            toast.error("something went wrong", {autoClose: 1000});
           }
         });
       }
@@ -132,7 +133,9 @@ function AddMockTest() {
         dispatch(updateMocktest(formdata)).then((res) => {
           if (res?.payload?.data?.success) {
             router.push("/admin/corporate/addcorporate");
-            toast.success("Updated");
+            toast.success("Updated", {autoClose: 1000});
+          }else{
+            toast.error('Error', {autoClose: 1000})
           }
         });
       }
