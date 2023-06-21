@@ -26,7 +26,7 @@ import {
   subStreamByMainStreamForPost,
 } from "../../../../redux/actions/organisation/postActions";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
-import {Form as Formboot} from "react-bootstrap";
+import { Form as Formboot } from "react-bootstrap";
 
 const PostBaar = () => {
   const dispatch = useDispatch();
@@ -170,7 +170,7 @@ const PostBaar = () => {
       // border: '1px solid #8e8ea1',
       padding: " 1px 10px",
       marginBottom: "10px",
-      fontFamily:"poppins",
+      fontFamily: "poppins",
     }),
     option: (styles, { isFocused }) => {
       return {
@@ -317,70 +317,76 @@ const PostBaar = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col md={12} className="wrap_select_div">
-                    <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                      {postFiltersArray.map((filterItems, filterIndex) =>
-                        filterItems.key === "jobRole"
-                          ? filterItems.postTypes.includes(
-                              values.postTypes
-                            ) && (
-                              <div
-                                className="me-2 react_select"
-                                key={`postFilter_${filterItems.key}_${filterIndex}`}
-                              >
-                                <label className="react_select_lable font_13">
-                                  {filterItems.displayName}
-                                </label>
-                                <Field name={filterItems.key}>
-                                  {({ input, meta }) => (
-                                    <Creatable
-                                      {...input}
-                                      styles={customStyles}
-                                      placeholder="Select JobRole"
-                                      isDisabled={filterItems.isDisabled(
-                                        values
+                    <Col md={12}>
+                      <div className="wrap_select_div">
+                        <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                          {postFiltersArray.map((filterItems, filterIndex) =>
+                            filterItems.key === "jobRole"
+                              ? filterItems.postTypes.includes(
+                                  values.postTypes
+                                ) && (
+                                  <div
+                                    className="me-2 react_select"
+                                    key={`postFilter_${filterItems.key}_${filterIndex}`}
+                                  >
+                                    <label className="react_select_lable font_13">
+                                      {filterItems.displayName}
+                                    </label>
+                                    <Field name={filterItems.key}>
+                                      {({ input, meta }) => (
+                                        <Creatable
+                                          {...input}
+                                          styles={customStyles}
+                                          placeholder="Select JobRole"
+                                          isDisabled={filterItems.isDisabled(
+                                            values
+                                          )}
+                                          options={renderFilterOptions(
+                                            filterItems.key
+                                          )}
+                                        />
                                       )}
-                                      options={renderFilterOptions(
-                                        filterItems.key
+                                    </Field>
+                                  </div>
+                                )
+                              : filterItems.postTypes.includes(
+                                  values.postTypes
+                                ) && (
+                                  <div
+                                    className="me-2 react_select"
+                                    key={`postFilter_${filterItems.key}_${filterIndex}`}
+                                  >
+                                    <label className="react_select_lable font_13">
+                                      {filterItems.displayName}
+                                    </label>
+                                    <Field name={filterItems.key}>
+                                      {({ input, meta }) => (
+                                        <Select
+                                          {...input}
+                                          styles={customStyles}
+                                          options={renderFilterOptions(
+                                            filterItems.key
+                                          )}
+                                          placeholder={`Select ${filterItems.displayName}`}
+                                          isDisabled={filterItems.isDisabled(
+                                            values
+                                          )}
+                                          onChange={(e) => {
+                                            input.onChange(e);
+                                            handleListApi(
+                                              filterItems.key,
+                                              e,
+                                              form
+                                            );
+                                          }}
+                                        />
                                       )}
-                                    />
-                                  )}
-                                </Field>
-                              </div>
-                            )
-                          : filterItems.postTypes.includes(
-                              values.postTypes
-                            ) && (
-                              <div
-                                className="me-2 react_select"
-                                key={`postFilter_${filterItems.key}_${filterIndex}`}
-                              >
-                                <label className="react_select_lable font_13">
-                                  {filterItems.displayName}
-                                </label>
-                                <Field name={filterItems.key}>
-                                  {({ input, meta }) => (
-                                    <Select
-                                      {...input}
-                                      styles={customStyles}
-                                      options={renderFilterOptions(
-                                        filterItems.key
-                                      )}
-                                      placeholder={`Select ${filterItems.displayName}`}
-                                      isDisabled={filterItems.isDisabled(
-                                        values
-                                      )}
-                                      onChange={(e) => {
-                                        input.onChange(e);
-                                        handleListApi(filterItems.key, e, form);
-                                      }}
-                                    />
-                                  )}
-                                </Field>
-                              </div>
-                            )
-                      )}
-                      </ScrollingCarousel>
+                                    </Field>
+                                  </div>
+                                )
+                          )}
+                        </ScrollingCarousel>
+                      </div>
                     </Col>
                     <div className="text-center">
                       <Button

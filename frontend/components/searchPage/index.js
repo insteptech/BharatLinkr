@@ -6,7 +6,7 @@ import SearchRightPage from "../homeLayout/rightPage/searchRightPages";
 const searchdata1 = [
   {
     studyName: "Profiles",
-    key:"profiles",
+    key: "profiles",
     count: 112,
     icons: "/images/profile-icon.svg",
     darkicons: "/images/dark-profile.svg",
@@ -14,7 +14,7 @@ const searchdata1 = [
   },
   {
     studyName: "Scripts",
-    key:"scripts",
+    key: "scripts",
     count: 102,
     icons: "/images/post-icon.svg",
     darkicons: "/images/dark-posts.svg",
@@ -22,7 +22,7 @@ const searchdata1 = [
   },
   {
     studyName: "Jobs",
-    key:"jobs",
+    key: "jobs",
     count: 11,
     icons: "/images/hiring-icon.svg",
     darkicons: "/images/dark-hiring.svg",
@@ -30,7 +30,7 @@ const searchdata1 = [
   },
   {
     studyName: "Internships",
-    key:"internships",
+    key: "internships",
     count: 12,
     icons: "/images/announcement-icon.svg",
     darkicons: "/images/dark-announcement.svg",
@@ -38,7 +38,7 @@ const searchdata1 = [
   },
   {
     studyName: "Announcements",
-    key:"announcements",
+    key: "announcements",
     count: 12,
     icons: "/images/announcement-icon.svg",
     darkicons: "/images/dark-announcement.svg",
@@ -46,7 +46,7 @@ const searchdata1 = [
   },
   {
     studyName: "Question Bank",
-    key:"questionbank",
+    key: "questionbank",
     count: 161,
     icons: "/images/question-icon.svg",
     darkicons: "/images/dark-question.svg",
@@ -54,7 +54,7 @@ const searchdata1 = [
   },
   {
     studyName: "Offer Services",
-    key:"offerservices",
+    key: "offerservices",
     count: 102,
     icons: "/images/offer-icon.svg",
     darkicons: "/images/dark-offer.svg",
@@ -62,7 +62,7 @@ const searchdata1 = [
   },
   {
     studyName: "Colleges",
-    key:"colleges",
+    key: "colleges",
     count: 76,
     icons: "/images/college-icon.svg",
     darkicons: "/images/dark-college.svg",
@@ -70,7 +70,7 @@ const searchdata1 = [
   },
   {
     studyName: "Courses",
-    key:"courses",
+    key: "courses",
     count: 179,
     icons: "/images/course-icon.svg",
     darkicons: "/images/dark-course.svg",
@@ -78,7 +78,7 @@ const searchdata1 = [
   },
   {
     studyName: "Exams",
-    key:"exams",
+    key: "exams",
     count: 2,
     icons: "/images/exam-icon.svg",
     darkicons: "/images/dark-exam.svg",
@@ -86,7 +86,7 @@ const searchdata1 = [
   },
   {
     studyName: "Corporate",
-    key:"corporate",
+    key: "corporate",
     count: 12,
     icons: "/images/corporate-icon.svg",
     darkicons: "/images/dark-corporate.svg",
@@ -94,79 +94,79 @@ const searchdata1 = [
   },
   {
     studyName: "Organisation",
-    key:"organisation",
+    key: "organisation",
     count: 16,
     icons: "/images/light-organization.svg",
     darkicons: "/images/company-profile-blue.svg",
     path: "/college",
   },
-{
+  {
     studyName: "Mentoring",
-    key:"mentoring",
+    key: "mentoring",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
     path: "/college",
   },
-{
+  {
     studyName: "College Festives",
-    key:"collegefestivals",
+    key: "collegefestivals",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
     path: "/college",
   },
-{
+  {
     studyName: "scholarship",
-    key:"scholarship",
+    key: "scholarship",
     count: 120,
     icons: "/images/scholarship.svg",
     darkicons: "/images/scholarship-blue.svg",
     path: "/college",
   },
-{
+  {
     studyName: "cultural events",
-    key:"culturalevents",
+    key: "culturalevents",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
     path: "/college",
   },
-{
+  {
     studyName: "conferences",
-    key:"conferences",
+    key: "conferences",
     count: 120,
     icons: "/images/conference.svg",
     darkicons: "/images/conference-blue.svg",
     path: "/college",
   },
-{
+  {
     studyName: "competitions",
-    key:"competitions",
+    key: "competitions",
     count: 120,
     icons: "/images/competition.svg",
     darkicons: "/images/competition-blue.svg",
     path: "/college",
   },
-{
+  {
     studyName: "hackathon",
-    key:"hackathon",
+    key: "hackathon",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
     path: "/college",
   },
-{
+  {
     studyName: "Hiring Challenges",
-    key:"hiringchallenges",
+    key: "hiringchallenges",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
     path: "/college",
   },
-{
+  {
     studyName: "Campus Recruitment",
-    key:"campusrecruitment",
+    key: "campusrecruitment",
     count: 120,
     icons: "/images/light-job.svg",
     darkicons: "/images/dark-job.svg",
@@ -174,12 +174,12 @@ const searchdata1 = [
   },
 ];
 const SearchPage = () => {
-  const [dataValue, setDataValue] = React.useState('profiles');
+  const [dataValue, setDataValue] = React.useState("profiles");
 
   return (
     <>
       <div className="user_dashboard_bg ">
-      <Container fluid>
+        <Container fluid>
           <Row>
             <Col lg={1} md={0} className="hide_box p-0"></Col>
             <Col lg={10}>

@@ -7028,6 +7028,13 @@ a:hover {
   height: 65px;
 }
 
+
+
+
+
+
+
+
 .react_select .css-t3ipsp-control {
   border-color: transparent !important;
   box-shadow: 0 0 0 1px var(--admin-bg) !important;
@@ -7035,20 +7042,16 @@ a:hover {
 }
 
 .react_select .css-13cymwt-control {
-  /* background-color: #1ba643 !important; */
   max-width: 160px;
   border-radius: 25px !important;
   margin: 0 8px !important;
   font-size: 14px;
 }
 
-.react_select .css-13cymwt-control:active {
-  /* all: unset; */
+/* .react_select .css-13cymwt-control:active {
   max-width: 160px;
-  /* background-color: #1ba643 !important; */
-  /* max-width: 100px; */
-  /* font-size: 14px; */
-}
+ 
+} */
 
 .react_select .css-13cymwt-control:focus {
   box-shadow: none;
@@ -7087,8 +7090,6 @@ a:hover {
   padding-top: 32px;
 }
 .wrap_select_div {
-  /* display: flex; */
-  /* align-items: center; */
+  width: 100%;
   max-width: 550px;
-  /* overflow-y: auto; */
 }
