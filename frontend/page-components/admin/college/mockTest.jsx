@@ -274,9 +274,9 @@ function AddMockTest() {
       if (!item?.subTopic) {
         error["subTopic"] = "*";
       }
-      if (!item?.totalMarksOfTest) {
-        error["totalMarksOfTest"] = "*";
-      }
+      // if (!item?.totalMarksOfTest) {
+      //   error["totalMarksOfTest"] = "*";
+      // }
       if (!item?.questionMarks) {
         error["questionMarks"] = "*";
       }
