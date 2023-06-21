@@ -152,6 +152,9 @@ db.mockTestFAQ.hasMany(db.mockTestFAQAnswer,{as:"Answerss", foreignKey: "questio
 
 db.mockTest.hasMany(db.mockTestUserAnswer,{as:"Attempt", foreignKey: "mockTestId"})
 
+db.mockTestUserAnswer.belongsTo(db.mockTest,{as:"Mocktestss", foreignKey: "mockTestId"})
+
+
 
 
 db.industry.belongsTo(db.sector,{as:"Sector", foreignKey: "sectorId"})
