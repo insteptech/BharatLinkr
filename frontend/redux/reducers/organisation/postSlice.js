@@ -1,19 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addOrganisationPost, cityByStateIdForPost, getDepartmentForJob, subStreamByMainStreamForPost } from "../../actions/organisation/postActions";
+import { addOrganisationPost, associateCourseByCollege, cityByStateIdForPost, commonFilterForPost, getFilterForQuestionPost, getFiltersForJobPost, subStreamByMainStreamForPost } from "../../actions/organisation/postActions";
 
 const initialState = {
     postFilterList: {
-        status: [],
+        eligibility: [],
         department: [],
         subDepartment: [],
-        streams: [],
-        subStreams: [],
         state: [],
         city: [],
-        workMode: [],
-        jobType: [],
         jobRole: [],
-        eligibility: [],
         organization: [],
         college: [],
         course: [],
@@ -29,14 +24,18 @@ const postSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getDepartmentForJob.fulfilled, (state, action) => {
+        builder.addCase(commonFilterForPost.fulfilled, (state, action) => {
             state.postFilterList = { ...state.postFilterList, ...action.payload }
             state.creatingPost = false
         })
-        builder.addCase(getDepartmentForJob.pending, (state, action) => {
-            state.creatingPost = true
+
+        builder.addCase(getFiltersForJobPost.fulfilled, (state, action) => {
+            state.postFilterList = { ...state.postFilterList, ...action.payload }
+            state.creatingPost = false
         })
-        builder.addCase(getDepartmentForJob.rejected, (state, action) => {
+
+        builder.addCase(getFilterForQuestionPost.fulfilled, (state, action) => {
+            state.postFilterList = { ...state.postFilterList, ...action.payload }
             state.creatingPost = false
         })
 
@@ -57,6 +56,10 @@ const postSlice = createSlice({
 
         builder.addCase(subStreamByMainStreamForPost.fulfilled, (state, action) => {
             state.postFilterList = { ...state.postFilterList, subDepartment: action.payload.data.rows }
+        })
+        
+        builder.addCase(associateCourseByCollege.fulfilled, (state, action) => {
+            state.postFilterList = { ...state.postFilterList, course: action.payload.AssociateCourse }
         })
     }
 })
