@@ -150,6 +150,9 @@ db.mockTest.hasMany(db.mockTestLikes,{as:"Likes&ViewsCount", foreignKey: "mockTe
 db.mockTest.hasMany(db.mockTestFAQAnswer,{as:"Answers", foreignKey: "mockTestId"})
 db.mockTestFAQ.hasMany(db.mockTestFAQAnswer,{as:"Answerss", foreignKey: "questionId"})
 
+db.mockTest.hasMany(db.mockTestUserAnswer,{as:"Attempt", foreignKey: "mockTestId"})
+
+
 
 db.industry.belongsTo(db.sector,{as:"Sector", foreignKey: "sectorId"})
 
@@ -199,6 +202,7 @@ db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
 db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
 
 db.mockTestScore.belongsTo(db.mockTest,{as:"MockTest", foreignKey: "mockTestId"})
+
 
 
 
