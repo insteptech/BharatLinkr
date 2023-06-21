@@ -1,14 +1,27 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { Button, Col, Row, Form, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Form, Table, Pagination } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllExams } from "../../../../redux/actions/exams/createExam";
 import {
   deleteMocktestCorporate,
   getMockTestCorporatelist,
 } from "../../../../redux/actions/corporate/addmocktestcorporate";
+import DeleteModal from "../../../modals/deleteModal";
+import { toast } from "react-toastify";
 
 function MockTable() {
+
+  const [pagination, setPagination] = useState({
+    pageNo: 1,
+    pageSize: 10
+  })
+  const [modalShow, setModalShow] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
+  const handleHide = () => {
+    setModalShow(false)
+  }
+
   const router = useRouter();
   const dispatch = useDispatch();
 
@@ -36,7 +49,8 @@ function MockTable() {
   const handleDelete = (item) => {
     dispatch(deleteMocktestCorporate(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        dispatch(getMockTestCorporatelist());
+        toast.success('Deleted', { autoClose: 1000 })
+        dispatch(getMockTestCorporatelist())
       }
     });
   };
@@ -48,6 +62,8 @@ function MockTable() {
   useEffect(() => {
     dispatch(getMockTestCorporatelist());
   }, []);
+
+  console.log(mocktestlistData, "dfsddfdfsdf123")
 
   return (
     <>
@@ -104,7 +120,10 @@ function MockTable() {
                       <img
                         className="mx-1 admin_table_action_icon"
                         src="/images/delete-icon-blue.png"
-                        onClick={() => handleDelete(item)}
+                        onClick={() => {
+                          setModalShow(true)
+                          setDeleteItem(item)
+                        }}
                       ></img>
                     </td>
                   </tr>
@@ -112,6 +131,13 @@ function MockTable() {
               })}
           </tbody>
         </Table>
+        <Pagination pagination={pagination} setPagination={setPagination} list={mocktestlistData} />
+        <DeleteModal
+          show={modalShow}
+          onHide={() => handleHide()}
+          handleDelete={handleDelete}
+          deleteItem={deleteItem}
+        />
       </div>
     </>
   );
