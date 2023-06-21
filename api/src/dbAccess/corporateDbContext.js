@@ -807,7 +807,7 @@ const mockTestList = async (req) => {
 
 
         {
-          model: mockTestUserAnswer,
+          model: mockTestScore,
           required: false,
           as: 'Attempt'
         }
@@ -823,7 +823,7 @@ const mockTestList = async (req) => {
     });
 
 
-    const countDetail = await mockTestUserAnswer.findAll({
+    const countDetail = await mockTestScore.findAll({
       attributes: [[Sequelize.fn('count', Sequelize.col('mockTestId')), 'AttemptCount']],
       include: [
         
