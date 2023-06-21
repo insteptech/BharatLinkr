@@ -802,12 +802,27 @@ const mockTestList = async (req) => {
           required: false,
           as: 'Likes&ViewsCount'
         },
+
+        {
+          model: mockTestUserAnswer,
+          required: false,
+          as: 'Attempt'
+        }
+
+  
       ],
+
 
       offset: (pageNo - 1) * size,
       limit: size,
       distinct: true,
       order: [['id', 'ASC']],
+    });
+
+    result["rows"] = result["rows"].map((row) => {
+      row = row.toJSON();
+      row["AttemptCount"] = row["Attempt"].length;
+      return row;
     });
 
     return { data: result, success: true };
