@@ -150,9 +150,9 @@ db.mockTest.hasMany(db.mockTestLikes,{as:"Likes&ViewsCount", foreignKey: "mockTe
 db.mockTest.hasMany(db.mockTestFAQAnswer,{as:"Answers", foreignKey: "mockTestId"})
 db.mockTestFAQ.hasMany(db.mockTestFAQAnswer,{as:"Answerss", foreignKey: "questionId"})
 
-db.mockTest.hasMany(db.mockTestUserAnswer,{as:"Attempt", foreignKey: "mockTestId"})
+db.mockTest.hasMany(db.mockTestScore,{as:"Attempt", foreignKey: "mockTestId"})
 
-db.mockTestUserAnswer.belongsTo(db.mockTest,{as:"Mocktestss", foreignKey: "mockTestId"})
+db.mockTestScore.belongsTo(db.mockTest,{as:"Mocktestss", foreignKey: "mockTestId"})
 
 
 
