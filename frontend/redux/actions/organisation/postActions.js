@@ -1,31 +1,67 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiRequest } from "../../services/api";
 
-export const getDepartmentForJob = createAsyncThunk('Organisation-Post/Department-List',
+
+export const commonFilterForPost = createAsyncThunk('Organisation-Post/Common-Filters',
     async (body) => {
         const apiCalls = {
-            state: apiRequest.post("/location/statelist"),
-            // city: apiRequest.post("/location/citylist"),
-            organisation: apiRequest.post("/organisation/organisationList"),
             department: apiRequest.post("/mainStream/streamList"),
-            // subDepartment: apiRequest.post("/subStream/subStreamList"),
-            eligibility: apiRequest.post("/masterFilter/masterFilterList?types=eligibility"),
-            jobRole: apiRequest.post("/masterFilter/masterFilterList?types=jobrole"),
-        };
-        const apiData = Promise.all(Object.entries(apiCalls).map(([key, value]) => {
-            return value
-                .then(data => ({ [key]: data.data.data.rows }));
+            eligibility: apiRequest.post("masterFilter/masterFilterList?types=eligibility"),
+        }
+        const apiData = Promise.all(Object.entries(apiCalls).map(([apiName, apiCall]) => {
+            return apiCall
+                .then(callResponse => ({ [apiName]: callResponse.data.data.rows }))
         }))
-            .then(results => {
-                const responseData = Object.assign({}, ...results);
+            .then(responseResult => {
+                const responseData = Object.assign({}, ...responseResult)
                 return responseData
             })
             .catch(error => {
-                console.error('Error:', error);
-            });
-        console.log(apiData)
+                console.log(error, 'eror')
+            })
+
         return apiData
 
+    }
+)
+
+export const getFiltersForJobPost = createAsyncThunk('Organisation-Post/Department-List',
+    async (body) => {
+        const apiCalls = {
+            state: apiRequest.post("/location/statelist"),
+            organization: apiRequest.post("/organisation/organisationList"),
+            jobRole: apiRequest.post("/masterFilter/masterFilterList?types=jobrole"),
+        };
+        const apiData = Promise.all(Object.entries(apiCalls).map(([apiName, apiCall]) => {
+            return apiCall
+                .then(callResponse => ({ [apiName]: callResponse.data.data.rows }));
+        }))
+            .then(responseResult => {
+                const responseData = Object.assign({}, ...responseResult);
+                return responseData
+            })
+        return apiData
+    }
+)
+
+export const getFilterForQuestionPost = createAsyncThunk("Organisation-Post/Question-Post-Fitler",
+    async (body) => {
+        const apiCalls = {
+            organization: apiRequest.post("/organisation/organisationList"),
+            college: apiRequest.post("/college/popularCollegeList"),
+            course: apiRequest.post("/Course/courselist"),
+            exam: apiRequest.post("/Exam/examlist"),
+            corporate: apiRequest.post("/corporate/corporateList"),
+        }
+        const apiData = Promise.all(Object.entries(apiCalls).map(([apiName, apiCall]) => {
+            return apiCall
+                .then(callResponse => ({ [apiName]: callResponse.data.data.rows }))
+        }))
+            .then(responseResult => {
+                const responseData = Object.assign({}, ...responseResult)
+                return responseData
+            })
+        return apiData
     }
 )
 
@@ -49,3 +85,9 @@ export const subStreamByMainStreamForPost = createAsyncThunk('Organisation/Post/
         return apiData.data
     }
 )
+
+export const associateCourseByCollege = createAsyncThunk("Organisation-Post/Course-By-Colleg",
+    async (body) => {
+        const apiData = await apiRequest.post('/college/popularCollegeList', body)
+        return apiData.data.data.rows[0]
+    })
