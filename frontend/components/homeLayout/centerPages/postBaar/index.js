@@ -30,7 +30,9 @@ import {
 } from "../../../../redux/actions/organisation/postActions";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { Form as Formboot } from "react-bootstrap";
+
 import { toast } from "react-toastify";
+
 
 const PostBaar = () => {
   const dispatch = useDispatch();
@@ -253,6 +255,7 @@ const PostBaar = () => {
                         </Field>
                       </div>
                     </Col>
+
                     <Col md={12} className="wrap_select_div">
                       <ScrollingCarousel show={5.5} slide={4} swiping={true}>
                         {postFiltersArray.map((filterItems, filterIndex) =>
@@ -301,11 +304,44 @@ const PostBaar = () => {
                                       styles={customStyles}
                                       options={renderFilterOptions(
                                         filterItems.key
+
                                       )}
-                                      placeholder={`Select ${filterItems.displayName}`}
-                                      isDisabled={filterItems.isDisabled(
-                                        values
+                                    </Field>
+                                  </div>
+                                )
+                              : filterItems.postTypes.includes(
+                                  values.postTypes
+                                ) && (
+                                  <div
+                                    className="me-2 react_select"
+                                    key={`postFilter_${filterItems.key}_${filterIndex}`}
+                                  >
+                                    <label className="react_select_lable font_13">
+                                      {filterItems.displayName}
+                                    </label>
+                                    <Field name={filterItems.key}>
+                                      {({ input, meta }) => (
+                                        <Select
+                                          {...input}
+                                          styles={customStyles}
+                                          options={renderFilterOptions(
+                                            filterItems.key
+                                          )}
+                                          placeholder={`Select ${filterItems.displayName}`}
+                                          isDisabled={filterItems.isDisabled(
+                                            values
+                                          )}
+                                          onChange={(e) => {
+                                            input.onChange(e);
+                                            handleListApi(
+                                              filterItems.key,
+                                              e,
+                                              form
+                                            );
+                                          }}
+                                        />
                                       )}
+
                                       onChange={(e) => {
                                         input.onChange(e);
                                         handleListApi(filterItems.key, e, form);
@@ -317,6 +353,7 @@ const PostBaar = () => {
                             )
                         )}
                       </ScrollingCarousel>
+
                     </Col>
                     <div className="text-center">
                       <Button
