@@ -8,11 +8,11 @@ export const postCategoryOptions = [
     { value: "question", label: "Question", icon: "/images/more-icon.png" },
     { value: "services", label: "Services", icon: "/images/more-icon.png" },
     { value: "collegefestives", label: "College festives", icon: "/images/more-icon.png" },
-    { value: "scholarship", label: "scholarship", icon: "/images/more-icon.png" },
-    { value: "culturalevents ", label: "cultural events", icon: "/images/more-icon.png" },
-    { value: "conferences", label: "conferences", icon: "/images/more-icon.png" },
-    { value: "competitions", label: "competitions", icon: "/images/more-icon.png", },
-    { value: "hackathon", label: "hackathon", icon: "/images/more-icon.png" },
+    { value: "scholarship", label: "Scholarship", icon: "/images/more-icon.png" },
+    { value: "culturalevents ", label: "Cultural Events", icon: "/images/more-icon.png" },
+    { value: "conferences", label: "Conferences", icon: "/images/more-icon.png" },
+    { value: "competitions", label: "Competitions", icon: "/images/more-icon.png", },
+    { value: "hackathon", label: "Hackathon", icon: "/images/more-icon.png" },
     { value: "hiringchallenges", label: "Hiring Challenges", icon: "/images/more-icon.png", },
     { value: "campusrecruitment", label: "Campus Recruitment", icon: "/images/more-icon.png", },
 ];
@@ -41,7 +41,7 @@ export const postFiltersArray = [
     {
         displayName: 'Status',
         key: 'status',
-        postTypes: ['jobs', 'internship', 'collegefestives', 'scholarship', 'culturalevents', 'conferences', 'hackathon', 'hiringchallenges', 'campusrecruitment'],
+        postTypes: ['jobs', 'internship', 'collegefestives', 'scholarship', 'culturalevents ', 'announcement', 'conferences', 'hackathon', 'hiringchallenges', 'campusrecruitment'],
         isSearchable: true,
         isDisabled: (values) => { return false }
     }, {
@@ -59,13 +59,13 @@ export const postFiltersArray = [
     }, {
         displayName: 'Department',
         key: 'department',
-        postTypes: ['jobs', 'internship'],
+        postTypes: ['jobs', 'internship', 'mentoring', 'question', 'services', 'scholarship', 'culturalevents ', 'conferences', 'competitions', 'hackathon', 'hiringchallenges', 'campusrecruitment'],
         isSearchable: true,
         isDisabled: (values) => { return false },
     }, {
         displayName: 'Sub Department',
         key: 'subDepartment',
-        postTypes: ['jobs', 'internship', 'mentoring', 'question', 'services', 'scholarship', 'culturalevents', 'conferences', 'competitions', 'hackathon', 'hiringchallenges', 'campusrecruitment'],
+        postTypes: ['jobs', 'internship', 'mentoring', 'question', 'services', 'scholarship', 'culturalevents ', 'conferences', 'competitions', 'hackathon', 'hiringchallenges', 'campusrecruitment'],
         isSearchable: true,
         isDisabled: (values) => { return values.department ? false : true },
     }, {
@@ -109,7 +109,7 @@ export const postFiltersArray = [
         key: 'course',
         postTypes: ['question'],
         isSearchable: true,
-        isDisabled: (values) => { return values.college ? false : true },
+        isDisabled: (values) => { return false  },
     }, {
         displayName: 'Exam',
         key: 'exam',

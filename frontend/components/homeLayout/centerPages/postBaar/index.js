@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Accordion,
@@ -21,12 +21,18 @@ import {
 } from "../../../utils/allJson";
 import {
   addOrganisationPost,
+  associateCourseByCollege,
   cityByStateIdForPost,
-  getDepartmentForJob,
+  commonFilterForPost,
+  getFilterForQuestionPost,
+  getFiltersForJobPost,
   subStreamByMainStreamForPost,
 } from "../../../../redux/actions/organisation/postActions";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { Form as Formboot } from "react-bootstrap";
+
+import { toast } from "react-toastify";
+
 
 const PostBaar = () => {
   const dispatch = useDispatch();
@@ -36,126 +42,50 @@ const PostBaar = () => {
   );
 
   const actionCallByPostCategory = {
-    script: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    announcement: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    jobs: (types) => {
-      dispatch(getDepartmentForJob());
-      console.log(types, "types From ActionCallBycategory");
-    },
-    internship: (types) => {
-      dispatch(getDepartmentForJob());
-      console.log(types, "types From ActionCallBycategory");
-    },
-    mentoring: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    question: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    services: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    collegefestives: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    scholarship: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    culturalevents: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    conferences: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    competitions: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    hackathon: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    hiringchallenges: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
-    campusrecruitment: (types) => {
-      console.log(types, "types From ActionCallBycategory");
-    },
+    jobs: (types) => { dispatch(getFiltersForJobPost()); },
+    internship: (types) => { dispatch(getFiltersForJobPost()); },
+    question: (types) => { dispatch(getFilterForQuestionPost()); },
   };
 
   const listData = {
     status: { list: offlineData["status"], value: "id", label: "name" },
-    department: {
-      list: filterListForPost["department"],
-      value: "id",
-      label: "mainStreamName",
-    },
-    subDepartment: {
-      list: filterListForPost["subDepartment"],
-      value: "id",
-      label: "subStreamName",
-    },
-    streams: { list: filterListForPost["streams"], value: "id", label: "name" },
-    subStreams: {
-      list: filterListForPost["subStreams"],
-      value: "id",
-      label: "name",
-    },
+    department: { list: filterListForPost["department"], value: "id", label: "mainStreamName" },
+    subDepartment: { list: filterListForPost["subDepartment"], value: "id", label: "subStreamName" },
     state: { list: filterListForPost["state"], value: "id", label: "state" },
     city: { list: filterListForPost["city"], value: "id", label: "name" },
-    workMode: {
-      list: offlineData["workMode"],
-      value: "modeName",
-      label: "modeName",
-    },
-    jobType: {
-      list: offlineData["jobType"],
-      value: "jobTypeName",
-      label: "jobTypeName",
-    },
+    workMode: { list: offlineData["workMode"], value: "modeName", label: "modeName" },
+    jobType: { list: offlineData["jobType"], value: "jobTypeName", label: "jobTypeName", },
     jobRole: { list: filterListForPost["jobRole"], value: "id", label: "name" },
-    eligibility: {
-      list: filterListForPost["eligibility"],
-      value: "id",
-      label: "name",
-    },
-    organization: {
-      list: filterListForPost["organization"],
-      value: "id",
-      label: "orgCatgeory",
-    },
-    college: { list: filterListForPost["college"], value: "id", label: "name" },
-    course: { list: filterListForPost["course"], value: "id", label: "name" },
-    exam: { list: filterListForPost["exam"], value: "id", label: "name" },
-    corporate: {
-      list: filterListForPost["corporate"],
-      value: "id",
-      label: "name",
-    },
+    eligibility: { list: filterListForPost["eligibility"], value: "id", label: "name" },
+    organization: { list: filterListForPost["organization"], value: "id", label: "orgCatgeory" },
+    college: { list: filterListForPost["college"], value: "id", label: "collegeName" },
+    course: { list: filterListForPost["course"], value: "id", label: "courseName" },
+    exam: { list: filterListForPost["exam"], value: "id", label: "examName" },
+    corporate: { list: filterListForPost["corporate"], value: "id", label: "topicName" },
   };
 
   const handleSubmit = (values, form) => {
-    let formData = new FormData();
-    let tempValues = { ...values };
-    tempValues.status = values.status.value;
-    tempValues.state = values.state.value;
-    tempValues.city = values.city.value;
-    tempValues.department = values.department.value;
-    tempValues.subDepartment = values.subDepartment.value;
-    tempValues.workMode = values.workMode.value;
-    tempValues.jobType = values.jobType.value;
-    tempValues.jobRole = values.jobRole.value;
-    let data = { payload: [tempValues] };
-    formData.append("organisationPostData", JSON.stringify(data));
-    dispatch(addOrganisationPost(formData)).then((res) => {
-      if (res.payload.success) {
-        setActiveKey(0);
-        form.reset();
+    let formData = new FormData()
+    let tempValues = { ...values }
+    postFiltersArray.forEach(item => {
+      if (item.postTypes.includes(values.postTypes)) {
+        tempValues[item.key] = values[item.key]['value']
+      } else {
+        delete tempValues[item.key]
       }
-    });
-  };
+    })
+    let data = { payload: [tempValues] }
+    formData.append('organisationPostData', JSON.stringify(data))
+    dispatch(addOrganisationPost(formData)).then(res => {
+      if (res.payload.success) {
+        setActiveKey(0)
+        toast.success("Post Created Succesfully")
+        form.reset()
+      } else {
+        form.reset()
+      }
+    })
+  }
 
   const customStyles = {
     control: (provided) => ({
@@ -180,9 +110,8 @@ const PostBaar = () => {
       };
     },
   };
-
   const handlePostCategory = ({ target: { value } }) => {
-    actionCallByPostCategory[value](value);
+    actionCallByPostCategory[value] && actionCallByPostCategory[value](value);
   };
 
   const renderFilterOptions = (types) => {
@@ -204,10 +133,19 @@ const PostBaar = () => {
         dispatch(subStreamByMainStreamForPost({ mainStreamId: value.value }));
         break;
       }
+      // case 'college': {
+      //   form.change('course', "")
+      //   dispatch(associateCourseByCollege({ id: value.value }))
+      //   break;
+      // }
       default:
         break;
     }
   };
+
+  useEffect(() => {
+    if (activeKey) dispatch(commonFilterForPost())
+  }, [activeKey])
 
   return (
     <>
@@ -317,34 +255,56 @@ const PostBaar = () => {
                         </Field>
                       </div>
                     </Col>
-                    <Col md={12}>
-                      <div className="wrap_select_div">
-                        <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                          {postFiltersArray.map((filterItems, filterIndex) =>
-                            filterItems.key === "jobRole"
-                              ? filterItems.postTypes.includes(
-                                  values.postTypes
-                                ) && (
-                                  <div
-                                    className="me-2 react_select"
-                                    key={`postFilter_${filterItems.key}_${filterIndex}`}
-                                  >
-                                    <label className="react_select_lable font_13">
-                                      {filterItems.displayName}
-                                    </label>
-                                    <Field name={filterItems.key}>
-                                      {({ input, meta }) => (
-                                        <Creatable
-                                          {...input}
-                                          styles={customStyles}
-                                          placeholder="Select JobRole"
-                                          isDisabled={filterItems.isDisabled(
-                                            values
-                                          )}
-                                          options={renderFilterOptions(
-                                            filterItems.key
-                                          )}
-                                        />
+
+                    <Col md={12} className="wrap_select_div">
+                      <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                        {postFiltersArray.map((filterItems, filterIndex) =>
+                          filterItems.key === "jobRole"
+                            ? filterItems.postTypes.includes(
+                              values.postTypes
+                            ) && (
+                              <div
+                                className="me-2 react_select"
+                                key={`postFilter_${filterItems.key}_${filterIndex}`}
+                              >
+                                <label className="react_select_lable font_13">
+                                  {filterItems.displayName}
+                                </label>
+                                <Field name={filterItems.key}>
+                                  {({ input, meta }) => (
+                                    <Creatable
+                                      {...input}
+                                      styles={customStyles}
+                                      placeholder="Select JobRole"
+                                      isDisabled={filterItems.isDisabled(
+                                        values
+                                      )}
+                                      options={renderFilterOptions(
+                                        filterItems.key
+                                      )}
+                                    />
+                                  )}
+                                </Field>
+                              </div>
+                            )
+                            : filterItems.postTypes.includes(
+                              values.postTypes
+                            ) && (
+                              <div
+                                className="me-2 react_select"
+                                key={`postFilter_${filterItems.key}_${filterIndex}`}
+                              >
+                                <label className="react_select_lable font_13">
+                                  {filterItems.displayName}
+                                </label>
+                                <Field name={filterItems.key}>
+                                  {({ input, meta }) => (
+                                    <Select
+                                      {...input}
+                                      styles={customStyles}
+                                      options={renderFilterOptions(
+                                        filterItems.key
+
                                       )}
                                     </Field>
                                   </div>
@@ -381,12 +341,19 @@ const PostBaar = () => {
                                           }}
                                         />
                                       )}
-                                    </Field>
-                                  </div>
-                                )
-                          )}
-                        </ScrollingCarousel>
-                      </div>
+
+                                      onChange={(e) => {
+                                        input.onChange(e);
+                                        handleListApi(filterItems.key, e, form);
+                                      }}
+                                    />
+                                  )}
+                                </Field>
+                              </div>
+                            )
+                        )}
+                      </ScrollingCarousel>
+
                     </Col>
                     <div className="text-center">
                       <Button

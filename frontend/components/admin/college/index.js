@@ -29,9 +29,7 @@ function CollegeAdminPage(props) {
   };
   
   const handleDelete = (item) => {
-    console.log(item, "rtr434444")
     dispatch(deleteCollege(item.id)).then((res) => {
-      console.log(res, "rtertert2123123")
       if (res?.payload?.data?.success ) {
         toast.success("Deleted");
         dispatch(getColleges(pagination));
@@ -99,7 +97,6 @@ function CollegeAdminPage(props) {
             <tbody>
               {collegeList?.rows &&
                 collegeList?.rows?.map((item, index) => {
-                  console.log(item, "werwerwerwer")
                   return (
                     <tr key={index}>
                       <td className="text-center admin_table_data">

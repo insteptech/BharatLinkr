@@ -1,11 +1,13 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { createCity, editCity, getCityById } from "../../../redux/actions/location/createCity";
 import { getState } from "../../../redux/actions/location/createState";
+import { FieldArray } from "react-final-form-arrays";
+import arrayMutators from "final-form-arrays";
 
 function AddCityPage() {
   const dispatch = useDispatch();
@@ -15,34 +17,40 @@ function AddCityPage() {
   );
   const initialData = () => {
     let initialValue = {}
-    if (router.query.Id) {
+    if (router?.query?.Id) {
       initialValue = {
-        name: city?.result?.name,
-        stateId: city?.result?.State?.id
+        // name: city?.result?.name,
+        stateId: city?.result?.State?.id,
+        city: [{ name: city?.result?.name, id: city?.result?.id }]
       }
     } else {
       initialValue = {
-        name: '',
-        stateId: ''
+        // name: '',
+        stateId: '',
+        city: [{ name: '' }]
       }
     }
-    console.log(initialValue, 'gg')
     return initialValue
   }
   const handleSubmit = (values) => {
-    const data = { city: [values] };
+    // const data = { city: [values] };
     let updatedData = {}
-    // console.log(data, "submit");
     if (!router.query.Id) {
-      console.log('create')
+      let data = { city: [] }
+      data.city = values.city.map((item, index) => {
+        return {
+          name: item?.name,
+          stateId: values?.stateId
+        }
+      })
+
       dispatch(createCity(data)).then((res) => {
         if (res?.payload?.data?.success) {
-          console.log(res, "resssss");
           const status = res?.payload?.data?.data?.city[0]?.status;
           if (status == "duplicate") {
-            toast.error(`City is ${status}`);
+            toast.error(`City is ${status}`, { autoClose: 1000 });
           } else {
-            toast.success("city added successfuly");
+            toast.success("city added successfuly", { autoClose: 1000 });
           }
           router.push("/admin/location");
         }
@@ -51,8 +59,8 @@ function AddCityPage() {
       updatedData = {
         city: [
           {
-            name: data?.city[0].name,
-            id : city?.result?.id
+            name: values?.city[0].name,
+            id: city?.result?.id
           }
         ]
       }
@@ -77,39 +85,117 @@ function AddCityPage() {
     }
   }, [router.query.Id]);
 
+  const validate = (values) => {
+    let errors = {};
+    let itemArray = []
+    if (!values.stateId) {
+      errors['stateId'] = "*"
+    }
+    values?.city?.map((item, index) => {
+      let error = {}
+      if (!item.name) {
+        error['name'] = "*"
+      }
+      itemArray.push(error)
+      errors['city'] = itemArray
+    })
+    return errors;
+  }
+
   return (
     <>
-      {/* <button onClick={() => console.log(city, 'gggggggg')}>jjjjjjjj</button> */}
       <Form
         onSubmit={handleSubmit}
-        initialValues={() => initialData()}
-        render={({ handleSubmit }) => (
+        mutators={
+          ...arrayMutators
+        }
+        initialValues={useMemo(() => initialData(), [city])}
+        validate={validate}
+        render={({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit}>
+            {console.log(values)}
             <Row className="padding_top mt-3">
               <Col lg={6} md={12}>
                 <label className="signup_form_label">State Name</label>
-                <Field
-                  name="stateId"
-                  component="select"
-                  className="form-control select-style signup_form_input margin_bottom"
-                  placeholder="Select State"
-                  disabled={router.query.Id? true : false}
-                >
-                  <option>Select State</option>
-                  {stateList &&
-                    stateList?.map((item) => (
-                      <option key={item.id} value={item.id}>{item.state} </option>
-                    ))}
+                <Field name="stateId">
+                  {({ input, meta }) => (
+                    <>
+                      <select
+                        {...input}
+                        className="form-control select-style signup_form_input margin_bottom"
+                        disabled={router.query.Id ? true : false}
+                      >
+                        <option value="">Select State</option>
+                        {stateList &&
+                          stateList?.map((item) => (
+                            <option key={item.id} value={Number(item.id)}>{item.state} </option>
+                          ))}
+                      </select>
+                      {meta.touched && meta.error && <span>{meta.error}</span>}
+                    </>
+                  )}
+
                 </Field>
               </Col>
               <Col lg={6} md={12}>
                 <label className="signup_form_label">City Name</label>
-                <Field
+                <FieldArray name='city'>
+                  {({ fields }) => (
+                    <>
+                      {fields.map((name, index) => (
+                        <>
+                          <Field name={`${name}.name`}>
+                            {({ input, meta }) => (
+                              <>
+                                <input
+                                  {...input}
+                                  className="form-control select-style signup_form_input margin_bottom"
+                                  placeholder="Enter City" />
+                                {meta.touched && meta.error && <span>{meta.error}</span>}
+                              </>
+                            )}
+                          </Field>
+                          <div className='d-flex mt-2 '>
+                            {!router.query.Id && (
+                              <div
+                                type='button'
+                                className='add_remove_btn'
+                                onClick={() =>
+                                  fields.push({ name: '' })
+                                }
+                              >
+                                <img
+                                  className='add_remove_icon'
+                                  src='/images/plus.png'
+                                />
+                              </div>
+                            )}
+                            {fields.length > 1 ? (
+                              <div
+                                className='add_remove_btn'
+                                type='button'
+                                onClick={() => fields.remove(index)}
+                              >
+                                <img
+                                  className='add_remove_icon'
+                                  src='/images/minus.png'
+                                />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                        </>
+                      ))}
+                    </>
+                  )}
+                </FieldArray>
+                {/* <Field
                   name="name"
                   component="input"
                   className="form-control select-style signup_form_input margin_bottom"
                   placeholder="Enter City"
-                />
+                /> */}
               </Col>
             </Row>
             <Row>
@@ -123,8 +209,9 @@ function AddCityPage() {
                 </button>
               </Col>
             </Row>
-          </form>
-        )}
+          </form >
+        )
+        }
       />
     </>
   );

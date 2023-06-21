@@ -60,6 +60,10 @@ function AddOrganisation() {
           formData.append("companyLogoFile", filestate.companyLogo);
         }
         values.CMS = values.cms[0];
+        values.groupId = values.groupId.value
+        values.brandId = values.brandId.value
+        values.companyId = values.companyId.value
+
         delete values.cms;
 
         formData.append("organisationData", JSON.stringify(values));
@@ -248,6 +252,8 @@ function AddOrganisation() {
           label: orgdata?.OrganisationCompany?.companyName
         },
         companyLevel: orgdata?.companyLevel,
+        streetAddress: orgdata?.streetAddress,
+        plotNumber: orgdata?.plotNumber,
         natureOfBuisness: orgdata?.natureOfBuisness,
         typeOfCompany: orgdata?.typeOfCompany,
         companySize: orgdata?.companySize,

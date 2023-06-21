@@ -28,7 +28,7 @@ function AddCountry() {
                 console.log(res)
                 if (res?.payload?.data?.success) {
                     router.push('/admin/location')
-                    toast.success('Country updated successfully',{autoClose:1000})
+                    toast.success('Country updated successfully', { autoClose: 1000 })
                 } else {
                     toast.error("Error")
                 }
@@ -53,13 +53,28 @@ function AddCountry() {
             }
         } else {
             initialValues = {
-                countryInputs: [{
-                    name: null
-                }]
+                countryInputs: [
+                    { name: '' }
+                ]
             }
         }
         return initialValues
     }
+
+    const validate = (values) => {
+        let errors = {};
+        let itemArray = []
+        values?.countryInputs?.map((item) => {
+            let err = {};
+            if (!item.name) {
+                err["name"] = "*"
+            }
+            itemArray.push(err);
+            errors["countryInputs"] = itemArray;
+        })
+        return errors;
+    }
+    
     return (
         <div>
             <Form
@@ -67,7 +82,8 @@ function AddCountry() {
                 mutators={{
                     ...arrayMutators,
                 }}
-                initialValues={useMemo((e) => initialdata(e))}
+                validate={validate}
+                initialValues={useMemo((e) => initialdata(e), [countrydetails])}
                 render={({ handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                         <label className="signup_form_label">Country Name</label>
@@ -76,7 +92,7 @@ function AddCountry() {
                                 {({ fields }) => (
                                     <>
                                         {fields.map((name, index) => (
-                                            <Row>
+                                            <Row key={index}>
                                                 <Col lg={12} md={12}>
                                                     <div className="add_main_stream_btn_input margin_bottom">
                                                         <Field name={`${name}.name`}>
