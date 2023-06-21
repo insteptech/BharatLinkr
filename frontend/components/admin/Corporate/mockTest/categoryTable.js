@@ -27,7 +27,7 @@ const CategoryTable = () => {
     dispatch(getSubCategory());
   }, []);
 
-  const tableHeading = ["No.", "Sub-Category", "Action"];
+  const tableHeading = ["No.", "Sub Category", "Action"];
 
   return (
     <>
