@@ -4,7 +4,7 @@ import { Button, Col, Form, Row, Table } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
-import { deleteExam, getAllExams, getExamById } from '../../../redux/actions/exams/createExam'
+import { deleteExam, adminexamList, getExamById } from '../../../redux/actions/exams/createExam'
 import DeleteModal from '../../modals/deleteModal'
 import Pagesize from '../pagination/pagesize'
 import Pagination from '../pagination/pagination'
@@ -23,7 +23,7 @@ function ExamTable() {
         dispatch(deleteExam(item.id)).then((res) => {
             if (res?.payload?.data?.success) {
                 toast.success('Deleted')
-                dispatch(getAllExams(pagination));
+                dispatch(adminexamList(pagination));
             } else {
                 toast.error('Error')
             }
@@ -37,11 +37,11 @@ function ExamTable() {
     const handleEdit = (item) => {
         router.push(`exams/updateexam/${item.id}`)
     }
-    const examData = useSelector((data) => data?.examList?.examlist?.data?.data)
+    const examData = useSelector((data) => data?.examList?.adminExamList)
     const loaderExamDate = useSelector((state) => state?.examList?.isLoading) 
 
     useEffect(() => {
-        dispatch(getAllExams(pagination))
+        dispatch(adminexamList(pagination))
     }, [pagination])
 
     const tableHeading = ["No.", "Main Stream", "Course Type", "Name", "Action"]

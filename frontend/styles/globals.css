@@ -4335,6 +4335,12 @@ img {
   opacity: 0.9;
 }
 
+.select_items_active{
+  background: #a66cff;
+  color: #fff;
+  opacity: 0.9;
+}
+
 .short_by_link {
   font-style: normal;
   font-weight: 500;

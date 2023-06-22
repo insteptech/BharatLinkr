@@ -37,7 +37,11 @@ const ExamLongCard = ({ item }, props) => {
     }
   };
 
-  // console.log(`${apibasePath}documents/exam/${item?.examLogo}`,'ppppppppppp')
+  let x = item?.examName.split("(")
+
+  let shortName = x[0]
+  let longName = x[1].split(")")[0]
+
 
   return (
     <Card
@@ -63,22 +67,18 @@ const ExamLongCard = ({ item }, props) => {
                 className="p_c_card_master_heading mobile_blue_text mobile_font_18"
                 onClick={() => handleMainStreamExamName(item)}
               >
-                {item?.examName}
+                {shortName}
               </h4>
               <h6 className="long_card_sub_heading mobile_font_12">
-                {item.Test_name
-                  ? item.Test_name
-                  : "Andhra Pradesh Polytechnic Common Entrance Test"}
+                {longName}
               </h6>
               <h6 className="long_card_sub_heading blue_font mobile_font_12">
-                {item.exam_info
-                  ? item.exam_info
-                  : "2188 Colleges Accepting this Exam"}
+                {item?.CollegeCount} Colleges Accepting this Exam
               </h6>
               <div className="long_card_arrow_links">
                 <p
                   className="arrow_links_name mobile_font_13 mobile_right_border mobile_blue_text"
-                  onClick={() => router.push(`/exams/overview/${item?.id}`)}
+                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=about`)}
                 >
                   Overview
                   <BsImage
@@ -88,7 +88,7 @@ const ExamLongCard = ({ item }, props) => {
                 </p>
                 <p
                   className="arrow_links_name mobile_font_13 mobile_right_border mobile_blue_text text-center"
-                  onClick={() => router.push(`/exams/overview/${item?.id}`)}
+                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=syllabus`)}
                 >
                   Syllabus
                   <BsImage
@@ -98,7 +98,7 @@ const ExamLongCard = ({ item }, props) => {
                 </p>
                 <p
                   className="arrow_links_name mobile_font_13 mobile_blue_text text-end"
-                  onClick={() => router.push(`/exams/overview/${item?.id}`)}
+                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=exampattern`)}
                 >
                   Exam Pattern
                   <BsImage
@@ -118,8 +118,8 @@ const ExamLongCard = ({ item }, props) => {
                     Application Date
                   </h4>
                   <p className="card_date_value">
-                    {/* {item.examApplicationDate} */}
-                    10 May 22-17 May 22
+                    {item.examApplicationDate}
+                    {/* 10 May 22-17 May 22 */}
                   </p>
                 </div>
                 <div className="mobile_right_border date_center">
@@ -130,8 +130,8 @@ const ExamLongCard = ({ item }, props) => {
                     Exam Date
                   </h4>
                   <p className="card_date_value">
-                    {/* {item.examDate} */}
-                    23 Jan 22
+                    {item.examDate}
+                    {/* 23 Jan 22 */}
                   </p>
                 </div>
                 <div className="date_center">
@@ -142,9 +142,7 @@ const ExamLongCard = ({ item }, props) => {
                     Result Date
                   </h4>
                   <p className="card_date_value">
-                    {item.resultAnnouncementDate
-                      ? item.resultAnnouncementDate
-                      : "05 Jun 22"}
+                    {item?.resultAnnouncementDate}
                   </p>
                 </div>
               </div>

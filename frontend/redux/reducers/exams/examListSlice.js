@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import {
+  adminexamList,
   filterExamByStreamCourse,
   getAllExams,
   searchExams,
@@ -14,6 +15,7 @@ const examListSlice = createSlice({
     isLoading: false,
     examSearchList: [],
     filterMainstreamList: [],
+    adminExamList:[]
   },
   extraReducers: (builder) => {
     builder.addCase(getAllExams.pending, (state, action) => {
@@ -25,6 +27,18 @@ const examListSlice = createSlice({
     });
     builder.addCase(getAllExams.fulfilled, (state, action) => {
       state.examlist = action.payload;
+      state.isLoading = false
+    });
+
+    builder.addCase(adminexamList.pending, (state, action) => {
+      state.isLoading = true
+    });
+    builder.addCase(adminexamList.rejected, (state, action) => {
+      state.isLoading = false
+      state.status = action?.status?.message;
+    });
+    builder.addCase(adminexamList.fulfilled, (state, action) => {
+      state.adminExamList = action?.payload?.data?.data;
       state.isLoading = false
     });
 

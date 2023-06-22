@@ -29,7 +29,7 @@ function OrganisationLeftPage({ dataValue }, props) {
   const stateList = useSelector((data) => data?.stateList?.stateList?.data?.data?.rows);
   var cityList = useSelector((city) => city?.cityList?.cityList?.data?.data?.rows);
   const cityStateList = useSelector((state) => state?.cityList?.cityList?.data?.result);
-
+const orgCount = useSelector((state)=>state?.sectorData?.organisationList?.count)
   const courselist = useSelector((data) => data?.courseList?.courselist?.data?.rows);
   const familyCodelist = useSelector((data) => data?.sectorData?.familyCodelist?.rows);
 
@@ -271,7 +271,7 @@ function OrganisationLeftPage({ dataValue }, props) {
 
       {/* ----------------------master search bar end----------------------- */}
       <div className="master_heading_manager_div">
-        <h3 className="college_left_page_master_heading">Found 33 Companies</h3>
+        <h3 className="college_left_page_master_heading">Found {orgCount} Companies</h3>
         <p className="college_left_page_master_text">Set Default</p>
       </div>
 
