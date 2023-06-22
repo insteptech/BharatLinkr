@@ -53,7 +53,7 @@ const PopularCourseCard = (props) => {
                       </p>
                       <p className="time_experience">
                         <Image src="/images/green-squre.svg" />{" "}
-                        {item.experienceType || "hardcoded data"}
+                        {item?.CourseType?.name}
                       </p>
                     </div>
                     <div className="three_link_row">

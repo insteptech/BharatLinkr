@@ -9,10 +9,11 @@ import ExamrightPage from "./examrightpage";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function ExamOverView(props) {
-  const [tab, setTab] = useState("about");
+  const [tab, setTab] = useState("");
 
   const router = useRouter();
   const { Id } = router.query;
+  const { active } = router.query;
 
   const [activeInnertab, setActiveInnertab] = useState("");
   const [activeTab, setActiveTab] = useState("");
@@ -124,7 +125,14 @@ function ExamOverView(props) {
   };
 
   useEffect(() => {
-    router.push(`/exams/overview/${Id}?active=${tab}`);
+    if (active){
+      setTab(active)
+    }
+    if (tab) { 
+      router.push(`/exams/overview/${Id}?active=${tab}`);
+    } else {
+      router.push(`/exams/overview/${Id}?active=${active}`);
+    }
   }, [tab]);
 
   const FormSteps = [
@@ -205,11 +213,11 @@ function ExamOverView(props) {
                           <li className="nav-item " key={stepsIndex}>
                             <a
                               className={`nav-link admin_tabs_name blue_row_tabs ${
-                                tab === steps?.key &&
+                                active === steps?.key &&
                                 "head-active blue_tabs_active"
                               }`}
                               active={true}
-                              onClick={() => setTab(steps?.key)}
+                              onClick={() => router.push(`/exams/overview/${Id}?active=${steps?.key}`)}
                             >
                               {steps.value}
                             </a>

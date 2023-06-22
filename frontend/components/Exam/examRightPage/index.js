@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper";
 import ExamLongCard from "./examLongCard/index.js";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllExams } from "../../../redux/actions/exams/createExam.js";
+import { deleteExam, getAllExams } from "../../../redux/actions/exams/createExam.js";
 import { useEffect } from "react";
 import { getAllMasterFilter } from "../../../redux/actions/masterfilter/createmasterfilter.js";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams.js";
@@ -14,74 +14,17 @@ import ExamLeftPage from "../examLeftPage/index.js";
 import LoaderPage from "../../common-components/loader/index.js";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
-const streamData = [
-  {
-    itemName: "Hello",
-    itemCount: 12,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "notification",
-    itemCount: 125,
-    courseItem: "B.tech",
-  },
-  {
-    itemName: "extra",
-    itemCount: 124,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "technology",
-    itemCount: 123,
-    courseItem: "Bba",
-  },
-  {
-    itemName: "Hello4",
-    itemCount: 122,
-    courseItem: "mbbs",
-  },
-  {
-    itemName: "Hello5",
-    itemCount: 121,
-    courseItem: "b.sc",
-  },
-  {
-    itemName: "Hello1",
-    itemCount: 125,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello2",
-    itemCount: 124,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello3",
-    itemCount: 123,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello4",
-    itemCount: 122,
-    courseItem: "B.ed",
-  },
-  {
-    itemName: "Hello5",
-    itemCount: 121,
-    courseItem: "B.ed",
-  },
-];
 
 const ExamRightPage = (props) => {
   const { showSearchList, setShowSearchList } = props;
-  const dispatch = useDispatch();
-  const streams = useSelector(
-    (data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
-  );
-  const coursesData = useSelector(
-    (data) => data?.courseList?.courselist?.data?.rows
-  );
 
+  const [mainStream, setMainStream] = useState("")
+  const [course, setCourse] = useState("")
+
+  const dispatch = useDispatch();
+
+  const streams = useSelector((data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows);
+  const coursesData = useSelector((data) => data?.courseList?.courselist?.data?.rows);
   const loadingexamcard = useSelector((state) => state?.courseList?.isLoading);
 
   useEffect(() => {
@@ -113,7 +56,6 @@ const ExamRightPage = (props) => {
                   placeholder="Search by name..."
                   className="form-control chat_box_weite_bar"
                   onChange={(e) => {
-                    console.log("ff");
                     props?.searchExam(e);
                   }}
                 />
@@ -153,8 +95,7 @@ const ExamRightPage = (props) => {
                 aria-label="Default select example"
               >
                 <option>Select Course</option>
-                {coursesData &&
-                  coursesData?.map((item, index) => (
+                {coursesData && coursesData?.map((item, index) => (
                     <option
                       className="mobile_font_12"
                       key={index}
@@ -181,11 +122,31 @@ const ExamRightPage = (props) => {
                   streams?.map((item, index) => (
                     <div key={index}>
                       <p
-                        className="select_items mobile_font_10"
-                        // onClick={() => props.handleStreamFilter(item?.id)}
+                        className={`select_items mobile_font_10 ${mainStream === item?.id && "select_items_active"}`}
+                        name="mainStreamId"
+                        onClick={() => {
+                          if (mainStream === item?.id) {
+                            let x = props.clear
+                            props?.handleFilterSelect("mainStreamId", item?.id)
+                            delete x.mainStreamId
+                            props.setclear({ ...x })
+                            setMainStream("")
+                            dispatch(getAllExams(x))
+                          } else {
+                            props?.handleFilterSelect("mainStreamId", item?.id)
+                            setMainStream(item?.id)
+                            props.setclear({
+                              ...props.clear,
+                              mainStreamId: item?.id
+                            })
+                            dispatch(getAllExams({
+                              ...props.clear,
+                              mainStreamId: item?.id
+                            }))
+                          }
+                        }}
                       >
                         {item?.mainStreamName}
-                        {/* <span>({item.itemCount})</span> */}
                       </p>
                     </div>
                   ))}
@@ -205,7 +166,18 @@ const ExamRightPage = (props) => {
                 {coursesData &&
                   coursesData?.map((item, index) => (
                     <div key={item.id} className="">
-                      <p className="select_items mobile_font_10">
+                      <p className={`select_items mobile_font_10 ${course === item?.id && "select_items_active"}`}
+                        name="course"
+                        onClick={(e) => {
+                          if (course === item?.id) {
+                            props?.handleFilterSelect("course", item?.id)
+                            setCourse("")
+                          } else {
+                            props?.handleFilterSelect("course", item?.id)
+                            setCourse(item?.id)
+                          }
+                        }}
+                      >
                         {item.courseName}
                       </p>
                     </div>

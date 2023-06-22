@@ -9,7 +9,7 @@ const ExamLeftPage = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectApplicationItem, setSelectedApplication] = useState([]);
   const [selectexammodeItem, setSelectedExammode] = useState([]);
-  const [clear, setclear] = useState({});
+ 
 
   const filterData = useSelector(
     (data) => data?.allMasterFilterList?.masterfilterlist?.data?.data
@@ -26,7 +26,7 @@ const ExamLeftPage = (props) => {
   }, []);
 
   const deleteSelectedfilter = (type, id) => {
-    setclear({ ...clear, [type]: id });
+    props.setclear({ ...props.clear, [type]: id });
   };
 
   const handleFilter = (index, item) => {
@@ -145,9 +145,9 @@ const ExamLeftPage = (props) => {
           className="college_left_page_master_text"
           onClick={() => {
             setSelectedItems("");
-            let obj = { ...clear };
+            let obj = { ...props.clear };
             delete obj.examtype;
-            setclear(obj);
+            props.setclear(obj);
             dispatch(getAllExams(obj));
           }}
         >
@@ -169,7 +169,7 @@ const ExamLeftPage = (props) => {
                         deleteSelectedfilter(item.types, item?.id);
                         handleFilter(index, item);
                       }}
-                      checked={clear.examtype === item?.id}
+                      checked={props.clear.examtype === item?.id}
                     />
                     <label className="check_input_label">{item?.name}</label>
                   </div>
@@ -185,9 +185,9 @@ const ExamLeftPage = (props) => {
           className="college_left_page_master_text"
           onClick={() => {
             setSelectedApplication("");
-            let obj = { ...clear };
+            let obj = { ...props.clear };
             delete obj.applicationmode;
-            setclear(obj);
+            props.setclear(obj);
             dispatch(getAllExams(obj));
           }}
         >
@@ -208,7 +208,7 @@ const ExamLeftPage = (props) => {
                       deleteSelectedfilter(item.types, item?.id);
                       handleFilterApplication(index, item);
                     }}
-                    checked={clear.applicationmode === item?.id}
+                    checked={props.clear.applicationmode === item?.id}
                   />
                   <label className="check_input_label">{item.name}</label>
                 </div>
@@ -222,9 +222,9 @@ const ExamLeftPage = (props) => {
           className="college_left_page_master_text"
           onClick={() => {
             setSelectedExammode("");
-            let obj = { ...clear };
+            let obj = { ...props.clear };
             delete obj.exammode;
-            setclear(obj);
+            props.setclear(obj);
             dispatch(getAllExams(obj));
           }}
         >
@@ -246,7 +246,7 @@ const ExamLeftPage = (props) => {
                       deleteSelectedfilter(item.types, item?.id);
                       handleFilterExamination(index, item);
                     }}
-                    checked={clear.exammode === item?.id}
+                    checked={props.clear.exammode === item?.id}
                   />
                   <label className="check_input_label">{item?.name}</label>
                 </div>

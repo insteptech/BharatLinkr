@@ -12,6 +12,8 @@ function ExamPage() {
   const [searchText, setSearchText] = useState("");
   const [filterkeys, setFilterkeys] = useState({});
   const [showSearchList, setShowSearchList] = useState(null);
+  const [clear, setclear] = useState({});
+  console.log(clear,'oooooooooo')
 
   const dispatch = useDispatch();
   const examData = useSelector((data) => data?.examList?.examlist?.data?.data);
@@ -27,9 +29,14 @@ function ExamPage() {
   };
 
   const handleFilterSelect = (e, itemId, item) => {
-    let data = { ...filterkeys, [e.target.name]: itemId };
-    setFilterkeys(data);
-    dispatch(getAllExams(data));
+    let data
+    if (e == "course" || e == "mainStreamId") {
+      data = { ...filterkeys, [e]: itemId };
+    } else {
+      data = { ...filterkeys, [e.target.name]: itemId };
+      setFilterkeys(data);
+      dispatch(getAllExams(data));
+    }
   };
 
   const handleSetDefault = () => {
@@ -69,14 +76,19 @@ function ExamPage() {
                   setShowSearchList={setShowSearchList}
                   showSearchList={showSearchList}
                   filterkeys={filterkeys}
+                  clear={clear}
+                  setclear={setclear}
                 />
               </Col>
               <Col lg={9} className="search_right_page_bg">
                 <ExamRightPage
                   examData={examData}
+                  handleFilterSelect={handleFilterSelect}
                   handleStreamFilter={handleStreamFilter}
                   setShowSearchList={setShowSearchList}
                   showSearchList={showSearchList}
+                  clear={clear}
+                  setclear={setclear}
                 />
               </Col>
             </Row>

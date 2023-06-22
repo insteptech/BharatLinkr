@@ -4,9 +4,7 @@ import { apiRequest } from "../../services/api";
 export const addExam = createAsyncThunk("addExam", async (data) => {
   return apiRequest
     .post("Exam/addExam", data)
-    .then((req) => {
-      return req;
-    })
+    .then((req) => req)
     .catch((err) => err);
 });
 
@@ -47,11 +45,11 @@ export const deleteExam = createAsyncThunk("deleteExam", async (id) => {
 });
 
 export const editExam = createAsyncThunk("editExam", async (data) => {
-    return apiRequest
-      .post("Exam/updateExam", data)
-      .then((req) => req)
-      .catch((err) => err);
-  }
+  return apiRequest
+    .post("Exam/updateExam", data)
+    .then((req) => req)
+    .catch((err) => err);
+}
 );
 export const filterExamByStreamCourse = createAsyncThunk(
   "filterExamByCourse",
@@ -72,3 +70,10 @@ export const examFaqDelete = createAsyncThunk(
       .catch((err) => err);
   }
 );
+
+export const adminexamList = createAsyncThunk("adminexamList/Exam/examlist", async (data) => {
+  return apiRequest
+    .post("exam/examlist", data)
+    .then((req) => req)
+    .catch((err) => err);
+});
