@@ -37,10 +37,15 @@ const ExamLongCard = ({ item }, props) => {
     }
   };
 
-  let x = item?.examName.split("(")
 
-  let shortName = x[0]
-  let longName = x[1].split(")")[0]
+
+  let x = item?.examName.split("(")
+  let longName
+  let shortName
+  if (x.length > 1) { 
+     shortName = x[0]
+     longName = x[1].split(")")[0]
+  }
 
 
   return (
@@ -67,10 +72,10 @@ const ExamLongCard = ({ item }, props) => {
                 className="p_c_card_master_heading mobile_blue_text mobile_font_18"
                 onClick={() => handleMainStreamExamName(item)}
               >
-                {shortName}
+                {x.length>1 ? shortName : item?.examName}
               </h4>
               <h6 className="long_card_sub_heading mobile_font_12">
-                {longName}
+                {x.length>1 ? longName : item?.examName}
               </h6>
               <h6 className="long_card_sub_heading blue_font mobile_font_12">
                 {item?.CollegeCount} Colleges Accepting this Exam
