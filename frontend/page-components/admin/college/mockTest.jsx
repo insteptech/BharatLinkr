@@ -3,7 +3,6 @@ import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators, { push } from "final-form-arrays";
-import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
 import CKeditorGenerator from "../../../components/admin/CKeditor";
 import { useRouter } from "next/router";
@@ -15,9 +14,11 @@ import {
   getMockTestbyid,
   updateMocktest,
 } from "../../../redux/actions/corporate/addmocktestcorporate";
+import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
 function AddMockTest() {
   const FormSteps = ["Questions", "Responses"];
+  const FormStep = ["Mock Test"];
   const [dataValue, setDataValue] = useState(0);
   const [FileState, setFileState] = useState([]);
 
@@ -47,10 +48,11 @@ function AddMockTest() {
 
   const handleSubmit = (value) => {
     if (!Id) {
+      var formData = new FormData();
+      let tempValues = { ...value };
       FileState.map((item, i) => {
         let name = item?.name;
         let uid = item?.file?.name.split("_")[0];
-
         value.MocktestQuestions[item.index][name].uniqueId = uid;
         if (name === "OptionAData") {
           formData.append("optionAFile", item.file);
@@ -69,10 +71,20 @@ function AddMockTest() {
         }
       });
 
-      var formData = new FormData();
-
       let data = {
-        payload: [value],
+        payload: [
+          {
+            MockTest: [
+              {
+                ...tempValues.MockTest[0],
+                totalMarksOfTest:
+                  value?.MockTest[0]?.questionMarks *
+                  value?.MocktestQuestions?.length,
+              },
+            ],
+            MocktestQuestions: [...tempValues.MocktestQuestions],
+          },
+        ],
       };
 
       formData.append("mockTestData", JSON.stringify(data));
@@ -98,7 +110,7 @@ function AddMockTest() {
           OptionBData: { optionB: item?.OptionBData?.optionB },
           OptionCData: { optionC: item?.OptionCData?.optionC },
           OptionDData: { optionD: item?.OptionDData?.optionD },
-          answer: value?.Questions[0]?.Answerss[0]?.answer,
+          answer: item?.answer[0],
         };
       });
 
@@ -241,7 +253,6 @@ function AddMockTest() {
           },
         ],
       };
-
       return initialValues;
     }
   };
@@ -326,6 +337,29 @@ function AddMockTest() {
 
   return (
     <>
+      <Row>
+        <Col lg={6} md={12} className="p-0">
+          <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+            <ul className="nav tabs_scroll">
+              {FormStep &&
+                FormStep?.map((steps, stepsIndex) => (
+                  <li className="nav-item " key={stepsIndex}>
+                    <a
+                      className={`nav-link admin_tabs_name ${
+                        dataValue === stepsIndex && "head-active"
+                      }`}
+                      active={true}
+                      onClick={() => setDataValue(stepsIndex)}
+                    >
+                      {steps}
+                    </a>
+                  </li>
+                ))}
+            </ul>
+          </ScrollingCarousel>
+        </Col>
+        <hr></hr>
+      </Row>
       <Form
         onSubmit={handleSubmit}
         mutators={{
@@ -484,56 +518,6 @@ function AddMockTest() {
                           </Field>
                         </Col>
                         <Col lg={6} md={12}>
-                          <Field name={`${name}.totalMarksOfTest`}>
-                            {({ input, meta }) => (
-                              <div>
-                                <label className="signup_form_label">
-                                  Total Marks Of Test
-                                </label>
-                                <input
-                                  {...input}
-                                  value={
-                                    values.MockTest[0].questionMarks *
-                                    values?.MocktestQuestions?.length
-                                  }
-                                  disabled="true"
-                                  type="text"
-                                  className="form-control signup_form_input margin_bottom"
-                                  placeholder="Enter Total Marks Of Test"
-                                />
-                                {meta.error && submitFailed && meta.touched && (
-                                  <span className="text-danger">
-                                    {meta.error || submitFailed}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </Field>
-                        </Col>
-                        <Col lg={6} md={12}>
-                          <Field name={`${name}.questionMarks`}>
-                            {({ input, meta }) => (
-                              <div>
-                                <label className="signup_form_label">
-                                  Question Marks
-                                </label>
-                                <input
-                                  {...input}
-                                  type="text"
-                                  className="form-control signup_form_input margin_bottom"
-                                  placeholder="Total Marks Of One Question"
-                                />
-                                {meta.error && submitFailed && meta.touched && (
-                                  <span className="text-danger">
-                                    {meta.error || submitFailed}
-                                  </span>
-                                )}
-                              </div>
-                            )}
-                          </Field>
-                        </Col>
-
-                        <Col md={12} lg={6}>
                           <label className="signup_form_label">
                             Total Time
                           </label>
@@ -577,9 +561,30 @@ function AddMockTest() {
                             </div>
                           </div>
                         </Col>
-                      </Row>
-                      <Row>
                         <Col lg={6} md={12}>
+                          <Field name={`${name}.questionMarks`}>
+                            {({ input, meta }) => (
+                              <div>
+                                <label className="signup_form_label">
+                                  Question Marks
+                                </label>
+                                <input
+                                  {...input}
+                                  type="text"
+                                  className="form-control signup_form_input margin_bottom"
+                                  placeholder="Total Marks Of One Question"
+                                />
+                                {meta.error && submitFailed && meta.touched && (
+                                  <span className="text-danger">
+                                    {meta.error || submitFailed}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        </Col>
+
+                        <Col md={12} lg={6}>
                           <Field name={`${name}.totalQuestions`}>
                             {({ input, meta }) => (
                               <div>
@@ -591,6 +596,35 @@ function AddMockTest() {
                                   type="text"
                                   className="form-control signup_form_input margin_bottom"
                                   placeholder="Enter Total Number Of Questions"
+                                />
+                                {meta.error && submitFailed && meta.touched && (
+                                  <span className="text-danger">
+                                    {meta.error || submitFailed}
+                                  </span>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        </Col>
+                      </Row>
+                      <Row>
+                        <Col lg={6} md={12}>
+                          <Field name={`${name}.totalMarksOfTest`}>
+                            {({ input, meta }) => (
+                              <div>
+                                <label className="signup_form_label">
+                                  Total Marks Of Test
+                                </label>
+                                <input
+                                  {...input}
+                                  value={
+                                    values?.MockTest[0]?.questionMarks *
+                                    values?.MocktestQuestions?.length
+                                  }
+                                  disabled="true"
+                                  type="text"
+                                  className="form-control signup_form_input margin_bottom"
+                                  placeholder="Enter Total Marks Of Test"
                                 />
                                 {meta.error && submitFailed && meta.touched && (
                                   <span className="text-danger">
@@ -655,7 +689,83 @@ function AddMockTest() {
                           <>
                             {fields?.map((name, index) => (
                               <div key={index}>
-                                <h1>Question no. {index + 1}</h1>
+                                <h3 className="text-center">
+                                  Question no. {index + 1}
+                                </h3>
+                                <div className="d-flex justify-content-end">
+                                  <Row>
+                                    <Col>
+                                      <img
+                                        onClick={() => {
+                                          if (
+                                            index <
+                                            values?.MockTest[0]?.totalQuestions
+                                          ) {
+                                            fields.push({
+                                              QuestionData: {
+                                                question: "",
+                                              },
+                                              type: "",
+                                              OptionAData: {
+                                                optionA: "",
+                                              },
+                                              OptionBData: {
+                                                optionB: "",
+                                              },
+                                              OptionCData: {
+                                                optionC: "",
+                                              },
+                                              OptionDData: {
+                                                optionD: "",
+                                              },
+                                              answer: "",
+                                            });
+                                          }
+                                        }}
+                                        className="add_remove_icon"
+                                        src="/images/question-add-icon.png"
+                                      />
+                                      {fields.length > 1 && (
+                                        <>
+                                          <img
+                                            onClick={() => {
+                                              if (
+                                                Id &&
+                                                values?.MocktestQuestions[index]
+                                                  ?.id
+                                              ) {
+                                                dispatch(
+                                                  deleteMockQuestion({
+                                                    mockTestId: Number(
+                                                      values?.MockTest[0]?.id
+                                                    ),
+                                                    id: Number(
+                                                      values?.MocktestQuestions[
+                                                        index
+                                                      ]?.id
+                                                    ),
+                                                  })
+                                                ).then((res) => {
+                                                  if (
+                                                    res?.payload?.data?.success
+                                                  ) {
+                                                    fields.remove(index);
+                                                    handlefileremoval(index);
+                                                  }
+                                                });
+                                              } else {
+                                                fields.remove(index);
+                                                handlefileremoval(index);
+                                              }
+                                            }}
+                                            className="add_remove_icon"
+                                            src="/images/delete-icon-blue.png"
+                                          />
+                                        </>
+                                      )}
+                                    </Col>
+                                  </Row>
+                                </div>
                                 <Field name={`${name}.QuestionData.question`}>
                                   {({ input, meta }) => (
                                     <>
@@ -673,6 +783,7 @@ function AddMockTest() {
                                     </>
                                   )}
                                 </Field>
+
                                 {/* image  */}
                                 <Row>
                                   <Col md={12} lg={6}>
@@ -736,73 +847,6 @@ function AddMockTest() {
                                         </div>
                                       )}
                                     </Field>
-                                  </Col>
-                                </Row>
-                                <Row>
-                                  <Col>
-                                    <img
-                                      onClick={() =>
-                                        fields.push({
-                                          QuestionData: {
-                                            question: "",
-                                          },
-                                          type: "",
-                                          OptionAData: {
-                                            optionA: "",
-                                          },
-                                          OptionBData: {
-                                            optionB: "",
-                                          },
-                                          OptionCData: {
-                                            optionC: "",
-                                          },
-                                          OptionDData: {
-                                            optionD: "",
-                                          },
-                                          answer: "",
-                                        })
-                                      }
-                                      className="add_remove_icon"
-                                      src="/images/question-add-icon.png"
-                                    />
-                                    {fields.length > 1 && (
-                                      <>
-                                        <img
-                                          onClick={() => {
-                                            if (
-                                              Id &&
-                                              values?.MocktestQuestions[index]
-                                                ?.id
-                                            ) {
-                                              dispatch(
-                                                deleteMockQuestion({
-                                                  mockTestId: Number(
-                                                    values?.MockTest[0]?.id
-                                                  ),
-                                                  id: Number(
-                                                    values?.MocktestQuestions[
-                                                      index
-                                                    ]?.id
-                                                  ),
-                                                })
-                                              ).then((res) => {
-                                                if (
-                                                  res?.payload?.data?.success
-                                                ) {
-                                                  fields.remove(index);
-                                                  handlefileremoval(index);
-                                                }
-                                              });
-                                            } else {
-                                              fields.remove(index);
-                                              handlefileremoval(index);
-                                            }
-                                          }}
-                                          className="add_remove_icon"
-                                          src="/images/delete-icon-blue.png"
-                                        />
-                                      </>
-                                    )}
                                   </Col>
                                 </Row>
 
