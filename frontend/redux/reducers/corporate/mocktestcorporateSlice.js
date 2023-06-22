@@ -21,7 +21,7 @@ const mockTestCorporateSlice = createSlice({
       state.status = action?.status?.message;
     });
     builder.addCase(getMockTestCorporatelist.fulfilled, (state, action) => {
-      state.mocktestcorporatelist = action?.payload?.data?.data;
+      state.mocktestcorporatelist = action?.payload?.data
       state.status = "";
     });
     builder.addCase(getMockTestbyid.rejected, (state, action) => {

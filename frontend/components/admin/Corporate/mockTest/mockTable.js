@@ -26,7 +26,11 @@ function MockTable() {
   const dispatch = useDispatch();
 
   const mocktestlistData = useSelector(
-    (state) => state?.corporateMocktest?.mocktestcorporatelist?.rows
+    (state) => state?.corporateMocktest?.mocktestcorporatelist?.data?.rows
+  );
+
+  const mocktestlistDataCount = useSelector(
+    (state) => state?.corporateMocktest?.mocktestcorporatelist
   );
 
   useEffect(() => {
@@ -36,11 +40,10 @@ function MockTable() {
   const tableHeading = [
     "No.",
     "Main Category",
-    "Sub-Category",
+    "Sub Category",
     "Topic",
     "Sub Topic",
     "T.Questions",
-    "Likes",
     "Attempts",
     "Date",
     "Action",
@@ -62,8 +65,6 @@ function MockTable() {
   useEffect(() => {
     dispatch(getMockTestCorporatelist());
   }, []);
-
-  console.log(mocktestlistData, "dfsddfdfsdf123")
 
   return (
     <>
@@ -106,11 +107,21 @@ function MockTable() {
                     <td className="text-center admin_table_data">
                       {item?.totalQuestions}
                     </td>
-                    <td className="text-center admin_table_data">{"190"}</td>
-                    <td className="text-center admin_table_data">{"190"}</td>
+                    {mocktestlistDataCount?.countDetail?.map((elem) => {
+                      if (item?.id == elem?.Mocktestss?.id) {
+                        return (
+                          <>
+                            <td className="text-center admin_table_data">{elem?.AttemptCount}</td>
+                          </>
+                        )
+                      }
+                    })
+
+                    }
                     <td className="text-center admin_table_data">
-                      {"02-1-2023"}
+                      {item?.createdAt.split('T')[0]}
                     </td>
+
                     <td className="text-center admin_table_data">
                       <img
                         className="mx-1 admin_table_action_icon"

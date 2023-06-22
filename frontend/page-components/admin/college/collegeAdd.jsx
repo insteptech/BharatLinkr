@@ -30,10 +30,6 @@ import { getAllExams } from "../../../redux/actions/exams/createExam";
 import dynamic from "next/dynamic";
 import Router, { useRouter } from "next/router";
 import { toast } from "react-toastify";
-// const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
-//   ssr: false,
-// });
-
 import { Table } from "react-bootstrap";
 import {
   collegeAbout,
