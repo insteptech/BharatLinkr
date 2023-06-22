@@ -65,7 +65,7 @@ function StreamsPage() {
       dispatch(deleteSubStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
-          toast.success("Deleted");
+          toast.success("Deleted", {autoClose: 1000});
           dispatch(getSubStream());
         } else {
           toast.error(res?.payload?.response?.data?.message);
@@ -75,10 +75,10 @@ function StreamsPage() {
     if (item?.colStreamName) {
       dispatch(deleteColStream(item.id)).then((res) => {
         if (res?.payload?.data?.success) {
-          toast.success("Deleted");
+          toast.success("Deleted", {autoClose: 1000});
           dispatch(getColStream());
         } else {
-          toast.error(res?.payload?.message);
+          toast.error(res?.payload?.message, {autoClose: 1000});
         }
       });
     }

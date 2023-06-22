@@ -34,13 +34,13 @@ function Header() {
           <Image className="header_profile" src="/images/profile1.png" />
         </div>
         <Form className="d-flex header_form">
-          <Form.Control
+          {/* <Form.Control
             type="search"
             placeholder="Search"
             className="me-2 header_search_input"
             aria-label="Search"
-          />
-          <Image className="header_search_icon" src="/images/search-icon.svg" />
+          /> */}
+          {/* <Image className="header_search_icon" src="/images/search-icon.svg" /> */}
         </Form>
         <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-md`} />
         <Navbar.Offcanvas

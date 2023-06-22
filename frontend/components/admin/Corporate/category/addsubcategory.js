@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
@@ -6,60 +6,78 @@ import arrayMutators from "final-form-arrays";
 import { useRouter } from "next/router";
 import { getMainCategory } from "../../../../redux/actions/corporate/addmaincategory";
 import { useDispatch, useSelector } from "react-redux";
-import { AddSubCategory } from "../../../../redux/actions/corporate/addsubcategory";
+import { AddSubCategory, getSubCategoryById, updateSubCategoryById } from "../../../../redux/actions/corporate/addsubcategory";
+import { toast } from "react-toastify";
 
 function Addsubcategory() {
   const router = useRouter();
+  const { Id } = router.query
   const dispatch = useDispatch();
 
+  const subcategoryListId = useSelector((state) => state?.corporateSubCategory?.subcategoryIdList?.rows)
   const handleSubmit = (values) => {
-    dispatch(
-      AddSubCategory({
-        ...values,
-        mainCategoryId: Number(values.mainCategoryId),
+    if (!Id) {
+      dispatch(
+        AddSubCategory({
+          ...values,
+          mainCategoryId: Number(values.mainCategoryId),
+        })
+      ).then((res) => {
+        if (res?.payload?.data?.success) {
+          const status = res?.payload?.data?.data?.corp[0]?.status;
+          if (status == "duplicate") {
+            toast.error(`Sub Category is ${status}`, { autoClose: 1000 });
+          } else {
+            toast.success("Sub Category added successfuly", { autoClose: 1000 });
+            router.push("/admin/corporate");
+          }
+        }
       })
-    ).then((res) => {
-      if (res?.payload?.status === 200) {
-        //     const status = res?.payload?.data?.data?.stream[0]?.status;
-        //     if (status == "duplicate") {
-        //       toast.error(`Sub Stream is ${status}`);
-        //     } else {
-        //       toast.success("Sub Stream added successfuly");
-        router.push("/admin/corporate/addcorporate");
-      }
-    })
-  }
-
-  const handleInit = () => {
-    let initialValue = {};
-    if (router.query.Id) {
-      initialValue = {
-        mainStreamId: subStream?.MainStream?.mainStreamName,
-        substream: [{ subStreamName: subStream?.subStreamName }],
-      };
     } else {
-      initialValue = {
-        mainStreamId: "",
-        substream: [{ subStreamName: "" }],
-      };
+
+      let updateSubCategory = {
+        subcategory: [
+          {
+            id: Id,
+            subCategory: values?.subcategory[0]?.subCategory,
+            mainCategoryId: subcategoryListId && subcategoryListId[0]?.mainCategoryId
+          }
+        ]
+      }
+      dispatch(updateSubCategoryById(updateSubCategory)).then((res) => {
+
+        if (res?.payload?.data?.success) {
+          toast.success('Updated', { autoClose: 1000 })
+          router.push('/admin/corporate')
+        } else {
+          let statuss = res?.payload?.data?.message
+          toast.error(statuss, { autoClose: 1000 })
+        }
+      })
     }
-    console.log(initialValue, "hhhhhhhhhhhh");
-    return initialValue;
-  };
+  }
 
   const setInitial = () => {
     let initialValues = {};
-    // if (Id) {
-    initialValues.mainCategoryId = '';
-    // } else {
-    initialValues.subcategory = [{}];
-    // }
+    if (Id) {
+      initialValues.mainCategoryId = subcategoryListId && subcategoryListId[0]?.mainCategoryId
+      initialValues.subcategory = [{ subCategory: subcategoryListId && subcategoryListId[0]?.subCategory }]
+    } else {
+      initialValues.mainCategoryId = '';
+      initialValues.subcategory = [{}];
+    }
     return initialValues;
   };
 
   useEffect(() => {
     dispatch(getMainCategory())
   }, [])
+
+  useEffect(() => {
+    if (Id) {
+      dispatch(getSubCategoryById({ id: Number(Id) }))
+    }
+  }, [Id])
 
   const validate = (values) => {
     let errors = {}
@@ -100,7 +118,7 @@ function Addsubcategory() {
                 ...arrayMutators,
               }}
               validate={validate}
-              initialValues={setInitial()}
+              initialValues={useMemo((e) => setInitial(e), [subcategoryListId])}
               render={({ handleSubmit, values }) => (
                 <form onSubmit={handleSubmit}>
                   <Row>
@@ -112,11 +130,11 @@ function Addsubcategory() {
                             <select
                               {...input}
                               className="form-control signup_form_input"
-                            //   disabled={router.query.Id ? true : false}
+                              disabled={Id ? true : false}
                             >
-                              {router.query.Id ? (
+                              {Id ? (
                                 <option>
-                                  {/* {subStream?.MainStream?.mainStreamName} */}
+                                  {subcategoryListId && subcategoryListId[0]?.MainCategories?.mainCategory}
                                 </option>
                               ) : (
                                 <option>Select main category</option>
@@ -175,7 +193,7 @@ function Addsubcategory() {
                                       </Field>
 
                                       <div className="d-flex mt-2 ">
-                                        {!router.query.Id && (
+                                        {!Id && (
                                           <div
                                             type="button"
                                             className="add_remove_btn"
@@ -219,7 +237,7 @@ function Addsubcategory() {
                           className="admin_signup_btn  mt-3"
                           type="submit"
                         >
-                          {router.query.Id ? "Update" : "Add"}
+                          {Id ? "Update" : "Add"}
                         </button>
                       </Col>
                     </Row>

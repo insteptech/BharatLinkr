@@ -775,6 +775,8 @@ const mockTestList = async (req) => {
       main = { mainCategoryId: req.body.mainCategoryId, deleted: false }
     }
 
+  
+
     const result = await mockTest.findAndCountAll({
       where: { [Op.and]: [whrCondition, sub, main] },
       include: [
@@ -802,7 +804,17 @@ const mockTestList = async (req) => {
           required: false,
           as: 'Likes&ViewsCount'
         },
+
+
+        {
+          model: mockTestScore,
+          required: false,
+          as: 'Attempt'
+        }
+
+  
       ],
+   
 
       offset: (pageNo - 1) * size,
       limit: size,
@@ -810,7 +822,22 @@ const mockTestList = async (req) => {
       order: [['id', 'ASC']],
     });
 
-    return { data: result, success: true };
+
+    const countDetail = await mockTestScore.findAll({
+      attributes: [[Sequelize.fn('count', Sequelize.col('mockTestId')), 'AttemptCount']],
+      include: [
+        
+        {
+          model: mockTest,
+          required: false,
+          as: 'Mocktestss'
+        }
+  
+      ],
+      group: ['mockTestId','Mocktestss.id' ],
+    });
+
+    return { data: result,countDetail, success: true };
   } catch (error) {
     throw new Error(error);
   }

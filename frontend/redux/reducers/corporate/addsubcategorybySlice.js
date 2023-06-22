@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getSubCategory } from "../../actions/corporate/addsubcategory";
+import { getSubCategory, getSubCategoryById } from "../../actions/corporate/addsubcategory";
 
 const getSubCategorySlice = createSlice({
   name: "subcategory",
   initialState: {
     value: 0,
     addsubcategory: [],
+    subcategoryIdList:[],
     status: "",
     isLoading: false
   },
@@ -20,6 +21,12 @@ const getSubCategorySlice = createSlice({
     builder.addCase(getSubCategory.fulfilled, (state, action) => {
       state.addsubcategory = action?.payload?.data?.data
       state.isLoading = false
+    });
+    builder.addCase(getSubCategoryById.rejected, (state, action) => {
+      state.status = action?.status?.message;
+    });
+    builder.addCase(getSubCategoryById.fulfilled, (state, action) => {
+      state.subcategoryIdList = action?.payload?.data?.data
     });
   },
 });

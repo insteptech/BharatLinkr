@@ -84,7 +84,7 @@ function MyApp({ Component, pageProps }) {
           <Provider store={store}>
             <SSRProvider>
               <div className="main_body_bg">
-                <Container>
+                <Container className="result_container_padding">
                   <Row>
                     <div className="col-lg-1 col-md-2 col-0 mobile_leftmenu">
                       <LeftMenuPage />

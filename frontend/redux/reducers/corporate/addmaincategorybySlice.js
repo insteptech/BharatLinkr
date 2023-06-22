@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getMainCategory } from "../../actions/corporate/addmaincategory";
+import { getMainCategory, getMainCategoryListById } from "../../actions/corporate/addmaincategory";
 
 
 const addmainCategorySlice = createSlice({
@@ -7,16 +7,27 @@ const addmainCategorySlice = createSlice({
   initialState: {
     value: 0,
     addmaincategory : [],
+    maincategoryId: [],
     status: "",
+    isLoading: false
   },
   extraReducers: (builder) => {
+    builder.addCase(getMainCategory.pending, (state, action) => {
+      state.isLoading = true
+    });
     builder.addCase(getMainCategory.rejected, (state, action) => {
-      state.addmaincategory = [];
+      state.isLoading = false
       state.status = action?.status?.message;
     });
     builder.addCase(getMainCategory.fulfilled, (state, action) => {
       state.addmaincategory = action?.payload?.data?.data;
-      state.status = "";
+      state.isLoading = false
+    });
+    builder.addCase(getMainCategoryListById.rejected, (state, action) => {
+      state.status = action?.status?.message;
+    });
+    builder.addCase(getMainCategoryListById.fulfilled, (state, action) => {
+      state.maincategoryId = action?.payload?.data?.data;
     });
 },
 });

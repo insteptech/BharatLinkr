@@ -1,19 +1,36 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
-import { Button, Col, Row, Form, Table } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Row, Form, Table, Pagination } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllExams } from "../../../../redux/actions/exams/createExam";
 import {
   deleteMocktestCorporate,
   getMockTestCorporatelist,
 } from "../../../../redux/actions/corporate/addmocktestcorporate";
+import DeleteModal from "../../../modals/deleteModal";
+import { toast } from "react-toastify";
 
 function MockTable() {
+
+  const [pagination, setPagination] = useState({
+    pageNo: 1,
+    pageSize: 10
+  })
+  const [modalShow, setModalShow] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
+  const handleHide = () => {
+    setModalShow(false)
+  }
+
   const router = useRouter();
   const dispatch = useDispatch();
 
   const mocktestlistData = useSelector(
-    (state) => state?.corporateMocktest?.mocktestcorporatelist?.rows
+    (state) => state?.corporateMocktest?.mocktestcorporatelist?.data?.rows
+  );
+
+  const mocktestlistDataCount = useSelector(
+    (state) => state?.corporateMocktest?.mocktestcorporatelist
   );
 
   useEffect(() => {
@@ -23,11 +40,10 @@ function MockTable() {
   const tableHeading = [
     "No.",
     "Main Category",
-    "Sub-Category",
+    "Sub Category",
     "Topic",
     "Sub Topic",
     "T.Questions",
-    "Likes",
     "Attempts",
     "Date",
     "Action",
@@ -36,7 +52,8 @@ function MockTable() {
   const handleDelete = (item) => {
     dispatch(deleteMocktestCorporate(item?.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        dispatch(getMockTestCorporatelist());
+        toast.success('Deleted', { autoClose: 1000 })
+        dispatch(getMockTestCorporatelist())
       }
     });
   };
@@ -90,11 +107,21 @@ function MockTable() {
                     <td className="text-center admin_table_data">
                       {item?.totalQuestions}
                     </td>
-                    <td className="text-center admin_table_data">{"190"}</td>
-                    <td className="text-center admin_table_data">{"190"}</td>
+                    {mocktestlistDataCount?.countDetail?.map((elem) => {
+                      if (item?.id == elem?.Mocktestss?.id) {
+                        return (
+                          <>
+                            <td className="text-center admin_table_data">{elem?.AttemptCount}</td>
+                          </>
+                        )
+                      }
+                    })
+
+                    }
                     <td className="text-center admin_table_data">
-                      {"02-1-2023"}
+                      {item?.createdAt.split('T')[0]}
                     </td>
+
                     <td className="text-center admin_table_data">
                       <img
                         className="mx-1 admin_table_action_icon"
@@ -104,7 +131,10 @@ function MockTable() {
                       <img
                         className="mx-1 admin_table_action_icon"
                         src="/images/delete-icon-blue.png"
-                        onClick={() => handleDelete(item)}
+                        onClick={() => {
+                          setModalShow(true)
+                          setDeleteItem(item)
+                        }}
                       ></img>
                     </td>
                   </tr>
@@ -112,6 +142,13 @@ function MockTable() {
               })}
           </tbody>
         </Table>
+        <Pagination pagination={pagination} setPagination={setPagination} list={mocktestlistData} />
+        <DeleteModal
+          show={modalShow}
+          onHide={() => handleHide()}
+          handleDelete={handleDelete}
+          deleteItem={deleteItem}
+        />
       </div>
     </>
   );

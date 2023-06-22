@@ -4,45 +4,72 @@ import { Field, Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
 import { useRouter } from "next/router";
-import { AddMainCategory } from "../../../../redux/actions/corporate/addmaincategory";
-import { useDispatch } from "react-redux";
+import { AddMainCategory, getMainCategoryListById, updateMainCategoryList } from "../../../../redux/actions/corporate/addmaincategory";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 function Addmaincategory() {
   const router = useRouter();
+  const { Id } = router.query
   const dispatch = useDispatch();
 
-  const handleSubmit = (values) => {
-    console.log(values, "values");
+  const maincategoryListbyId = useSelector(
+    (state) => state?.corporateCategory?.maincategoryId?.rows
+  );
 
-    dispatch(AddMainCategory(values));
-    //.then((res) => {
-    // if (res?.payload?.data?.success) {
-    //   const status = res?.payload?.data?.data?.stream[0]?.status;
-    //   if (status == "duplicate") {
-    //     toast.error(`Main Stream is ${status}`);
-    //   } else {
-    //     toast.success("Main Stream added successfuly");
-    //     router.push("/admin/streams");
-    //   }
-    //  })
-  };
+  const handleSubmit = (values) => {
+  
+    if (!Id) {
+      dispatch(AddMainCategory(values))
+        .then((res) => {
+          if (res?.payload?.data?.success) {
+            const status = res?.payload?.data?.data?.corp[0]?.status;
+            if (status == "duplicate") {
+              toast.error(`Main Category is ${status}`, { autoClose: 1000 });
+            } else {
+              toast.success("Main Category added successfuly", { autoClose: 1000 });
+              router.push("/admin/corporate");
+            }
+          }
+        })
+    } else {
+      let updateMainCategory = {
+        mainCategory: [
+          {
+            id: Id,
+            mainCategory: values.mainCategory[0]?.mainCategory
+          }
+        ]
+      }
+      dispatch(updateMainCategoryList(updateMainCategory)).then((res) => {
+       
+        if(res?.payload?.data?.success){
+          toast.success('Updated', {autoClose:1000})
+          router.push('/admin/corporate')
+        }else{
+          let statuss = res?.payload?.data?.message
+          toast.error(statuss, {autoClose: 1000})
+        }
+      })
+    }
+  }
 
   const setInitial = () => {
     let initialValues = {};
-    // if (Id) {
-    //   initialValues.mainCategory = [{ mainCategory: mainCategory }];
-    // } else {
-    initialValues.mainCategory = [{ mainCategory: "" }];
-    // }
+    if (Id) {
+      initialValues.mainCategory = [{ mainCategory: maincategoryListbyId && maincategoryListbyId[0]?.mainCategory }];
+    } else {
+      initialValues.mainCategory = [{ mainCategory: "" }];
+    }
     return initialValues;
   };
 
-  const validate=(values)=>{
+  const validate = (values) => {
     let errors = {}
     let itemArray = []
     values?.mainCategory?.map((item) => {
       let error = {}
-      if(!item?.mainCategory){
+      if (!item?.mainCategory) {
         error['mainCategory'] = "*"
       }
       itemArray.push(error)
@@ -51,11 +78,14 @@ function Addmaincategory() {
     return errors
   }
 
+  useEffect(() => {
+    dispatch(getMainCategoryListById({ id: Number(Id) }))
+  }, [Id])
+
 
   return (
     <div>
       <Container className="p-0">
-        {/* <button onClick={() => console.log(mainStream)}>hhh</button> */}
         <Row className="my-3 padding_top">
           <Col>
             <h3 className="master_heading">Main Category</h3>
@@ -100,7 +130,7 @@ function Addmaincategory() {
                                     </Field>
 
                                     <div className="d-flex mt-2 ">
-                                      {!router.query.Id && (
+                                      {!Id && (
                                         <div
                                           type="button"
                                           className="add_remove_btn"
