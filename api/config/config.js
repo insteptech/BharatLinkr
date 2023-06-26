@@ -43,6 +43,12 @@ module.exports = {
     host: envVars.DB_HOST,
     port: envVars.DB_PORT,
     dialect: envVars.DB_DIALECT,
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false // You can remove this line if you have a valid SSL certificate
+      }
+    },
     logging: false,
   },
   jwt: {
