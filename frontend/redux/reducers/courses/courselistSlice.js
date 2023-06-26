@@ -5,6 +5,7 @@ import {
   filterMainstreamCourse,
   getCourse,
   getCoursebyId,
+  getMasterFilterCourse,
   mainstreamCourseCount,
   searchCourse,
 } from "../../actions/course/addcourse";
@@ -25,6 +26,7 @@ const courseListSlice = createSlice({
     courseCountData: [],
     courseLevelList: [],
     filterMainstreamlist: [],
+    getCourseLevelData: []
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -102,6 +104,13 @@ const courseListSlice = createSlice({
     builder.addCase(filterMainstreamCourse.rejected, (state, action) => {
       console.log(action.payload);
       state.isLoading = false;
+    });
+    // builder.addCase(getMasterFilterCourse.pending, (state) => {
+    //   state.isLoading = true;
+    // });
+
+    builder.addCase(getMasterFilterCourse.fulfilled, (state, action) => {
+      state.getCourseLevelData = action.payload?.data?.data
     });
   },
 });

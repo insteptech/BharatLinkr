@@ -96,15 +96,13 @@ const CollegeRightPage = (props) => {
   const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
 
   useEffect(() => {
-    dispatch(getMainStream());
-    dispatch(getColleges());
+    // dispatch(getMainStream());
+    // dispatch(getColleges());
     if (getTokenDecode()) {
       dispatch(CollegeLikesList(getTokenDecode()?.userId));
     }
   }, []);
-  // useEffect(() => {
 
-  // }, [])
 
   return (
     <>
@@ -263,17 +261,18 @@ const CollegeRightPage = (props) => {
         </div>
         <div>
           <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-3">
-            {loadercollegecard === true ? (
+            {loadercollegecard ? (
               <LoaderPage />
-            ) : (
-              collegeList &&
-              collegeList?.map((item, index) => {
+            ) : collegeList && collegeList.length > 0 ? (
+              collegeList.map((item, index) => {
                 return (
                   <Col>
                     <CollegeCard item={item} index={index} />
                   </Col>
                 );
               })
+            ) : (
+              <p>No colleges found.</p>
             )}
           </Row>
         </div>
