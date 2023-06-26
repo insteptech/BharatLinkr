@@ -47,6 +47,12 @@ const masterFilterDelete = async function (req) {
   return result;
 };
 
+const getMasterFilterByCourseLevel = async function (req) {
+  const result = await masterFilterDbContext.getMasterFilterByCourseLevel(req);
+  return result;
+};
+
+
 module.exports = {
     addMasterFilter,
     getMasterFilterById,
@@ -54,5 +60,6 @@ module.exports = {
     getMasterFilterDropDown,
     updateMasterFilter,
     masterFilterDelete,
+    getMasterFilterByCourseLevel
 
 }  

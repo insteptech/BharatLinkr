@@ -44,6 +44,8 @@ router.post(
 
 
 router.delete('/masterFilterDelete/:id', masterFilterController.masterFilterDelete);
+router.get('/masterFilterByCourseLevel', masterFilterController.getMasterFilterByCourseLevel);
+
 
 
 

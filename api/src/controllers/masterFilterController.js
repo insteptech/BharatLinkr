@@ -76,6 +76,17 @@ const masterFilterDelete = async function (req, res) {
 };
 
 
+const getMasterFilterByCourseLevel = async function (req, res) {
+  await masterFilterManager
+    .getMasterFilterByCourseLevel(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
 
 
 module.exports = {
@@ -84,6 +95,7 @@ module.exports = {
     getMasterFilter,
     getMasterFilterDropDown,
     updateMasterFilter,
-    masterFilterDelete
+    masterFilterDelete,
+    getMasterFilterByCourseLevel
    
   };

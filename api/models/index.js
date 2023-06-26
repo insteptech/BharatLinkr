@@ -40,6 +40,7 @@ db.colStream.belongsTo(db.subStream, { as: "SubStream", foreignKey: 'subStreamId
 
 db.masterFilter.belongsTo(db.Status, { as: "Status", foreignKey: 'statusId' });
 
+
 db.exam.hasMany(db.examFAQ, { as: "examFAQ", foreignKey: 'examId' });
 
 db.exam.belongsTo(db.masterFilter, { as: "CourseType", foreignKey: 'courseTypeId' });
@@ -205,6 +206,11 @@ db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
 db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
 
 db.mockTestScore.belongsTo(db.mockTest,{as:"MockTest", foreignKey: "mockTestId"})
+
+
+db.masterFilter.hasMany(db.course, { as: "CourseLevel", foreignKey: 'courseLevelId' });
+db.course.belongsTo(db.mainStream, { as: "MainStreamsss", foreignKey: 'mainStreamId' });
+db.course.belongsTo(db.masterFilter, { as: "courselevelType", foreignKey: 'courseLevelId' });
 
 
 
