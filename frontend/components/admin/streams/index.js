@@ -149,9 +149,9 @@ function StreamsPage() {
               </ul>
             </ScrollingCarousel>
           </Col>
-          <Col>
+          {/* <Col>
             <Pagesize setPagination={setPagination} />
-          </Col>
+          </Col> */}
         </Row>
       </div>
       {dataValue === 0 && (
@@ -162,7 +162,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Main Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  {/* <Pagesize setPagination={setPagination} /> */}
+                  <Pagesize setPagination={setPagination} />
                 </div>
               </div>
             </Col>
