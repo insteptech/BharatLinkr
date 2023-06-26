@@ -10,8 +10,6 @@ import {
 } from "react-bootstrap";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useDispatch } from "react-redux";
-import { getTokenDecode } from "../utils";
 
 function Header() {
   const router = useRouter();

@@ -5,7 +5,6 @@ import AdminPage from "./admin";
 import { Container, Row, SSRProvider } from "react-bootstrap";
 import Home from ".";
 import LeftMenuPage from "../components/admin/LeftMenu";
-import Header from "../components/layout/Header";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import { ToastContainer } from "react-toastify";
@@ -17,6 +16,7 @@ import "react-toastify/dist/ReactToastify.css";
 import homeLayout from "../components/homeLayout";
 import CommonHead from "../components/common-components/UserHead/CommonHead";
 import UserLayout from "../components/userLayout";
+import Header from "../components/Layout/Header";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();

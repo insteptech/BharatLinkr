@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import AboutUs from "../../components/aboutUs";
+import AboutUs from "../../components/aboutUs/AboutUs";
 import AboutLeftTabs from "../../components/homeLayout/leftPage/aboutUsLeftTab";
 // import AboutPage from "../../components/aboutUs/aboutPage";
 
