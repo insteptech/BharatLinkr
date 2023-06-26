@@ -25,7 +25,7 @@ import Select from "react-select";
 import Creatable from "react-select/creatable";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 
-const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
+const CKeditorGenerator = dynamic(() => import("../Ckeditor/CKeditor"), {
   ssr: false,
 });
 

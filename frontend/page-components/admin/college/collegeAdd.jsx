@@ -39,7 +39,7 @@ import {
   distanceeducation,
 } from "../../../utils/helper";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
-import CKeditorGenerator from "../../../components/admin/CKeditor";
+import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
 
 function CreateCollege() {
   const dispatch = useDispatch();
