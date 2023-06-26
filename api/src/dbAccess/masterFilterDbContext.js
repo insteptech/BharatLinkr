@@ -345,27 +345,12 @@ const getMasterFilterById = async (req) => {
       const status = await Status.findOne({
         where: { name: STATUS.ENABLE },
       });
-      const result = await masterFilter.findAll({
+       await masterFilter.findAll({
         where: {
           types: { [Op.or]: req.query.types.split(',') },
           deleted: false,
           statusId: status.id,
         },
-
-        include:[
-          {
-            model: course,
-            required:false,
-            as:'CourseLevel',
-            include:[
-              {
-                model: mainStream,
-                required:false,
-                as:'MainStreamsss',
-              }
-            ]
-          }
-        ]
       });
 
       const countDetail = await course.findAll({
@@ -376,9 +361,14 @@ const getMasterFilterById = async (req) => {
             required: false,
             as:'courselevelType'
           },
+          {
+            model: mainStream,
+            required: false,
+            as:'MainStreamsss'
+          },
      
         ],
-        group: ['courseLevelId','courselevelType.id'],
+        group: ['courseLevelId','courselevelType.id','MainStreamsss.id'],
       });
 
       return { data:countDetail, success: true };
