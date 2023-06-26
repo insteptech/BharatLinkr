@@ -7,6 +7,7 @@ import {
   cardlevelIdDetails,
   courseByMainStream,
   getCourse,
+  getMasterFilterCourse,
   mainstreamCourseCount,
 } from "../../../../../redux/actions/course/addcourse";
 import { getAllMasterFilter } from "../../../../../redux/actions/masterfilter/createmasterfilter";
@@ -47,44 +48,19 @@ const LevelCard = (props) => {
 
   const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
+  const getCourseLevelList = useSelector((state) => state?.courseList?.getCourseLevelData)
   useEffect(() => {
     dispatch(getMainStream());
     dispatch(getAllMasterFilter("courselevel"));
     dispatch(getCourse());
   }, []);
 
-  const finalList =
-    coursetypelist &&
-    coursetypelist?.map((courseLevel) => {
-      const filtered =
-        courseList &&
-        courseList?.filter(
-          (courseItem) => courseItem?.courseLevelId === courseLevel?.id
-        );
-      return {
-        courseLevelName: courseLevel.name,
-        courseLevelId: courseLevel.id,
-        count: filtered && filtered.length,
-        mainStreamName:
-          filtered && filtered[0] && filtered[0].MainStream.mainStreamName
-            ? filtered[0].MainStream.mainStreamName
-            : "",
-        mainStreamId:
-          filtered && filtered[0] && filtered[0].mainStreamId
-            ? filtered[0].mainStreamId
-            : "",
-        mainStreamCourseId:
-          filtered && filtered[0] && filtered[0]?.MainStream?.id
-            ? filtered[0]?.MainStream?.id
-            : "",
-      };
-    });
 
   const handleMainStreamName = (item) => {
     dispatch(
       courseByMainStream({
-        mainStreamId: item?.mainStreamId,
-        courseLevelId: item?.courseLevelId,
+        mainStreamId: item?.MainStreamsss?.id,
+        courseLevelId: item?.courselevelType?.id,
       })
     );
 
@@ -97,16 +73,16 @@ const LevelCard = (props) => {
     }
   };
 
-  const mainCourseCount = useSelector(
-    (state) => state?.courseList?.courseCountData?.data
-  );
   useEffect(() => {
     dispatch(mainstreamCourseCount());
   }, []);
 
-  const handleImage = (item) => {
-    dispatch(cardlevelIdDetails({ courseLevelId: item?.courseLevelId }));
+  useEffect(() => {
+    dispatch(getMasterFilterCourse())
+  }, [])
 
+  const handleImage = (item) => {
+    dispatch(cardlevelIdDetails({ courseLevelId: item?.id }));
     if (item?.mainStreamCourseId === "") {
       setShowList(false);
       setCardLevelShow(null);
@@ -121,69 +97,68 @@ const LevelCard = (props) => {
       <Row xs={1} md={3} className="g-4">
         {loading ? (
           <LoaderPage />
-        ) : finalList && finalList.length > 0 ? (
-          finalList?.map((listItem, listIndex) => (
-            <Col key={listIndex}>
-              <div>
-                <Card
-                  key={`MainStream_${listIndex}`}
-                  className="user_college_card"
-                >
-                  {cardData &&
-                    cardData?.map((el, index) => (
-                      <div key={index}>
-                        <div className="image_cover_content_base ">
-                          <Card.Img
-                            className="course_card_img "
-                            variant="top"
-                            src={el.collegeImg}
-                            onClick={() => handleImage(listItem)}
-                          />
-                        </div>
-                        <div className="image_cover_content">
-                          <h6 className="image_cover_content_text">
-                            {listItem.courseLevelName}
-                          </h6>
-                        </div>
-                      </div>
-                    ))}
+        ) : coursetypelist && coursetypelist.length > 0 ? (
+          coursetypelist?.map((listItem, listIndex) => {
+            let courseLevelList = getCourseLevelList.filter((item, index) => {
+              return (item?.courselevelType?.id === listItem?.id)
+            })
 
-                  <Card.Body>
-                    <div className="selected_filters_subbox course_name_subbox">
-                      {listItem.mainStreamName ? (
-                        <div className="course_name_count_div">
-                          {mainCourseCount?.mainStreamCountss?.map((elem, index) => {
-                            if (
-                              listItem?.mainStreamCourseId ===
-                              elem?.mainStreamCounts?.id
-                            ) {
-                              return (
-                                <span key={index} className="course_name_items">
-                                  {elem?.mainStreamCount}
-                                </span>
-                              );
-                            }
-                          })}
-                          <h6
-                            className="course_name_items"
-                            onClick={() => handleMainStreamName(listItem)}
-                          >
-                            {listItem.mainStreamName}{" "}
-                          </h6>
-                        </div>
-                      ) : (
-                        <div className="no_course_available">
-                          <h6 className="no_course_available_title">
-                            No courses available
-                          </h6>
-                        </div>
-                      )}
+            return (<Col key={listIndex}>
+
+              <Card
+                key={`MainStream_${listIndex}`}
+                className="user_college_card"
+              >
+                {cardData &&
+                  cardData?.map((el, index) => (
+                    <div key={index}>
+                      <div className="image_cover_content_base " >
+                        <Card.Img
+                          className="course_card_img "
+                          variant="top"
+                          src={el.collegeImg}
+                        />
+                      </div>
+                      <div className="image_cover_content" onClick={() => handleImage(listItem)}>
+                        <h6 className="image_cover_content_text">
+                          {listItem?.name}
+                        </h6>
+                      </div>
                     </div>
-                  </Card.Body>
-                </Card>
-              </div>
-            </Col>
-          ))
+                  ))}
+
+                <Card.Body>
+                  <div className="selected_filters_subbox course_name_subbox">
+                    {courseLevelList.length > 0 ? (
+
+                      courseLevelList.map((elem, index) => {
+                        return (
+                          <div className="course_name_count_div" key={index}>
+                            <span className="course_name_items">
+                              {elem?.CourseCount}
+                            </span>
+                            <h6
+                              className="course_name_items"
+                              onClick={() => handleMainStreamName(elem)}
+                            >
+                              {elem?.MainStreamsss?.mainStreamName}
+                            </h6>
+                          </div>
+                        );
+                      })
+                    ) : (
+                      <div className="no_course_available">
+                        <h6 className="no_course_available_title">
+                          No courses available
+                        </h6>
+                      </div>
+                    )}
+                  </div>
+                </Card.Body>
+              </Card>
+
+            </Col>)
+          })
         ) : (
           "No Data found"
         )}

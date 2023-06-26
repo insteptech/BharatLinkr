@@ -73,6 +73,15 @@ export const cardlevelIdDetails = createAsyncThunk(
   }
 );
 
+export const getMasterFilterCourse = createAsyncThunk(
+  "getMasterFilterCourse",
+  async (data) => {
+    return apiRequest
+      .get(`masterFilter/masterFilterByCourseLevel?types=courselevel`)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
 export const filterMainstreamCourse = createAsyncThunk(
   "filterMainstreamCourse",
   async (data) => {
