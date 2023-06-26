@@ -42,7 +42,7 @@ const NewIndusty = () => {
       // creating/adding new industry action
       dispatch(
         createNewIndustry({
-          industryData: obj,
+          industryData: obj, 
         })
       ).then((res) => {
         if (res?.payload?.data?.success) {
@@ -159,7 +159,7 @@ const NewIndusty = () => {
                               <option>Select sector</option>
                             )}
                             {getSectorList &&
-                              getSectorList?.map((item) => (
+                              getSectorList?.rows?.map((item) => (
                                 <option key={item.id} value={item.id}>
                                   {item.name}
                                 </option>

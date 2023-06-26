@@ -213,7 +213,7 @@ function Organisation() {
                     ))}
                 </ul>
               </ScrollingCarousel>
-              <div className="ms-2">
+              <div className="ms-2 d-flex">
                 <Pagesize setPagination={setPagination} />
               </div>
             </div>

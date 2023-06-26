@@ -10,6 +10,7 @@ import { CollegeLikes, CollegeLikesList, getColleges } from "../../../redux/acti
 import { getTokenDecode } from "../../utils";
 
 import { toast } from "react-toastify";
+import SignupModal from "../../modals/signupmodal";
 
 export const cardData = [
   {
@@ -98,7 +99,8 @@ const CollegeCard = ({ item, index }, props) => {
 
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
-  const [update, setUpdate] = useState(false);
+  const [modalShow1, setModalShow1] = useState(false);
+
   const [pagination, setPagination] = useState({
     pageNo: 1,
     pageSize: 10,
@@ -110,6 +112,9 @@ const CollegeCard = ({ item, index }, props) => {
   const handleHide = () => {
     setModalShow(false);
   };
+  const handleHide1 = () => {
+    setModalShow1(false)
+  }
 
   const handleLikes = (itemId, values) => {
     if (getTokenDecode()) {
@@ -118,19 +123,21 @@ const CollegeCard = ({ item, index }, props) => {
         update: values,
         userId: getTokenDecode()?.userId
       })).then((res) => {
-        if (res?.payload?.status === 200 && res.payload.data?.success === true) {
+        if (res?.payload?.status === 200 && res.payload.data?.success) {
           dispatch(CollegeLikesList(getTokenDecode()?.userId))
           dispatch(getColleges(pagination))
         }
       })
     } else {
-      setModalShow(true);
+      setModalShow1(true);
     }
   };
 
   const isliked = likesList?.filter((i) => {
     if (item.id === i.categoryId) {
       return true
+    }else{
+      return false
     }
   })
 
@@ -308,6 +315,11 @@ const CollegeCard = ({ item, index }, props) => {
       </Card>
 
       <CollegeShareModal show={modalShow} onHide={() => handleHide()} />
+      <SignupModal
+        show={modalShow1}
+        // setModalShow={setModalShow}
+        onHide={() => handleHide1()}
+      />
     </>
   );
 };
