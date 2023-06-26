@@ -11,7 +11,7 @@ const fs = require('fs');
 const XLSX = require('xlsx');
 const excelJS = require('exceljs');
 const { STATUS } = require('../utils/helper');
-const { masterFilter, Status, course, exam, college, collegeAgency, collegeAssociateCourse, collegeAssociateStream } = require('../../models');
+const { masterFilter, Status, course, exam, college, collegeAgency, collegeAssociateCourse, collegeAssociateStream, mainStream } = require('../../models');
 
 const { status } = require('../../config/config');
 
@@ -178,6 +178,7 @@ const getMasterFilterById = async (req) => {
         group[types].push(item);
         return group;
       }, {});
+      
       return { data: groupByCategory, success: true };
     } catch (error) {
       throw new Error(error);
@@ -339,6 +340,53 @@ const getMasterFilterById = async (req) => {
     }
   };
 
+  const getMasterFilterByCourseLevel = async (req) => {
+    try {
+      const status = await Status.findOne({
+        where: { name: STATUS.ENABLE },
+      });
+      const result = await masterFilter.findAll({
+        where: {
+          types: { [Op.or]: req.query.types.split(',') },
+          deleted: false,
+          statusId: status.id,
+        },
+
+        include:[
+          {
+            model: course,
+            required:false,
+            as:'CourseLevel',
+            include:[
+              {
+                model: mainStream,
+                required:false,
+                as:'MainStreamsss',
+              }
+            ]
+          }
+        ]
+      });
+
+      const countDetail = await course.findAll({
+        attributes: [[Sequelize.fn('count', Sequelize.col('courseLevelId')), 'CourseCount']],
+        include: [
+          {
+            model: masterFilter,
+            required: false,
+            as:'courselevelType'
+          },
+     
+        ],
+        group: ['courseLevelId','courselevelType.id'],
+      });
+
+      return { data:countDetail, success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
 
 
 module.exports = {
@@ -348,5 +396,6 @@ module.exports = {
     getMasterFilterDropDown,
     updateMasterFilter,
     masterFilterDelete,
+    getMasterFilterByCourseLevel
 
 };
