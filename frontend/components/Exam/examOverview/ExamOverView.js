@@ -125,10 +125,10 @@ function ExamOverView(props) {
   };
 
   useEffect(() => {
-    if (active){
+    if (active) {
       setTab(active)
     }
-    if (tab) { 
+    if (tab) {
       router.push(`/exams/overview/${Id}?active=${tab}`);
     } else {
       router.push(`/exams/overview/${Id}?active=${active}`);
@@ -197,8 +197,8 @@ function ExamOverView(props) {
           <Row>
             <Col lg={12} md={12} className="">
               <div className="blue_row_tabs mt-0">
-              <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                {/* <Swiper
+                <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+                  {/* <Swiper
                   className="swiper_main_blue_row"
                   navigation
                   modules={[Navigation]}
@@ -210,22 +210,21 @@ function ExamOverView(props) {
                     {FormSteps &&
                       FormSteps?.map((steps, stepsIndex) => (
                         // <SwiperSlide className="swiper_sub_div">
-                          <li className="nav-item " key={stepsIndex}>
-                            <a
-                              className={`nav-link admin_tabs_name blue_row_tabs ${
-                                active === steps?.key &&
-                                "head-active blue_tabs_active"
+                        <li className="nav-item " key={stepsIndex}>
+                          <a
+                            className={`nav-link admin_tabs_name blue_row_tabs ${active === steps?.key &&
+                              "head-active blue_tabs_active"
                               }`}
-                              active={true}
-                              onClick={() => router.push(`/exams/overview/${Id}?active=${steps?.key}`)}
-                            >
-                              {steps.value}
-                            </a>
-                          </li>
+                            active={true}
+                            onClick={() => router.push(`/exams/overview/${Id}?active=${steps?.key}`)}
+                          >
+                            {steps.value}
+                          </a>
+                        </li>
                         // </SwiperSlide>
                       ))}
                   </ul>
-                {/* </Swiper> */}
+                  {/* </Swiper> */}
                 </ScrollingCarousel>
               </div>
             </Col>
