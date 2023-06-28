@@ -7,7 +7,7 @@ import { apibasePath } from "../../../config";
 import Image from "next/image";
 import CollegeShareModal from "../../modals/collegesharemodal";
 import { CollegeLikes, CollegeLikesList, getColleges } from "../../../redux/actions/college/college";
-import { getTokenDecode } from "../../utils";
+import { getTokenDecode, isUserLogined } from "../../utils";
 
 import { toast } from "react-toastify";
 import SignupModal from "../../modals/signupmodal";
@@ -95,7 +95,8 @@ export const cardData = [
   },
 ];
 
-const CollegeCard = ({ item, index }, props) => {
+const CollegeCard = ({ handleLikes, item, isliked, stateLike }) => {
+
 
   const router = useRouter();
   const [modalShow, setModalShow] = useState(false);
@@ -106,8 +107,7 @@ const CollegeCard = ({ item, index }, props) => {
     pageSize: 10,
   });
   const dispatch = useDispatch();
-  const likesList = useSelector(state => state?.collegelist?.collegeListLikes?.rows)
-
+  // const likesList = useSelector((state) => state?.collegelist?.collegeListLikes?.rows);
 
   const handleHide = () => {
     setModalShow(false);
@@ -116,34 +116,9 @@ const CollegeCard = ({ item, index }, props) => {
     setModalShow1(false)
   }
 
-  const handleLikes = (itemId, values) => {
-    if (getTokenDecode()) {
-      dispatch(CollegeLikes({
-        collegeId: itemId,
-        update: values,
-        userId: getTokenDecode()?.userId
-      })).then((res) => {
-        if (res?.payload?.status === 200 && res.payload.data?.success) {
-          dispatch(CollegeLikesList(getTokenDecode()?.userId))
-          dispatch(getColleges(pagination))
-        }
-      })
-    } else {
-      setModalShow1(true);
-    }
-  };
-
-  const isliked = likesList?.filter((i) => {
-    if (item.id === i.categoryId) {
-      return true
-    }else{
-      return false
-    }
-  })
-
   return (
     <>
-      <Card className="user_college_card" key={index}>
+      <Card className="user_college_card" key={item?.id}>
         <div className="image_box">
           <Image
             height={92}
@@ -182,14 +157,14 @@ const CollegeCard = ({ item, index }, props) => {
                 <Col xs={4} className="text-end">
                   <p className="card_location_name">
                     <BootImage className="me-1" src="/images/blue-book.png" />
-                    {item.Approval.name}
+                    {item?.Approval?.name}
                   </p>
                 </Col>
               </Row>
             </div>
             <div className="course_detail">
               <Row>
-                <Col xs={3} className="text-center  p-2 pe-0">
+                <Col xs={3} className="text-center  p-2 pe-0"   >
                   <h6 className="course_detail_name right_border">Course</h6>
                 </Col>
                 <Col xs={3} className="text-center p-2 pe-0">
@@ -235,27 +210,47 @@ const CollegeCard = ({ item, index }, props) => {
                 <Col xs={3} className="text-center  p-2 pe-0">
                   <div
                     className="media_icon_num_pair right_border"
-                    onClick={() => {
-                      if (isliked?.length > 0) {
-                        handleLikes(item?.id, "dislikes")
-                      } else {
-                        handleLikes(item?.id, "likes")
-                      }
-                    }}
                   >
                     <Image
                       width={20}
                       height={20}
                       className="media_icons"
-                      src={isliked?.length > 0 ? "/images/blue-like.png" : "/images/border-like.svg"}
+                      onClick={() => {
+                        if (stateLike.length > 0) {
+                          if (stateLike[0].state === 'likes') {
+                            handleLikes(item?.id, "dislikes");
+                          } else {
+                            handleLikes(item?.id, "likes");
+                          }
+                        } else {
+                          if (isliked) {
+                            handleLikes(item?.id, "dislikes");
+                          } else {
+                            handleLikes(item?.id, "likes");
+                          }
+                        }
+                      }}
+                      src={stateLike.length > 0 ?
+                        stateLike[0].state === 'likes'
+                          ? "/images/blue-like.png"
+                          : "/images/border-like.svg"
+                        :
+                        isliked
+                          ? "/images/blue-like.png"
+                          : "/images/border-like.svg"
+                      }
                     />
 
                     <h6 className="course_detail_name ">
-                      {item.CountLikesShare
-                        ? item.CountLikesShare[0]?.likes
-                        : "00"}
+                      {stateLike.length > 0
+                        ? stateLike[0].state === 'likes'
+                        && item?.CountLikesShare[0]?.likes + 1 ||
+                        stateLike[0].state === "dislikes"
+                        && item?.CountLikesShare[0]?.likes - 1
+                        : (item?.CountLikesShare[0]?.likes ? item?.CountLikesShare[0]?.likes : 0)}
                     </h6>
                   </div>
+
                 </Col>
                 <Col xs={3} className="text-center p-2 ">
                   <div className="media_icon_num_pair right_border">

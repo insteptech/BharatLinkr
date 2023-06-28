@@ -1,6 +1,7 @@
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 
 const AdmissionBars = [
   "Introduction",
@@ -9,12 +10,13 @@ const AdmissionBars = [
   "Admission Highlights",
   "Application Process",
   "PHD Admission Process",
-  "Documents Required",
+  // "Documents Required",
 ];
 
 function AdmissionRight(props) {
   const { dataValue, setDataValue } = props;
 
+  const collegeDetails = useSelector((data) => data?.collegelist?.college?.rows);
   return (
     <>
       <div className="">
@@ -27,9 +29,8 @@ function AdmissionRight(props) {
                     AdmissionBars?.map((steps, stepsIndex) => (
                       <li className="nav-item " key={stepsIndex}>
                         <a
-                          className={`nav-link admin_tabs_name ${
-                            dataValue === stepsIndex && "head-active"
-                          }`}
+                          className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                            }`}
                           active={true}
                           onClick={() => setDataValue(stepsIndex)}
                         >
@@ -42,132 +43,52 @@ function AdmissionRight(props) {
             </Col>
           </Row>
         </div>
-        {props.dataValue === 0 && (
-          <>
-            <h4>Introduction</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 1 && (
-          <>
-            <h4>ABOUT TEST</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 2 && (
-          <>
-            <h4>IMPORTANT DATES</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 3 && (
-          <>
-            <h4>ADMISSION HIGHLIGHTS</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 4 && (
-          <>
-            <h4>APPLICATION PROCESS</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 5 && (
-          <>
-            <h4>PHD ADMISSION PROCESS</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 6 && (
-          <>
-            <h4>DOCUMENTS REQUIRED</h4>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
+        {collegeDetails && collegeDetails?.map((admissionlist, index) => (
+          <div key={index}>
+            {props.dataValue === 0 && (
+              <>
+                <h4>Introduction</h4>
+                <p>{admissionlist?.admissionIntro}
+                </p>
+              </>
+            )}
+            {props.dataValue === 1 && (
+              <>
+                <h4>ABOUT TEST</h4>
+                <p>{admissionlist?.admissionAboutTest}
+                </p>
+              </>
+            )}
+            {props.dataValue === 2 && (
+              <>
+                <h4>IMPORTANT DATES</h4>
+                <p>{admissionlist?.admissionImportantDates}
+                </p>
+              </>
+            )}
+            {props.dataValue === 3 && (
+              <>
+                <h4>ADMISSION HIGHLIGHTS</h4>
+                <p>{admissionlist?.admissionHighLights}
+                </p>
+              </>
+            )}
+            {props.dataValue === 4 && (
+              <>
+                <h4>APPLICATION PROCESS</h4>
+                <p>{admissionlist?.applicationProcess}
+                </p>
+              </>
+            )}
+            {props.dataValue === 5 && (
+              <>
+                <h4>PHD ADMISSION PROCESS</h4>
+                <p>{admissionlist?.PHDadmissionProcess}
+                </p>
+              </>
+            )}
+          </div>
+        ))}
       </div>
     </>
   );

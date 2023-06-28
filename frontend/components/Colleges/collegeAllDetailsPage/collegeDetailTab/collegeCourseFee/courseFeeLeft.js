@@ -1,10 +1,14 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const CourseBars = ["B.Ed", "M.Ed", "BCA", "MCA"];
 
 function CourseFeeLeft(props) {
   const { dataValue, setDataValue } = props;
+  const collegeDetails = useSelector(
+    (data) => data?.collegelist?.college?.rows
+  );
 
   return (
     <>
@@ -24,8 +28,8 @@ function CourseFeeLeft(props) {
       <div className="card_sec">
         <div className="card_mid search_left_card">
         <ul className="nav search_page_left_tabs_box">
-            {CourseBars &&
-              CourseBars?.map((steps, stepsIndex) => (
+            {collegeDetails.length>0 &&
+              collegeDetails[0]?.AssociateCourse?.map((steps, stepsIndex) => (
                 <li className="nav-item search_page_side_tabs w-100" key={stepsIndex}>
                   <a
                     className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${
@@ -34,7 +38,7 @@ function CourseFeeLeft(props) {
                     active={true}
                     onClick={() => setDataValue(stepsIndex)}
                   >
-                    {steps}
+                    {steps?.courseName}
                   </a>
                 </li>
               ))}

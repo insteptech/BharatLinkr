@@ -1,6 +1,7 @@
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import React from "react";
 import { Col, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 const ScholarshipBars = [
   "INTRODUCTION",
@@ -13,6 +14,10 @@ const ScholarshipBars = [
 const ScholarshipRight = (props) => {
   const { dataValue, setDataValue } = props;
 
+  const collegeDetails = useSelector(
+    (data) => data?.collegelist?.college?.rows
+  );
+
   return (
     <>
       <div className="admin_home_tabs_row top_padding_none big_screen_none">
@@ -24,9 +29,8 @@ const ScholarshipRight = (props) => {
                   ScholarshipBars?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         active={true}
                         onClick={() => setDataValue(stepsIndex)}
                       >
@@ -39,31 +43,35 @@ const ScholarshipRight = (props) => {
           </Col>
         </Row>
       </div>
-      <div className="">
-        {props.dataValue === 0 && (
-          <>
-            <h1>Basic Info</h1>
-            <p>
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua. At vero eos et accusam et justo duo
-              dolores et ea rebum. Stet clita kasd gubergren, no sea takimata
-              sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-              amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-              invidunt ut labore et dolore magna aliquyam erat, sed diam
-              voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
-              Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum
-              dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing
-              elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-            </p>
-          </>
-        )}
-        {props.dataValue === 1 && <h3>hIGHLIGHTS</h3>}
-        {props.dataValue === 2 && <h3>Ranking & Awards</h3>}
-        {props.dataValue === 3 && <h3>COURSES</h3>}
-        {props.dataValue === 4 && <h3>SCHOLARSHIP PLACEMENTS</h3>}
-        {props.dataValue === 5 && <h3>FACILITIES</h3>}
-      </div>
+      {collegeDetails && collegeDetails.map((scholarshipData, index) => (
+        <div className="" key={index}>
+          {props.dataValue === 0 && (
+            <>
+              <p>{scholarshipData?.scholarShipIntro}</p>
+            </>
+          )}
+          {props.dataValue === 1 && (
+            <>
+              <p>{scholarshipData?.basedOnUniExams}</p>
+            </>
+          )}
+          {props.dataValue === 2 && (
+            <>
+              <p>{scholarshipData?.basedOnAdmissionTest}</p>
+            </>
+          )}
+          {props.dataValue === 3 && (
+            <>
+              <p>{scholarshipData?.basedOnDiplomaGraduates}</p>
+            </>
+          )}
+          {props.dataValue === 4 && (
+            <>
+              <p>{scholarshipData?.basedOnSportsQuota}</p>
+            </>
+          )}
+        </div>
+      ))}
     </>
   );
 };

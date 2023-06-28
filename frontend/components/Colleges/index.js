@@ -23,9 +23,9 @@ const CollegePage = () => {
 
   useEffect(() => {
     // dispatch(getColleges());
- 
+
     if (user) {
-      dispatch(CollegeLikesList(user.id));
+      dispatch(CollegeLikesList(getTokenDecode()?.userId));
     }
   }, []);
 

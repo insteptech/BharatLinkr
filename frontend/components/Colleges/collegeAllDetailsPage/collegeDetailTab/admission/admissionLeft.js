@@ -7,7 +7,7 @@ const AdmissionBars = [
   "Admission Highlights",
   "Application Process",
   "PHD Admission Process",
-  "Documents Required",
+  // "Documents Required",
 ];
 function AdmissionLeft(props) {
   const { dataValue, setDataValue } = props;
@@ -24,9 +24,8 @@ function AdmissionLeft(props) {
                   key={stepsIndex}
                 >
                   <a
-                    className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${
-                      dataValue === stepsIndex && "active_bar"
-                    }`}
+                    className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${dataValue === stepsIndex && "active_bar"
+                      }`}
                     active={true}
                     onClick={() => setDataValue(stepsIndex)}
                   >

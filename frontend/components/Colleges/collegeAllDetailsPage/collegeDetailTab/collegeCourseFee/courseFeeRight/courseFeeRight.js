@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import CourseFee from "./courseFee";
 import { Col, Row } from "react-bootstrap";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import { useDispatch, useSelector } from "react-redux";
+import {getAllMasterFilter} from "../../../../../../redux/actions/masterfilter/createmasterfilter"
 
 const CourseBars = ["B.Ed", "M.Ed", "BCA", "MCA"];
 
 function CourseFeeRight(props) {
   const { dataValue, setDataValue } = props;
+  const programTypelist = useSelector((data)=>data?.allMasterFilterList?.masterfilterlist?.data?.data?.coursecategory)
+  
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllMasterFilter('coursecategory'))
+  }, [])
 
   return (
     <>
@@ -35,7 +43,7 @@ function CourseFeeRight(props) {
         </Row>
       </div>
       <div className="">
-        {props.dataValue === 0 && <CourseFee />}
+        {props.dataValue === 0 && <CourseFee programTypelist={programTypelist}/>}
         {props.dataValue === 1 && <h3>hIGHLIGHTS2</h3>}
         {props.dataValue === 2 && <h3>Ranking & Awards2</h3>}
         {props.dataValue === 3 && <h3>COURSES2</h3>}
