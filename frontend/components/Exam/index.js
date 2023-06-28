@@ -7,26 +7,25 @@ import ExamLeftPage from "./examLeftPage";
 import ExamRightPage from "./examRightPage";
 import { getAllExams, searchExams } from "../../redux/actions/exams/createExam";
 import { filterExamByStreamCourse } from "../../redux/actions/exams/createExam";
+import { debounce } from "debounce";
 
 function ExamPage() {
   const [searchText, setSearchText] = useState("");
   const [filterkeys, setFilterkeys] = useState({});
   const [showSearchList, setShowSearchList] = useState(null);
   const [clear, setclear] = useState({});
-  console.log(clear,'oooooooooo')
 
   const dispatch = useDispatch();
   const examData = useSelector((data) => data?.examList?.examlist?.data?.data);
 
-  const searchExam = (key) => {
+  const searchExam = debounce((key) => {
     let val = key.target.value;
-    console.log(val);
     if (val.length > 0) {
       dispatch(getAllExams({ search: val }));
     } else {
-      dispatch(getAllExams());
+      dispatch(getAllExams(clear));
     }
-  };
+  },600);
 
   const handleFilterSelect = (e, itemId, item) => {
     let data

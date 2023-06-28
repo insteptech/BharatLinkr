@@ -7,6 +7,7 @@ import { login } from "../../redux/actions/auth";
 import DisclaimerModal from "../modals/disclaimermodal";
 import SignupModal from "../modals/signupmodal";
 import ForgotPasswordPage from "../admin/forgotPassword";
+
 function LoginPage() {
   const [modalShow, setModalShow] = useState(false);
   const handleHide = () => {
@@ -24,6 +25,8 @@ function LoginPage() {
       if (res?.payload?.success === true) {
         let token = res?.payload?.data?.token;
         localStorage.setItem("token", token);
+        // document.cookie =
+        // cookies().set('name', JSON.stringify(loginData));
         toast.success("logined successfuly");
         router.push("/");
       } else {
