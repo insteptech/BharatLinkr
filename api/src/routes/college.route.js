@@ -90,6 +90,9 @@ router.post('/collegeAgencyDelete', collegeController.collegeAgencyDelete);
 router.post('/collegeStreamDelete', collegeController.collegeStreamsDelete);
 router.post('/collegeFAQDelete', collegeController.collegeFAQDelete);
 
+router.delete('/collegeCourseFeesDelete/:id', collegeController.collegeCourseFeesDelete);
+
+
 
 
 

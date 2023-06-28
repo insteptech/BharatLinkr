@@ -135,6 +135,12 @@ const collegeFAQDelete = async function (req) {
   return result;
 };
 
+const collegeCourseFeesDelete = async function (req) {
+  const result = await collegeDbContext.collegeCourseFeesDelete(req);
+  return result;
+};
+
+
 
 
 
@@ -157,5 +163,6 @@ module.exports = {
   collegeAssociateCourseDelete,
   collegeAgencyDelete,
   collegeStreamsDelete,
-  collegeFAQDelete
+  collegeFAQDelete,
+  collegeCourseFeesDelete
 };

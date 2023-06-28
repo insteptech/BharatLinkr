@@ -1656,6 +1656,21 @@ const collegePendingRequestList = async (req) => {
   }
 };
 
+const collegeCourseFeesDelete = async (req) => {
+  try {
+
+    let faq = await collegeAssociateFees.findOne({
+      where: { id: req.id, },
+    });
+    await faq.update({ deleted: true }, { where: { id: req.id } });
+
+
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 
 
 module.exports = {
@@ -1677,6 +1692,7 @@ module.exports = {
   collegeAssociateCourseDelete,
   collegeAgencyDelete,
   collegeStreamsDelete,
-  collegeFAQDelete
+  collegeFAQDelete,
+  collegeCourseFeesDelete
 
 };

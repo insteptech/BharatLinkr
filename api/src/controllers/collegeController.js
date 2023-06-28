@@ -214,6 +214,16 @@ const collegeFAQDelete = async function (req, res) {
     });
 };
 
+const collegeCourseFeesDelete = async function (req, res) {
+  await collegeManager
+    .collegeCourseFeesDelete(req.params)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 
 module.exports = {
@@ -235,5 +245,6 @@ module.exports = {
   collegeAssociateCourseDelete,
   collegeAgencyDelete,
   collegeStreamsDelete,
-  collegeFAQDelete
+  collegeFAQDelete,
+  collegeCourseFeesDelete
 };
