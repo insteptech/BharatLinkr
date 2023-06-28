@@ -29,43 +29,49 @@ export const buttonTypes = {
 export const refined = (title) =>
   title?.toLowerCase()?.replace(/[/\s?]+/g, "-");
 
- export const collegeAbout = [
-    { title: "Intro", key: "aboutIntro" },
-    { title: "Highlights", key: "aboutHighLights" },
-    { title: "Ranking & Awards", key: "aboutRankingAndAwards" },
-    { title: "Courses", key: "aboutCourses" },
-    { title: "Scholarship Placements", key: "aboutScholarShipPlacements" },
-    { title: "Facilities", key: "aboutFacilities" },
-  ];
+export const collegeAbout = [
+  { title: "Intro", key: "aboutIntro" },
+  { title: "Highlights", key: "aboutHighLights" },
+  { title: "Ranking & Awards", key: "aboutRankingAndAwards" },
+  { title: "Courses", key: "aboutCourses" },
+  { title: "Scholarship Placements", key: "aboutScholarShipPlacements" },
+  { title: "Facilities", key: "aboutFacilities" },
+];
 
-  export const collegeadmission = [
-    { title: "Intro", key: "admissionIntro" },
-    { title: "About Test", key: "admissionAboutTest" },
-    { title: "Imp. Dates", key: "admissionImportantDates" },
-    { title: "Admission Highlights", key: "admissionHighLights" },
-    { title: "Application Process", key: "applicationProcess" },
-    { title: "PHD Admission Process", key: "PHDadmissionProcess" },
-  ];
+export const collegeadmission = [
+  { title: "Intro", key: "admissionIntro" },
+  { title: "About Test", key: "admissionAboutTest" },
+  { title: "Imp. Dates", key: "admissionImportantDates" },
+  { title: "Admission Highlights", key: "admissionHighLights" },
+  { title: "Application Process", key: "applicationProcess" },
+  { title: "PHD Admission Process", key: "PHDadmissionProcess" },
+];
 
-   export const distanceeducation = [
-    { title: "Basic Info", key: "basicInfo" },
-    { title: "Course Details", key: "courseDetails" },
-    { title: "Honors", key: "honors" },
-  ];
+export const distanceeducation = [
+  { title: "Basic Info", key: "basicInfo" },
+  { title: "Course Details", key: "courseDetails" },
+  { title: "Honors", key: "honors" },
+];
 
-   export const scholarship = [
-    { title: "Intro", key: "scholarShipIntro" },
-    { title: "Based on Uni Exams", key: "basedOnUniExams" },
-    { title: "Based on Admission Test", key: "basedOnAdmissionTest" },
-    { title: "Based on Sports Quota", key: "basedOnSportsQuota" },
-    { title: "Based on Diploma, Grad", key: "basedOnDiplomaGraduates" },
-  ];
+export const scholarship = [
+  { title: "Intro", key: "scholarShipIntro" },
+  { title: "Based on Uni Exams", key: "basedOnUniExams" },
+  { title: "Based on Admission Test", key: "basedOnAdmissionTest" },
+  { title: "Based on Sports Quota", key: "basedOnSportsQuota" },
+  { title: "Based on Diploma, Grad", key: "basedOnDiplomaGraduates" },
+];
 
-  export  const placements = [
-    { title: "Intro", key: "placeMentIntro" },
-    { title: "Highlights 2021", key: "highLights2021" },
-    { title: "MBA Highlights", key: "MBAhighLights" },
-    { title: "BTECH Highlights", key: "BTECHhighLights" },
-    { title: "Year Wise Placements", key: "yearWisePlaceMents" },
-    { title: "Top Recruiters", key: "topRecruiters" },
-  ];
+export const placements = [
+  { title: "Intro", key: "placeMentIntro" },
+  { title: "Highlights 2021", key: "highLights2021" },
+  { title: "MBA Highlights", key: "MBAhighLights" },
+  { title: "BTECH Highlights", key: "BTECHhighLights" },
+  { title: "Year Wise Placements", key: "yearWisePlaceMents" },
+  { title: "Top Recruiters", key: "topRecruiters" },
+];
+
+export const userRoles = {
+  superadmin: 'superadmin',
+  admin: 'admin',
+  user: 'user'
+}

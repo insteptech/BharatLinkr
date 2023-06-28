@@ -61,22 +61,8 @@ export const login = createAsyncThunk("loginCall", async (data) => {
     .post("auth/login", data, {
       headers: { "Content-Type": "application/json" },
     })
-    .then((res) => {
-      if (res?.data?.success) {
-        console.log(res.data.success, "errors");
-        // toast.success("otp verified");
-        return res.data;
-      } else {
-        console.log(res.data.message, "errors");
-        // toast.error("something went wrong");
-        return res.data
-      }
-    })
-    .catch((err) => {
-      console.log(err, "errors");
-      return err
-      //   toast.error(err);
-    });
+    .then((res) => res.data)
+    .catch((err) => err);
 });
 
 
@@ -93,15 +79,15 @@ export const getUserDetails = createAsyncThunk('', async (id) => {
     .catch(err => err)
 })
 
-export const forgetPassword = createAsyncThunk("forgetPassword/auth/userForgotPassword", async (data)=> {
+export const forgetPassword = createAsyncThunk("forgetPassword/auth/userForgotPassword", async (data) => {
   return apiRequest
-    .post(`auth/userForgotPassword`, { email : data })
+    .post(`auth/userForgotPassword`, { email: data })
     .then(res => res)
     .catch(err => err)
 })
-export const  updatePassword = createAsyncThunk("updatePassword/auth/userPasswordUpdate", async (data) =>{
+export const updatePassword = createAsyncThunk("updatePassword/auth/userPasswordUpdate", async (data) => {
   return apiRequest
-  .post(`auth/userPasswordUpdate`, data)
-  .then(res => res)
-  .catch(err => err)
+    .post(`auth/userPasswordUpdate`, data)
+    .then(res => res)
+    .catch(err => err)
 })

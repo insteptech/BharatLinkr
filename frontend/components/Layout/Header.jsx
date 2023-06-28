@@ -8,8 +8,8 @@ import {
   NavDropdown,
   Offcanvas,
 } from "react-bootstrap";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import { setCookies } from "../utils";
 
 function Header() {
   const router = useRouter();
@@ -18,9 +18,10 @@ function Header() {
     setActiveIndex(id);
     router.push(`/admin/${path}`);
   };
-  
+
   const handleLogout = () => {
     localStorage.clear();
+    setCookies(-1)
     router.push("/login");
   };
 

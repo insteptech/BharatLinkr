@@ -4,7 +4,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  images: { domains: ["localhost", "https://bharatlinkr.onrender.com/"] },
+  images: { domains: ["localhost", "bharatlinkr.onrender.com"] },
 };
 
 module.exports = nextConfig;

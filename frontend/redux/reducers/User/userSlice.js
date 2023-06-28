@@ -8,6 +8,7 @@ const initialState = {
     currentUser: {},
     likeContentList: [],
     likeContentCount: 0,
+    layoutByRole: null,
 }
 
 const userSlice = createSlice({
@@ -19,6 +20,9 @@ const userSlice = createSlice({
         },
         setActiveNav(state, action) {
             state.activeNavItem = action.payload
+        },
+        setLayoutByRole(state, action) {
+            state.layoutByRole = action.payload
         }
     },
     extraReducers: (builder) => {
@@ -43,5 +47,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { setLoginStatus, setActiveNav } = userSlice.actions
+export const { setLoginStatus, setActiveNav, setLayoutByRole } = userSlice.actions
 export default userSlice.reducer

@@ -1,34 +1,46 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { login } from "../../redux/actions/auth";
 import DisclaimerModal from "../modals/disclaimermodal";
 import SignupModal from "../modals/signupmodal";
 import ForgotPasswordPage from "../admin/forgotPassword";
+import { setCookies } from "../utils";
+import { userRoles } from "../../utils/helper";
+import { setLayoutByRole } from "../../redux/reducers/User/userSlice";
+import LoaderPage from "../common-components/loader";
 
 function LoginPage() {
+  const router = useRouter();
+  const dispatch = useDispatch();
   const [modalShow, setModalShow] = useState(false);
   const handleHide = () => {
     setModalShow(false);
   };
-  const router = useRouter();
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   });
-  const dispatch = useDispatch();
-  const [userData, setUserData] = useState();
+
+  const loginLoader = useSelector((state) => state.loginUser.isLoading)
+
+  console.log(loginLoader, "ssssssssssssssssss")
+
   const handleLogin = () => {
     dispatch(login(loginData)).then((res) => {
-      if (res?.payload?.success === true) {
-        let token = res?.payload?.data?.token;
-        localStorage.setItem("token", token);
-        // document.cookie =
-        // cookies().set('name', JSON.stringify(loginData));
-        toast.success("logined successfuly");
-        router.push("/");
+      if (res.payload.success) {
+        setCookies(10, res.payload.data.token, res.payload.data.user.Roles.key)
+        localStorage.setItem('token', res.payload.data.token)
+        toast.success("Successfully Logged In")
+        if (res.payload.data.user.Roles.key === userRoles.admin) {
+          dispatch(setLayoutByRole(res.payload.data.user.Roles.key))
+          router.push('/admin/dashboard')
+        } else {
+          dispatch(setLayoutByRole(res.payload.data.user.Roles.key))
+          router.push('/')
+        }
       } else {
         toast.error(res?.payload?.message);
       }
@@ -36,17 +48,13 @@ function LoginPage() {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    // console.log(userData);
-    // if (loginData) {
-
-    //   toast.success("logined");
-    // }
   };
   const handleForget = () => {
     router.push("/forget");
   };
   return (
     <>
+      {loginLoader && <LoaderPage />}
       <div className="login_bg">
         <div className="container-fluid">
           <div className="row">
@@ -108,11 +116,9 @@ function LoginPage() {
           </div>
         </div>
       </div>
-      {/* <SignupModal
-        show={modalShow}
-        onHide={() => handleHide()}
-        /> */}
       <DisclaimerModal show={modalShow} onHide={() => handleHide()} />
+
+
     </>
   );
 }

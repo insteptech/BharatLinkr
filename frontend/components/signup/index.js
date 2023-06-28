@@ -37,7 +37,7 @@ function SignUpPage() {
     email: "",
     mobileNumber: "",
     state: "",
-    school: "",
+    school_college_company: "",
     highestEducation: "",
     summary: "",
     expertise: "",
@@ -124,8 +124,8 @@ function SignUpPage() {
     if (!values.coverPhoto && values?.usertype === "Student") {
       errors.coverPhoto = "*";
     }
-    if (!values.school && values?.usertype === "Student") {
-      errors["school"] = "*";
+    if (!values.school_college_company && values?.usertype === "Student") {
+      errors["school_college_company"] = "*";
     }
     if (!values.highestEducation && values?.usertype === "Student") {
       errors["highestEducation"] = "*";
@@ -198,7 +198,7 @@ function SignUpPage() {
       mobileNumber: values.mobileNumber,
       name: values.name,
       password: values.password,
-      school: values.school,
+      school_college_company: values.school_college_company,
       stateId: Number(values.state),
       cityId: Number(values.city),
       summary: values.summary,
@@ -459,7 +459,7 @@ function SignUpPage() {
                                     </label>
                                     {meta.error && meta.touched && (
                                       <span className="text-danger required_msg">
-                                        {meta.error}
+                                        {meta.error.required}
                                       </span>
                                     )}
                                   </div>
@@ -470,11 +470,11 @@ function SignUpPage() {
                                     className="form-control signup_form_input margin_bottom"
                                     placeholder="Enter Mobile No."
                                   />
-                                  {/* {meta.error && meta.touched && (
+                                  {meta.error && meta.touched && (
                                       <span className="text-danger">
-                                        {meta.error}
+                                        {meta.error.fieldError}
                                       </span>
-                                    )} */}
+                                    )}
                                 </div>
                               )}
                             </Field>
@@ -526,7 +526,7 @@ function SignUpPage() {
                             </Field>
                           </Col>
                           <Col md={12} lg={6}>
-                            <Field name="school">
+                            <Field name="school_college_company_college_company">
                               {({ input, meta }) => (
                                 <div>
                                   <div className="d-flex">
@@ -918,7 +918,7 @@ function SignUpPage() {
                                     </label>
                                     {meta.error && meta.touched && (
                                       <span className="text-danger required_msg">
-                                        {meta.error}
+                                        {meta.error.required}
                                       </span>
                                     )}
                                   </div>
@@ -929,11 +929,11 @@ function SignUpPage() {
                                     className="form-control signup_form_input margin_bottom"
                                     placeholder="Enter Mobile No."
                                   />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
+                                  {meta.error && meta.touched && (
+                                    <span className="text-danger">
+                                      {meta.error.fieldError}
+                                    </span>
+                                  )}
                                 </div>
                               )}
                             </Field>
@@ -985,7 +985,7 @@ function SignUpPage() {
                             </Field>
                           </Col>
                           <Col md={12} lg={6}>
-                            <Field name="school">
+                            <Field name="school_college_company">
                               {({ input, meta }) => (
                                 <div>
                                   <div className="d-flex">
@@ -1798,7 +1798,7 @@ function SignUpPage() {
                                     </label>
                                     {meta.error && meta.touched && (
                                       <span className="text-danger required_msg">
-                                        {meta.error}
+                                        {meta.error.required}
                                       </span>
                                     )}
                                   </div>
@@ -1809,11 +1809,11 @@ function SignUpPage() {
                                     className="form-control signup_form_input margin_bottom"
                                     placeholder="Enter Mobile Number"
                                   />
-                                  {/* {meta.error && meta.touched && (
+                                  {meta.error && meta.touched && (
                                       <span className="text-danger">
-                                        {meta.error}
+                                        {meta.error.fieldError}
                                       </span>
-                                    )} */}
+                                    )}
                                 </div>
                               )}
                             </Field>

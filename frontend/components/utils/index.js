@@ -12,6 +12,14 @@ export const getRole = () => {
   }
   return null;
 };
+export const setCookies = ( expDays, LoginToken, RoleKey) => {
+  const d = new Date();
+  d.setTime(d.getTime() + (expDays * 24 * 60 * 60 * 1000));
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = "role" + "=" + RoleKey + ";" + expires + ";path=/";
+  document.cookie = "token" + "=" + LoginToken + ";" + expires + ";path=/";
+  document.cookie = "isLoggedIn" + "=" + true + ";" + expires + ";path=/";
+}
 
 export const getToken = () => {
   let token = null;

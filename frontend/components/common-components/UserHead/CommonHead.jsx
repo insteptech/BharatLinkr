@@ -15,7 +15,7 @@ import {
 } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { isUserLogined, getTokenDecode, logout, LikedContent } from "../../utils";
+import { isUserLogined, getTokenDecode, logout, LikedContent, setCookies } from "../../utils";
 import CounslingForm from "../../Forms/counslingForm";
 import CommonModal from "../../Forms/commonModal";
 import SubmitForm from "../../Forms/submitResume";
@@ -122,9 +122,10 @@ export default function CommonHead() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
+    localStorage.clear();
+    setCookies(-1)
     toast.success("Successfully Logged Out");
+    router.push("/login");
   };
 
   const getComponnet = () => {
