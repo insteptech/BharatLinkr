@@ -21,6 +21,8 @@ import {
 import { getTokenDecode, isUserLogined } from "../../../utils";
 
 function CompanyCard({ setModalShow }) {
+  const [likesHandler, setLikesHandler] = useState([])
+
   const isloggedin = isUserLogined();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -37,17 +39,42 @@ function CompanyCard({ setModalShow }) {
           update: value,
         })
       ).then((res) => {
-        console.log(res, "res");
         if (res?.payload?.data?.success) {
-          dispatch(companyLikeslist(getTokenDecode().userId));
-          dispatch(getOrganisationlist());
+          // dispatch(companyLikeslist(getTokenDecode().userId));
+          // dispatch(getOrganisationlist());
         }
       });
+      let index
+      likesHandler.map((item, i) => {
+        if (item?.id === id) {
+          index = i
+        }
+      })
+      let x = likesHandler.filter((item) => item.id === id)
+      if (index !== undefined) {
+        let y = [...likesHandler]
+        if (x[0].state == value) {
+          y[index] = { id: x[0].id, state: value }
+        } else {
+          y.splice(index, 1)
+        }
+        setLikesHandler(y)
+      } else {
+        setLikesHandler(
+          [...likesHandler,
+          {
+            id: id,
+            state: value
+          }
+          ]
+        )
+      }
     } else {
       setModalShow(true);
     }
   };
 
+  
   useEffect(() => {
     if (isloggedin) {
       dispatch(companyLikeslist(getTokenDecode().userId));
@@ -104,13 +131,13 @@ function CompanyCard({ setModalShow }) {
               </ScrollingCarousel>
             </div> */}
       <>
-
         {orgList?.rows?.map((item, index) => {
           let isliked = orgLikedList.find((i) => {
             if (item.id === i.categoryId) {
               return true;
             }
           });
+          let stateLike = likesHandler.filter((ele) => ele.id === item.id)
           return (
             <Card key={index} className="p_c_card mt-5 purpal_border white_bg">
               <Row>
@@ -143,13 +170,25 @@ function CompanyCard({ setModalShow }) {
                                 height={20}
                                 className="media_icons"
                                 onClick={() => {
-                                  if (isliked) {
-                                    handleLikes(item?.id, "dislikes");
+                                  if (stateLike.length > 0) {
+                                    if (stateLike[0].state === 'likes') {
+                                      handleLikes(item?.id, "dislikes");
+                                    } else {
+                                      handleLikes(item?.id, "likes");
+                                    }
                                   } else {
-                                    handleLikes(item?.id, "likes");
+                                    if (isliked) {
+                                      handleLikes(item?.id, "dislikes");
+                                    } else {
+                                      handleLikes(item?.id, "likes");
+                                    }
                                   }
                                 }}
-                                src={
+                                src={stateLike.length > 0 ?
+                                  stateLike[0].state === 'likes'
+                                    ? "/images/blue-like.png"
+                                    : "/images/border-like.svg"
+                                  :
                                   isliked
                                     ? "/images/blue-like.png"
                                     : "/images/border-like.svg"
@@ -158,7 +197,12 @@ function CompanyCard({ setModalShow }) {
                             </div>
 
                             <h6 className="course_detail_name font_12">
-                              {item?.LikesCount[0]?.likes}
+                              {stateLike.length > 0
+                                ? stateLike[0].state === 'likes'
+                                && item?.LikesCount[0]?.likes + 1 ||
+                                stateLike[0].state === "dislikes"
+                                && item?.LikesCount[0]?.likes - 1
+                                : (item?.LikesCount[0]?.likes ? item?.LikesCount[0]?.likes :0) }
                             </h6>
                           </div>
                           <div className="media_icon_num_pair right_border">

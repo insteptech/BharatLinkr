@@ -22,7 +22,7 @@ const ShortTricks = () => {
   });
   const [alreadyViewed, setAlreadyViewed] = useState([])
   const likedList = useSelector((state) => state?.corporateData?.corplikeslist)
-  const currentUser = useSelector(state => state.userSlice.currentUser)
+  const currentUser = useSelector(state => state?.userSlice?.currentUser)
 
   const handleShow = (data) => {
     setShow(true);
@@ -95,8 +95,8 @@ const ShortTricks = () => {
   }
   useEffect(() => {
     dispatch(getCorporateData(pagination));
-    if (isloggedin && currentUser.id) dispatch(corporatelikesList(currentUser?.id))
-  }, [pagination]);
+    if (isloggedin && currentUser?.id) dispatch(corporatelikesList(currentUser?.id))
+  }, [pagination,currentUser]);
 
   return (
     <>
@@ -110,7 +110,6 @@ const ShortTricks = () => {
               }
             })
           }
-
           return (
             <div
               key={index}
