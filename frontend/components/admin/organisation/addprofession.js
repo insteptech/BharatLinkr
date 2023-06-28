@@ -9,7 +9,7 @@ import { addProfession, familycodeList, getProfessionById, professioncodeList, u
 import { getCourse } from '../../../redux/actions/course/addcourse';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
-const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
+const CKeditorGenerator = dynamic(() => import("../Ckeditor/CKeditor"), {
     ssr: false,
 });
 function Addprofession() {

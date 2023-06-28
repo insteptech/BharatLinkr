@@ -3,15 +3,20 @@ import { useRef } from "react";
 
 const Internship = () => {
   const handleClickScroll = () => {
-    const element = document.getElementById("section-1");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== 'undefined') {
+      const element = document.getElementById("section-1");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
   const handleClickScroll2 = () => {
-    const element = document.getElementById("section-2");
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (typeof window !== 'undefined') {
+
+      const element = document.getElementById("section-2");
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 

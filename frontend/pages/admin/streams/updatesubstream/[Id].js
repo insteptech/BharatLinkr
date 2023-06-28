@@ -3,9 +3,9 @@ import AddSubStream from '../../../../components/admin/SubStream/addSubStream'
 
 function updateSubStream() {
   return (
-      <>
+    <>
       <AddSubStream />
-      </>
+    </>
   )
 }
 

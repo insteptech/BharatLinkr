@@ -12,6 +12,7 @@ import { signupAsync } from "../../redux/signup/signupSlice";
 import { FieldTypes, inputFieldTypes } from "../../utils/helper";
 import FormGenerator from "../common-components/Form/FormGenerator";
 import { cityDropdown } from "../../redux/actions/location/createCity";
+import Image from "next/image";
 
 function SignUpPage() {
   const [dataValue, setDataValue] = useState(0);
@@ -267,7 +268,7 @@ function SignUpPage() {
         <Row>
           <Col className="d-flex">
             <div className="text-center signup_logo_headings">
-              <h1 className="logo_heading">LOGO</h1>
+              <Image width={210} height={100} src="images/bharat-logo.svg" />
               <p className="f-22 logo_sub_heading"> Create Your Account</p>
             </div>
           </Col>

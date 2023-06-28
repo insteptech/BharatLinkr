@@ -148,6 +148,7 @@ const CourseRightPage = (props) => {
           <Row>
             <Col md={12}>
               <PopularCourseCard
+                show={show}
                 showList={showList}
                 setShowList={setShowList}
                 cardLevelShow={cardLevelShow}

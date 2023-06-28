@@ -1,8 +1,7 @@
 import Image from "next/image";
 import { Container, Row } from "react-bootstrap";
-import Header from "../layout/Header";
 import LeftMenuPage from "./LeftMenu";
-import College from "../../pages/admin/college";
+import Header from '../Layout/Header'
 import { useRouter } from "next/router";
 import { memo } from "react";
 

@@ -4,7 +4,7 @@ import { Field, Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators, { push } from "final-form-arrays";
 import { useDispatch, useSelector } from "react-redux";
-import CKeditorGenerator from "../../../components/admin/CKeditor";
+import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getMainCategory } from "../../../redux/actions/corporate/addmaincategory";
@@ -345,9 +345,8 @@ function AddMockTest() {
                 FormStep?.map((steps, stepsIndex) => (
                   <li className="nav-item " key={stepsIndex}>
                     <a
-                      className={`nav-link admin_tabs_name ${
-                        dataValue === stepsIndex && "head-active"
-                      }`}
+                      className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                        }`}
                       active={true}
                       onClick={() => setDataValue(stepsIndex)}
                     >
@@ -657,9 +656,8 @@ function AddMockTest() {
                         FormSteps?.map((steps, stepsIndex) => (
                           <li className="nav-item " key={stepsIndex}>
                             <a
-                              className={`nav-link admin_tabs_name ${
-                                dataValue === stepsIndex && "head-active"
-                              }`}
+                              className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                                }`}
                               active={true}
                               onClick={() => setDataValue(stepsIndex)}
                             >
@@ -682,7 +680,7 @@ function AddMockTest() {
                         backgroundColor: "#FFF",
                       }}
                       eventKey={0}
-                      // title="General"
+                    // title="General"
                     >
                       <FieldArray name="MocktestQuestions">
                         {({ fields }) => (

@@ -1,13 +1,11 @@
-import { Toast } from "bootstrap";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
-import { Button, Col, Form, Row, Table } from "react-bootstrap";
+import { Button, Col, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
   adminMasterfilterData,
   deleteMasterFilter,
-  getMasterFilter,
 } from "../../../redux/actions/masterfilter/createmasterfilter";
 import DeleteModal from "../../modals/deleteModal";
 import Pagesize from "../pagination/pagesize";

@@ -17,7 +17,6 @@
     "lint:fix": "eslint . --fix",
     "prettier": "prettier --check **/*.js",
     "prettier:fix": "prettier --write **/*.js",
-    "prepare": "husky install",
     "db:create": "cross-env NODE_ENV=development sequelize-cli db:create",
     "db:migrate": "cross-env NODE_ENV=development sequelize-cli db:migrate",
     "db:seeds": "cross-env NODE_ENV=development sequelize-cli db:seed:all",
@@ -68,7 +67,6 @@
     "eslint-plugin-jest": "26.1.4",
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-security": "1.4.0",
-    "husky": "7.0.4",
     "jest": "27.5.1",
     "lint-staged": "12.3.7",
     "nodemon": "2.0.15"

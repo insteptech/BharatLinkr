@@ -17,12 +17,11 @@ import FormGenerator from "../common-components/Form/FormGenerator";
 import Select from "react-select";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
-// import CKeditorGenerator from "../CKeditor";
 
 import dynamic from "next/dynamic";
 import CollegeProfile from "./collegeProfile";
 import ProfileReview from "./profileReview";
-const CKeditorGenerator = dynamic(() => import("../admin/Ckeditor"), {
+const CKeditorGenerator = dynamic(() => import("../admin/Ckeditor/CKeditor"), {
   ssr: false,
 });
 

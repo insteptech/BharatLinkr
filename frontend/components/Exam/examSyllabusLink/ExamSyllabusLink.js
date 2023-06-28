@@ -1,5 +1,5 @@
 import React from "react";
-import ExamSyllabus from "../examOverView/examSyllabus";
+import ExamSyllabus from "../examOverview/examSyllabus/ExamSyllabus";
 const ExamSyllabusLink = () => {
   return (
     <div>

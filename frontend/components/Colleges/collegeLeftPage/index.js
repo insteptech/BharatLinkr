@@ -12,6 +12,7 @@ import { getColleges } from "../../../redux/actions/college/college";
 import { getAllMasterFilter } from "../../../redux/actions/masterfilter/createmasterfilter";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
 import { refined } from "../../../utils/helper";
+import { debounce } from "debounce";
 
 const CollegeLeftPage = (props) => {
   const [apiFilterObject, setApiFilterObject] = useState({});
@@ -237,6 +238,15 @@ const CollegeLeftPage = (props) => {
     dispatch(getAllExams());
   }, []);
 
+  // useEffect(() => {
+  //   dispatch(getColleges());
+  // }, []);
+
+  const handleSearchCollege = debounce((e) => {
+    const searchText = e.target.value
+    dispatch(getColleges({ search: searchText }))
+  }, 500)
+
   return (
     <>
       {/* -----------------------master search bar start--------------------- */}
@@ -246,7 +256,8 @@ const CollegeLeftPage = (props) => {
             type="text"
             placeholder="Search by name..."
             name=""
-            onChange={(e) => props?.handleSearch(e)}
+            // onChange={(e) => props?.handleSearch(e)}
+             onChange={handleSearchCollege}
             className="form-control chat_box_weite_bar"
           />
           <button type="submit">

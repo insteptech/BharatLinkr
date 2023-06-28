@@ -19,7 +19,7 @@ import {
   getExamById,
 } from "../../../redux/actions/exams/createExam";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
-import CKeditorGenerator from "../../../components/admin/CKeditor";
+import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
 
 export default function AddExams() {
   const FormSteps = ["Exam Register", "CMS"];
@@ -665,9 +665,8 @@ export default function AddExams() {
                   FormSteps?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         // active={true}
                         onClick={() => setDataValue(stepsIndex)}
                       >
@@ -1695,7 +1694,7 @@ export default function AddExams() {
                                       <>
                                         <CKeditorGenerator
                                           input={input}
-                                          onReady={(editor) => {}}
+                                          onReady={(editor) => { }}
                                         />
                                       </>
                                     )}
@@ -1797,7 +1796,7 @@ export default function AddExams() {
                     <button
                       className="admin_signup_btn admin_signup_btn_mobile"
                       type="submit"
-                      // onClick={()=>{ddddddddddd(values,dirtyFields)}}
+                    // onClick={()=>{ddddddddddd(values,dirtyFields)}}
                     >
                       Add Category
                     </button>

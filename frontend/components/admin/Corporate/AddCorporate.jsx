@@ -20,7 +20,7 @@ import { getAllExams } from "../../../redux/actions/exams/createExam";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { toast } from "react-toastify";
 
-const CKeditorGenerator = dynamic(() => import("../CKeditor"), {
+const CKeditorGenerator = dynamic(() => import("../Ckeditor/CKeditor"), {
   ssr: false,
 });
 
@@ -209,9 +209,8 @@ export default function AddCorporate() {
                   FormSteps?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         active={true}
                         onClick={() => setDataValue(stepsIndex)}
                       >

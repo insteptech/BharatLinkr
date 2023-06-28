@@ -17,7 +17,7 @@ import Router, { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
-import CKeditorGenerator from "../../../components/admin/CKeditor";
+import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
 
 export default function AddCourse() {
   const [dataValue, setDataValue] = useState(0);

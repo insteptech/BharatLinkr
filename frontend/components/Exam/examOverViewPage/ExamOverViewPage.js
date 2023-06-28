@@ -4,7 +4,9 @@ import { useEffect } from "react";
 import { Col, Container, Image, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getExamById } from "../../../redux/actions/exams/createExam";
-import ExamOverView from "../examOverView";
+import ExamOverView from "../examOverview/ExamOverView";
+// import ExamOverView from "../examOverview/ExamOverView";
+// import ExamOverView from "../examOverView/index.js";
 
 const ExamOverViewPage = () => {
   const data = useSelector((data) => data?.exambyid?.exam?.data?.data?.rows[0]);

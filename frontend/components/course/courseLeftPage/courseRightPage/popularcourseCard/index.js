@@ -7,7 +7,7 @@ import { getCourse } from "../../../../../redux/actions/course/addcourse";
 import LoaderPage from "../../../../common-components/loader";
 
 const PopularCourseCard = (props) => {
-  // const { showList, setShowList, cardLevelShow } = props;
+  const { showList, show, setShowList, cardLevelShow } = props;
 
   const dispatch = useDispatch();
 
@@ -23,9 +23,9 @@ const PopularCourseCard = (props) => {
   //   (state) => state?.courseList?.courselist
   // );
 
-  // const courselevelData = useSelector(
-  //   (state) => state?.courseList?.courseLevelList?.data?.data?.rows
-  // );
+  const courselevelData = useSelector(
+    (state) => state?.courseList?.courseLevelList?.data?.data?.rows
+  );
 
   // useEffect(() => {
   //   dispatch(getCourse());
@@ -36,7 +36,7 @@ const PopularCourseCard = (props) => {
       {courseData && courseData.length === 0 ? (
         <LoaderPage />
       ) : (
-        courseData &&
+         courseData &&
         courseData?.map((item, index) => {
           return (
             <div key={index}>
@@ -48,11 +48,11 @@ const PopularCourseCard = (props) => {
                     </h6>
                     <div className="experience_row align_center">
                       <p className="time_experience">
-                        <Image src="/images/green-squre.svg" />{" "}
+                        <Image src="/images/green-squre.svg" />
                         {item?.courseDuration}
                       </p>
                       <p className="time_experience">
-                        <Image src="/images/green-squre.svg" />{" "}
+                        <Image src="/images/green-squre.svg" />
                         {item?.CourseType?.name}
                       </p>
                     </div>
@@ -218,8 +218,8 @@ const PopularCourseCard = (props) => {
       )} */}
 
       {/* ----------------------image card filtered----------------------- */}
-      {/* <div>
-        {cardLevelShow === true &&
+      <div>
+        {cardLevelShow &&
           courselevelData &&
           courselevelData?.map((item, index) => {
             return (
@@ -230,7 +230,7 @@ const PopularCourseCard = (props) => {
                       <Col md={6}>
                         <h6 className="p_c_card_master_heading align_center">
                           {item &&
-                          item?.MainStream?.mainStreamName === undefined ? (
+                            item?.MainStream?.mainStreamName === undefined ? (
                             <p>No data found</p>
                           ) : (
                             item?.courseName
@@ -239,7 +239,7 @@ const PopularCourseCard = (props) => {
                         <div className="experience_row align_center">
                           <p className="time_experience">
                             <Image src="" />
-                            {item?.courseDuration || "hardcoded data"}
+                            {item?.courseDuration}
                           </p>
                           <p className="time_experience">
                             {item.experienceType || "hardcoded data"}
@@ -284,7 +284,7 @@ const PopularCourseCard = (props) => {
                               Average Fees
                             </h6>
                             <p className="p_c_card_fees_value">
-                              ₹ {item?.averageFees || 1000}
+                              ₹ {item?.averageFees}
                             </p>
                           </Col>
                           <Col md={6} sm={6}>
@@ -293,7 +293,7 @@ const PopularCourseCard = (props) => {
                               Average Salary
                             </h6>
                             <p className="p_c_card_fees_value">
-                              ₹ {item?.averageSalary || 1000}
+                              ₹ {item?.averageSalary}
                             </p>
                           </Col>
                         </Row>
@@ -313,7 +313,7 @@ const PopularCourseCard = (props) => {
               </>
             );
           })}
-      </div> */}
+      </div>
     </>
   );
 };
