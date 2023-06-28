@@ -1,15 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Col, Dropdown, Form, Image, Row } from "react-bootstrap";
 
-const CourseFeesCard = () => {
+const CourseFeesCard = ({item,index}) => {
+  const [feeIndex,setFeeIndex] = useState(0)
   return (
-    <>
-      <div className=" course_fees_card">
+      <div className=" course_fees_card" key={index}>
         <Card className="profile_sec_c mobile_card_padding pt-3">
           <Row>
             <Col md={6} className="item_align">
               <h6 className="p_c_card_master_heading align_center mobile_blue_text mobile_font_18 pt-2">
-                Bachelors of Science [B.Sc](Microbiology)
+                {item?.courseName}
               </h6>
               <div className="text-end post_card_three_dot big_screen_none m-0 course_card_dot">
                 <Dropdown className="edit_delete_drop">
@@ -23,7 +23,7 @@ const CourseFeesCard = () => {
 
                   <Dropdown.Menu className="">
                     <Dropdown.Item href="#/action-1">Edit</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Aplly Now</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Apply Now</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
               </div>
@@ -35,17 +35,16 @@ const CourseFeesCard = () => {
                     <h6 className="p_c_card_fees_heading mobile_font_13 m-0">
                       <Image src="/images/green-squre.svg" /> Total Fees
                     </h6>
-                    <p className="p_c_card_fees_value m-0 ms-3">₹ 6644</p>
+                    <p className="p_c_card_fees_value m-0 ms-3">₹ {item?.CourseFees[feeIndex]?.fees}</p>
                   </div>
                   <Form.Select
                     className="me-0 hide_box"
                     aria-label="Default select example"
+                    onChange={(e)=>setFeeIndex(e.target.value)}
                   >
-                    <option>GEN</option>
-                    <option>SE</option>
-                    <option>ST</option>
-                    <option>NRI</option>
-                    <option>MGT</option>
+                    {item?.CourseFees?.map((ele,i)=>{
+                      return(<option key={i} value={i}>{ele?.FeeDetails?.name}</option>)
+                    })}
                   </Form.Select>
                 </Col>
               </Row>
@@ -71,7 +70,7 @@ const CourseFeesCard = () => {
                     alt="icon"
                   />
                   <h6 className="p_c_card_fees_heading text-start margin_none mobile_font_12">
-                    2Yrs
+                    {item?.courseDuration}Yrs
                   </h6>
                 </div>
                 <div className="item_align me-4">
@@ -81,7 +80,7 @@ const CourseFeesCard = () => {
                     alt="icon"
                   />
                   <h6 className="p_c_card_fees_heading margin_none mobile_font_12">
-                    Degree
+                    {item?.CourseType?.name}
                   </h6>
                 </div>
                 <div className="item_align me-4">
@@ -91,7 +90,7 @@ const CourseFeesCard = () => {
                     alt="icon"
                   />
                   <h6 className="p_c_card_fees_heading margin_none mobile_font_12">
-                    On Campus
+                    {item?.Place?.name}
                   </h6>
                 </div>
 
@@ -102,7 +101,7 @@ const CourseFeesCard = () => {
                     alt="icon"
                   />
                   <h6 className="p_c_card_fees_heading margin_none mobile_font_12">
-                    Graduation
+                    {item?.CourseLevel?.name}
                   </h6>
                 </div>
                 <div className="item_align">
@@ -112,7 +111,7 @@ const CourseFeesCard = () => {
                     alt="icon"
                   />
                   <h6 className="p_c_card_fees_heading margin_none mobile_font_12">
-                    Full Time
+                    {item?.ProgramType?.name}
                   </h6>
                 </div>
               </div>
@@ -141,7 +140,7 @@ const CourseFeesCard = () => {
               <h6 className="p_c_card_fees_heading margin_none blue_color mobile_font_12 underline">
                 Exams Accepted
               </h6>
-              <p className="p_c_card_fees_value m-0 ms-2 me-4">JE | JE | JE</p>
+              <p className="p_c_card_fees_value m-0 ms-2 me-4">{item?.ExamAccepted?.examName}</p>
             </div>
             <div sm={6} md={4} className="item_align">
               <Image className="me-1" src="/images/blue-star.svg" alt="icon" />
@@ -154,15 +153,15 @@ const CourseFeesCard = () => {
           <Row className="mt-3">
             <Col lg={12}>
               <p className="course_fee_card_paira">
-                11 Streams- Biological Sciences | Biological Sciences | Bio
-                Sciences | Biological Sciences{" "}
-                <span className="green_text">...View more</span>
+                {item?.CourseAssociateStream?.map((ele,i)=>{
+                  return(` ${ele?.MainStream?.mainStreamName} ${i+1==item?.CourseAssociateStream?.length?'':'|'}`)
+                })}
+                {/* <span className="green_text">...View more</span> */}
               </p>
             </Col>
           </Row>
         </Card>
       </div>
-    </>
   );
 };
 

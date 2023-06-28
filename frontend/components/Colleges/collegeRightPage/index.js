@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Form, Image, Offcanvas, Row } from "react-bootstrap";
+import { Card, Col, Form, Image, Offcanvas, Pagination, Row } from "react-bootstrap";
 import CollegeCard from "../collegeCard";
 // import { Swiper, SwiperSlide } from "swiper/react";
 // import { Navigation } from "swiper";
@@ -8,12 +8,13 @@ import CollegeLeftPage from "../collegeLeftPage";
 import { useDispatch, useSelector } from "react-redux";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
 import {
+  CollegeLikes,
   CollegeLikesList,
   getColleges,
 } from "../../../redux/actions/college/college";
 import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
-import { getTokenDecode } from "../../utils";
+import { getTokenDecode, isUserLogined } from "../../utils";
 
 const streamData = [
   {
@@ -81,6 +82,7 @@ const streamData = [
 const CollegeRightPage = (props) => {
   const dispatch = useDispatch();
   const [show1, setShow1] = useState(false);
+  const [likesHandler, setLikesHandler] = useState([])
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
 
@@ -93,15 +95,74 @@ const CollegeRightPage = (props) => {
   );
   const date = new Date().getFullYear();
 
-  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
+  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading)
 
-  useEffect(() => {
-    // dispatch(getMainStream());
-    // dispatch(getColleges());
+  const likesList = useSelector((state) => state?.collegelist?.collegeListLikes?.rows);
+
+  const handleLikes = (itemId, values) => {
+
     if (getTokenDecode()) {
-      dispatch(CollegeLikesList(getTokenDecode()?.userId));
+      dispatch(CollegeLikes({
+        collegeId: itemId,
+        update: values,
+        userId: getTokenDecode()?.userId
+      })).then((res) => {
+
+        if (res?.payload?.status === 200 && res.payload.data?.success) {
+          dispatch(CollegeLikesList(getTokenDecode()?.userId))
+          // dispatch(getColleges(Pagination))
+        }
+      })
+      let index
+      likesHandler.map((item, i) => {
+        if (item?.id === itemId) {
+          index = i
+        }
+      })
+      let x = likesHandler.filter((item) => item.id === itemId)
+      if (index !== undefined) {
+        let y = [...likesHandler]
+        if (x[0].state == values) {
+          y[index] = { id: x[0].id, state: values }
+        } else {
+          y.splice(index, 1)
+        }
+        setLikesHandler(y)
+      } else {
+        setLikesHandler(
+          [...likesHandler,
+          {
+            id: itemId,
+            state: values
+          }
+          ]
+        )
+      }
+    } else {
+      setModalShow1(true);
     }
-  }, []);
+  };
+
+  // const isliked = likesList?.filter((i) => {
+  //   if (item.id === i.categoryId) {
+  //     return true
+  //   } else {
+  //     return false
+  //   }
+  // })
+
+  const activeColor = (id) => {
+    if (id && isUserLogined()) {
+      const findActiveLike = likesList?.find(
+        (Likelist) => Likelist?.categoryId === id
+      );
+      return findActiveLike ? "/images/blue-like.png" : "/images/border-like.svg"
+    } else {
+      return "/images/border-like.svg";
+    }
+  };
+
+
 
 
   return (
@@ -265,9 +326,23 @@ const CollegeRightPage = (props) => {
               <LoaderPage />
             ) : collegeList && collegeList.length > 0 ? (
               collegeList.map((item, index) => {
+                let isliked = likesList?.find((i) => {
+                  if (item.id === i.categoryId) {
+                    return true;
+                  }
+                });
+                console.log(likesList, 'likesLists')
+                let stateLike = likesHandler.filter((ele) => ele?.id === item?.id)
                 return (
                   <Col>
-                    <CollegeCard item={item} index={index} />
+                    <CollegeCard item={item}
+                      index={index}
+                      color={activeColor(item?.id)}
+                      isliked={isliked}
+                      stateLike={stateLike}
+                      handleLikes={handleLikes}
+
+                    />
                   </Col>
                 );
               })

@@ -1,7 +1,15 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
-const EducationBars =  ["BASIC INFORMATION", "COURSE DETAILS", "HONORS"];
-const DistanceEducationLeft = (props) => {
+
+const PlacementLeft = (props) => {
+  const PlacementBars = [
+      "B.TECH HighLights",
+      "M.B.A HighLights",
+      "HighLights 2021",
+      "Placement Introduction",
+      "Top Recruiters"
+   
+  ];
   const { dataValue, setDataValue } = props;
 
   return (
@@ -9,12 +17,9 @@ const DistanceEducationLeft = (props) => {
       <div className="card_sec">
         <div className="card_mid search_left_card">
           <ul className="nav search_page_left_tabs_box">
-            {EducationBars &&
-              EducationBars?.map((steps, stepsIndex) => (
-                <li
-                  className="nav-item search_page_side_tabs w-100"
-                  key={stepsIndex}
-                >
+            {PlacementBars &&
+              PlacementBars?.map((steps, stepsIndex) => (
+                <li className="nav-item search_page_side_tabs w-100" key={stepsIndex}>
                   <a
                     className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${
                       dataValue === stepsIndex && "active_bar"
@@ -33,4 +38,4 @@ const DistanceEducationLeft = (props) => {
   );
 };
 
-export default DistanceEducationLeft;
+export default PlacementLeft;
