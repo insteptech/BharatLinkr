@@ -10,3 +10,23 @@ export const getContentUserLiked = createAsyncThunk("userSlice/get-content-userL
     const apiData = await apiRequest.post("auth/userLikesList", body)
     return apiData.data.data
 });
+
+export const getAllUserList = createAsyncThunk('userSlice/All-User-List', async (body) => {
+    const apiData = await apiRequest.post(`auth/userList`, body)
+    return apiData.data.data
+});
+
+export const addFriend = createAsyncThunk("userSlice/Friend/Add-Friend", async (body) => {
+    const apiData = await apiRequest.post("auth/addFrienda")
+    return apiData.data
+})
+
+export const getPendingFriendRequest = createAsyncThunk("userSlice/Friend/Pending-Requests", async (body) => {
+    const apiData = await apiRequest.post("auth/UserPendingFriend")
+    return apiData.data
+})
+
+export const friendRequestStatus = createAsyncThunk("userSlice/Friend/Friend-Request-Status", async (body) => {
+    const apiData = await apiRequest.post("auth/approveFriendRequest")
+    return apiData.data
+})

@@ -22,6 +22,7 @@ import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
 import LoaderPage from "../../common-components/loader";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 
 function StreamsPage() {
   const [pagination, setPagination] = useState({
@@ -50,7 +51,7 @@ function StreamsPage() {
   };
 
   const handleDelete = (item) => {
-    if (item?.mainStreamName || item.mainStreamName=="") {
+    if (item?.mainStreamName || item.mainStreamName == "") {
       dispatch(deleteMainStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
@@ -65,7 +66,7 @@ function StreamsPage() {
       dispatch(deleteSubStream(item.id)).then((res) => {
         console.log(res);
         if (res?.payload?.data?.success) {
-          toast.success("Deleted", {autoClose: 1000});
+          toast.success("Deleted", { autoClose: 1000 });
           dispatch(getSubStream());
         } else {
           toast.error(res?.payload?.response?.data?.message);
@@ -75,10 +76,10 @@ function StreamsPage() {
     if (item?.colStreamName) {
       dispatch(deleteColStream(item.id)).then((res) => {
         if (res?.payload?.data?.success) {
-          toast.success("Deleted", {autoClose: 1000});
+          toast.success("Deleted", { autoClose: 1000 });
           dispatch(getColStream());
         } else {
-          toast.error(res?.payload?.message, {autoClose: 1000});
+          toast.error(res?.payload?.message, { autoClose: 1000 });
         }
       });
     }
@@ -115,7 +116,7 @@ function StreamsPage() {
       router.push(`/admin/streams/updatecolstream/${item.id}`);
     }
   };
-  
+
   useEffect(() => {
     dispatch(getSubStream(pagination));
     dispatch(getMainStream(pagination));
@@ -133,9 +134,8 @@ function StreamsPage() {
                   FormSteps?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         active='true'
                         onClick={() => {
                           setDataValue(stepsIndex);
@@ -201,44 +201,45 @@ function StreamsPage() {
                 <tbody>
                   {loadingMainTreamData ? (
                     <LoaderPage />
-                  ) : (
-                    mainsTreamData?.rows?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_serial">
-                            {pagination.pageSize * (pagination.pageNo - 1) +
-                              (index + 1)}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item.mainStreamName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/edit-icon-blue.png"}
-                              onClick={() => handleEdit(item)}
-                            />
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/delete-icon-blue.png"}
-                              onClick={() => {
-                                setModalShow(true);
-                                setDeleteItem(item);
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
+                  ) : mainsTreamData?.rows.length > 0 &&
+                  mainsTreamData?.rows?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-center admin_table_serial">
+                          {pagination.pageSize * (pagination.pageNo - 1) +
+                            (index + 1)}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          {item.mainStreamName}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/edit-icon-blue.png"}
+                            onClick={() => handleEdit(item)}
+                          />
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/delete-icon-blue.png"}
+                            onClick={() => {
+                              setModalShow(true);
+                              setDeleteItem(item);
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
+              {mainsTreamData && mainsTreamData.rows && mainsTreamData?.rows.length === 0 && <NoDataPage name="Mains Streams" />}
             </Row>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={mainsTreamData}
-            />
+            {mainsTreamData?.rows && mainsTreamData?.rows.length > 0 && (
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={mainsTreamData}
+              />)}
           </div>
         </Row>
       )}
@@ -251,7 +252,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Sub Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  
+                  <Pagesize setPagination={setPagination} />
                 </div>
               </div>
             </Col>
@@ -290,47 +291,48 @@ function StreamsPage() {
                 <tbody>
                   {loadingSubStreamData ? (
                     <LoaderPage />
-                  ) : (
-                    subStreamData?.rows?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_serial">
-                            {pagination.pageSize * (pagination.pageNo - 1) +
-                              (index + 1)}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item.MainStream?.mainStreamName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item.subStreamName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/edit-icon-blue.png"}
-                              onClick={() => handleEdit(item)}
-                            />
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/delete-icon-blue.png"}
-                              onClick={() => {
-                                setModalShow(true);
-                                setDeleteItem(item);
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
+                  ) : subStreamData?.rows.length > 0 &&
+                  subStreamData?.rows?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-center admin_table_serial">
+                          {pagination.pageSize * (pagination.pageNo - 1) +
+                            (index + 1)}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          {item.MainStream?.mainStreamName}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          {item.subStreamName}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/edit-icon-blue.png"}
+                            onClick={() => handleEdit(item)}
+                          />
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/delete-icon-blue.png"}
+                            onClick={() => {
+                              setModalShow(true);
+                              setDeleteItem(item);
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
+              {subStreamData && subStreamData.rows && subStreamData?.rows.length === 0 && <NoDataPage name="Sub Streams" />}
             </Row>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={subStreamData}
-            />
+            {subStreamData?.rows && subStreamData?.rows.length > 0 && (
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={subStreamData}
+              />)}
           </div>
         </Row>
       )}
@@ -343,7 +345,7 @@ function StreamsPage() {
                 <h4 className="table_list_heading">Col Stream List</h4>
                 <div className="enteries_input">
                   <h6 className="enteries_input_label">Show Enteries</h6>
-                  {/* <Pagesize setPagination={setPagination} /> */}
+                  <Pagesize setPagination={setPagination} />
                 </div>
               </div>
             </Col>
@@ -382,47 +384,49 @@ function StreamsPage() {
                 <tbody>
                   {loadingColStreamData ? (
                     <LoaderPage />
-                  ) : (
-                    colStreamData?.rows?.map((item, index) => {
-                      return (
-                        <tr key={index}>
-                          <td className="text-center admin_table_serial">
-                            {pagination.pageSize * (pagination.pageNo - 1) +
-                              (index + 1)}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item?.SubStream?.subStreamName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            {item.colStreamName}
-                          </td>
-                          <td className="text-center admin_table_data">
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/edit-icon-blue.png"}
-                              onClick={() => handleEdit(item)}
-                            />
-                            <img
-                              className="mx-1 admin_table_action_icon"
-                              src={"/images/delete-icon-blue.png"}
-                              onClick={() => {
-                                setModalShow(true);
-                                setDeleteItem(item);
-                              }}
-                            />
-                          </td>
-                        </tr>
-                      );
-                    })
-                  )}
+                  ) : colStreamData?.rows.length > 0 &&
+                  colStreamData?.rows?.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        <td className="text-center admin_table_serial">
+                          {pagination.pageSize * (pagination.pageNo - 1) +
+                            (index + 1)}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          {item?.SubStream?.subStreamName}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          {item.colStreamName}
+                        </td>
+                        <td className="text-center admin_table_data">
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/edit-icon-blue.png"}
+                            onClick={() => handleEdit(item)}
+                          />
+                          <img
+                            className="mx-1 admin_table_action_icon"
+                            src={"/images/delete-icon-blue.png"}
+                            onClick={() => {
+                              setModalShow(true);
+                              setDeleteItem(item);
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </Table>
+              {colStreamData && colStreamData.rows && colStreamData?.rows.length === 0 && <NoDataPage name="Col Streams" />}
             </Row>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={colStreamData}
-            />
+            {colStreamData?.rows && colStreamData?.rows.length > 0 && (
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={colStreamData}
+              />
+            )}
           </div>
         </Row>
       )}

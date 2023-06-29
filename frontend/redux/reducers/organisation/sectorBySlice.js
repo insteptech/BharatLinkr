@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { companyBrandList, companyGroupList, companyLikeslist, companyNameList, getOrganisationbyid, getOrganisationlist } from "../../actions/organisation/addorganisation";
+import { addOrganisation, companyBrandList, companyGroupList, companyLikeslist, companyNameList, getOrganisationbyid, getOrganisationlist, updateOrganisation } from "../../actions/organisation/addorganisation";
 import {
   getIndustryById,
   getIndustryList,
   getSectorById,
   getlistSector,
 } from "../../actions/organisation/addsector";
-import { familyCodeById, familycodeList, professioncodeList,professionCodeById, professionlist, getProfessionById, professioncodeDropdownlist } from "../../actions/organisation/profession";
+import { familyCodeById, familycodeList, professioncodeList, professionCodeById, professionlist, getProfessionById, professioncodeDropdownlist } from "../../actions/organisation/profession";
 
 const sectorBySlice = createSlice({
   name: "sector",
@@ -30,12 +30,30 @@ const sectorBySlice = createSlice({
     professionCodeById: [],
     professionList: [],
     professionById: [],
-    professionCodeDropdown:[],
+    professionCodeDropdown: [],
     error: ""
   },
 
   // list of all sector that are created
   extraReducers: (builder) => {
+    builder.addCase(addOrganisation.pending, (state) => {
+      state.isLoading = true
+    });
+    builder.addCase(addOrganisation.rejected, (state, action) => {
+      state.isLoading = false
+    });
+    builder.addCase(addOrganisation.fulfilled, (state, action) => {
+      state.isLoading = false
+    });
+    builder.addCase(updateOrganisation.pending, (state) => {
+      state.isLoading = true
+    });
+    builder.addCase(updateOrganisation.rejected, (state, action) => {
+      state.isLoading = false
+    });
+    builder.addCase(updateOrganisation.fulfilled, (state, action) => {
+      state.isLoading = false
+    });
     builder.addCase(getlistSector.pending, (state) => {
       state.isLoading = true
     });
@@ -159,7 +177,7 @@ const sectorBySlice = createSlice({
       (state.status = ""),
         (state.professionCodeList = action.payload?.data?.data);
     });
-    
+
     // //profession code dropdown
     // builder.addCase(professioncodeDropdownlist.pending, (state, action) => {
     //   (state.status = action.payload?.status);

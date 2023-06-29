@@ -24,6 +24,7 @@ import { toast } from "react-toastify";
 import Select from "react-select";
 import Creatable from "react-select/creatable";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import LoaderPage from "../../common-components/loader";
 
 const CKeditorGenerator = dynamic(() => import("../Ckeditor/CKeditor"), {
   ssr: false,
@@ -47,7 +48,10 @@ function AddOrganisation() {
     }
   });
 
+  const isLoading = useSelector(state => state.sectorData.isLoading)
+
   const handleSubmit = (values) => {
+    const tempValues = { ...values }
     if (dataValue === 0) {
       setDataValue(1);
     } else {
@@ -59,26 +63,26 @@ function AddOrganisation() {
         if (filestate.companyLogo) {
           formData.append("companyLogoFile", filestate.companyLogo);
         }
-        values.CMS = values.cms[0];
-        values.groupId = values.groupId.value
-        values.brandId = values.brandId.value
-        values.companyId = values.companyId.value
+        tempValues.CMS = values.cms[0];
+        tempValues.groupId = values.groupId.value
+        tempValues.brandId = values.brandId.value
+        tempValues.companyId = values.companyId.value
 
-        delete values.cms;
+        delete tempValues.cms;
 
-        formData.append("organisationData", JSON.stringify(values));
+        formData.append("organisationData", JSON.stringify(tempValues));
         dispatch(updateOrganisation(formData)).then((res) => {
-            if (res?.payload?.data?.success) {
-                router.push('/admin/organisation')
-                toast.success('updated')
-            } else {
-                toast.error('error')
-            }
+          if (res?.payload?.data?.success) {
+            router.push('/admin/organisation')
+            toast.success('updated')
+          } else {
+            toast.error('error')
+          }
         })
       } else {
         let data = { payload: [], CMS: {} };
-        data.CMS = values.cms[0];
-        delete values.cms;
+        data.CMS = tempValues.cms[0];
+        delete tempValues.cms;
         data.payload[0] = values;
         data.payload[0].brandId = values.brandId.value;
         data.payload[0].groupId = values.groupId.value;
@@ -116,7 +120,7 @@ function AddOrganisation() {
   }, [Id, selectSectorids]);
 
   const handleCityList = (e) => {
-    dispatch(cityDropdown(e.target.value));
+    dispatch(cityDropdown({ stateId: e.target.value }));
   };
 
   const handleSectorSelect = (e, values) => {
@@ -145,7 +149,7 @@ function AddOrganisation() {
   };
 
   const companySize = [
-    "001-50",
+    "1-50",
     "51 - 200",
     "201 - 500",
     "501 - 1000",
@@ -450,6 +454,7 @@ function AddOrganisation() {
 
   return (
     <>
+      {isLoading && <LoaderPage />}
       <div className="admin_home_tabs_row">
         <Row>
           <Col className="p-0">
@@ -459,9 +464,8 @@ function AddOrganisation() {
                   FormSteps.map((steps, stepsIndex) => (
                     <li className="nav-item" key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          }`}
                         active="true"
                         onClick={() => setDataValue(stepsIndex)}
                       >
@@ -676,10 +680,10 @@ function AddOrganisation() {
                                             </option>
                                             {industrylist &&
                                               industrylist?.map((ele, i) => {
-                                                return(values?.sector?.map((item, index) => {
+                                                return (values?.sector?.map((item, index) => {
                                                   if (item.sectorId == ele?.sectorId) {
-                                                      return (<option value={ele?.id} key={index}>{ele?.name}</option>)
-                                                    }
+                                                    return (<option value={ele?.id} key={index}>{ele?.name}</option>)
+                                                  }
                                                 }))
                                               })
                                             }

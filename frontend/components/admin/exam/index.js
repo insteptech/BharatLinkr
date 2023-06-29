@@ -9,6 +9,7 @@ import DeleteModal from '../../modals/deleteModal'
 import Pagesize from '../pagination/pagesize'
 import Pagination from '../pagination/pagination'
 import LoaderPage from '../../common-components/loader'
+import NoDataPage from '../../common-components/NoDataPage/NoDataPage'
 
 
 
@@ -38,7 +39,7 @@ function ExamTable() {
         router.push(`exams/updateexam/${item.id}`)
     }
     const examData = useSelector((data) => data?.examList?.adminExamList)
-    const loaderExamDate = useSelector((state) => state?.examList?.isLoading) 
+    const loaderExamDate = useSelector((state) => state?.examList?.isLoading)
 
     useEffect(() => {
         dispatch(adminexamList(pagination))
@@ -78,42 +79,46 @@ function ExamTable() {
                             {tableHeading &&
                                 tableHeading?.map((i, index) => {
                                     return (
-                                            <th className="table_head" key={index}>
-                                                {i}
-                                            </th>
+                                        <th className="table_head" key={index}>
+                                            {i}
+                                        </th>
                                     );
                                 })}
                         </tr>
                     </thead>
                     <tbody>
-                        {loaderExamDate ? <LoaderPage /> : examData?.rows && examData?.rows?.map((item, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td className="text-center admin_table_data">{pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}</td>
-                                    <td className="text-center admin_table_data">{item?.MainStream?.mainStreamName}</td>
-                                    <td className="text-center admin_table_data">{item?.CourseType?.name}</td>
-                                    <td className="text-center admin_table_data">{item?.examName}</td>
-                                    <td className="text-center admin_table_data">
-                                        <img
-                                            className="mx-1 admin_table_action_icon"
-                                            src="/images/edit-icon-blue.png"
-                                            onClick={() => handleEdit(item)}
-                                        ></img>
-                                        <img
-                                            className="mx-1 admin_table_action_icon"
-                                            src="/images/delete-icon-blue.png"
-                                            onClick={() => {
-                                                setModalShow(true);
-                                                setDeleteItem(item);
-                                            }}
-                                        ></img>
-                                    </td>
-                                </tr>
-                            )
-                        })}
+                        {loaderExamDate ? <LoaderPage /> : examData?.rows && examData?.rows.length > 0 &&
+                            examData?.rows?.map((item, index) => {
+                                return (
+                                    <tr key={index}>
+                                        <td className="text-center admin_table_data">{pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}</td>
+                                        <td className="text-center admin_table_data">{item?.MainStream?.mainStreamName}</td>
+                                        <td className="text-center admin_table_data">{item?.CourseType?.name}</td>
+                                        <td className="text-center admin_table_data">{item?.examName}</td>
+                                        <td className="text-center admin_table_data">
+                                            <img
+                                                className="mx-1 admin_table_action_icon"
+                                                src="/images/edit-icon-blue.png"
+                                                onClick={() => handleEdit(item)}
+                                            ></img>
+                                            <img
+                                                className="mx-1 admin_table_action_icon"
+                                                src="/images/delete-icon-blue.png"
+                                                onClick={() => {
+                                                    setModalShow(true);
+                                                    setDeleteItem(item);
+                                                }}
+                                            ></img>
+                                        </td>
+                                    </tr>
+                                )
+                            })}
                     </tbody>
                 </Table>
-                <Pagination pagination={pagination} setPagination={setPagination} list={examData} />
+                {examData && examData?.rows && examData?.rows.length === 0 && <NoDataPage name="Exams" />}
+                {examData && examData?.rows && examData.rows.length !== 0 &&
+                    <Pagination pagination={pagination} setPagination={setPagination} list={examData} />
+                }
                 <DeleteModal
                     show={modalShow}
                     onHide={() => handleHide()}

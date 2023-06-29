@@ -21,6 +21,7 @@ import {
 } from "../../../redux/actions/location/countryList";
 import LoaderPage from "../../common-components/loader";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 
 function LocationPage() {
   const dispatch = useDispatch();
@@ -252,9 +253,9 @@ function LocationPage() {
                   {tableHeading1 &&
                     tableHeading1?.map((i, index) => {
                       return (
-                          <th className="table_head" key={index}>
-                            {i}
-                          </th>
+                        <th className="table_head" key={index}>
+                          {i}
+                        </th>
                       );
                     })}
                 </tr>
@@ -263,7 +264,7 @@ function LocationPage() {
                 {loadercityList ? (
                   <LoaderPage />
                 ) : (
-                  cityList?.rows &&
+                  cityList?.rows && cityList?.rows.length > 0 &&
                   cityList?.rows?.map((item, index) => {
                     return (
                       <tr key={index}>
@@ -301,11 +302,14 @@ function LocationPage() {
                 )}
               </tbody>
             </Table>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={cityList}
-            />
+            {cityList && cityList.rows && cityList.rows.length === 0 && <NoDataPage name="Cities" />}
+            {cityList && cityList.rows && cityList.rows.length !== 0 &&
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={cityList}
+              />
+            }
             <DeleteModal
               show={modalShow}
               onHide={() => handleHide()}
@@ -322,15 +326,15 @@ function LocationPage() {
                   {tableHeading2 &&
                     tableHeading2?.map((i, index) => {
                       return (
-                          <th className="table_head" key={index}>
-                            {i}
-                          </th>
+                        <th className="table_head" key={index}>
+                          {i}
+                        </th>
                       );
                     })}
                 </tr>
               </thead>
               <tbody>
-                {stateList?.rows &&
+                {stateList?.rows && stateList?.rows.length > 0 &&
                   stateList?.rows?.map((item, index) => {
                     return (
                       <tr key={index}>
@@ -367,11 +371,13 @@ function LocationPage() {
                   })}
               </tbody>
             </Table>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={stateList}
-            />
+            {stateList?.rows && stateList?.rows.length === 0 && <NoDataPage name="States" />}
+            {stateList?.rows && stateList?.rows.length !== 0 &&
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={stateList}
+              />}
             <DeleteModal
               show={modalShow}
               onHide={() => handleHide()}
@@ -388,15 +394,15 @@ function LocationPage() {
                   {tableHeading3 &&
                     tableHeading3?.map((i, index) => {
                       return (
-                          <th className="table_head" key={index}>
-                            {i}
-                          </th>
+                        <th className="table_head" key={index}>
+                          {i}
+                        </th>
                       );
                     })}
                 </tr>
               </thead>
               <tbody>
-                {countryList?.rows &&
+                {countryList?.rows && countryList?.rows.length > 0 &&
                   countryList?.rows?.map((item, index) => {
                     return (
                       <tr key={index}>
@@ -430,11 +436,14 @@ function LocationPage() {
                   })}
               </tbody>
             </Table>
-            <Pagination
-              pagination={pagination}
-              setPagination={setPagination}
-              list={countryList}
-            />
+            {countryList && countryList.rows && countryList?.rows.length === 0 && <NoDataPage name="Countries" />}
+            {countryList && countryList.rows && countryList?.rows.length !== 0 &&
+              <Pagination
+                pagination={pagination}
+                setPagination={setPagination}
+                list={countryList}
+              />
+            }
             <DeleteModal
               show={modalShow}
               onHide={() => handleHide()}
