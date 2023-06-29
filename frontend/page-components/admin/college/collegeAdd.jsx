@@ -10,7 +10,11 @@ import {
   addCollege,
   deleteAssociateCOllege,
   deleteAssociateCourse,
+  deleteCollegeAgency,
+  deleteCollegeFees,
+  deleteCollegeStreams,
   getCollegebyId,
+  getColleges,
   updateCollege,
 } from "../../../redux/actions/college/college";
 import {
@@ -166,6 +170,7 @@ function CreateCollege() {
       } else if (dataValue === 2) {
         let x = values;
         let collegeUpdateObj = {};
+
         let formdata = new FormData();
 
         Object.keys(x).map((key) => {
@@ -186,7 +191,15 @@ function CreateCollege() {
           if (key === "collegeAgencies" || key === "faq") {
             collegeUpdateObj[key] = x[key];
           }
+          if (key === "collegeCourse") {
+            collegeUpdateObj[key] = x[key];
+            console.log(collegeUpdateObj[key], x[key], "dffffwerwerwe23423");
+          }
         });
+
+        if (collegeDetails?.collegeName === collegeUpdateObj?.collegeName) {
+          delete collegeUpdateObj?.collegeName;
+        }
 
         formdata.append("collegeData", JSON.stringify(collegeUpdateObj));
         if (formdata !== 0) {
@@ -323,9 +336,9 @@ function CreateCollege() {
         if (!item.chooseExamAcceptedId) {
           error["chooseExamAcceptedId"] = "*";
         }
-        if (!item.ShowonFiltering) {
-          error["ShowonFiltering"] = "*";
-        }
+        // if (!item.ShowonFiltering) {
+        //   error["ShowonFiltering"] = "*";
+        // }
 
         item?.collegeStreams?.map((items) => {
           let error = {};
@@ -398,10 +411,11 @@ function CreateCollege() {
             collegeImage: collegeDetails?.collegeImage,
           },
         ];
-        let mainStreamArray = [];
-        let subStreamArray = [];
+      
         initialValues.collegeCourse = collegeDetails?.AssociateCourse?.map(
           (item) => {
+            let mainStreamArray = [];
+            let subStreamArray = [];
             let x = item?.CourseAssociateStream?.map((ele) => {
               if (!mainStreamArray.includes(ele.mainStreamId))
                 mainStreamArray.push(ele.mainStreamId);
@@ -414,6 +428,7 @@ function CreateCollege() {
                 colStreamId: ele?.ColStream?.id,
               };
             });
+
             let y = item?.CourseFees?.map((ele) => {
               return {
                 id: ele?.id,
@@ -433,13 +448,13 @@ function CreateCollege() {
               programTypeId: item?.programTypeId,
               courseCategoryId: item?.courseCategoryId,
               chooseExamAcceptedId: item?.chooseExamAcceptedId,
-              collegeStreams: x,
-              courseFees: y,
+              collegeStreams: x ? [...x] : [],
+              courseFees: y ? [...y] : [],
             };
           }
         );
 
-        dispatchforStreams(mainStreamArray, subStreamArray);
+        //  dispatchforStreams(mainStreamArray,  subStreamArray);
 
         collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
@@ -517,18 +532,19 @@ function CreateCollege() {
             ])
         );
 
-        collegeDetails?.CollegeAgency?.map(
-          (item) =>
-            (initialValues.collegeAgencies = [
-              {
-                id: item?.id,
-                collegeAgencyId: item?.collegeAgencyId,
-                collegeAgencyFor: item?.collegeAgencyFor,
-                totalAgency: item?.totalAgency,
-                totalAgencyForYears: item?.totalAgencyForYears,
-              },
-            ])
-        );
+        initialValues.collegeAgencies = [];
+
+        collegeDetails?.CollegeAgency?.map((item) => {
+          initialValues.collegeAgencies.push({
+            id: item?.id,
+            collegeAgencyId: item?.collegeAgencyId,
+            collegeAgencyFor: item?.collegeAgencyFor,
+            totalAgency: item?.totalAgency,
+            totalAgencyForYears: item?.totalAgencyForYears,
+          });
+        });
+
+        console.log(initialValues, "dfgdfgdfgdfg234234");
         return initialValues;
       }
     } else {
@@ -663,7 +679,71 @@ function CreateCollege() {
   }, [Id]);
 
   const handleCityList = (e) => {
-    dispatch(cityDropdown(e.target.value));
+    dispatch(cityDropdown({ stateId: e.target.value }));
+  };
+
+  const handleAgencyDelete = (fields, index, agencyValue) => {
+    if (Id) {
+      if ((agencyValue[index].totalAgency = "")) {
+        dispatch(
+          deleteCollegeAgency({
+            id: collegeDetails?.CollegeAgency[index]?.id,
+            collegeId: collegeDetails?.id,
+          })
+        ).then((res) => {
+          if (res?.payload?.data?.success) {
+            fields.remove(index);
+            toast.success("Agency deleted", { autoClose: 1000 });
+          }
+        });
+      } else {
+        fields.remove(index);
+      }
+    } else {
+      fields.remove(index);
+    }
+  };
+
+  const handleFeeDelete = (fields, index, feesValue) => {
+    if (Id) {
+      if (feesValue[displayIndex].courseFees[index].courseFeeDetailsId != "") {
+        dispatch(
+          deleteCollegeFees(feesValue[displayIndex].courseFees[index].id)
+        ).then((res) => {
+          if (res?.payload?.data?.success) {
+            fields.remove(index);
+            toast.success("Deleted", { autoClose: 1000 });
+          }
+        });
+      } else {
+        fields.remove(index);
+      }
+    } else {
+      fields.remove(index);
+    }
+  };
+
+  const handleCollegeStream = (fields, index, Streamvalues) => {
+    console.log(Streamvalues[displayIndex].collegeStreams[index], "stream");
+    if (Id) {
+      if (Streamvalues[displayIndex].collegeStreams[index].mainStreamId != "") {
+        dispatch(
+          deleteCollegeStreams({
+            id: Streamvalues[displayIndex].collegeStreams[index].id,
+          })
+        ).then((res) => {
+          if (res?.payload?.data?.success) {
+            fields.remove(Streamvalues[displayIndex].collegeStreams[index]);
+            toast.success("deleted", { autoClose: 1000 });
+          }
+        });
+      } else {
+        fields.remove(index);
+      }
+    } else {
+      console.log("sdfsdfsdfsdfsdf1232323");
+      fields.remove(index);
+    }
   };
 
   return (
@@ -1171,28 +1251,36 @@ function CreateCollege() {
                                                 </Field>
 
                                                 <div className="d-flex plus_minus_btn_row my-2">
-                                                  {!router.query.Id && (
-                                                    <div
-                                                      type="button"
-                                                      className="add_remove_btn"
-                                                      onClick={() =>
-                                                        fields.push({
-                                                          industryId: "",
-                                                        })
-                                                      }
-                                                    >
-                                                      <img
-                                                        className="add_remove_icon"
-                                                        src="/images/plus.png"
-                                                      />
-                                                    </div>
-                                                  )}
+                                                  <div
+                                                    type="button"
+                                                    className="add_remove_btn"
+                                                    onClick={() =>
+                                                      fields.push({
+                                                        collegeAgencyId: "",
+                                                        collegeAgencyFor: "",
+                                                        totalAgency: "",
+                                                        totalAgencyForYears: "",
+                                                      })
+                                                    }
+                                                  >
+                                                    <img
+                                                      className="add_remove_icon"
+                                                      src="/images/plus.png"
+                                                    />
+                                                  </div>
+
                                                   {fields.length > 1 ? (
                                                     <div
                                                       className="add_remove_btn"
                                                       type="button"
-                                                      onClick={() =>
-                                                        fields.remove(index)
+                                                      onClick={
+                                                        () =>
+                                                          handleAgencyDelete(
+                                                            fields,
+                                                            index,
+                                                            values.collegeAgencies
+                                                          )
+                                                        // fields.remove(index)
                                                       }
                                                     >
                                                       <img
@@ -1736,8 +1824,10 @@ function CreateCollege() {
                                                               className="add_remove_btn ms-2"
                                                               type="button"
                                                               onClick={() =>
-                                                                fields.remove(
-                                                                  collegeStreamsIndex
+                                                                handleCollegeStream(
+                                                                  fields,
+                                                                  index,
+                                                                  values.collegeCourse
                                                                 )
                                                               }
                                                             >
@@ -1784,8 +1874,8 @@ function CreateCollege() {
                                                 </option>
                                                 {masterFilterData &&
                                                   masterFilterData.coursetype
-                                                    .length > 0 &&
-                                                  masterFilterData.coursetype.map(
+                                                    ?.length > 0 &&
+                                                  masterFilterData.coursetype?.map(
                                                     (item, index) => (
                                                       <option
                                                         key={`CourseType_${index}`}
@@ -1943,8 +2033,10 @@ function CreateCollege() {
                                                             className="add_remove_btn ms-2 margin_top"
                                                             type="button"
                                                             onClick={() =>
-                                                              fields.remove(
-                                                                index
+                                                              handleFeeDelete(
+                                                                fields,
+                                                                index,
+                                                                values.collegeCourse
                                                               )
                                                             }
                                                           >

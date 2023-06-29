@@ -79,5 +79,34 @@ export const deleteAssociateCOllege = createAsyncThunk(
   }
 );
 
+//agency delete
+export const deleteCollegeAgency = createAsyncThunk(
+  "deleteCollegeAgency/college/collegeAgencyDelete",
+  async (data) => {
+    return apiRequest
+      .post("college/collegeAgencyDelete", data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
 
+// fees delete
+export const deleteCollegeFees = createAsyncThunk(
+  "deleteCollegeFees/college/collegeCourseFeesDelete",
+  async (id) => {
+    return apiRequest
+      .delete(`college/collegeCourseFeesDelete/${id}`)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
 
+export const deleteCollegeStreams = createAsyncThunk(
+  "deleteCollegeStreams/college/collegeStreamDelete",
+  async (data) => {
+    return apiRequest
+      .post(`college/collegeStreamDelete`, data)
+      .then((res) => res)
+      .catch((err) => err);
+  }
+);
