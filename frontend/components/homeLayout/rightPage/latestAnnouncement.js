@@ -58,7 +58,7 @@ const LatestAnnouncement = () => {
                 <>
                   {showLess && index < 4 &&
                     <ul key={index}>
-                      <li>
+                      <li className="mb-0">
                         <span className="hover_link">{item.title}</span>
                         <div className="flex_it">
                           <p>{item.Name}</p>
@@ -69,7 +69,7 @@ const LatestAnnouncement = () => {
                   }
                   {!showLess &&
                     <ul key={index}>
-                      <li>
+                      <li className="mb-0">
                         <span className="hover_link">{item.title}</span>
                         <div className="flex_it">
                           <p>{item.Name}</p>

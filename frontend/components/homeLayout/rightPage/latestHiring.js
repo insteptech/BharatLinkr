@@ -55,7 +55,7 @@ const LatestHiring = () => {
                 <>
                   {show && index < 4 &&
                     <ul key={index}>
-                      <li>
+                      <li className="mb-0">
                         <span className="hover_link">{item.heading}</span>
                         <div className="flex_it">
                           <p>{item.names}</p>
@@ -66,7 +66,7 @@ const LatestHiring = () => {
                   }
                    {!show && 
                     <ul key={index}>
-                      <li>
+                      <li className="mb-0">
                         <span className="hover_link">{item.heading}</span>
                         <div className="flex_it">
                           <p>{item.names}</p>

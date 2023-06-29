@@ -124,7 +124,7 @@ optgroup {
 
 /* ----------loader-css-end------------ */
 .hcceco_logo {
-  max-width: 140px;
+  max-width: 220px;
 }
 
 /* -------------------------------modal-css-start-------------------------- */
@@ -258,7 +258,7 @@ optgroup {
 
 .login_input {
   width: 100%;
-  padding: 0.9375rem 2.1875rem;
+  padding: 11px 20px;
   font-weight: 400;
   font-size: 1rem;
   line-height: 1.5rem;
@@ -309,14 +309,14 @@ optgroup {
 
 .login_btn {
   width: 100%;
-  padding: 0.9375rem 2.1875rem !important;
+  padding: 0.6875rem 2.1875rem !important;
   background: var(--admin-btn-bg) !important;
   border-radius: 0.3125rem;
   font-weight: 500 !important;
   font-size: 1.125rem !important;
   line-height: 1.6875rem;
   color: #ffffff !important;
-  margin: 2.8125rem 0;
+  margin: 2.1875rem 0;
   transition: all 0.5s;
 }
 
@@ -503,10 +503,10 @@ optgroup {
 }
 .signup_form_label {
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 16px;
   color: #463196;
   margin-bottom: 0.3125rem;
-  margin-left: 1.875rem !important;
+  margin-left: 1.25rem !important;
 }
 
 .signup_form_input {
@@ -514,15 +514,15 @@ optgroup {
   border: 0.0625rem solid #c8c1df;
   border-radius: 0.3125rem;
   font-weight: 400;
-  font-size: 1rem;
+  font-size: 15px;
   line-height: 1.5rem;
   color: #939198;
   max-height: 3.75rem;
-  padding: 1rem 1.875rem;
+  padding: 11px 20px;
 }
 
 .summary_input {
-  min-height: 12.375rem !important;
+  min-height: 150px !important;
 }
 
 .required_msg {
@@ -541,9 +541,9 @@ optgroup {
 }
 
 .select_down_icon {
-  width: 0.9375rem;
-  margin-right: 1.75rem;
-  margin-top: -80px;
+  width: 13px;
+  margin-right: 22px;
+  margin-top: -72px;
 }
 
 .cant_find_div {
@@ -566,9 +566,10 @@ optgroup {
 }
 
 .select_down_icon_second {
-  width: 0.9375rem;
+  width: 13px;
   margin-left: -2.5rem;
-  margin-bottom: -2rem;
+  margin-bottom: -23px;
+  opacity: 0.9;
 }
 
 .for_input_center {
@@ -576,7 +577,7 @@ optgroup {
   border-radius: 0.3125rem;
   font-size: 1rem;
   color: #0f0c1a;
-  padding: 1rem 1.9375rem;
+  padding: 11px 31px;
   font-weight: 600;
 }
 
@@ -2931,7 +2932,8 @@ input::-webkit-inner-spin-button {
 }
 
 .quick_link_acc_div {
-  padding: 20px 0 !important;
+  padding: 0 !important;
+  padding-bottom: 16px !important;
 }
 
 .acc_bar {
@@ -5239,7 +5241,7 @@ img {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
     rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   border-radius: 0.3125rem;
-  padding: 1.875rem;
+  padding: 25px;
   margin-bottom: 1.875rem;
   /* border: 2px solid transparent !important; */
 }
@@ -5916,7 +5918,7 @@ ul {
   background: #463196;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(0, 0, 0, 0.0588235);
   border-radius: 0.3125rem 0.3125rem 0rem 0rem;
-  padding: 0.875rem 0;
+  padding: 12px 0;
   text-align: center;
 }
 
@@ -5936,6 +5938,7 @@ ul {
   line-height: 1.3125rem;
   text-transform: uppercase;
   color: #ffffff;
+  margin-bottom: 0;
 }
 
 .card_top h1 img {
@@ -5949,7 +5952,7 @@ ul {
 
 .card_mid {
   background: #fff;
-  padding: 1.5625rem;
+  padding: 20px 25px;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(0, 0, 0, 0.0588235);
   border-bottom-left-radius: 0.3125rem;
   border-bottom-right-radius: 0.3125rem;
@@ -6042,7 +6045,7 @@ a:hover {
 
 .social_sec_main {
   background: #fff;
-  padding: 3.125rem 1.5625rem;
+  padding: 30px 25px;
 }
 
 .top_input {

@@ -35,7 +35,7 @@ const StudyGols = () => {
             study_goals
           </h1>
         </div>
-        <div className="card_mid">
+        <div className="card_mid pb-1">
           {studyGoals &&
             studyGoals?.map((item, index) => {
               return (

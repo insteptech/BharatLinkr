@@ -16,7 +16,7 @@ const Profession = (props) => {
     }, [])
 
   return (
-    <div>
+    <div className="mt-3">
       <Table responsive className="admin_table" bordered hover>
         <thead>
           <tr className="table_head blue_and_white">

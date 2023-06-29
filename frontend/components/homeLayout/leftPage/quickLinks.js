@@ -63,7 +63,7 @@ const QuickLinks = () => {
           </h1>
         </div>
         <div className="quick_link_acc_div card_mid">
-          <Accordion defaultActiveKey="0">
+          <Accordion>
             {quickLinksData &&
               quickLinksData?.map((item, index) => (
                 <>

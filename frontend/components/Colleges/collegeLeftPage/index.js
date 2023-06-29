@@ -277,7 +277,7 @@ const CollegeLeftPage = (props) => {
       {/* ----------------------master filter bar start----------------------- */}
 
       <div className="colleges_left_boxes">
-        <p className="college_box_heading">Selected Filters</p>
+        <p className="college_box_heading mb-0">Selected Filters</p>
         <div className="selected_filters_subbox">
           {props?.selectedFilter &&
             props?.selectedFilter?.length > 0 &&

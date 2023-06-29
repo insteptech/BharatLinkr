@@ -14,11 +14,11 @@ import JobCard from "./jobCard";
 
 const dropData = [
   {
-    page: "Jobs",
+    page: "Profession",
     value: "1",
   },
   {
-    page: "Profession",
+    page: "Jobs",
     value: "2",
   },
   {
@@ -65,7 +65,7 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
               {dataValue == 0
                 ? `List of top Jobs in india based on ${date} ranking`
                 : dataValue == 1
-                  ? `List of top Profession in india based on ${date} ranking`
+                  ? `List of top Profession in india`
                   : dataValue == 2
                     ? `List of top Inernship in india based on ${date} ranking`
                     : `List of top Company in india based on ${date} ranking`}
@@ -177,8 +177,8 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
             </div>
           </Col>
         </Row>
-        {dataValue == 0 && <JobCard />}
-        {dataValue == 1 && <Profession />}
+        {dataValue == 0 && <Profession />}
+        {dataValue == 1 && <JobCard />}
 
         {dataValue == 2 && <Internship />}
 
