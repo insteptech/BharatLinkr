@@ -315,7 +315,7 @@ const getProxyAuthToken = async () => {
 
 const userList = async (req) => {
   try {
-    let whereCondition = {};
+    let whereCondition = {roleId:[3,4]};
     if (req.body.id) {
       whereCondition = req.body.id;
     }
@@ -350,9 +350,12 @@ const userList = async (req) => {
               as:'Approved Friends'
             }
           ]
-        }
+        },
+  
       ],
-      attributes: ['id',
+      attributes: [
+        
+        'id',
       'isNumberVerified',
       'userType',
       'name',
@@ -369,7 +372,6 @@ const userList = async (req) => {
       'totalExperience',
       'profilePhoto',
       'coverPhoto',
-      'password',
       'collegeWebsite',
       'collegeId',
       'roleId'
