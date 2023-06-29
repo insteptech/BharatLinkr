@@ -37,6 +37,15 @@ router.post('/userLikesList', authController.userPostLikeList);
 router.post('/userPasswordUpdate', authController.updateUserPassword);
 router.post('/userForgotPassword', authController.forgotUserPassword);
 
+router.post('/addFriend', authController.addFriend);
+
+router.post('/UserPendingFriend', authController.userPendingFriendRequest);
+
+router.post('/approveFriendRequest', authController.approveFriendRequest);
+
+
+
+
 
 
 

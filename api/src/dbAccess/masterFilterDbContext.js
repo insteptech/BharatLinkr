@@ -255,8 +255,6 @@ const getMasterFilterById = async (req) => {
     }
   };
 
-
-
   const masterFilterDelete = async (req) => {
     try {
       const master = await masterFilter.findOne({

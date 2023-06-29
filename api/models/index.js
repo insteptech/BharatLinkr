@@ -212,6 +212,11 @@ db.masterFilter.hasMany(db.course, { as: "CourseLevel", foreignKey: 'courseLevel
 db.course.belongsTo(db.mainStream, { as: "MainStreamsss", foreignKey: 'mainStreamId' });
 db.course.belongsTo(db.masterFilter, { as: "courselevelType", foreignKey: 'courseLevelId' });
 
+db.User.hasMany(db.userFriendList, { as: "Friends", foreignKey: 'recieverId' });
+db.userFriendList.belongsTo(db.User, { as: "Approved Friends", foreignKey: 'senderId' });
+
+
+
 
 
 
