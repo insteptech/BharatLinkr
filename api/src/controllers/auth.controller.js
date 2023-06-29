@@ -114,6 +114,41 @@ const forgotUserPassword = async function (req, res) {
     });
 };
 
+const addFriend = async function (req, res) {
+  await authManager
+    .addFriend(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+const userPendingFriendRequest = async function (req, res) {
+  await authManager
+    .userPendingFriendRequest(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+const approveFriendRequest = async function (req, res) {
+  await authManager
+    .approveFriendRequest(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+
+
 
 
 module.exports = {
@@ -126,5 +161,8 @@ module.exports = {
   userActive,
   userPostLikeList,
   updateUserPassword,
-  forgotUserPassword
+  forgotUserPassword,
+  addFriend,
+  userPendingFriendRequest,
+  approveFriendRequest
 };

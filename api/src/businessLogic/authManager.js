@@ -109,6 +109,25 @@ const forgotUserPassword = async function (req) {
   return result;
 };
 
+const addFriend = async function (req) {
+  const result = await authDbContext.addFriend(req);
+  return result;
+};
+
+const userPendingFriendRequest = async function (req) {
+  const result = await authDbContext.userPendingFriendRequest(req);
+  return result;
+};
+
+const approveFriendRequest = async function (req) {
+  const result = await authDbContext.approveFriendRequest(req);
+  return result;
+};
+
+
+
+
+
 
 module.exports = {
   register,
@@ -122,5 +141,8 @@ module.exports = {
   userActive,
   userPostLikeList,
   updateUserPassword,
-  forgotUserPassword
+  forgotUserPassword,
+  addFriend,
+  userPendingFriendRequest,
+  approveFriendRequest
 };

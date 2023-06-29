@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer")
 
 
 
-const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes } = require('../../models');
+const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes, userFriendList } = require('../../models');
 const { roles } = require('../../config/roles');
 
 function generateOTP() {
@@ -132,12 +132,23 @@ const register = async (req) => {
     if (profileData.password) {
       userObj.password = await bcrypt.hash(profileData.password, 12);
     }
+    let roleDetail; 
+    ////// roles differentiating
+    if (profileData.userType === "Organisation") {
+      userObj.active = false;
+      roleDetail =  await Role.findOne({ where: { key: roles[6] } });
+
+    }
     // this for confirmation from bharatlinker after it will active true 
     if (profileData.userType === "College") {
       userObj.active = false;
-    }
-    const roleDetail = await Role.findOne({ where: { key: roles[0] } });
+      roleDetail =  await Role.findOne({ where: { key: roles[4] } });
 
+    }else{
+      
+      roleDetail= await Role.findOne({ where: { key: roles[0] } });
+    }
+    
     if (roleDetail.id) {
       userObj.roleId = await roleDetail.id;
     }
@@ -326,6 +337,20 @@ const userList = async (req) => {
           required: false,
           as: 'Cities',
         },
+
+        {
+          model:userFriendList,
+          required:false,
+          as:'Friends',
+          where:{status:true},
+          include:[
+            {
+              model:User,
+              required: false,
+              as:'Approved Friends'
+            }
+          ]
+        }
       ],
       attributes: ['id',
       'isNumberVerified',
@@ -348,7 +373,8 @@ const userList = async (req) => {
       'collegeWebsite',
       'collegeId',
       'roleId'
-    ]
+    ],
+    distinct:true
     });
     return { data: result, success: true };
   } catch (error) {
@@ -463,6 +489,103 @@ const forgotUserPassword = async (req, res) => {
 };
 
 
+const addFriend = async (req) => {
+  try {
+    const stream1 = [];
+    await Promise.all(
+      req.body.Friends.map(async (item) => {
+        const prg = await userFriendList.findOne({ where: { recieverId: item.recieverId, senderId:item.senderId, deleted: false } });
+        if (!prg) {
+          const result = await userFriendList.create({ ...item, returning: true });
+          stream1.push(result);
+          return result;
+        }
+        stream1.push({ mainStreamName: item.mainStreamName, status: 'Request Already Sent' });
+      })
+    );
+    return { data: stream1, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const userPendingFriendRequest = async (req) => {
+  try {
+    let whereCondition = {};
+    if (req.body.id) {
+      whereCondition = req.body.id;
+    }
+    const result = await User.findAndCountAll({
+      where: whereCondition,
+      include: [
+        {
+          model: Role,
+          required: false,
+          as: 'Roles',
+        },
+        {
+          model:userFriendList,
+          required:false,
+          as:'Friends',
+          where:{recieverId:req.body.id}
+        }
+      ],
+      attributes: ['id',
+      'isNumberVerified',
+      'userType',
+      'name',
+      'designation',
+      'email',
+      'mobileNumber',
+      'stateId',
+      'cityId',
+      'school_college_company',
+      'highestEducation',
+      'summary',
+      'areaOfExpertise',
+      'accomplishments',
+      'totalExperience',
+      'profilePhoto',
+      'coverPhoto',
+      'password',
+      'collegeWebsite',
+      'collegeId',
+      'roleId'
+    ],
+    distinct:true
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+const approveFriendRequest = async (req) => {
+  try {
+    const stream1 = [];
+    await Promise.all(
+      req.body.FriendRequest.map(async (item) => {
+     
+          const result = await userFriendList.update({ status:item.status,
+           returning: true }, {where:{recieverId:item.recieverId, senderId:item.senderId}});
+           if(item.status === true){
+             
+             stream1.push({status:'Freiend Added SuccessFully'});
+           }else{
+           const friendDel =  await userFriendList.findOne({where:{recieverId:item.recieverId, senderId:item.senderId}})
+                    await userFriendList.destroy({where:{senderId:friendDel.senderId}})
+           stream1.push({status:'Freiend Deleted SuccesFully'});
+            
+           }
+          return result;
+      }),
+    );
+    return { data: stream1, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 
 module.exports = {
@@ -477,5 +600,8 @@ module.exports = {
   resendOtp,
   userPostLikeList,
   updateUserPassword,
-  forgotUserPassword
+  forgotUserPassword,
+  addFriend,
+  userPendingFriendRequest,
+  approveFriendRequest
 };
