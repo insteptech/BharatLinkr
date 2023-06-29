@@ -16,7 +16,7 @@ export default function Wrapper({ children, responseData }) {
     const dispatch = useDispatch();
     useEffect(() => {
         async function fetchLayout() {
-            const response = await fetch('https://bharat-linkr-insteptech.vercel.app/layout');
+            const response = await fetch('https://bharat-linkr.vercel.app/layout');
             const data = await response.json();
             dispatch(setLayoutByRole(data.role))
         }
