@@ -517,7 +517,7 @@ optgroup {
   font-size: 15px;
   line-height: 1.5rem;
   color: #939198;
-  max-height: 3.75rem;
+  max-height: 48px;
   padding: 11px 20px;
 }
 
@@ -577,8 +577,9 @@ optgroup {
   border-radius: 0.3125rem;
   font-size: 1rem;
   color: #0f0c1a;
-  padding: 11px 31px;
+  padding: 11px 25px;
   font-weight: 600;
+  max-height: 47px;
 }
 
 .css-13cymwt-control {
@@ -624,11 +625,11 @@ optgroup {
   background: var(--admin-btn-bg);
   max-width: 14.625rem;
   border-radius: 0.3125rem;
-  padding: 0.75rem 1.875rem;
-  margin-top: 4.5rem;
-  margin-bottom: 6.875rem;
+  padding: 0.6875rem 1.875rem;
+  margin-top: 60px;
+  margin-bottom: 70px;
   font-weight: 500;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   color: #ffffff;
   border: none;
 }
@@ -702,7 +703,7 @@ input[type="file"]::file-selector-button {
   color: #1a120c;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  padding: 1.5rem 2.625rem;
+  padding: 17px 42px;
 }
 
 .form-control[type="file"] {
@@ -1610,7 +1611,7 @@ input::-webkit-inner-spin-button {
   }
 
   .margin_top {
-    margin-top: 23px;
+    margin-top: 21px;
   }
 
   .signup_form_label {
@@ -2572,6 +2573,13 @@ input::-webkit-inner-spin-button {
 .user_header_profile_set {
   display: flex;
   align-items: center;
+  /* margin-top: 16rem; */
+}
+
+.ui_left_menu_body{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .notification_page {
