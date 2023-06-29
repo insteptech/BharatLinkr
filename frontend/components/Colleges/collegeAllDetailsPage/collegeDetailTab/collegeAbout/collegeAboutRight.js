@@ -104,7 +104,7 @@ const CollegeAboutRight = (props) => {
           </div>
         );
       })}
-    </div>
+    </div>    
   );
 };
 

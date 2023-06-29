@@ -378,7 +378,7 @@ function MobileMenus() {
           onClick={handleShow2}
         >
           <img className="leftmenu_icons" src="/images/l-links.svg" />
-          learning links
+          Learning Links
         </Button>
 
         <Offcanvas
@@ -425,7 +425,7 @@ function MobileMenus() {
           onClick={handleShow3}
         >
           <img className="leftmenu_icons" src="/images/q-links.svg" />
-          QUICK LINKS
+          Quick Links
         </Button>
 
         <Offcanvas
@@ -492,7 +492,7 @@ function MobileMenus() {
           onClick={handleShow4}
         >
           <img className="leftmenu_icons" src="/images/ann-icon.svg" />
-          LATEST ANCMT
+          Latest Announcement
         </Button>
 
         <Offcanvas
@@ -543,7 +543,7 @@ function MobileMenus() {
           onClick={handleShow5}
         >
           <img className="leftmenu_icons" src="/images/blue-hiring.svg" />
-          LATEST HIRING
+          Latest Hiring
         </Button>
 
         <Offcanvas
@@ -592,7 +592,7 @@ function MobileMenus() {
           onClick={handleShow6}
         >
           <img className="leftmenu_icons" src="/images/hcceco-links.svg" />
-          HCCECO LINKS
+          Bharat Links
         </Button>
 
         <Offcanvas
@@ -608,7 +608,7 @@ function MobileMenus() {
             </button>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <p>Hello Instep</p>
+            <p>Hello</p>
           </Offcanvas.Body>
         </Offcanvas>
       </div>
