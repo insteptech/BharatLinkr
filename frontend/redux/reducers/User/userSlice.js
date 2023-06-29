@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getContentUserLiked, getUserDetailsById } from "../../actions/user/userActions";
+import { getAllUserList, getContentUserLiked, getUserDetailsById } from "../../actions/user/userActions";
 
 const initialState = {
     activeNavItem: null,
@@ -9,6 +9,7 @@ const initialState = {
     likeContentList: [],
     likeContentCount: 0,
     layoutByRole: null,
+    allUserList: []
 }
 
 const userSlice = createSlice({
@@ -43,7 +44,10 @@ const userSlice = createSlice({
         });
         builder.addCase(getContentUserLiked.pending, (state, action) => {
             state.isLoading = true
-        })
+        });
+        builder.addCase(getAllUserList.fulfilled, (state, action) => {
+            state.allUserList = action.payload
+        });
     }
 })
 

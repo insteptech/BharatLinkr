@@ -12,6 +12,7 @@ import DeleteModal from "../../modals/deleteModal";
 import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
 import LoaderPage from "../../common-components/loader";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 
 function CourseTable() {
   const [pagination, setPagination] = useState({
@@ -34,10 +35,10 @@ function CourseTable() {
   const handleDelete = (item) => {
     dispatch(deleteCourse(item.id)).then((res) => {
       if (res?.payload?.data?.success) {
-        toast.success("Deleted",{autoClose:1000});
+        toast.success("Deleted", { autoClose: 1000 });
         dispatch(getCourse(pagination));
       } else {
-        toast.error("error",{autoClose:1000});
+        toast.error("error", { autoClose: 1000 });
       }
     });
   };
@@ -89,10 +90,11 @@ function CourseTable() {
               </tr>
             </thead>
             <tbody>
-              {loadingData  ? (
+              {loadingData ? (
                 <LoaderPage />
               ) : (
                 courseData?.rows &&
+                courseData?.rows.length > 0 &&
                 courseData?.rows?.map((item, index) => {
                   return (
                     <tr key={index}>
@@ -130,12 +132,15 @@ function CourseTable() {
               )}
             </tbody>
           </Table>
+          {courseData && courseData?.rows && courseData?.rows.length === 0 && <NoDataPage name="Courses" />}
         </Row>
-        <Pagination
-          pagination={pagination}
-          setPagination={setPagination}
-          list={courseData}
-        />
+        {courseData && courseData?.rows && courseData?.rows.length !== 0 &&
+          <Pagination
+            pagination={pagination}
+            setPagination={setPagination}
+            list={courseData}
+          />
+        }
         <DeleteModal
           show={modalShow}
           onHide={() => handleHide()}
