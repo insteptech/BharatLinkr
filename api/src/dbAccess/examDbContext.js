@@ -842,19 +842,19 @@ const allExamList = async (req) => {
       where: { [Op.and]: [whrCondition, examMode, applicationMode, examType, wherecond] },
       subQuery: false,
       include: [
-        {
-          model: collegeAssociateCourse,
-          required: false,
-          as: 'AssociateCourse',
-             include: [
-        {
-          model: college,
-          required: false,
-          as: 'College',
-          attributes:['id','collegeName']
-        }
-      ]
-    },
+    //     {
+    //       model: collegeAssociateCourse,
+    //       required: false,
+    //       as: 'AssociateCourse',
+    //          include: [
+    //     {
+    //       model: college,
+    //       required: false,
+    //       as: 'College',
+    //       attributes:['id','collegeName']
+    //     }
+    //   ]
+    // },
         {
           model: mainStream,
           required: false,
@@ -897,11 +897,11 @@ const allExamList = async (req) => {
       order: [['id', 'ASC']],
     });
 
-    result["rows"] = result["rows"].map((row) => {
-      row = row.toJSON();
-      row["CollegeCount"] = row["AssociateCourse"].length;
-      return row;
-    });
+    // result["rows"] = result["rows"].map((row) => {
+    //   row = row.toJSON();
+    //   row["CollegeCount"] = row["AssociateCourse"].length;
+    //   return row;
+    // });
 
     return { data: result, success: true };
   } catch (error) {
