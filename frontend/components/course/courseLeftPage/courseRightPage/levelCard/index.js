@@ -29,7 +29,7 @@ const cardData = [
     adduser: "12",
     share: "125",
     post: "56",
-  }
+  },
 ];
 
 const LevelCard = (props) => {
@@ -48,13 +48,14 @@ const LevelCard = (props) => {
 
   const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
-  const getCourseLevelList = useSelector((state) => state?.courseList?.getCourseLevelData)
+  const getCourseLevelList = useSelector(
+    (state) => state?.courseList?.getCourseLevelData
+  );
   useEffect(() => {
     dispatch(getMainStream());
     dispatch(getAllMasterFilter("courselevel"));
     dispatch(getCourse());
   }, []);
-
 
   const handleMainStreamName = (item) => {
     dispatch(
@@ -78,8 +79,8 @@ const LevelCard = (props) => {
   }, []);
 
   useEffect(() => {
-    dispatch(getMasterFilterCourse())
-  }, [])
+    dispatch(getMasterFilterCourse());
+  }, []);
 
   const handleImage = (item) => {
     dispatch(cardlevelIdDetails({ courseLevelId: item?.id }));
@@ -100,64 +101,73 @@ const LevelCard = (props) => {
         ) : coursetypelist && coursetypelist.length > 0 ? (
           coursetypelist?.map((listItem, listIndex) => {
             let courseLevelList = getCourseLevelList.filter((item, index) => {
-              return (item?.courselevelType?.id === listItem?.id)
-            })
+              return item?.courselevelType?.id === listItem?.id;
+            });
 
-            return (<Col key={listIndex}>
-
-              <Card
-                key={`MainStream_${listIndex}`}
-                className="user_college_card"
-              >
-                {cardData &&
-                  cardData?.map((el, index) => (
-                    <div key={index}>
-                      <div className="image_cover_content_base " >
-                        <Card.Img
-                          className="course_card_img "
-                          variant="top"
-                          src={el.collegeImg}
-                        />
+            return (
+              <Col key={listIndex}>
+                <Card
+                  key={`MainStream_${listIndex}`}
+                  className="user_college_card"
+                >
+                  {cardData &&
+                    cardData?.map((el, index) => (
+                      <div key={index}>
+                        <div className="image_cover_content_base ">
+                          <Card.Img
+                            className="course_card_img "
+                            variant="top"
+                            src={el.collegeImg}
+                          />
+                        </div>
+                        <div
+                          className="image_cover_content"
+                          onClick={() => handleImage(listItem)}
+                        >
+                          <h6 className="image_cover_content_text">
+                            {listItem?.name}
+                          </h6>
+                        </div>
                       </div>
-                      <div className="image_cover_content" onClick={() => handleImage(listItem)}>
-                        <h6 className="image_cover_content_text">
-                          {listItem?.name}
-                        </h6>
-                      </div>
-                    </div>
-                  ))}
+                    ))}
 
-                <Card.Body>
-                  <div className="selected_filters_subbox course_name_subbox">
-                    {courseLevelList.length > 0 ? (
-
-                      courseLevelList.map((elem, index) => {
-                        return (
-                          <div className="course_name_count_div" key={index}>
-                            <span className="course_name_items">
-                              {elem?.CourseCount}
-                            </span>
-                            <h6
-                              className="course_name_items"
-                              onClick={() => handleMainStreamName(elem)}
-                            >
-                              {elem?.MainStreamsss?.mainStreamName}
+                  <Card.Body>
+                    <>
+                      <div className="selected_filters_subbox ">
+                        {courseLevelList.length > 0 ? (
+                          courseLevelList.map((elem, index) => {
+                            return (
+                              <>
+                                <div
+                                  className="course_name_count_div"
+                                  key={index}
+                                >
+                                  <span className="course_name_items">
+                                    {elem?.CourseCount}
+                                  </span>
+                                  <h6
+                                    className="course_name_items"
+                                    onClick={() => handleMainStreamName(elem)}
+                                  >
+                                    {elem?.MainStreamsss?.mainStreamName}
+                                  </h6>
+                                </div>
+                              </>
+                            );
+                          })
+                        ) : (
+                          <div className="no_course_available">
+                            <h6 className="no_course_available_title">
+                              No courses available
                             </h6>
                           </div>
-                        );
-                      })
-                    ) : (
-                      <div className="no_course_available">
-                        <h6 className="no_course_available_title">
-                          No courses available
-                        </h6>
+                        )}
                       </div>
-                    )}
-                  </div>
-                </Card.Body>
-              </Card>
-
-            </Col>)
+                    </>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
           })
         ) : (
           "No Data found"
