@@ -41,7 +41,7 @@
     "whitelogo": "/images/white-exams.png"
   },
   {
-    "name": "Corporate",
+    "name": "Practice",  
     "path": "/corporate",
     "other": [
       "/corporate"
@@ -51,7 +51,7 @@
     "whitelogo": "/images/white-corporate.png"
   },
   {
-    "name": "Organization",
+    "name": "Corporate",
     "path": "/organisation",
     "other": [
       "/organisation"

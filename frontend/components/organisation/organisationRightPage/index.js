@@ -63,9 +63,9 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
           <Col md={12} className="heading_align ">
             <h2 className="edit_profile_h2 mobile_margin_bottom">
               {dataValue == 0
-                ? `List of top Jobs in india based on ${date} ranking`
+                ? `List of top Profession in india`
                 : dataValue == 1
-                  ? `List of top Profession in india`
+                  ? `List of top Jobs in india based on ${date} ranking`
                   : dataValue == 2
                     ? `List of top Inernship in india based on ${date} ranking`
                     : `List of top Company in india based on ${date} ranking`}
