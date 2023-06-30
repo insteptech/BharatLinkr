@@ -333,7 +333,7 @@ const CollegeRightPage = (props) => {
           <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-3">
             {loadercollegecard ? (
               <LoaderPage />
-            ) : collegeList && !collegeList.length > 0 ? (
+            ) : collegeList && collegeList.length > 0 ? (
               collegeList.map((item, index) => {
                 let isliked = likesList?.find((i) => {
                   if (item.id === i.categoryId) {
