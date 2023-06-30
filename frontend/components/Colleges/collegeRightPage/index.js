@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Form, Image, Offcanvas, Pagination, Row } from "react-bootstrap";
+import {
+  Card,
+  Col,
+  Form,
+  Image,
+  Offcanvas,
+  Pagination,
+  Row,
+} from "react-bootstrap";
 import CollegeCard from "../collegeCard";
 // import { Swiper, SwiperSlide } from "swiper/react";
 // import { Navigation } from "swiper";
@@ -15,6 +23,7 @@ import {
 import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
 import { getTokenDecode, isUserLogined } from "../../utils";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 
 const streamData = [
   {
@@ -82,7 +91,7 @@ const streamData = [
 const CollegeRightPage = (props) => {
   const dispatch = useDispatch();
   const [show1, setShow1] = useState(false);
-  const [likesHandler, setLikesHandler] = useState([])
+  const [likesHandler, setLikesHandler] = useState([]);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
 
@@ -95,48 +104,49 @@ const CollegeRightPage = (props) => {
   );
   const date = new Date().getFullYear();
 
-  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading)
+  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
 
-  const likesList = useSelector((state) => state?.collegelist?.collegeListLikes?.rows);
+  const likesList = useSelector(
+    (state) => state?.collegelist?.collegeListLikes?.rows
+  );
 
   const handleLikes = (itemId, values) => {
-
     if (getTokenDecode()) {
-      dispatch(CollegeLikes({
-        collegeId: itemId,
-        update: values,
-        userId: getTokenDecode()?.userId
-      })).then((res) => {
-
+      dispatch(
+        CollegeLikes({
+          collegeId: itemId,
+          update: values,
+          userId: getTokenDecode()?.userId,
+        })
+      ).then((res) => {
         if (res?.payload?.status === 200 && res.payload.data?.success) {
-          dispatch(CollegeLikesList(getTokenDecode()?.userId))
+          dispatch(CollegeLikesList(getTokenDecode()?.userId));
           // dispatch(getColleges(Pagination))
         }
-      })
-      let index
+      });
+      let index;
       likesHandler.map((item, i) => {
         if (item?.id === itemId) {
-          index = i
+          index = i;
         }
-      })
-      let x = likesHandler.filter((item) => item.id === itemId)
+      });
+      let x = likesHandler.filter((item) => item.id === itemId);
       if (index !== undefined) {
-        let y = [...likesHandler]
+        let y = [...likesHandler];
         if (x[0].state == values) {
-          y[index] = { id: x[0].id, state: values }
+          y[index] = { id: x[0].id, state: values };
         } else {
-          y.splice(index, 1)
+          y.splice(index, 1);
         }
-        setLikesHandler(y)
+        setLikesHandler(y);
       } else {
-        setLikesHandler(
-          [...likesHandler,
+        setLikesHandler([
+          ...likesHandler,
           {
             id: itemId,
-            state: values
-          }
-          ]
-        )
+            state: values,
+          },
+        ]);
       }
     } else {
       setModalShow1(true);
@@ -156,14 +166,13 @@ const CollegeRightPage = (props) => {
       const findActiveLike = likesList?.find(
         (Likelist) => Likelist?.categoryId === id
       );
-      return findActiveLike ? "/images/blue-like.png" : "/images/border-like.svg"
+      return findActiveLike
+        ? "/images/blue-like.png"
+        : "/images/border-like.svg";
     } else {
       return "/images/border-like.svg";
     }
   };
-
-
-
 
   return (
     <>
@@ -324,30 +333,32 @@ const CollegeRightPage = (props) => {
           <Row xs={1} sm={2} md={3} lg={2} xl={3} className="g-3">
             {loadercollegecard ? (
               <LoaderPage />
-            ) : collegeList && collegeList.length > 0 ? (
+            ) : collegeList && !collegeList.length > 0 ? (
               collegeList.map((item, index) => {
                 let isliked = likesList?.find((i) => {
                   if (item.id === i.categoryId) {
                     return true;
                   }
                 });
-                console.log(likesList, 'likesLists')
-                let stateLike = likesHandler.filter((ele) => ele?.id === item?.id)
+                console.log(likesList, "likesLists");
+                let stateLike = likesHandler.filter(
+                  (ele) => ele?.id === item?.id
+                );
                 return (
                   <Col>
-                    <CollegeCard item={item}
+                    <CollegeCard
+                      item={item}
                       index={index}
                       color={activeColor(item?.id)}
                       isliked={isliked}
                       stateLike={stateLike}
                       handleLikes={handleLikes}
-
                     />
                   </Col>
                 );
               })
             ) : (
-              <p>No colleges found.</p>
+              <NoDataPage name="Colleges" />
             )}
           </Row>
         </div>

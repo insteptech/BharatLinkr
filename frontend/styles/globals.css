@@ -122,6 +122,16 @@ optgroup {
   color: var(--admin-btn-bg) !important;
 }
 
+.no_data_page{
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--admin-btn-bg);
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* ----------loader-css-end------------ */
 .hcceco_logo {
   max-width: 220px;
@@ -688,6 +698,10 @@ optgroup {
   margin-bottom: 30px;
 }
 
+.m_top_30{
+  margin-top: 30px;
+}
+
 .next_step_btn {
   background: var(--admin-btn-bg);
   border: none;
@@ -1228,7 +1242,10 @@ input::-webkit-inner-spin-button {
   } */
 }
 
-@media only screen and (max-width: 1202px) {
+@media only screen and (max-width: 1209px) {
+  .edit_profile_h2{
+    font-size: 25px !important;
+  }
   .admin_home_tabs_row_padding {
     padding-bottom: 0.625rem;
   }
@@ -1317,7 +1334,9 @@ input::-webkit-inner-spin-button {
     min-width: 25rem;
     min-height: 2.5rem;
   } */
-
+  .edit_profile_h2{
+    font-size: 22px !important;
+  }
   .login_img {
     margin-top: 3.75rem;
     margin-left: 0rem;
@@ -1379,6 +1398,9 @@ input::-webkit-inner-spin-button {
 
   .border_tabs_padding {
     padding: 6px 18px;
+  }
+  .edit_profile_h2{
+    font-size: 20px !important;
   }
 }
 
@@ -2766,7 +2788,7 @@ input::-webkit-inner-spin-button {
 .edit_profile_h2 {
   font-style: normal;
   font-weight: 700;
-  font-size: 1.875rem;
+  font-size: 27px;
   color: #463196;
   padding: 2.5rem 0;
   text-transform: uppercase;

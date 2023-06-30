@@ -116,10 +116,17 @@ function AddCityPage() {
             {console.log(values)}
             <Row className="padding_top mt-3">
               <Col lg={6} md={12}>
-                <label className="signup_form_label">State Name</label>
                 <Field name="stateId">
                   {({ input, meta }) => (
                     <>
+                    <div className="d-flex">
+                                <label className="signup_form_label">State Name</label>
+                                          {meta.error && meta.touched && (
+                                            <span className="text-danger required_msg">
+                                              {meta.error}
+                                            </span>
+                                          )}
+                                        </div>
                       <select
                         {...input}
                         className="form-control select-style signup_form_input margin_bottom"
@@ -131,14 +138,13 @@ function AddCityPage() {
                             <option key={item.id} value={Number(item.id)}>{item.state} </option>
                           ))}
                       </select>
-                      {meta.touched && meta.error && <span>{meta.error}</span>}
                     </>
                   )}
 
                 </Field>
               </Col>
-              <Col lg={6} md={12}>
-                <label className="signup_form_label">City Name</label>
+              <Col lg={6} md={12} className="d-flex">
+                
                 <FieldArray name='city'>
                   {({ fields }) => (
                     <>
@@ -146,16 +152,23 @@ function AddCityPage() {
                         <>
                           <Field name={`${name}.name`}>
                             {({ input, meta }) => (
-                              <>
+                              <div className="w-100">
+                                <div className="d-flex">
+                                <label className="signup_form_label">City Name</label>
+                                          {meta.error && meta.touched && (
+                                            <span className="text-danger required_msg">
+                                              {meta.error}
+                                            </span>
+                                          )}
+                                        </div>
                                 <input
                                   {...input}
                                   className="form-control select-style signup_form_input margin_bottom"
                                   placeholder="Enter City" />
-                                {meta.touched && meta.error && <span>{meta.error}</span>}
-                              </>
+                              </div>
                             )}
                           </Field>
-                          <div className='d-flex mt-2 '>
+                          <div className='d-flex m_top_30'>
                             {!router.query.Id && (
                               <div
                                 type='button'

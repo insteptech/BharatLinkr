@@ -222,10 +222,10 @@ function CreateMasterFilter() {
                           )}
                         </Field>
                         {!ID && (
-                          <div className="d-flex plus_minus_btn_margin">
+                          <div className="d-flex m_top_30">
                             <div
                               type="button"
-                              className="add_remove_btn ms-2 m-0"
+                              className="add_remove_btn"
                               onClick={() =>
                                 fields.push({
                                   fieldName: "",
@@ -239,7 +239,7 @@ function CreateMasterFilter() {
                             </div>
                             {fields.length > 1 ? (
                               <div
-                                className="add_remove_btn ms-2 m-0"
+                                className="add_remove_btn"
                                 type="button"
                                 onClick={() => fields.remove(index)}
                               >
