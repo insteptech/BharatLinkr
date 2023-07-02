@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllUserList, getContentUserLiked, getUserDetailsById } from "../../actions/user/userActions";
+import { friendRequestStatus, getAllUserList, getContentUserLiked, getPendingFriendRequest, getUserDetailsById } from "../../actions/user/userActions";
 
 const initialState = {
     activeNavItem: null,
@@ -9,7 +9,11 @@ const initialState = {
     likeContentList: [],
     likeContentCount: 0,
     layoutByRole: null,
-    allUserList: []
+    allUserList: [],
+    userCount: 0,
+    friendList: [],
+    freindCount: 0,
+    requestStatus: {}
 }
 
 const userSlice = createSlice({
@@ -46,7 +50,15 @@ const userSlice = createSlice({
             state.isLoading = true
         });
         builder.addCase(getAllUserList.fulfilled, (state, action) => {
-            state.allUserList = action.payload
+            state.allUserList = action.payload.rows
+            state.userCount = action.payload.count
+        });
+        builder.addCase(getPendingFriendRequest.fulfilled, (state, action) => {
+            state.friendList = action.payload.rows
+            state.freindCount = action.payload.count
+        });
+        builder.addCase(friendRequestStatus.fulfilled, (state, action) => {
+            state.requestStatus = action.payload
         });
     }
 })

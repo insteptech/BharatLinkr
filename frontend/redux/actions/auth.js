@@ -4,37 +4,9 @@ import { apiRequest } from "../services/api";
 
 export const getUsers = createAsyncThunk("getUsersCall", async (data) => {
   return apiRequest
-    .post("auth/userSignup", data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    .then((res) => {
-      if (res?.data?.success) {
-        // toast.success("otp verified");
-        return res.data;
-      } else {
-        // toast.error("something went wrong");
-        return res.data
-      }
-    })
-    .catch((err) => {
-      //   toast.error(err);
-      return err;
-    });
-
-  //   apiRequest({
-  //     method: "post",
-  //     url: "http://localhost:4000/auth/userSignup",
-  //     data: data,
-  //     headers: { "Content-Type": "multipart/form-data" },
-  //   })
-  //     .then(function (response) {
-  //       //handle success
-  //       console.log(response, "ressssssssssssss");
-  //     })
-  //     .catch(function (error) {
-  //       //handle error
-  //       console.log(error);
-  //     });
+    .post("auth/userSignup", data)
+    .then((res) => res)
+    .catch((err) => err);
 });
 
 export const verifyOtp = createAsyncThunk("verifyOtpCall", async (data) => {
