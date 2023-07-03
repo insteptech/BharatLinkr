@@ -1152,6 +1152,18 @@ input::-webkit-inner-spin-button {
   color: #0f0c1a;
   font-size: 0.9375rem;
 }
+/* .cms_tabs{
+  line-height: 20px;
+} */
+.cms_active{
+  color: #0f0c1a;
+  background-color: #fff;
+  border-top: 1px solid var(--admin-bg);
+  border-right: 1px solid var(--admin-bg);
+  border-left: 1px solid var(--admin-bg);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
 
 .active_bar {
   border-left: 0.3125rem solid #463196;
