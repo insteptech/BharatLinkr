@@ -378,8 +378,31 @@ const userList = async (req) => {
             {
               model:User,
               required: false,
-              as:'Approved Friends'
-            }
+              as:'Approved Friends',
+              attributes: [
+        
+                'id',
+              'isNumberVerified',
+              'userType',
+              'name',
+              'designation',
+              'email',
+              'mobileNumber',
+              'stateId',
+              'cityId',
+              'school_college_company',
+              'highestEducation',
+              'summary',
+              'areaOfExpertise',
+              'accomplishments',
+              'totalExperience',
+              'profilePhoto',
+              'coverPhoto',
+              'collegeWebsite',
+              'collegeId',
+              'roleId'
+            ],
+            },
           ]
         },
   
@@ -546,7 +569,7 @@ const userPendingFriendRequest = async (req) => {
   try {
     let whereCondition = {};
     if (req.body.recieverId) {
-      whereCondition ={recieverId: req.body.recieverId};
+      whereCondition ={recieverId: req.body.recieverId, status:false};
     }
     const result = await userFriendList.findAndCountAll({
       where: whereCondition,
