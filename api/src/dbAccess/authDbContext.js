@@ -168,11 +168,13 @@ const register = async (req) => {
     }
     let result;
     if (profileData.id) {
-      result = await User.update(userObj, { where: { id: profileData.id }, returning: true });
+      result = await User.update(userObj, { where: { id: profileData.id }});
 
     } else {
 
       result = await User.create(userObj);
+
+
 
       const mailOptions = {
         from: process.env.EMAIL,
@@ -192,8 +194,37 @@ const register = async (req) => {
       });
 
     }
+let userDetail;
+if(result.id){
+  userDetail= await User.findOne({
+    where:{id:result.id},
+    attributes: [
+        
+      'id',
+    'isNumberVerified',
+    'userType',
+    'name',
+    'designation',
+    'email',
+    'mobileNumber',
+    'stateId',
+    'cityId',
+    'school_college_company',
+    'highestEducation',
+    'summary',
+    'areaOfExpertise',
+    'accomplishments',
+    'totalExperience',
+    'profilePhoto',
+    'coverPhoto',
+    'collegeWebsite',
+    'collegeId',
+    'roleId'
+  ],
+  })
+}
 
-    return { success: true, user: result, roleDetail };
+    return { success: true, user: userDetail, roleDetail };
   } catch (error) {
     throw new Error(error);
   }
@@ -514,46 +545,28 @@ const addFriend = async (req) => {
 const userPendingFriendRequest = async (req) => {
   try {
     let whereCondition = {};
-    if (req.body.id) {
-      whereCondition = req.body.id;
+    if (req.body.recieverId) {
+      whereCondition ={recieverId: req.body.recieverId};
     }
-    const result = await User.findAndCountAll({
+    const result = await userFriendList.findAndCountAll({
       where: whereCondition,
       include: [
+     
         {
-          model: Role,
-          required: false,
-          as: 'Roles',
-        },
-        {
-          model:userFriendList,
+          model:User,
           required:false,
-          as:'Friends',
-          where:{recieverId:req.body.id}
+          as:'FriendsDetail',
+          attributes: ['id',
+          'isNumberVerified',
+          'userType',
+          'name',
+          'designation',
+          'email',
+   
+        ],
         }
       ],
-      attributes: ['id',
-      'isNumberVerified',
-      'userType',
-      'name',
-      'designation',
-      'email',
-      'mobileNumber',
-      'stateId',
-      'cityId',
-      'school_college_company',
-      'highestEducation',
-      'summary',
-      'areaOfExpertise',
-      'accomplishments',
-      'totalExperience',
-      'profilePhoto',
-      'coverPhoto',
-      'password',
-      'collegeWebsite',
-      'collegeId',
-      'roleId'
-    ],
+ 
     distinct:true
     });
     return { data: result, success: true };
