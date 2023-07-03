@@ -13,6 +13,7 @@ import { getToken } from "../utils";
 import { useRouter } from "next/router";
 import { friendRequestStatus, getPendingFriendRequest } from "../../redux/actions/user/userActions";
 import NoDataPage from "../common-components/NoDataPage/NoDataPage";
+import LoaderPage from "../common-components/loader";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
@@ -21,11 +22,12 @@ const EditProfile = () => {
   const currentUser = useSelector((state) => state?.userSlice.currentUser);
   const friendList = useSelector((state) => state?.userSlice.friendList);
   const freindCount = useSelector((state) => state?.userSlice.freindCount);
+  const isFriendListLoading = useSelector((state) => state?.userSlice.isFriendListLoading);
   useEffect(() => {
     if (!getToken() && router.pathname.includes("editprofile")) {
       router.push("/"); // redirect to the home page when user not logged in
     }
-    if (loginStatus && currentUser) dispatch(getPendingFriendRequest({ id: currentUser.id }))
+    if (loginStatus && currentUser) dispatch(getPendingFriendRequest({ recieverId: currentUser.id }))
   }, [dispatch, currentUser]);
 
   const onSubmit = (values) => {
@@ -59,14 +61,15 @@ const EditProfile = () => {
   const handleRequestStatus = (userObject, status) => {
     let requestData = {
       FriendRequest: [{
-        recieverId: userObject.id,
-        senderId: currentUser.id,
+        recieverId: userObject.recieverId,
+        senderId: userObject.senderId,
         status: status
       }]
     }
     if (loginStatus) dispatch(friendRequestStatus(requestData)).then(res => {
       if (res.payload[0]) {
         toast.success(res.payload[0].status)
+        dispatch(getPendingFriendRequest({ recieverId: currentUser.id }))
       }
     })
   }
@@ -127,13 +130,21 @@ const EditProfile = () => {
                             }
                           />
                           <div className="profile_pen_bg logo_pen">
-                                  <img className="pen" src="/images/pen.png" />
+                            <label className="" for="actual-btn">
+                              <div className="profile_pen_bg">
+                                <img src="/images/pen.png" />
+                              </div>
+                            </label>
+                            <input type="file" id="actual-btn" hidden />
                           </div>
                         </div>
                         <div className="edit_pen_col">
-                          <div className="profile_pen_bg">
-                            <img src="/images/pen.png" />
-                          </div>
+                          <label className="" for="actual-btn">
+                            <div className="profile_pen_bg">
+                              <img src="/images/pen.png" />
+                            </div>
+                          </label>
+                          <input type="file" id="actual-btn" hidden />
                         </div>
                       </div>
                     </div>
@@ -385,39 +396,47 @@ const EditProfile = () => {
                           </p>
                         </Accordion.Header>
                         <Accordion.Body>
-                          {friendList && friendList.length > 0 ? friendList.map((listItem, listIndex) => (
-                            <div className="d-flex justify-content-between">
-                              <div className="d-flex gap-4 fw-bold">
-                                <p>{listIndex + 1}.</p>
-                                <img
-                                  src={
-                                    listItem?.profilePhoto
-                                      ? `${apibasePath}documents/userProfile/${listItem?.profilePhoto}`
-                                      : "/images/dammy.svg"}
-                                />
-                                <p className="friend_request fw-bold">
-                                  {listItem.name}
-                                </p>
-                              </div>
-                              <div>
-                                <button
-                                  className="suggested_card_btn suggested_card_link_btn"
-                                  type="button"
-                                  onClick={() => handleRequestStatus(listItem, true)}
-                                >
-                                  Accept
-                                </button>
-                                <button
-                                  className=" suggested_card_btn"
-                                  onClick={() => handleRequestStatus(listItem, false)}
-                                  type="button"
-                                >
-                                  Decline
-                                </button>
-                              </div>
+                          {isFriendListLoading ? <LoaderPage /> :
+                            friendList &&
+                              friendList.length > 0
+                              ? friendList.map((listItem, listIndex) => (
+                                <div className="d-flex justify-content-between">
+                                  <div className="d-flex gap-4 ">
+                                    <p>{listIndex + 1}.</p>
+                                    <img
+                                      src={
+                                        listItem?.profilePhoto
+                                          ? `${apibasePath}documents/userProfile/${listItem?.profilePhoto}`
+                                          : "/images/dammy.svg"}
+                                    />
+                                    <div>
+                                      <p className="friend_request fw-bold">
+                                        {listItem.FriendsDetail.name}
+                                      </p>
+                                      <p className="friend_request">
+                                        {listItem.FriendsDetail.userType.toUpperCase()} | {listItem.FriendsDetail.designation.toUpperCase()}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <button
+                                      className="suggested_card_btn suggested_card_link_btn"
+                                      type="button"
+                                      onClick={() => handleRequestStatus(listItem, true)}
+                                    >
+                                      Accept
+                                    </button>
+                                    <button
+                                      className=" suggested_card_btn"
+                                      onClick={() => handleRequestStatus(listItem, false)}
+                                      type="button"
+                                    >
+                                      Decline
+                                    </button>
+                                  </div>
 
-                            </div>
-                          )) : <NoDataPage name='Friends' />}
+                                </div>
+                              )) : <NoDataPage name='Friends' />}
                         </Accordion.Body>
                       </Accordion.Item>
                     </Accordion>

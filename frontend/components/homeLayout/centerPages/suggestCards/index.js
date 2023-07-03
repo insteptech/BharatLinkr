@@ -13,6 +13,7 @@ const SuggestCards = () => {
   const dispatch = useDispatch()
   const loginStatus = useSelector((state) => state.userSlice.loginStatus);
   const allUserList = useSelector((state) => state.userSlice.allUserList);
+  const myFriendsList = useSelector((state) => state.userSlice.myFriendsList);
   const currentUser = useSelector((state) => state.userSlice.currentUser);
   const handleRequest = (userObject) => {
     let data = {
@@ -23,6 +24,19 @@ const SuggestCards = () => {
     }
     if (loginStatus) dispatch(addFriend(data))
     if (!loginStatus) toast.info("Login First")
+  }
+  const isFriend = (id) => {
+    if (id) {
+      let friendStatus = myFriendsList.find(item => item.senderId === id)
+      console.log(myFriendsList, 'freind', friendStatus)
+      if (!friendStatus) {
+        return "Link"
+      } else if (friendStatus.status) {
+        return "Accepted"
+      } else if (!friendStatus.status) {
+        return "Sent"
+      }
+    }
   }
   return (
     <>
@@ -77,7 +91,7 @@ const SuggestCards = () => {
                               type="button"
                               onClick={() => handleRequest(userObject, true)}
                             >
-                              Link
+                              {isFriend(userObject.id)}
                             </button>
                             <button className=" suggested_card_btn" type="button">
                               Post

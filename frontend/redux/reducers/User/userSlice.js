@@ -3,6 +3,8 @@ import { friendRequestStatus, getAllUserList, getContentUserLiked, getPendingFri
 
 const initialState = {
     activeNavItem: null,
+    myFriendsList: [],
+    myFriendsCount: 0,
     isLoading: false,
     loginStatus: false,
     currentUser: {},
@@ -13,7 +15,8 @@ const initialState = {
     userCount: 0,
     friendList: [],
     freindCount: 0,
-    requestStatus: {}
+    requestStatus: {},
+    isFriendListLoading: false
 }
 
 const userSlice = createSlice({
@@ -35,6 +38,8 @@ const userSlice = createSlice({
             state.isLoading = false
             state.loginStatus = true
             state.currentUser = action.payload.rows[0]
+            state.myFriendsList = action.payload.rows[0]?.Friends
+            state.myFriendsCount = action.payload.rows[0]?.Friends.length
         });
         builder.addCase(getUserDetailsById.pending, (state, action) => {
             state.isLoading = true
@@ -56,6 +61,13 @@ const userSlice = createSlice({
         builder.addCase(getPendingFriendRequest.fulfilled, (state, action) => {
             state.friendList = action.payload.rows
             state.freindCount = action.payload.count
+            state.isFriendListLoading = false
+        });
+        builder.addCase(getPendingFriendRequest.pending, (state, action) => {
+            state.isFriendListLoading = true
+        });
+        builder.addCase(getPendingFriendRequest.rejected, (state, action) => {
+            state.isFriendListLoading = false
         });
         builder.addCase(friendRequestStatus.fulfilled, (state, action) => {
             state.requestStatus = action.payload
