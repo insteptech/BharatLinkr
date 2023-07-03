@@ -585,7 +585,8 @@ const userPendingFriendRequest = async (req) => {
           'name',
           'designation',
           'email',
-   
+          'profilePhoto',
+          'coverPhoto'
         ],
         }
       ],
