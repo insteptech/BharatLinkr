@@ -19,6 +19,9 @@ export default function Wrapper({ children, responseData }) {
             const response = await fetch('https://bharat-linkr.vercel.app/layout');
             const data = await response.json();
             dispatch(setLayoutByRole(data.role))
+            if (!router.pathname.startsWith('/admin') && data.role === userRoles.admin) {
+                router.push('/admin/dashboard')
+            }
         }
         fetchLayout();
     }, []);
