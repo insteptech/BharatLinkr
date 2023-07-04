@@ -11,6 +11,7 @@ import AdminTable from "../AdminTable";
 import Pagesize from "../pagination/pagesize";
 import Pagination from "../pagination/pagination";
 import { toast } from "react-toastify";
+import LoaderPage from "../../common-components/loader";
 
 function CollegeAdminPage(props) {
   const [pagination, setPagination] = useState({
@@ -23,18 +24,20 @@ function CollegeAdminPage(props) {
   const collegeList = useSelector((data) => data?.collegelist?.collegelist)
   const Heading = ["No.", "Image", "Logo", "Name", "City", "State", "Courses", "Action"]
 
+  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading)
+
 
   const handleEdit = (item) => {
     router.push(`college/update/${item?.id}`)
   };
-  
+
   const handleDelete = (item) => {
     dispatch(deleteCollege(item.id)).then((res) => {
-      if (res?.payload?.data?.success ) {
-        toast.success("Deleted");
+      if (res?.payload?.data?.success) {
+        toast.success("Deleted", {autoClose: 1000});
         dispatch(getColleges(pagination));
       } else {
-        toast.error("error");
+        toast.error("error", {autoClose: 1000});
       }
     })
   };
@@ -53,8 +56,6 @@ function CollegeAdminPage(props) {
 
   return (
     <>
-      {/* <CommonHead /> */}
-      {/* <div className="d-flex justify-content-between"> */}
       <Row className="padding_top">
         <Col xl={6} lg={12} md={12}>
           <div className="d-flex table_heading_header">
@@ -78,7 +79,6 @@ function CollegeAdminPage(props) {
           </div>
         </Col>
       </Row>
-      {/* </div> */}
       <hr />
       <div className="admin_stream_table">
         <Row>
@@ -95,7 +95,7 @@ function CollegeAdminPage(props) {
               </tr>
             </thead>
             <tbody>
-              {collegeList?.rows &&
+              {loadercollegecard ? <LoaderPage /> : collegeList?.rows?.length > 0 ?
                 collegeList?.rows?.map((item, index) => {
                   return (
                     <tr key={index}>
@@ -147,7 +147,7 @@ function CollegeAdminPage(props) {
                       </td>
                     </tr>
                   );
-                })}
+                }) : "No college"}
             </tbody>
           </Table>
         </Row>

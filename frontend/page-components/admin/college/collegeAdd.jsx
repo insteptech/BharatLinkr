@@ -31,7 +31,6 @@ import {
   getSubstreamData,
 } from "../../../redux/actions/streams/addSubStream";
 import { getAllExams } from "../../../redux/actions/exams/createExam";
-import dynamic from "next/dynamic";
 import Router, { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { Table } from "react-bootstrap";
@@ -44,6 +43,8 @@ import {
 } from "../../../utils/helper";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
+import LoaderPage from "../../../components/common-components/loader";
+import { Form as FormBoot } from "react-bootstrap";
 
 function CreateCollege() {
   const dispatch = useDispatch();
@@ -75,7 +76,7 @@ function CreateCollege() {
     (state) => state?.colStreamList?.colstreamDetails?.data?.data?.rows
   );
 
-  const tableHeading = ["No.", "Course-Name", "Action"];
+  const tableHeading = ["No.", "Course Name", "Action"];
 
   const [FileState, setFileState] = useState([]);
 
@@ -89,9 +90,11 @@ function CreateCollege() {
     0: { substreamData: substreamSelectVal, colStreamData: colstreamSelectVal },
   });
 
-  const handleMainstreamselect = (form) => {
-    form.change("subStreamId", "");
-  };
+  // const handleMainstreamselect = (form) => {
+  //   form.change("subStreamId", "");
+  // };
+
+  const loadercollegecard = useSelector((data) => data?.collegelist?.isLoading);
 
   const handleDeleteAssociate = (deletecourse) => {
     let deletepayload = {
@@ -156,7 +159,7 @@ function CreateCollege() {
         dispatch(addCollege(formData)).then((res) => {
           if (res?.payload?.data?.success) {
             Router.push("/admin/college");
-            toast.success("College added");
+            toast.success("College added", { autoClose: 1000 });
           } else {
             toast.error("Error");
           }
@@ -172,6 +175,17 @@ function CreateCollege() {
         let collegeUpdateObj = {};
 
         let formdata = new FormData();
+        if (x.college[0]?.collegeLogo) {
+          formdata.append("collegeImageFile", x.college[0].collegeLogo);
+        }
+        if (x.college[0]?.collegeImage) {
+          formdata.append("collegeLogoFile", x.college[0].collegeImage);
+        }
+
+        x.college[0] = values.college[0];
+
+        delete x.college[0].collegeLogo;
+        delete x.college[0].collegeImage;
 
         Object.keys(x).map((key) => {
           if (key === "college") {
@@ -193,7 +207,6 @@ function CreateCollege() {
           }
           if (key === "collegeCourse") {
             collegeUpdateObj[key] = x[key];
-            console.log(collegeUpdateObj[key], x[key], "dffffwerwerwe23423");
           }
         });
 
@@ -206,7 +219,7 @@ function CreateCollege() {
           dispatch(updateCollege(formdata)).then((res) => {
             if (res?.payload?.data?.success) {
               Router.push("/admin/college");
-              toast.success("College updated");
+              toast.success("College updated", { autoClose: 1000 });
             } else {
               toast.error("Error");
             }
@@ -368,8 +381,12 @@ function CreateCollege() {
         errors["courseFees"] = itemArray5;
       });
       errors["collegeCourse"] = itemArray4;
-      errors["collegeCourse"][0]["collegeStreams"] = itemArray3;
-      errors["collegeCourse"][0]["courseFees"] = itemArray5;
+      itemArray4.map(
+        (item, index) => (
+          (errors["collegeCourse"][index]["collegeStreams"] = itemArray3),
+          (errors["collegeCourse"][index]["courseFees"] = itemArray5)
+        )
+      );
     }
     return errors;
   };
@@ -411,18 +428,18 @@ function CreateCollege() {
             collegeImage: collegeDetails?.collegeImage,
           },
         ];
-      
+
+        let mainStreamArray = [];
+        let subStreamArray = [];
         initialValues.collegeCourse = collegeDetails?.AssociateCourse?.map(
           (item) => {
-            let mainStreamArray = [];
-            let subStreamArray = [];
             let x = item?.CourseAssociateStream?.map((ele) => {
               if (!mainStreamArray.includes(ele.mainStreamId))
                 mainStreamArray.push(ele.mainStreamId);
               if (!subStreamArray.includes(ele.subStreamId))
                 subStreamArray.push(ele.subStreamId);
               return {
-                id: ele?.mainStreamId,
+                id: ele?.id,
                 mainStreamId: ele?.mainStreamId,
                 subStreamId: ele.subStreamId,
                 colStreamId: ele?.ColStream?.id,
@@ -453,8 +470,7 @@ function CreateCollege() {
             };
           }
         );
-
-        //  dispatchforStreams(mainStreamArray,  subStreamArray);
+        dispatchforStreams(mainStreamArray, subStreamArray);
 
         collegeDetails?.CollegeAbout?.map((item) => {
           initialValues.collegeAbouts = [
@@ -520,7 +536,6 @@ function CreateCollege() {
               },
             ])
         );
-
         collegeDetails?.FAQ?.map(
           (item) =>
             (initialValues.faq = [
@@ -533,7 +548,6 @@ function CreateCollege() {
         );
 
         initialValues.collegeAgencies = [];
-
         collegeDetails?.CollegeAgency?.map((item) => {
           initialValues.collegeAgencies.push({
             id: item?.id,
@@ -543,8 +557,6 @@ function CreateCollege() {
             totalAgencyForYears: item?.totalAgencyForYears,
           });
         });
-
-        console.log(initialValues, "dfgdfgdfgdfg234234");
         return initialValues;
       }
     } else {
@@ -566,7 +578,7 @@ function CreateCollege() {
         },
       ];
 
-      (initialValues.collegeCourse = [
+      initialValues.collegeCourse = [
         {
           courseTypeId: "",
           courseName: "",
@@ -579,9 +591,9 @@ function CreateCollege() {
           chooseExamAcceptedId: "",
           collegeStreams: [
             {
-              mainStreamId: "",
-              subStreamId: "",
-              colStreamId: "",
+              mainStreamId: null,
+              subStreamId: null,
+              colStreamId: null,
             },
           ],
           courseFees: [
@@ -591,17 +603,18 @@ function CreateCollege() {
             },
           ],
         },
-      ]),
-        (initialValues.collegeAbouts = [
-          {
-            aboutIntro: "",
-            aboutHighLights: "",
-            aboutRankingAndAwards: "",
-            aboutCourses: "",
-            aboutScholarShipPlacements: "",
-            aboutFacilities: "",
-          },
-        ]);
+      ];
+
+      initialValues.collegeAbouts = [
+        {
+          aboutIntro: "",
+          aboutHighLights: "",
+          aboutRankingAndAwards: "",
+          aboutCourses: "",
+          aboutScholarShipPlacements: "",
+          aboutFacilities: "",
+        },
+      ];
       initialValues.collegeAdmissions = [
         {
           admissionIntro: "",
@@ -723,32 +736,42 @@ function CreateCollege() {
     }
   };
 
-  const handleCollegeStream = (fields, index, Streamvalues) => {
-    console.log(Streamvalues[displayIndex].collegeStreams[index], "stream");
+  const handleCollegeStream = (
+    fields,
+    index,
+    Streamvalues,
+    collegeStreamsIndex
+  ) => {
     if (Id) {
-      if (Streamvalues[displayIndex].collegeStreams[index].mainStreamId != "") {
+      if (
+        Streamvalues[displayIndex].collegeStreams[collegeStreamsIndex]
+          .mainStreamId != ""
+      ) {
         dispatch(
           deleteCollegeStreams({
-            id: Streamvalues[displayIndex].collegeStreams[index].id,
+            id: Streamvalues[displayIndex].collegeStreams[collegeStreamsIndex]
+              .id,
           })
         ).then((res) => {
           if (res?.payload?.data?.success) {
-            fields.remove(Streamvalues[displayIndex].collegeStreams[index]);
+            fields.remove(
+              Streamvalues[displayIndex].collegeStreams[collegeStreamsIndex]
+            );
             toast.success("deleted", { autoClose: 1000 });
           }
         });
       } else {
-        fields.remove(index);
+        fields.remove(Streamvalues[index].collegeStreams[collegeStreamsIndex]);
       }
     } else {
-      console.log("sdfsdfsdfsdfsdf1232323");
-      fields.remove(index);
+      fields.remove(
+        Streamvalues[displayIndex].collegeStreams[collegeStreamsIndex]
+      );
     }
   };
 
   return (
     <>
-      {/* <Container> */}
       <div className="admin_home_tabs_row">
         <Row>
           <Col className="p-0">
@@ -782,7 +805,7 @@ function CreateCollege() {
               ...arrayMutators,
             }}
             keepDirtyOnReinitialize
-            validate={validate}
+            // validate={validate}
             initialValues={useMemo(
               (event) => setInitialValues(event),
               [collegeDetails]
@@ -797,6 +820,7 @@ function CreateCollege() {
               form,
             }) => (
               <form onSubmit={handleSubmit}>
+                {loadercollegecard && <LoaderPage />}
                 {dataValue === 0 && (
                   <>
                     <FieldArray name="college">
@@ -1551,9 +1575,9 @@ function CreateCollege() {
                                                                   input.onChange(
                                                                     e
                                                                   );
-                                                                  handleMainstreamselect(
-                                                                    form
-                                                                  );
+                                                                  // handleMainstreamselect(
+                                                                  //   form
+                                                                  // );
                                                                 }}
                                                               >
                                                                 <option value="">
@@ -1827,7 +1851,8 @@ function CreateCollege() {
                                                                 handleCollegeStream(
                                                                   fields,
                                                                   index,
-                                                                  values.collegeCourse
+                                                                  values.collegeCourse,
+                                                                  collegeStreamsIndex
                                                                 )
                                                               }
                                                             >
@@ -2370,7 +2395,7 @@ function CreateCollege() {
                                         </Field>
                                       </Col>
                                       <Col md={12} lg={6}>
-                                        <Field name={`${name}.ShowonFiltering`}>
+                                        {/* <Field name={`${name}.ShowonFiltering`}>
                                           {({ input, meta }) => (
                                             <>
                                               <div className="d-flex">
@@ -2387,13 +2412,19 @@ function CreateCollege() {
                                                 {...input}
                                                 className="form-control signup_form_input "
                                               >
-                                                <option value="">
+                                                <option
+                                                  value=""
+                                                  disabled={true}
+                                                >
                                                   True/False
                                                 </option>
-                                                <option value={true}>
+                                                <option value={false}>
                                                   True
                                                 </option>
-                                                <option value={false}>
+                                                <option
+                                                  value={false}
+                                                  disabled={true}
+                                                >
                                                   False
                                                 </option>
                                               </select>
@@ -2405,7 +2436,7 @@ function CreateCollege() {
                                               </div>
                                             </>
                                           )}
-                                        </Field>
+                                        </Field> */}
                                       </Col>
                                     </Row>
                                     <Row>
@@ -2730,59 +2761,115 @@ function CreateCollege() {
                                 <>
                                   {fields?.map((name, index) => (
                                     <div key={index}>
-                                      <Field name={`${name}.question`}>
-                                        {({ input, meta }) => (
-                                          <>
-                                            <CKeditorGenerator
-                                              input={input}
-                                              onReady={(editor) => {}}
-                                            />
-                                          </>
-                                        )}
-                                      </Field>
-                                      <Field name={`${name}.answerType`}>
-                                        {({ input, meta }) => (
-                                          <>
-                                            <select {...input}>
-                                              <option value="">
-                                                select Answer Type
-                                              </option>
-                                              <option>Short Answer</option>
-                                              <option>Paragraph</option>
-                                            </select>
-                                          </>
-                                        )}
-                                      </Field>
-                                      <Field name={`${name}.answer`}>
-                                        {({ input, meta }) => (
-                                          <>
-                                            <input
-                                              {...input}
-                                              type="text"
-                                              placeholder="Type Your Answer"
-                                            />
-                                          </>
-                                        )}
-                                      </Field>
-                                      <Field name={`${name}.image`}>
-                                        {({ input, meta }) => (
-                                          <>
-                                            <input
-                                              name={`${name}.image`}
-                                              onChange={(e) => {
-                                                handleFileChange(
-                                                  e.target.files,
-                                                  e.target.name
-                                                );
-                                                // input.onChange(e.target.files[0])
-                                              }}
-                                              type="file"
-                                            />
-                                          </>
-                                        )}
-                                      </Field>
-                                      {/* <div> */}
-                                      <img
+                                      <div className="margin_bottom">
+                                        <Field name={`${name}.question`}>
+                                          {({ input, meta }) => (
+                                            <>
+                                              <CKeditorGenerator
+                                                input={input}
+                                                onReady={(editor) => {}}
+                                              />
+                                            </>
+                                          )}
+                                        </Field>
+                                      </div>
+                                      <Row>
+                                        <Col lg={6}>
+                                        <Field name={`${name}.answerType`}>
+                                            {({ input, meta }) => (
+                                              <>
+                                                <FormBoot.Select
+                                                  className="signup_form_input w-100 "
+                                                  {...input}
+                                                >
+                                                  <option value="">
+                                                    select Answer Type
+                                                  </option>
+                                                  <option>Short Answer</option>
+                                                  <option>Paragraph</option>
+                                                </FormBoot.Select>
+                                                <div className="text-end">
+                                                  <img
+                                                    className="select_down_icon"
+                                                    src="/images/down.png"
+                                                  />
+                                                </div>
+                                              </>
+                                            )}
+                                          </Field>
+                                        </Col>
+                                        <Col lg={6}>
+                                        <Field name={`${name}.answer`}>
+                                            {({ input, meta }) => (
+                                              <>
+                                                <input
+                                                  className="signup_form_input w-100 margin_bottom"
+                                                  {...input}
+                                                  type="text"
+                                                  placeholder="Type Your Answer"
+                                                />
+                                              </>
+                                            )}
+                                          </Field>
+                                        </Col>
+                                        <Col lg={12} className="d-flex">
+                                        <Field name={`${name}.image`}>
+                                            {({ input, meta }) => (
+                                              <>
+                                                <input
+                                                  // {...input}
+                                                  type="file"
+                                                  onChange={(e) => {
+                                                    handleFileChange(
+                                                      e.target.files,
+                                                      e.target.name
+                                                    );
+                                                    // input.onChange(e.target.files[0])
+                                                  }}
+                                                  className="form-control signup_form_input margin_bottom"
+                                                  placeholder="College Image"
+                                                />
+                                              </>
+                                            )}
+                                          </Field>
+                                          <div className="d-flex plus_minus_btn_row">
+                                            <div
+                                              type="button"
+                                              className="add_remove_btn"
+                                              onClick={() =>
+                                                fields.push({
+                                                  question: null,
+                                                  answerType: null,
+                                                  answer: null,
+                                                })
+                                              }
+                                            >
+                                              <img
+                                                className="add_remove_icon"
+                                                src="/images/plus.png"
+                                              />
+                                            </div>
+
+                                            {fields.length > 1 ? (
+                                              <div
+                                                className="add_remove_btn"
+                                                type="button"
+                                                onClick={() =>
+                                                  fields.remove(index)
+                                                }
+                                              >
+                                                <img
+                                                  className="add_remove_icon"
+                                                  src="/images/delete-black.png"
+                                                />
+                                              </div>
+                                            ) : (
+                                              <></>
+                                            )}
+                                          </div>
+                                        </Col>
+                                      </Row>
+                                      {/* <img
                                         onClick={() =>
                                           fields.push({
                                             question: null,
@@ -2798,9 +2885,8 @@ function CreateCollege() {
                                           onClick={() => fields.remove(index)}
                                           className="add_remove_icon"
                                           src="/images/delete-icon-blue.png"
-                                        />
-                                      )}
-                                      {/* </div> */}
+                                        /> */}
+                                      {/* )} */}
                                     </div>
                                   ))}
                                 </>

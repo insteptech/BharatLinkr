@@ -689,7 +689,7 @@ export default function AddExams() {
         initialValues={useMemo((e) => init(e), [prevExamData])}
         render={({ handleSubmit, values, dirtyFields, initialValues }) => (
           <form onSubmit={handleSubmit}>
-            {prevExamLoader.loading && <h1>Loading...</h1>}
+            {/* {prevExamLoader.loading && <h1>Loading...</h1>} */}
             {dataValue === 0 && (
               <>
                 <FieldArray name="exam">
