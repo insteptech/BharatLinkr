@@ -54,28 +54,44 @@ router.post('/collegeApproval', collegeController.collegeLinkApproval);
 
 
 router.post(
-  '/addCollegePost',
+  '/addCollege',
   fileUpload.fields([
     {
       name: 'imageFile',
       maxCount: 10,
     },
-
+    {
+      name: 'collegeLogoFile',
+      maxCount: 10,
+    },
+    {
+      name: 'collegeImageFile',
+      maxCount: 10,
+    },
   ]),
-  collegeController.addCollegePosts
-)
+  collegeController.addCollege
+);
+
+
 
 router.post(
-  '/updateCollegePost',
+  '/updateCollege',
   fileUpload.fields([
     {
       name: 'imageFile',
       maxCount: 10,
     },
-
+    {
+      name: 'collegeLogoFile',
+      maxCount: 10,
+    },
+    {
+      name: 'collegeImageFile',
+      maxCount: 10,
+    },
   ]),
-  collegeController.updateCollegePost
-)
+  collegeController.updateCollege
+);
 
 router.post('/collegePostList', collegeController.collegePostList);
 
@@ -91,6 +107,9 @@ router.post('/collegeStreamDelete', collegeController.collegeStreamsDelete);
 router.post('/collegeFAQDelete', collegeController.collegeFAQDelete);
 
 router.delete('/collegeCourseFeesDelete/:id', collegeController.collegeCourseFeesDelete);
+
+router.get('/collegeSampleSheetDownload', collegeController.getCollegeSampleDataExcel);
+
 
 
 

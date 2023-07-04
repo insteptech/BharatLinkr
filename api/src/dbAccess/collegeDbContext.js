@@ -590,12 +590,11 @@ const updateCollege = async (req) => {
 
     });
 
-    console.log(collegeLogoFile, '9090909090')
     await writeFiles(req.files);
 
     if (collegeLogoFile && collegeLogoFile.length > 0) {
       const fileExist = collegeLogoFile.find(
-        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == collegeData.uniqueId
+        (file) => file.originalname
       );
       if (fileExist) {
         console.log
@@ -610,7 +609,7 @@ const updateCollege = async (req) => {
 
     if (collegeImageFile && collegeImageFile.length > 0) {
       const fileExist = collegeImageFile.find(
-        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == collegeData.uniqueId
+        (file) => file.originalname
       );
       if (fileExist) {
         if (cllg && cllg.collegeImage)
@@ -1671,6 +1670,186 @@ const collegeCourseFeesDelete = async (req) => {
   }
 };
 
+//////////// Excel Sheet functionality //////////////////////////
+
+
+
+const getCollegeSampleDataExcel = async (req, res) => {
+  try {
+
+  
+    const collegeStates = await State.findAll({
+      where: { deleted: false },
+    });
+    const collegeCities = await City.findAll({
+      where: { deleted: false },
+    });
+    const chooseAffilation = await masterFilter.findAll({
+      where: { deleted: false, types: 'affilation' },
+    });
+
+    const collegeTypeData = await masterFilter.findAll({
+      where: { deleted: false, types: 'collegetype' },
+    });
+
+    const chooseApprovalData = await masterFilter.findAll({
+      where: { deleted: false, types: 'approvals' },
+    });
+
+   
+
+    const statusesData = await Status.findAll({
+      where: { deleted: false },
+    });
+
+
+    
+    const workbook = new excelJS.Workbook();
+    const workSheet = workbook.addWorksheet('CollegeData');
+    workSheet.columns = [
+      { header: 'College Name', key: 'collegeName', width: 20 },
+      { header: 'Affiliations', key: 'chooseAffiliationId', width: 20 },
+      { header: 'College Type', key: 'collegeTypeId', width: 20 },
+      { header: 'Approvals', key: 'chooseApprovalId', width: 20 },
+      { header: 'States', key: 'collegeStateId', width: 40 },
+      { header: 'City', key: 'collegeCityId', width: 20 },
+      { header: 'Email', key: 'collegeMailId', width: 20 },
+      { header: 'EstablishmentDate', key: 'collegeEstablishedDate', width: 20 },
+      { header: 'NAAC Grade', key: 'collegeNaacGrade', width: 20 },
+      { header: 'Status', key: 'collegeStatusId', width: 20 },
+    ];
+//-------------------------------------------------------------------//
+    chooseAffilation.forEach((affilationData) => {
+      affilationData.masterFilter = affilationData.name;
+    });
+
+    const affilationNames = await Promise.all(
+      chooseAffilation.map((affilationData) => {
+        return affilationData.name;
+      })
+    );
+
+    workSheet.getCell('B2').dataValidation = {
+      type: 'list',
+      allowBlank: true,
+      formulae: [`"${affilationNames.join(',')}"`],
+    };
+//------------------------------------------------------------------//
+    collegeTypeData.forEach((collegeType) => {
+      collegeType.masterFilter = collegeType.name;
+    });
+
+    const collegeTypeNames = await Promise.all(
+      collegeTypeData.map((collegeType) => {
+        return collegeType.name;
+      })
+    );
+
+    workSheet.getCell('C2').dataValidation = {
+      type: 'list',
+      allowBlank: true,
+      formulae: [`"${collegeTypeNames.join(',')}"`],
+    };
+//-----------------------------------------------------------------//
+
+
+    chooseApprovalData.forEach((approvals) => {
+      approvals.masterFilter = approvals.name;
+    });
+
+    const approvalsNames = await Promise.all(
+      chooseApprovalData.map((approvals) => {
+        return approvals.name;
+      })
+    );
+
+    workSheet.getCell('D2').dataValidation = {
+      type: 'list',
+      allowBlank: true,
+      formulae: [`"${approvalsNames.join(',')}"`],
+    };
+//-------------------------------------------------------//
+
+
+collegeStates.forEach((states) => {
+  states.State = states.state;
+});
+
+const statesName = await Promise.all(
+  collegeStates.map((states) => {
+    return states.state;
+  })
+);
+
+workSheet.getCell('E2').dataValidation = {
+  type: 'list',
+  allowBlank: true,
+  formulae: [`"${statesName.join(',')}"`],
+};
+//-------------------------------------------------------//
+
+collegeCities.forEach((cities) => {
+  cities.City = cities.name;
+});
+
+const cityNames = await Promise.all(
+  collegeCities.map((cities) => {
+    return cities.name;
+  })
+);
+
+
+workSheet.getCell('F2').dataValidation = {
+  type: 'list',
+  allowBlank: true,
+  formulae: [`"${cityNames.join(',')}"`],
+};
+
+//-------------------------------------------------------//
+
+
+statusesData.forEach((statuses) => {
+  statuses.Status = statuses.name;
+});
+
+const statusName = await Promise.all(
+  statusesData.map((statuses) => {
+    return statuses.name;
+  })
+);
+workSheet.getCell('J2').dataValidation = {
+  type: 'list',
+  allowBlank: true,
+  formulae: [`"${statusName.join(',')}"`],
+};
+
+
+    workSheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+    const filename = `College${Date.now()}.xlsx`;
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+    await workbook.xlsx.writeFile('Collegesampledata.xlsx');
+    res.send('done');
+    return workbook.xlsx.write(res).then(() => {
+      res.status(200).end();
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
 
 
 module.exports = {
@@ -1693,6 +1872,7 @@ module.exports = {
   collegeAgencyDelete,
   collegeStreamsDelete,
   collegeFAQDelete,
-  collegeCourseFeesDelete
+  collegeCourseFeesDelete,
+  getCollegeSampleDataExcel
 
 };

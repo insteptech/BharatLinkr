@@ -141,6 +141,11 @@ const collegeCourseFeesDelete = async function (req) {
 };
 
 
+const getCollegeSampleDataExcel = async function (req, res) {
+  const result = await collegeDbContext.getCollegeSampleDataExcel(req, res);
+  return result;
+};
+
 
 
 
@@ -164,5 +169,6 @@ module.exports = {
   collegeAgencyDelete,
   collegeStreamsDelete,
   collegeFAQDelete,
-  collegeCourseFeesDelete
+  collegeCourseFeesDelete,
+  getCollegeSampleDataExcel
 };
