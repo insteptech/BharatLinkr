@@ -147,6 +147,30 @@ const approveFriendRequest = async function (req, res) {
     });
 };
 
+const collegeRegisterPendingList = async function (req, res) {
+  await authManager
+    .collegeRegisterPendingList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+
+const approveCollegeRegisterByAdmin = async function (req, res) {
+  await authManager
+    .approveCollegeRegisterByAdmin(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+
 
 
 
@@ -164,5 +188,7 @@ module.exports = {
   forgotUserPassword,
   addFriend,
   userPendingFriendRequest,
-  approveFriendRequest
+  approveFriendRequest,
+  collegeRegisterPendingList,
+  approveCollegeRegisterByAdmin
 };

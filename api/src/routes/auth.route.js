@@ -43,6 +43,12 @@ router.post('/UserPendingFriend', authController.userPendingFriendRequest);
 
 router.post('/approveFriendRequest', authController.approveFriendRequest);
 
+router.post('/collegeRegisterPendingList', authController.collegeRegisterPendingList);
+
+router.post('/approveCollegeRegisterByAdmin', authController.approveCollegeRegisterByAdmin);
+
+
+
 
 
 

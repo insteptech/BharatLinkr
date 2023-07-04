@@ -124,6 +124,16 @@ const approveFriendRequest = async function (req) {
   return result;
 };
 
+const collegeRegisterPendingList = async function (req) {
+  const result = await authDbContext.collegeRegisterPendingList(req);
+  return result;
+};
+
+const approveCollegeRegisterByAdmin = async function (req) {
+  const result = await authDbContext.approveCollegeRegisterByAdmin(req);
+  return result;
+};
+
 
 
 
@@ -144,5 +154,7 @@ module.exports = {
   forgotUserPassword,
   addFriend,
   userPendingFriendRequest,
-  approveFriendRequest
+  approveFriendRequest,
+  collegeRegisterPendingList,
+  approveCollegeRegisterByAdmin
 };
