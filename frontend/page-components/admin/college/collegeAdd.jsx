@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Col, Container, placeholder, Row, Tab, Tabs } from "react-bootstrap";
+import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
@@ -9,17 +9,14 @@ import { getState } from "../../../redux/actions/location/createState";
 import {
   addCollege,
   deleteAssociateCOllege,
-  deleteAssociateCourse,
   deleteCollegeAgency,
   deleteCollegeFees,
   deleteCollegeStreams,
   getCollegebyId,
-  getColleges,
   updateCollege,
 } from "../../../redux/actions/college/college";
 import {
   getAllMasterFilter,
-  getMasterFilter,
 } from "../../../redux/actions/masterfilter/createmasterfilter";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
 import {
