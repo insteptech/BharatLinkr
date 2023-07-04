@@ -98,7 +98,8 @@ const LevelCard = (props) => {
       <Row xs={1} md={3} className="g-4">
         {loading ? (
           <LoaderPage />
-        ) : coursetypelist && coursetypelist.length > 0 ? (
+        ) : 
+        coursetypelist && coursetypelist.length > 0 ? (
           coursetypelist?.map((listItem, listIndex) => {
             let courseLevelList = getCourseLevelList.filter((item, index) => {
               return item?.courselevelType?.id === listItem?.id;

@@ -60,7 +60,7 @@ const CoursesDetailsLeft = (props) => {
       tabsName: `Carrer after ${courseData?.courseName}`,
     },
     {
-      tabsName: "IMPORTANT EXAM BOOKS",
+      // tabsName: "IMPORTANT EXAM BOOKS",
     },
     {
       tabsName: "Average fee",
@@ -69,7 +69,7 @@ const CoursesDetailsLeft = (props) => {
       tabsName: "Salary Trends",
     },
     {
-      tabsName: "Top recruiters",
+      // tabsName: "Top recruiters",
     },
   ];
   const { dataValue, setDataValue } = props;

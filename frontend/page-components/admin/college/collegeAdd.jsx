@@ -805,7 +805,7 @@ function CreateCollege() {
               ...arrayMutators,
             }}
             keepDirtyOnReinitialize
-            // validate={validate}
+             validate={validate}
             initialValues={useMemo(
               (event) => setInitialValues(event),
               [collegeDetails]
