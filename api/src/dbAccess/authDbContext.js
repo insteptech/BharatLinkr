@@ -626,6 +626,62 @@ const approveFriendRequest = async (req) => {
   }
 };
 
+const collegeRegisterPendingList = async (req) => {
+  try {
+      const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+      const size = req.body.pageSize ? req.body.pageSize : 10;
+      let whrCondition = { deleted: false, active:false };
+      if(req.body.id){
+        whrCondition = {id:req.body.id }
+      }
+      if (req.body.search) {
+        const obj = {
+          name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+        };
+        whrCondition = { ...obj, ...whrCondition };
+      }
+
+   
+  
+      const result = await User.findAndCountAll({
+        where:   whrCondition ,
+     
+        offset: (pageNo - 1) * size,
+        limit: size,
+        distinct:true
+      });
+      return { data: result, success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+};
+
+
+const approveCollegeRegisterByAdmin = async (req) => {
+  try {
+    const stream1 = [];
+    await Promise.all(
+      req.body.PendingRequest.map(async (item) => {
+     
+          const result = await User.update({ active:item.active,
+           returning: true }, {where:{id:item.id}});
+           if(item.active === true){
+             
+             stream1.push({status:'College Approved SuccessFully'});
+           }else{
+           const collegeDel =  await User.findOne({where:{id:item.id}})
+                    await User.destroy({where:{id:collegeDel.id}})
+           stream1.push({status:'College Deleted SuccesFully'});
+            
+           }
+          return result;
+      }),
+    );
+    return { data: stream1, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   register,
@@ -642,5 +698,7 @@ module.exports = {
   forgotUserPassword,
   addFriend,
   userPendingFriendRequest,
-  approveFriendRequest
+  approveFriendRequest,
+  collegeRegisterPendingList,
+  approveCollegeRegisterByAdmin
 };
