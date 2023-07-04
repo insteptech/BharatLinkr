@@ -20,7 +20,18 @@ import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import CKeditorGenerator from "../../../components/admin/Ckeditor/CKeditor";
 
 export default function AddCourse() {
+  const courseCMS = [
+    { title: "About", key: "about" },
+    { title: "Specialization", key: "specialization" },
+    { title: "Eligibility", key: "eligibility" },
+    { title: "Course After Details", key: "courseAfterDetails" },
+    { title: "Career", key: "career" },
+    { title: "Avg. Fees", key: "avgFees" },
+    { title: "Salary Trends", key: "salaryTrends" },
+  ];
+
   const [dataValue, setDataValue] = useState(0);
+  const [CMSActive, setCMSActive] = useState(courseCMS[0].key);
   const FormSteps = ["Course Register", "CMS"];
   const [durationState, setDurationState] = useState("Year");
 
@@ -39,16 +50,6 @@ export default function AddCourse() {
   const prevData = useSelector(
     (data) => data?.coursebyId?.course?.data?.data?.rows[0]
   );
-
-  const courseCMS = [
-    { title: "About", key: "about" },
-    { title: "Specialization", key: "specialization" },
-    { title: "Eligibility", key: "eligibility" },
-    { title: "Course After Details", key: "courseAfterDetails" },
-    { title: "Career", key: "career" },
-    { title: "Avg. Fees", key: "avgFees" },
-    { title: "Salary Trends", key: "salaryTrends" },
-  ];
 
   const handleSubmit = (values) => {
     if (router.query.Id) {
@@ -394,7 +395,7 @@ export default function AddCourse() {
             keepDirtyOnReinitialize
             validate={validate}
             initialValues={useMemo((e) => init(e), [prevData])}
-            render={({ handleSubmit }) => (
+            render={({ handleSubmit, values }) => (
               <form onSubmit={handleSubmit}>
                 {dataValue === 0 ? (
                   <>
@@ -594,14 +595,13 @@ export default function AddCourse() {
                       <Col md={12} lg={6}>
                         <div className="">
                           <div className="">
-                             <label className="signup_form_label">
-                                      Course Duration(years)
-                                    </label>
+                            <label className="signup_form_label">
+                              Course Duration(years)
+                            </label>
                             <Field name="courseDuration">
                               {({ input, meta }) => (
                                 <>
                                   <div className="d-flex">
-                                   
                                     {meta.error && meta.touched && (
                                       <span className="text-danger required_msg">
                                         {meta.error}
@@ -787,12 +787,13 @@ export default function AddCourse() {
                 ) : null}
                 {dataValue === 1 ? (
                   <>
-                    <Row>
+                    {/* <Row>
                       <Col>
                         <FieldArray name="CMS">
                           {({ fields }) => (
                             <>
                               {fields.map((name, index) => (
+                                // <ScrollingCarousel show={5.5} slide={4} swiping={true}>
                                 <Tabs
                                   key={index}
                                   defaultActiveKey={0}
@@ -825,12 +826,82 @@ export default function AddCourse() {
                                     );
                                   })}
                                 </Tabs>
+                                  // </ScrollingCarousel>
                               ))}
                             </>
                           )}
                         </FieldArray>
                       </Col>
-                    </Row>
+                    </Row> */}
+                      <Row>
+                        <Col lg={12} className="">
+                          <FieldArray name="CMS">
+                            {({ fields }) => (
+                              <>
+                                {fields.map((name, index) => (
+                                  <>
+                                    <div className=" admin_home_tabs_row p-0">
+                                      <ScrollingCarousel
+                                        show={5.5}
+                                        slide={4}
+                                        swiping={true}
+                                      >
+                                        <ul
+                                          key={index}
+                                          className="nav "
+                                        >
+                                          {courseCMS &&
+                                            courseCMS.map(
+                                              (steps, stepsIndex) => (
+                                                <li
+                                                  className="nav-item"
+                                                  key={steps.key}
+                                                >
+                                                  <a
+                                                    className={`nav-link admin_tabs_name cms_tabs ${
+                                                      CMSActive === steps.key &&
+                                                      "cms_active"
+                                                    }`}
+                                                    active="true"
+                                                    onClick={() =>
+                                                      setCMSActive(steps.key)
+                                                    }
+                                                  >
+                                                    {steps.title}
+                                                  </a>
+                                                </li>
+                                              )
+                                            )}
+                                        </ul>
+                                      </ScrollingCarousel>
+                                    </div>
+
+                                    {courseCMS &&
+                                      courseCMS.map(
+                                        (steps, stepsIndex) =>
+                                          CMSActive === steps.key && (
+                                            <Field
+                                              name={`${name}.${steps.key}`}
+                                            >
+                                              {({ input, meta }) => (
+                                                <>
+                                                  <CKeditorGenerator
+                                                    input={input}
+                                                    onReady={(editor) => {}}
+                                                  />
+                                                </>
+                                              )}
+                                            </Field>
+                                          )
+                                      )}
+                                  </>
+                                ))}
+                              </>
+                            )}
+                          </FieldArray>
+                        </Col>
+                        <Col></Col>
+                      </Row>
                     <Row>
                       <Col className="text-center">
                         <button

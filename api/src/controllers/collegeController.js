@@ -226,6 +226,18 @@ const collegeCourseFeesDelete = async function (req, res) {
 };
 
 
+const getCollegeSampleDataExcel = async function (req, res) {
+  await collegeManager
+    .getCollegeSampleDataExcel(req, res)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
 module.exports = {
   addCollege,
   collegeList,
@@ -246,5 +258,6 @@ module.exports = {
   collegeAgencyDelete,
   collegeStreamsDelete,
   collegeFAQDelete,
-  collegeCourseFeesDelete
+  collegeCourseFeesDelete,
+  getCollegeSampleDataExcel
 };

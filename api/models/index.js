@@ -214,6 +214,8 @@ db.course.belongsTo(db.masterFilter, { as: "courselevelType", foreignKey: 'cours
 
 db.User.hasMany(db.userFriendList, { as: "Friends", foreignKey: 'recieverId' });
 db.userFriendList.belongsTo(db.User, { as: "Approved Friends", foreignKey: 'senderId' });
+db.userFriendList.belongsTo(db.User, { as: "FriendsDetail", foreignKey: 'senderId' });
+
 
 
 
