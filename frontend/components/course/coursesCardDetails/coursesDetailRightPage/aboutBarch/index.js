@@ -52,7 +52,7 @@ const AboutBarch = ({ props }) => {
       tabsName: `Carrer after ${courseData?.courseName}`,
     },
     {
-      tabsName: "IMPORTANT EXAM BOOKS",
+      // tabsName: "IMPORTANT EXAM BOOKS",
     },
     {
       tabsName: "Average fee",
@@ -61,7 +61,7 @@ const AboutBarch = ({ props }) => {
       tabsName: "Salary Trends",
     },
     {
-      tabsName: "Top recruiters",
+      // tabsName: "Top recruiters",
     },
   ];
 
@@ -188,7 +188,7 @@ const AboutBarch = ({ props }) => {
           })}
       </div>
 
-      <div>
+      {/* <div>
         {props.dataValue === 5 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
@@ -203,10 +203,10 @@ const AboutBarch = ({ props }) => {
               </>
             );
           })}
-      </div>
+      </div> */}
 
       <div>
-        {props.dataValue === 6 &&
+        {props.dataValue === 5 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -223,7 +223,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 7 &&
+        {props.dataValue === 6 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -239,7 +239,7 @@ const AboutBarch = ({ props }) => {
           })}
       </div>
 
-      <div>
+      {/* <div>
         {props.dataValue === 8 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
@@ -254,7 +254,7 @@ const AboutBarch = ({ props }) => {
               </>
             );
           })}
-      </div>
+      </div> */}
     </>
   );
 };

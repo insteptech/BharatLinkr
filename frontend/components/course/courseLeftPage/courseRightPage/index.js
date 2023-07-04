@@ -95,6 +95,8 @@ const CourseRightPage = (props) => {
   const loadingFilterlist = useSelector(
     (state) => state?.courseList?.isLoading
   );
+   
+  const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
   return (
     <>
@@ -129,7 +131,7 @@ const CourseRightPage = (props) => {
                 </div>
               </div>
             </Col>
-          </Row>
+          </Row>        
           <div className="mobile_margin_bottom">
             <LevelCard
               showList={showList}
@@ -160,7 +162,7 @@ const CourseRightPage = (props) => {
       )}
 
       {/* ----------------------search filter----------------------- */}
-      {show && (
+      {show && loading ? <LoaderPage/> : (
         <div className="">
           {searchCourseList &&
             searchCourseList?.map((item, index) => {

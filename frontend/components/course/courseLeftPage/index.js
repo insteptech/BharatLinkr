@@ -15,7 +15,6 @@ const CourseLeftPage = (props) => {
 
   const [filteredId, setFilteredId] = useState([]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [search, setSearch] = useState("");
 
   const courseList = useSelector(
     (data) => data?.courseList?.courselist?.data
@@ -119,7 +118,7 @@ const CourseLeftPage = (props) => {
               return (
                 <div className="selected_filters" key={index}>
                   {item}
-                  <div className="filter_dot"></div>
+                  {/* <div className="filter_dot" onClick={() => handleSelectedFilterDelete(item, index)}></div> */}
                 </div>
               );
             })}
