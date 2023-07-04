@@ -122,6 +122,16 @@ optgroup {
   color: var(--admin-btn-bg) !important;
 }
 
+.no_data_page{
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--admin-btn-bg);
+  width: 100%;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* ----------loader-css-end------------ */
 .hcceco_logo {
   max-width: 220px;
@@ -517,7 +527,7 @@ optgroup {
   font-size: 15px;
   line-height: 1.5rem;
   color: #939198;
-  max-height: 3.75rem;
+  max-height: 48px;
   padding: 11px 20px;
 }
 
@@ -577,8 +587,9 @@ optgroup {
   border-radius: 0.3125rem;
   font-size: 1rem;
   color: #0f0c1a;
-  padding: 11px 31px;
+  padding: 11px 25px;
   font-weight: 600;
+  max-height: 47px;
 }
 
 .css-13cymwt-control {
@@ -624,11 +635,11 @@ optgroup {
   background: var(--admin-btn-bg);
   max-width: 14.625rem;
   border-radius: 0.3125rem;
-  padding: 0.75rem 1.875rem;
-  margin-top: 4.5rem;
-  margin-bottom: 6.875rem;
+  padding: 0.6875rem 1.875rem;
+  margin-top: 60px;
+  margin-bottom: 70px;
   font-weight: 500;
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   color: #ffffff;
   border: none;
 }
@@ -687,6 +698,10 @@ optgroup {
   margin-bottom: 30px;
 }
 
+.m_top_30{
+  margin-top: 30px;
+}
+
 .next_step_btn {
   background: var(--admin-btn-bg);
   border: none;
@@ -702,7 +717,7 @@ input[type="file"]::file-selector-button {
   color: #1a120c;
   cursor: pointer;
   transition: background-color 0.2s ease-in-out;
-  padding: 1.5rem 2.625rem;
+  padding: 17px 42px;
 }
 
 .form-control[type="file"] {
@@ -1137,6 +1152,18 @@ input::-webkit-inner-spin-button {
   color: #0f0c1a;
   font-size: 0.9375rem;
 }
+/* .cms_tabs{
+  line-height: 20px;
+} */
+.cms_active{
+  color: #0f0c1a;
+  background-color: #fff;
+  border-top: 1px solid var(--admin-bg);
+  border-right: 1px solid var(--admin-bg);
+  border-left: 1px solid var(--admin-bg);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
 
 .active_bar {
   border-left: 0.3125rem solid #463196;
@@ -1227,7 +1254,10 @@ input::-webkit-inner-spin-button {
   } */
 }
 
-@media only screen and (max-width: 1202px) {
+@media only screen and (max-width: 1209px) {
+  .edit_profile_h2{
+    font-size: 25px !important;
+  }
   .admin_home_tabs_row_padding {
     padding-bottom: 0.625rem;
   }
@@ -1316,7 +1346,9 @@ input::-webkit-inner-spin-button {
     min-width: 25rem;
     min-height: 2.5rem;
   } */
-
+  .edit_profile_h2{
+    font-size: 22px !important;
+  }
   .login_img {
     margin-top: 3.75rem;
     margin-left: 0rem;
@@ -1378,6 +1410,9 @@ input::-webkit-inner-spin-button {
 
   .border_tabs_padding {
     padding: 6px 18px;
+  }
+  .edit_profile_h2{
+    font-size: 20px !important;
   }
 }
 
@@ -1610,7 +1645,7 @@ input::-webkit-inner-spin-button {
   }
 
   .margin_top {
-    margin-top: 23px;
+    margin-top: 21px;
   }
 
   .signup_form_label {
@@ -2572,6 +2607,13 @@ input::-webkit-inner-spin-button {
 .user_header_profile_set {
   display: flex;
   align-items: center;
+  /* margin-top: 16rem; */
+}
+
+.ui_left_menu_body{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .notification_page {
@@ -2758,7 +2800,7 @@ input::-webkit-inner-spin-button {
 .edit_profile_h2 {
   font-style: normal;
   font-weight: 700;
-  font-size: 1.875rem;
+  font-size: 27px;
   color: #463196;
   padding: 2.5rem 0;
   text-transform: uppercase;
@@ -3999,7 +4041,7 @@ img {
 .selected_filters_subbox {
   display: flex;
   flex-wrap: wrap;
-  max-height: 9.375rem;
+  max-height: 6.875rem;
   overflow: auto;
 }
 
@@ -5207,7 +5249,7 @@ img {
 
 .image_cover_content {
   width: 100%;
-  height: 66%;
+  height: 7.4375rem;
   position: absolute;
   top: 0;
   left: 0;

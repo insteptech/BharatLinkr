@@ -159,7 +159,7 @@ function AddFamilycode() {
                                     </div>
                                   )}
                                 </Field>
-                                <div className=" d-flex plus_minus_btn_margin">
+                                <div className=" d-flex m_top_30">
                                   {!Id && (
                                     <div
                                       type="button"

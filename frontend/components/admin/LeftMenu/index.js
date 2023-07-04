@@ -16,7 +16,7 @@ const LeftMenuPage = () => {
   return (
     <>
       <div className="leftmenu">
-        <h2 className="leftmenu_logo_heading">Logo</h2>
+      <Image width={80} height={40} src="/images/bharat-logo.svg" />
         {dummyData?.map((items, index) => {
           return (
               <div

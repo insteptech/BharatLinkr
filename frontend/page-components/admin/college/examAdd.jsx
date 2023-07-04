@@ -756,25 +756,7 @@ export default function AddExams() {
                                       {...input}
                                       className="form-control select-style signup_form_input"
                                     >
-                                      <option value="">
-                                        Select Course Type
-                                      </option>
-
-                                      {masterFilterData &&
-                                        masterFilterData?.coursetype?.map(
-                                          (item, index) => {
-                                            if (item?.types === "coursetype") {
-                                              return (
-                                                <option
-                                                  key={index}
-                                                  value={item.id}
-                                                >
-                                                  {item.name}
-                                                </option>
-                                              );
-                                            }
-                                          }
-                                        )}
+                                      
                                       <option value="">
                                         Select Course Type
                                       </option>

@@ -112,7 +112,7 @@ const CourseLeftPage = (props) => {
       {/* ----------------------master filter bar start (selected filter)----------------------- */}
 
       <div className="colleges_left_boxes">
-        <p className="college_box_heading">Selected Filters</p>
+        <p className="college_box_heading mb-0">Selected Filters</p>
         <div className="selected_filters_subbox">
           {selectedItems &&
             selectedItems?.map((item, index) => {

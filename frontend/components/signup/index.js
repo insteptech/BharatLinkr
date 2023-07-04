@@ -267,8 +267,8 @@ function SignUpPage() {
       <Container className="p-3">
         <Row>
           <Col className="d-flex">
-            <div className="text-center signup_logo_headings">
-              <Image width={210} height={100} src="images/bharat-logo.svg" />
+            <div className="text-center signup_logo_headings mt-4">
+              <Image width={240} height={40} src="images/bharat-logo.svg" />
               <p className="f-22 logo_sub_heading"> Create Your Account</p>
             </div>
           </Col>

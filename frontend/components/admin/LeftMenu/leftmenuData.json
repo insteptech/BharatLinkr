@@ -18,7 +18,7 @@
     "whitelogo": "/images/college-white.png"
   },
   {
-    "name": "Organisation",
+    "name": "Corporate",
     "path": "/organisation",
     "logo": "/images/admin-management.svg",
     "whitelogo": "/images/admin-management-white.png"
@@ -54,7 +54,7 @@
     "whitelogo": "/images/white-location.svg"
   },
   {
-    "name": "Corporate",
+    "name": "Practice",
     "path": "/corporate",
     "logo": "/images/corporate-icon.png",
     "whitelogo": "/images/white-corporate.png"

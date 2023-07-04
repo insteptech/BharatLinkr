@@ -1274,7 +1274,7 @@ function CreateCollege() {
                                                   )}
                                                 </Field>
 
-                                                <div className="d-flex plus_minus_btn_row my-2">
+                                                <div className="d-flex plus_minus_btn_row">
                                                   <div
                                                     type="button"
                                                     className="add_remove_btn"
@@ -1815,7 +1815,7 @@ function CreateCollege() {
                                                           )}
                                                         </Field>
 
-                                                        <div className="d-flex mt-2 margin_bottom">
+                                                        <div className="d-flex ">
                                                           <div
                                                             type="button"
                                                             className="add_remove_btn ms-2"
@@ -2036,10 +2036,10 @@ function CreateCollege() {
                                                           </div>
                                                         )}
                                                       </Field>
-                                                      <div className="d-flex mt-2 margin_bottom">
+                                                      <div className="d-flex m_top_30 ">
                                                         <div
                                                           type="button"
-                                                          className="add_remove_btn ms-2 margin_top"
+                                                          className="add_remove_btn "
                                                           onClick={() =>
                                                             fields.push({
                                                               courseFeeDetailsId:
@@ -2055,7 +2055,7 @@ function CreateCollege() {
                                                         </div>
                                                         {fields.length > 1 ? (
                                                           <div
-                                                            className="add_remove_btn ms-2 margin_top"
+                                                            className="add_remove_btn "
                                                             type="button"
                                                             onClick={() =>
                                                               handleFeeDelete(
