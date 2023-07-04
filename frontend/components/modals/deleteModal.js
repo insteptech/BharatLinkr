@@ -16,7 +16,7 @@ function DeleteModal(props) {
             <button
               className=" admin_signup_btn mx-2 my-0"
               onClick={() => {
-                props.handleDelete(props.deleteItem);
+                props.handleDelete(props.subHeader, props.deleteItem);
                 props.onHide();
               }}
             >

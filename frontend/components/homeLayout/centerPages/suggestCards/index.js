@@ -28,7 +28,6 @@ const SuggestCards = () => {
   const isFriend = (id) => {
     if (id) {
       let friendStatus = myFriendsList.find(item => item.senderId === id)
-      console.log(myFriendsList, 'freind', friendStatus)
       if (!friendStatus) {
         return "Link"
       } else if (friendStatus.status) {

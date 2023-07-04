@@ -1,47 +1,62 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Image } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { setActiveNav } from "../../../redux/reducers/User/userSlice";
 
 const LeftMenuPage = () => {
-  const dummyData = require("./leftmenuData.json");
-  const [activeIndex, setActiveIndex] = useState("");
+  const adminNavBar = require("./leftmenuData.json");
+
   const router = useRouter();
-  // console.log(router.pathname, "pathname");
-  //   router.asPath
-  const handleActive = (id, path) => {
-    setActiveIndex(id);
-    router.push(`/admin${path}`);
+  const { pathname } = router
+
+  const activeNavItem = useSelector((state) => state.userSlice.activeNavItem);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    checkRoute();
+  }, [router.pathname]);
+  function checkRoute() {
+    adminNavBar.forEach((NavItem) => {
+      NavItem.other.map((ele) => {
+        if (pathname.includes(ele)) {
+          dispatch(setActiveNav(NavItem.name));
+        }
+      });
+    });
+  }
+  const handleActive = (path) => {
+    router.push(`/admin/${path}`);
   };
   return (
     <>
       <div className="leftmenu">
-      <Image width={80} height={40} src="/images/bharat-logo.svg" />
-        {dummyData?.map((items, index) => {
+        <Image width={80} height={40} src="/images/bharat-logo.svg" />
+        {adminNavBar?.map((navItem, index) => {
           return (
-              <div
-                key={index}
-                onClick={() => handleActive(index, items.path)}
+            <div
+              key={index}
+              onClick={() => handleActive(navItem.path)}
+              className={
+                navItem.name === activeNavItem ?
+                  "leftmenu_btn active"
+                  : "leftmenu_btn"
+              }
+            >
+              <Image
+                className="admin_leftmenu_btn_icon"
+                src={navItem.name === activeNavItem ? navItem.whitelogo : navItem.logo}
+              />
+              <h6
                 className={
-                  router.pathname.includes(items.path)
-                    ? "leftmenu_btn active"
-                    : "leftmenu_btn"
+                  navItem.name === activeNavItem
+                    ? "leftmenu_tabs_name white_font"
+                    : "leftmenu_tabs_name"
                 }
               >
-                <Image
-                  className="admin_leftmenu_btn_icon"
-                  src={activeIndex == index ? items.whitelogo : items.logo}
-                />
-                <h6
-                  className={
-                    activeIndex == index
-                      ? "leftmenu_tabs_name white_font"
-                      : "leftmenu_tabs_name"
-                  }
-                >
-                  {items.name}
-                </h6>
-              </div>
+                {navItem.name}
+              </h6>
+            </div>
           );
         })}
       </div>

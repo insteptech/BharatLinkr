@@ -5,7 +5,6 @@ const AdminTable = (props) => {
   let tableData = props.data;
   let tableHeading = tableData[0].Heading;
   let tableContent = tableData[1].Content;
-  console.log(tableHeading, tableContent, "data");
   return (
     <>
       <Table responsive className="admin_table" bordered hover>
