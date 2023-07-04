@@ -1,10 +1,10 @@
 import React from "react";
-import CollegeEditProfile from "../../../components/collegeEditProfile/collegeEditProfile";
+import EditProfile from "../../../components/collegeEditProfile/EditProfile";
 
 const CollegeEProfile = () => {
   return (
     <>
-      <CollegeEditProfile />
+      <EditProfile />
     </>
   );
 };
