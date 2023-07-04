@@ -2,19 +2,13 @@ import React, { useState } from "react";
 import {
   Col,
   Container,
-  Placeholder,
   Row,
   Tab,
   Tabs,
-  tab,
   Form as Bootform,
-  Button,
   Table
 } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
-import { buttonTypes, FieldTypes, inputFieldTypes } from "../../utils/helper";
-import FormGenerator from "../common-components/Form/FormGenerator";
-import Select from "react-select";
 import { FieldArray } from "react-final-form-arrays";
 import arrayMutators from "final-form-arrays";
 
