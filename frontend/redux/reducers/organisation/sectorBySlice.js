@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addOrganisation, companyBrandList, companyGroupList, companyLikeslist, companyNameList, getOrganisationbyid, getOrganisationlist, updateOrganisation } from "../../actions/organisation/addorganisation";
 import {
+  createNewIndustry,
   getIndustryById,
   getIndustryList,
   getSectorById,
@@ -89,6 +90,12 @@ const sectorBySlice = createSlice({
     });
 
     // for particular id of industry
+    builder.addCase(createNewIndustry.pending, (state, action) => {
+      state.isLoading = true
+    });
+    builder.addCase(createNewIndustry.fulfilled, (state, action) => {
+      state.isLoading = false
+    });
     builder.addCase(getIndustryById.pending, (state, action) => {
       (state.status = action.payload?.status), (state.industryBylist = []);
     });
@@ -99,11 +106,11 @@ const sectorBySlice = createSlice({
 
     // org list
     builder.addCase(getOrganisationlist.pending, (state, action) => {
-      (state.status = action.payload?.status), (state.organisationList = []);
+      state.isLoading = true
     });
     builder.addCase(getOrganisationlist.fulfilled, (state, action) => {
-      (state.status = ""),
-        (state.organisationList = action.payload?.data?.data);
+      state.isLoading = false
+      state.organisationList = action.payload?.data?.data
     });
 
     //org by id
@@ -153,11 +160,14 @@ const sectorBySlice = createSlice({
 
     //familycodelist
     builder.addCase(familycodeList.pending, (state, action) => {
-      (state.status = action.payload?.status);
+      state.status = action.payload?.status
+      state.isLoading = true
+
     });
     builder.addCase(familycodeList.fulfilled, (state, action) => {
-      (state.status = ""),
-        (state.familyCodelist = action.payload?.data?.data);
+      state.status = "";
+      state.isLoading = false
+      state.familyCodelist = action.payload?.data?.data;
     });
 
     //familycodeById
@@ -171,11 +181,14 @@ const sectorBySlice = createSlice({
 
     //professioncodelist
     builder.addCase(professioncodeList.pending, (state, action) => {
-      (state.status = action.payload?.status);
+      state.status = action.payload?.status;
+      state.isLoading = true
+
     });
     builder.addCase(professioncodeList.fulfilled, (state, action) => {
-      (state.status = ""),
-        (state.professionCodeList = action.payload?.data?.data);
+      state.status = ""
+      state.isLoading = false
+      state.professionCodeList = action.payload?.data?.data;
     });
 
     // //profession code dropdown
@@ -198,11 +211,13 @@ const sectorBySlice = createSlice({
 
     //profession list
     builder.addCase(professionlist.pending, (state, action) => {
-      (state.status = action.payload?.status);
+      state.isLoading = true
+      state.status = action.payload?.status;
     });
     builder.addCase(professionlist.fulfilled, (state, action) => {
-      (state.status = ""),
-        (state.professionList = action.payload?.data?.data);
+      state.status = ""
+      state.isLoading = false
+      state.professionList = action.payload?.data?.data;
     });
 
     //profession by id

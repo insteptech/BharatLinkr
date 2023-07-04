@@ -29,163 +29,366 @@ import {
   deleteProfession,
 } from "../../../redux/actions/organisation/profession";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 
 function Organisation() {
-  const [pagination, setPagination] = useState({
-    pageNo: 1,
-    pageSize: 10,
-  });
-  const [modalShow, setModalShow] = useState(false);
-  const [deleteItem, setDeleteItem] = useState();
-  const [displayProfessions, setDisplayProfessions] = useState("Family code");
-  const [displayCompanies, setDisplayCompanies] = useState("Sector")
-  const handleHide = () => {
-    setModalShow(false);
-  };
+  const headerTabs = [{ name: "Companies", key: 'companies' }, { name: "Professions", key: 'profession' }];
+  const subHeaderTabs = [
+    { name: "Sector", key: 'sector', showFor: 'companies' },
+    { name: "Industry", key: 'industry', showFor: 'companies' },
+    { name: "Companies", key: 'companies', showFor: 'companies' },
+    { name: "Family code", key: 'familyCode', showFor: 'profession' },
+    { name: "Profession Code", key: 'professionCode', showFor: 'profession' },
+    { name: "Profession list", key: 'profession', showFor: 'profession' }]
+
+  const sectorheading = ["No.", "Sector", "Action"];
+  const industryheading = ["No.", "Industry", "Action"];
+  const Heading = ["S.No.", "Image", "Logo", "Name", "City", "State", "Company level", "Action",];
+  const professionHeading = ["S.No.", "family/profession", "Also called", "Prep Level", "Action",];
+  const familyCodeTablehead = ["Sr. no", "Family Name", "Family Code", "Action",];
+  const professionCodeTablehead = ["Sr. no", "Profession Name", "Profession Code", "Action",];
 
   const router = useRouter();
   const dispatch = useDispatch();
-  const Heading = [
-    "S.No.",
-    "Image",
-    "Logo",
-    "Name",
-    "City",
-    "State",
-    "Company level",
-    "Action",
-  ];
-  const professionHeading = [
-    "S.No.",
-    "family/profession",
-    "Also called",
-    "Prep Level",
-    "Action",
-  ];
-  const FormSteps = ["Companies", "Professions"];
-  const sectorheading = ["No.", "Sector", "Action"];
-  const industryheading = ["No.", "Industry", "Action"];
-  const [dataValue, setDataValue] = useState(0);
+
+  const [pagination, setPagination] = useState({ pageNo: 1, pageSize: 10, });
+  const [modalShow, setModalShow] = useState(false);
+  const [deleteItem, setDeleteItem] = useState();
+  const [header, setHeader] = useState(headerTabs[0].key);
+  const [subHeader, setSubHeader] = useState(subHeaderTabs[0].key);
+
+  const handleHide = () => {
+    setModalShow(false);
+  };
+  const isLoading = useSelector(state => state.sectorData.isLoading)
 
   const getSectorList = useSelector((state) => state?.sectorData?.sectorlist);
-  const loadergetSectorlist = useSelector(
-    (state) => state?.sectorData?.isLoading
-  );
-  const organisationlist = useSelector(
-    (state) => state?.sectorData?.organisationList
-  );
+  const organisationlist = useSelector(state => state?.sectorData?.organisationList);
+  const industrylist = useSelector(state => state?.sectorData?.industrylist);
+  const familycodelist = useSelector(state => state?.sectorData?.familyCodelist);
+  const professioncodelist = useSelector(state => state?.sectorData?.professionCodeList);
+  const professionList = useSelector(state => state?.sectorData?.professionList);
+
+  const tabData = {
+    sector: {
+      forList: () => dispatch(getlistSector(pagination)), list: getSectorList?.rows, tableHeadings: sectorheading
+    },
+    industry: {
+      forList: () => dispatch(getIndustryList(pagination)), list: industrylist?.rows, tableHeadings: industryheading,
+    },
+    companies: {
+      forList: () => dispatch(getOrganisationlist(pagination)), list: organisationlist?.rows, tableHeadings: Heading,
+    },
+    familyCode: {
+      forList: () => dispatch(familycodeList(pagination)), list: familycodelist?.rows, tableHeadings: familyCodeTablehead,
+    },
+    professionCode: {
+      forList: () => dispatch(professioncodeList(pagination)), list: professioncodelist?.rows, tableHeadings: professionCodeTablehead,
+    },
+    profession: {
+      forList: () => dispatch(professionlist(pagination)), list: professionList?.rows, tableHeadings: professionHeading, editRoute: () =>
+        router.push(
+          `organisation/profession/update/${item?.id}`
+        )
+    },
+  }
 
   useEffect(() => {
-    // if (getRole() !== "admin") {
-    //   router.push('/organisation')
-    // } else {
-    dispatch(getlistSector(pagination));
-    dispatch(getIndustryList(pagination));
-    dispatch(getOrganisationlist(pagination));
-    dispatch(familycodeList(pagination));
-    dispatch(professioncodeList(pagination));
-    dispatch(professionlist(pagination));
-    // }
-  }, [pagination]);
+    if (subHeader) tabData[subHeader].forList()
+  }, [subHeader, pagination])
 
-  const getIndustrylist = useSelector(
-    (state) => state?.sectorData?.industrylist
-  );
-  const loadergetIndustrylist = useSelector(
-    (state) => state?.sectorData?.isLoading
-  );
-  const familycodelist = useSelector(
-    (state) => state?.sectorData?.familyCodelist
-  );
-  const professioncodelist = useSelector(
-    (state) => state?.sectorData?.professionCodeList
-  );
-  const professionList = useSelector(
-    (state) => state?.sectorData?.professionList
-  );
-
-  const professionTabs = ["Family code", "Profession Code", "Profession list"];
-  const companyTabs = ["Sector", "Industry", "Companies"]
-  const familyCodeTablehead = [
-    "Sr. no",
-    "Family Name",
-    "Family Code",
-    "Action",
-  ];
-  const professionCodeTablehead = [
-    "Sr. no",
-    "Profession Name",
-    "Profession Code",
-    "Action",
-  ];
-
-  const handleDeleteOrganisation = (item) => {
-    dispatch(deleteOrganisation(Number(item.id))).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 });
-        dispatch(getOrganisationlist(pagination));
-      } else {
-        toast.error("Error", { autoClose: 1000 });
+  const handleDelete = (type, item) => {
+    switch (type) {
+      case 'sector': {
+        dispatch(deleteSector(item.id)).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 })
+            dispatch(getlistSector(pagination));
+          }
+        });
+        break;
       }
-    });
-  };
-
-  const handleDeleteSector = (item) => {
-    dispatch(deleteSector(item.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
-        dispatch(getlistSector(pagination));
+      case 'industry': {
+        dispatch(deleteIndustry(item.id)).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 })
+            dispatch(getIndustryList(pagination));
+          }
+        });
+        break;
       }
-    });
-  };
-
-  const handleFamilyCodeDelete = (item) => {
-    dispatch(deleteFamilycode(item?.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
-        dispatch(familycodeList(pagination));
+      case 'companies': {
+        dispatch(deleteOrganisation(Number(item.id))).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 });
+            dispatch(getOrganisationlist(pagination));
+          } else {
+            toast.error("Error", { autoClose: 1000 });
+          }
+        });
+        break;
       }
-    });
-  };
-
-  const handleProfessionCodeDelete = (item) => {
-    dispatch(deleteProfessioncode(item?.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
-        dispatch(professioncodeList(pagination));
+      case 'familyCode': {
+        dispatch(deleteFamilycode(item?.id)).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 })
+            dispatch(familycodeList(pagination));
+          }
+        });
+        break;
       }
-    });
-  };
-
-  const handleDeleteProfession = (item) => {
-    dispatch(deleteProfession(item.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
-        dispatch(professionlist(pagination));
+      case 'professionCode': {
+        dispatch(deleteProfessioncode(item?.id)).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 })
+            dispatch(professioncodeList(pagination));
+          }
+        });
+        break;
       }
-    });
-  };
-
-  const handleDeleteIndustry = (item) => {
-    dispatch(deleteIndustry(item.id)).then((res) => {
-      if (res?.payload?.data?.success) {
-        toast.success("Deleted", { autoClose: 1000 })
-        dispatch(getIndustryList(pagination));
+      case 'profession': {
+        dispatch(deleteProfession(item.id)).then((res) => {
+          if (res?.payload?.data?.success) {
+            toast.success("Deleted", { autoClose: 1000 })
+            dispatch(professionlist(pagination));
+          }
+        });
+        break;
       }
-    });
-  };
+      default: return null
+    }
+  }
 
-  const handleEditSector = (item) => {
-    router.push(`/admin/organisation/sector/update/${item.id}`);
-  };
+  const handleMenu = (key) => {
+    const subHeaderkey = subHeaderTabs.find(item => item.showFor == key)
+    setHeader(key)
+    setSubHeader(subHeaderkey?.key)
+  }
 
-  const handleEditIndustry = (item) => {
-    router.push(`/admin/organisation/industry/update/${item.id}`);
-  };
-
-  const handleOrgEdit = (id) => {
-    router.push(`/admin/organisation/company/update/${id}`);
-  };
+  const tableRows = (type, item, index) => {
+    switch (type) {
+      case 'sector': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_serial">
+              {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              {item.name}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src={"/images/edit-icon-blue.png"}
+                onClick={() => router.push(`/admin/organisation/sector/update/${item.id}`)}
+              />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src={"/images/delete-icon-blue.png"}
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      case 'industry': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_serial">
+              {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              {item.name}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src={"/images/edit-icon-blue.png"}
+                onClick={() => router.push(`/admin/organisation/industry/update/${item.id}`)}
+              />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src={"/images/delete-icon-blue.png"}
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      case 'companies': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_data">
+              {pagination.pageSize * (pagination.pageNo - 1) +
+                (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              <Image
+                height={75}
+                width={75}
+                // className="college_card_img img-fluid"
+                alt=""
+                src={`${apibasePath}documents/organisation/${item?.companyCover}`}
+              />
+            </td>
+            <td className="text-center admin_table_data">
+              <Image
+                height={75}
+                width={75}
+                // className="college_card_img img-fluid"
+                alt=""
+                src={`${apibasePath}documents/organisation/${item?.companyLogo}`}
+              />
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.OrganisationCompany?.companyName}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.Cities?.name}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.States?.state}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.CompanyLevel.length > 0 &&
+                item?.CompanyLevel[0]?.companyLevel}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/edit-icon-blue.png"
+                onClick={() => router.push(`/admin/organisation/company/update/${item.id}`)}
+              />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/delete-icon-blue.png"
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      case 'familyCode': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_data">
+              {pagination.pageSize * (pagination.pageNo - 1) +
+                (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.familyName}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.familyCode}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/edit-icon-blue.png"
+                onClick={() => router.push(`/admin/organisation/familycode/update/${item?.id}`)} />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/delete-icon-blue.png"
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      case 'professionCode': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_data">
+              {pagination.pageSize *
+                (pagination.pageNo - 1) +
+                (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.professionName}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.professionCode}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/edit-icon-blue.png"
+                onClick={() => router.push(`/admin/organisation/professioncode/update/${item?.id}`)}
+              />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/delete-icon-blue.png"
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      case 'profession': {
+        return (
+          <tr key={index}>
+            <td className="text-center admin_table_data">
+              {pagination.pageSize * (pagination.pageNo - 1) +
+                (index + 1)}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.ProfessionCode ? (
+                <>
+                  {`${item?.ProfessionCode?.FamilyCode?.familyCode}.${item?.ProfessionCode?.professionCode}`}{" "}
+                  - {item?.ProfessionCode?.professionName}
+                </>
+              ) : (
+                <>
+                  {`${item?.FamilyCode?.familyCode}.0000`} -{" "}
+                  {item?.FamilyCode?.familyName}
+                </>
+              )}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.alsoCalled}
+            </td>
+            <td className="text-center admin_table_data">
+              {item?.prepLevel}
+            </td>
+            <td className="text-center admin_table_data">
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/edit-icon-blue.png"
+                onClick={() => router.push(`organisation/profession/update/${item?.id}`)}
+              />
+              <img
+                className="mx-1 admin_table_action_icon"
+                src="/images/delete-icon-blue.png"
+                onClick={() => {
+                  setModalShow(true);
+                  setDeleteItem(item);
+                }}
+              />
+            </td>
+          </tr>
+        )
+      }
+      default: return null
+    }
+  }
+  const handleRoutes = (type) => {
+    router.push(`organisation/${type.toLowerCase()}/add`)
+  }
 
   return (
     <>
@@ -195,19 +398,18 @@ function Organisation() {
             <div className="tab_drop_justify">
               <ScrollingCarousel show={5.5} slide={4} swiping={true}>
                 <ul className="nav  ">
-                  {FormSteps &&
-                    FormSteps?.map((steps, stepsIndex) => (
+                  {headerTabs &&
+                    headerTabs?.map((steps, stepsIndex) => (
                       <li className="nav-item " key={stepsIndex}>
                         <a
-                          className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"
+                          className={`nav-link admin_tabs_name ${header === steps.key && "head-active"
                             }`}
                           active='true'
                           onClick={() => {
-                            setDataValue(stepsIndex);
-                            //     setPagination({ ...pagination, pageNo: 1 });
+                            handleMenu(steps.key)
                           }}
                         >
-                          {steps}
+                          {steps.name}
                         </a>
                       </li>
                     ))}
@@ -218,714 +420,163 @@ function Organisation() {
               </div>
             </div>
           </Col>
-          <Col
-            xl={6}
-            lg={12}
-            md={12}
-            className="text-end admin_table_header_smallscreen hide_btn_row"
-          >
-            {dataValue === 0 && (
-              <>
-                {displayCompanies === "Sector" && (
-                  <div>
-                    <Button
-                      className="border_btn"
-                      onClick={() => router.push("organisation/sector/add")}
-                    >
-                      Add new sector
-                    </Button>
-                    <Button
-                      className="border_btn green"
-                      onClick={() => router.push("organisation/industry/add")}
-                    >
-                      Add new industry
-                    </Button>
-                  </div>
-                )}
-                {displayCompanies === "Industry" && (
-                  <div>
-                    <Button
-                      className="border_btn"
-                      onClick={() => router.push("organisation/sector/add")}
-                    >
-                      Add new sector
-                    </Button>
-                    <Button
-                      className="border_btn green"
-                      onClick={() => router.push("organisation/industry/add")}
-                    >
-                      Add new industry
-                    </Button>
-                  </div>
-                )}
-                {displayCompanies === "Companies" && (
-                  <div>
-                    <Button className="border_btn">Upload CSV</Button>
-                    <Button className="border_btn">Download CSV</Button>
-                    <Button
-                      className="border_btn green"
-                      onClick={() => router.push("organisation/company/add")}
-                    >
-                      Add New
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-            {dataValue === 1 && (
-              <>
-                {displayProfessions === "Family code" && (
-                  <>
-                    <div>
-                      <Button className="border_btn">Upload CSV</Button>
-                      <Button className="border_btn">Download CSV</Button>
-                      <Button
-                        className="border_btn green"
-                        onClick={() =>
-                          router.push("organisation/familycode/add")
-                        }
-                      >
-                        Add New
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {displayProfessions === "Profession Code" && (
-                  <>
-                    <div>
-                      <Button className="border_btn">Upload CSV</Button>
-                      <Button className="border_btn">Download CSV</Button>
-                      <Button
-                        className="border_btn green"
-                        onClick={() =>
-                          router.push("organisation/professioncode/add")
-                        }
-                      >
-                        Add New
-                      </Button>
-                    </div>
-                  </>
-                )}
-                {displayProfessions === "Profession list" && (
-                  <div>
-                    <Button className="border_btn">Upload CSV</Button>
-                    <Button className="border_btn">Download CSV</Button>
-                    <Button
-                      className="border_btn green"
-                      onClick={() => router.push("organisation/profession/add")}
-                    >
-                      Add New
-                    </Button>
-                  </div>
-                )}
-              </>
-            )}
-          </Col>
-        </Row>
-      </div>
-      <Row>
-        <Col
-          xl={12}
-          className="text-end  display_btn_row"
-        >
-          {dataValue === 0 && (
-            <div>
-              <Button
-                className="border_btn margin_top_none"
-                onClick={() => router.push("organisation/sector/add")}
-              >
-                Add new sector
-              </Button>
-              <Button
-                className="border_btn margin_top_none green"
-                onClick={() => router.push("organisation/industry/add")}
-              >
-                Add new industry
-              </Button>
-            </div>
-          )}
-          {dataValue === 1 && (
-            <div>
-              <Button
-                className="border_btn margin_top_none"
-                onClick={() => router.push("organisation/sector/add")}
-              >
-                Add new sector
-              </Button>
-              <Button
-                className="border_btn margin_top_none green"
-                onClick={() => router.push("organisation/industry/add")}
-              >
-                Add new industry
-              </Button>
-            </div>
-          )}
-          {dataValue === 2 && (
-            <>
+          <Col xl={6} lg={12} md={12} className="text-end admin_table_header_smallscreen hide_btn_row">
+            {subHeader === "companies" ?
+              header === 'companies' &&
               <div>
-                <Button className="border_btn margin_top_none">Upload CSV</Button>
-                <Button className="border_btn margin_top_none">Download CSV</Button>
+                <Button className="border_btn">Upload CSV</Button>
+                <Button className="border_btn">Download CSV</Button>
                 <Button
-                  className="border_btn margin_top_none green"
+                  className="border_btn green"
                   onClick={() => router.push("organisation/company/add")}
                 >
                   Add New
                 </Button>
               </div>
-            </>
-          )}
-          {dataValue === 3 && (
-            <>
-              {displayProfessions === "Family code" && (
-                <>
-                  <div>
-                    <Button className="border_btn margin_top_none">Upload CSV</Button>
-                    <Button className="border_btn margin_top_none">Download CSV</Button>
-                    <Button
-                      className="border_btn margin_top_none green"
-                      onClick={() => router.push("organisation/familycode/add")}
-                    >
-                      Add New
-                    </Button>
-                  </div>
-                </>
-              )}
-              {displayProfessions === "Profession Code" && (
-                <>
-                  <div>
-                    <Button className="border_btn margin_top_none">Upload CSV</Button>
-                    <Button className="border_btn margin_top_none">Download CSV</Button>
-                    <Button
-                      className="border_btn margin_top_none green"
-                      onClick={() =>
-                        router.push("organisation/professioncode/add")}>
-                      Add New
-                    </Button>
-                  </div>
-                </>
-              )}
-              {displayProfessions === "Profession list" && (
-                <div>
-                  <Button className="border_btn margin_top_none">Upload CSV</Button>
-                  <Button className="border_btn margin_top_none">Download CSV</Button>
-                  <Button
-                    className="border_btn margin_top_none green"
-                    onClick={() => router.push("organisation/profession/add")}
-                  >
-                    Add New
-                  </Button>
-                </div>
-              )}
-            </>
-          )}
+              : header === 'companies' &&
+              < div >
+                <Button
+                  className="border_btn"
+                  onClick={() => router.push("organisation/sector/add")}
+                >
+                  Add new sector
+                </Button>
+                <Button
+                  className="border_btn green"
+                  onClick={() => router.push("organisation/industry/add")}
+                >
+                  Add new industry
+                </Button>
+              </div>
+            }
+            {header === 'profession' &&
+              <div>
+                <Button className="border_btn">Upload CSV</Button>
+                <Button className="border_btn">Download CSV</Button>
+                <Button
+                  className="border_btn green"
+                  onClick={() =>
+                    handleRoutes(subHeader)
+                  }
+                >
+                  Add New
+                </Button>
+              </div>
+            }
+          </Col >
+        </Row >
+      </div >
+      <Row>
+        <Col
+          xl={12}
+          className="text-end  display_btn_row"
+        >
+          {
+            subHeader === "companies" ?
+              header === 'companies' &&
+              <div>
+                <Button className="border_btn">Upload CSV</Button>
+                <Button className="border_btn">Download CSV</Button>
+                <Button
+                  className="border_btn green"
+                  onClick={() => router.push("organisation/company/add")}
+                >
+                  Add New
+                </Button>
+              </div>
+              : header === 'companies' &&
+              < div >
+                <Button
+                  className="border_btn"
+                  onClick={() => router.push("organisation/sector/add")}
+                >
+                  Add new sector
+                </Button>
+                <Button
+                  className="border_btn green"
+                  onClick={() => router.push("organisation/industry/add")}
+                >
+                  Add new industry
+                </Button>
+              </div>
+          }
+          {header === 'profession' &&
+            <div>
+              <Button className="border_btn">Upload CSV</Button>
+              <Button className="border_btn">Download CSV</Button>
+              <Button
+                className="border_btn green"
+                onClick={() =>
+                  handleRoutes(subHeader)
+                }
+              >
+                Add New
+              </Button>
+            </div>
+          }
         </Col>
       </Row>
-
-      {/* Organisation Table */}
-      {dataValue === 0 && (
+      <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+        <ul className="nav ">
+          {subHeaderTabs.map((item, index) => {
+            if (item.showFor === header)
+              return (
+                <li
+                  key={index}
+                  onClick={() => setSubHeader(item.key)}
+                  className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item.key === subHeader && "active_btn_tabs"}`}
+                >
+                  {item.name}
+                </li>
+              );
+          })}
+        </ul>
+      </ScrollingCarousel>
+      {isLoading && <LoaderPage />}
+      {subHeader && tabData[subHeader] && (
         <>
-          <div className="  p-0">
-            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-              <ul className="nav ">
-                {companyTabs.map((item, index) => {
-                  return (
-                    <li
-                      key={index}
-                      onClick={() => setDisplayCompanies(item)}
-                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayCompanies && "active_btn_tabs"
-                        }`}
-                    >
-                      {item}
-                    </li>
-                  );
-                })}
-              </ul>
-            </ScrollingCarousel>
+          <div className="admin_stream_table">
+            <Row>
+              <Table responsive className="admin_table" bordered hover>
+                <thead>
+                  <tr>
+                    {tabData[subHeader] && tabData[subHeader]?.tableHeadings.map((tableHead, index) => {
+                      return (
+                        <th className="table_head" key={index}>
+                          {tableHead}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {subHeader && tabData[subHeader] && tabData[subHeader].list &&
+                    tabData[subHeader].list.length > 0 && tabData[subHeader].list.map((item, index) => tableRows(subHeader, item, index))}
+                </tbody>
+              </Table>
+              {subHeader && tabData[subHeader] && tabData[subHeader].list &&
+                tabData[subHeader].list.length === 0 && <NoDataPage />}
+            </Row>
           </div>
-          {displayCompanies === "Sector" && (
-            <>
-              <div className="admin_stream_table">
-                <Row>
-                  <Table responsive className="admin_table" bordered hover>
-                    <thead>
-                      <tr>
-                        {sectorheading.map((hd, index) => {
-                          return (
-                            <th className="table_head" key={index}>
-                              {hd}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {loadergetSectorlist ? (
-                        <LoaderPage />
-                      ) : (
-                        getSectorList?.rows?.map((item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="text-center admin_table_serial">
-                                {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                {item.name}
-                              </td>
-
-                              <td className="text-center admin_table_data">
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src={"/images/edit-icon-blue.png"}
-                                  onClick={() => handleEditSector(item)}
-                                />
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src={"/images/delete-icon-blue.png"}
-                                  onClick={() => {
-                                    setModalShow(true);
-                                    setDeleteItem(item);
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                          );
-                        })
-                      )}
-                    </tbody>
-                  </Table>
-                </Row>
-              </div>
+          {subHeader && tabData[subHeader] && tabData[subHeader].list &&
+            tabData[subHeader].list.length !== 0 && (
               <div className="admin_table_footer">
                 <Pagination
                   pagination={pagination}
                   setPagination={setPagination}
-                  list={getSectorList}
+                  list={tabData[subHeader].list}
                 />
               </div>
-              <DeleteModal
-                show={modalShow}
-                onHide={() => handleHide()}
-                handleDelete={handleDeleteSector}
-                deleteItem={deleteItem}
-              />
-            </>
-          )}
-
-          {displayCompanies === "Industry" && (
-            <>
-              <div className="admin_stream_table">
-                <Row>
-                  {loadergetIndustrylist ? (
-                    <LoaderPage />
-                  ) : (
-                    <Table responsive className="admin_table" bordered hover>
-                      <thead>
-                        <tr>
-                          {industryheading.map((hd, index) => {
-                            return (
-                              <th className="table_head" key={index}>
-                                {hd}
-                              </th>
-                            );
-                          })}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {getIndustrylist?.rows?.map((item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="text-center admin_table_serial">
-                                {pagination.pageSize * (pagination.pageNo - 1) + (index + 1)}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                {item?.name}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src={"/images/edit-icon-blue.png"}
-                                  onClick={() => handleEditIndustry(item)}
-                                />
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src={"/images/delete-icon-blue.png"}
-                                  onClick={() => {
-                                    setModalShow(true);
-                                    setDeleteItem(item);
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                          );
-                        })
-                        }
-                      </tbody>
-                    </Table>
-                  )}
-                </Row>
-                <div className="admin_table_footer">
-                  <Pagination
-                    pagination={pagination}
-                    setPagination={setPagination}
-                    list={getIndustrylist}
-                  />
-                </div>
-                <DeleteModal
-                  show={modalShow}
-                  onHide={() => handleHide()}
-                  handleDelete={handleDeleteIndustry}
-                  deleteItem={deleteItem}
-                />
-              </div>
-            </>
-          )}
-
-          {displayCompanies === "Companies" && (
-            <div className="admin_stream_table">
-              <Row>
-                <Table responsive className="admin_table" bordered hover>
-                  <thead>
-                    <tr>
-                      {Heading.map((hd, index) => {
-                        return (
-                          <th className="table_head" key={index}>
-                            {hd}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {organisationlist &&
-                      organisationlist?.rows?.map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td className="text-center admin_table_data">
-                              {pagination.pageSize * (pagination.pageNo - 1) +
-                                (index + 1)}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              <Image
-                                height={75}
-                                width={75}
-                                // className="college_card_img img-fluid"
-                                alt=""
-                                src={`${apibasePath}documents/organisation/${item?.companyLogo}`}
-                              />
-                            </td>
-                            <td className="text-center admin_table_data">
-                              <Image
-                                height={75}
-                                width={75}
-                                // className="college_card_img img-fluid"
-                                alt=""
-                                src={`${apibasePath}documents/organisation/${item?.companyCover}`}
-                              />
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.OrganisationCompany?.companyName}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.Cities?.name}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.States?.state}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.CompanyLevel.length > 0 &&
-                                item?.CompanyLevel[0]?.companyLevel}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              <img
-                                className="mx-1 admin_table_action_icon"
-                                src="/images/edit-icon-blue.png"
-                                onClick={() => handleOrgEdit(item?.id)}
-                              />
-                              <img
-                                className="mx-1 admin_table_action_icon"
-                                src="/images/delete-icon-blue.png"
-                                onClick={() => {
-                                  setModalShow(true);
-                                  setDeleteItem(item);
-                                }}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </Table>
-              </Row>
-              <div className="admin_table_footer">
-                <Pagination
-                  pagination={pagination}
-                  setPagination={setPagination}
-                  list={organisationlist}
-                />
-              </div>
-              <DeleteModal
-                show={modalShow}
-                onHide={() => handleHide()}
-                handleDelete={handleDeleteOrganisation}
-                deleteItem={deleteItem}
-              />
-            </div>
-          )}
+            )}
         </>
       )}
-
-      {/* Professions Table */}
-      {dataValue === 1 && (
-        <>
-          <div className="  p-0">
-            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-              <ul className="nav">
-                {professionTabs.map((item, index) => {
-                  return (
-                    <li
-                      key={index}
-                      onClick={() => setDisplayProfessions(item)}
-                      className={`border_tabs_padding border_btn_tabs mobile_font_12 ${item === displayProfessions && "active_btn_tabs"
-                        }`}
-                    >
-                      {item}
-                    </li>
-                  );
-                })}
-              </ul>
-            </ScrollingCarousel>
-          </div>
-
-          {displayProfessions === "Family code" && (
-            <>
-              <Row>
-                <Table responsive className="admin_stream_table admin_table" bordered hover>
-                  <thead>
-                    <tr>
-                      {familyCodeTablehead.map((hd, index) => {
-                        return (
-                          <th className="table_head" key={index}>
-                            {hd}
-                          </th>
-                        )
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {familycodelist?.rows?.length > 0 &&
-                      familycodelist?.rows?.map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td className="text-center admin_table_data">
-                              {pagination.pageSize * (pagination.pageNo - 1) +
-                                (index + 1)}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.familyName}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              {item?.familyCode}
-                            </td>
-                            <td className="text-center admin_table_data">
-                              <img
-                                className="mx-1 admin_table_action_icon"
-                                src="/images/edit-icon-blue.png"
-                                onClick={() =>
-                                  router.push(`/admin/organisation/familycode/update/${item?.id}`)} />
-                              <img
-                                className="mx-1 admin_table_action_icon"
-                                src="/images/delete-icon-blue.png"
-                                onClick={() => {
-                                  setModalShow(true);
-                                  setDeleteItem(item);
-                                }}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </Table>
-                <div className="admin_table_footer">
-                  <Pagination
-                    pagination={pagination}
-                    setPagination={setPagination}
-                    list={familycodelist}
-                  />
-                </div>
-                <DeleteModal
-                  show={modalShow}
-                  onHide={() => handleHide()}
-                  handleDelete={handleFamilyCodeDelete}
-                  deleteItem={deleteItem}
-                />
-              </Row>
-            </>
-          )}
-
-          {displayProfessions === "Profession Code" && (
-            <>
-              <Row>
-                <Table responsive className="admin_stream_table admin_table" bordered hover>
-                  <thead>
-                    <tr>
-                      {professionCodeTablehead.map((hd, index) => {
-                        return (
-                          <th className="table_head" key={index}>
-                            {hd}
-                          </th>
-                        );
-                      })}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {professioncodelist?.rows &&
-                      professioncodelist?.rows?.length > 0 && (
-                        <>
-                          {professioncodelist?.rows.map((item, index) => {
-                            return (
-                              <tr key={index}>
-                                <td className="text-center admin_table_data">
-                                  {pagination.pageSize *
-                                    (pagination.pageNo - 1) +
-                                    (index + 1)}
-                                </td>
-                                <td className="text-center admin_table_data">
-                                  {item?.professionName}
-                                </td>
-                                <td className="text-center admin_table_data">
-                                  {item?.professionCode}
-                                </td>
-                                <td className="text-center admin_table_data">
-                                  <img
-                                    className="mx-1 admin_table_action_icon"
-                                    src="/images/edit-icon-blue.png"
-                                    onClick={() =>
-                                      router.push(
-                                        `/admin/organisation/professioncode/update/${item?.id}`
-                                      )
-                                    }
-                                  />
-                                  <img
-                                    className="mx-1 admin_table_action_icon"
-                                    src="/images/delete-icon-blue.png"
-                                    onClick={() => {
-                                      setModalShow(true);
-                                      setDeleteItem(item);
-                                    }}
-                                  />
-                                </td>
-                              </tr>
-                            );
-                          })}
-                        </>
-                      )}
-                  </tbody>
-                  <div className="admin_table_footer">
-                    <Pagination
-                      pagination={pagination}
-                      setPagination={setPagination}
-                      list={professioncodelist}
-                    />
-                  </div>
-                  <DeleteModal
-                    show={modalShow}
-                    onHide={() => handleHide()}
-                    handleDelete={handleProfessionCodeDelete}
-                    deleteItem={deleteItem}
-                  />
-                </Table>
-              </Row>
-            </>
-          )}
-
-          {displayProfessions === "Profession list" && (
-            <>
-              <div className="admin_stream_table">
-                <Row>
-                  <Table responsive className="admin_table" bordered hover>
-                    <thead>
-                      <tr>
-                        {professionHeading.map((hd, index) => {
-                          return (
-                            <th className="table_head" key={index}>
-                              {hd}
-                            </th>
-                          );
-                        })}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {professionList?.rows?.length > 0 &&
-                        professionList?.rows?.map((item, index) => {
-                          return (
-                            <tr key={index}>
-                              <td className="text-center admin_table_data">
-                                {pagination.pageSize * (pagination.pageNo - 1) +
-                                  (index + 1)}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                {item?.ProfessionCode ? (
-                                  <>
-                                    {`${item?.ProfessionCode?.FamilyCode?.familyCode}.${item?.ProfessionCode?.professionCode}`}{" "}
-                                    - {item?.ProfessionCode?.professionName}
-                                  </>
-                                ) : (
-                                  <>
-                                    {`${item?.FamilyCode?.familyCode}.0000`} -{" "}
-                                    {item?.FamilyCode?.familyName}
-                                  </>
-                                )}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                {item?.alsoCalled}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                {item?.prepLevel}
-                              </td>
-                              <td className="text-center admin_table_data">
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src="/images/edit-icon-blue.png"
-                                  onClick={() =>
-                                    router.push(
-                                      `organisation/profession/update/${item?.id}`
-                                    )
-                                  }
-                                />
-                                <img
-                                  className="mx-1 admin_table_action_icon"
-                                  src="/images/delete-icon-blue.png"
-                                  onClick={() => {
-                                    setModalShow(true);
-                                    setDeleteItem(item);
-                                  }}
-                                />
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </Table>
-                </Row>
-                <div className="admin_table_footer">
-                  <Pagination
-                    pagination={pagination}
-                    setPagination={setPagination}
-                    list={professionList}
-                  />
-                </div>
-                <DeleteModal
-                  show={modalShow}
-                  onHide={() => handleHide()}
-                  handleDelete={handleDeleteProfession}
-                  deleteItem={deleteItem}
-                />
-              </div>
-            </>
-          )}
-        </>
-      )}
+      <DeleteModal
+        show={modalShow}
+        onHide={() => handleHide()}
+        handleDelete={handleDelete}
+        deleteItem={deleteItem}
+        subHeader={subHeader}
+      />
     </>
   );
 }

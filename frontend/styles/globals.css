@@ -2885,6 +2885,92 @@ input::-webkit-inner-spin-button {
   filter: drop-shadow(0rem 0.3125rem 0.4063rem rgba(0, 0, 0, 0.160784));
 }
 
+
+.pending_frnd_acc .accordion-button{
+  padding: 10px 20px;
+  }
+  
+  .pending_frnd_acc .accordion-button::after {
+    display: block;
+    margin-top: -15px;
+  }
+  
+  .friend_request{
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--admin-btn-bg);
+    margin-bottom: 0%;
+    display: flex;
+    align-items: center;
+    /* justify-content: space-between; */
+  }
+  .friend_request_count{
+    font-size: 16px;
+    font-weight: 600;
+    background: var(--admin-btn-bg);
+    color: #fff;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    margin-right: 10px;
+  }
+  .friend_request_acc_body{
+    padding: 20px !important;
+    
+  }
+  .friend_request_img{
+    max-width: 45px;
+  }
+  .s_no{
+    width: 20px;
+    font-size: 15px;
+    color: var(--admin-btn-bg);
+    font-weight: 600;
+    margin-bottom: 0%;
+  }
+  .name_img_div{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .acc_body_div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 0.0625rem solid #c8c1df;
+  }
+  .friend_request_title{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--admin-btn-bg);
+    margin-bottom: 0%;
+    text-transform: capitalize;
+  }
+  .friend_request_sub_title{
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--admin-btn-bg);
+    margin-bottom: 0%;
+    text-transform: capitalize;
+  }
+  .friend_request_btn{
+    font-size: 14px !important;
+  }
+  
+  .red_hover:hover{
+  background: #E32636 !important;
+  color: #fff !important;
+  }
+  .green_hover:hover{
+    background: rgb(42, 159, 52) !important;
+  color: #fff !important;
+
+}
+  
 .edit_pen_col {
   width: 50%;
   display: flex;

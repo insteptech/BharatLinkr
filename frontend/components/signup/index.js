@@ -13,6 +13,7 @@ import { FieldTypes, inputFieldTypes } from "../../utils/helper";
 import FormGenerator from "../common-components/Form/FormGenerator";
 import { cityDropdown } from "../../redux/actions/location/createCity";
 import Image from "next/image";
+import LoaderPage from "../common-components/loader";
 
 function SignUpPage() {
   const [dataValue, setDataValue] = useState(0);
@@ -76,6 +77,7 @@ function SignUpPage() {
 
   const stateList = useSelector((state) => state?.stateList?.stateList?.data?.data?.rows);
   const cityListByState = useSelector(state => state.cityList?.cityList?.data?.result)
+  const isRegistering = useSelector(state => state.signUp.isRegistering)
 
   const validate = (values) => {
     const errors = {};
@@ -178,10 +180,10 @@ function SignUpPage() {
     newVal = { mobileNumber: mobileNum, otp: Number(values) };
     dispatch(verifyOtp(newVal)).then((res) => {
       if (res?.payload?.success) {
-        toast.success("otp verified");
+        toast.success("Otp Verified");
         router.push("/login");
       } else {
-        toast.error("wrong otp");
+        toast.error(res?.payload?.message);
       }
     });
   };
@@ -191,7 +193,7 @@ function SignUpPage() {
     const payload = {
       accomplishments: values.accomplishments,
       designation: values.designation,
-      email: values.email,
+      email: values.email.toLowerCase(),
       totalExperience: values.experience,
       areaOfExpertise: values.expertise,
       highestEducation: values.highestEducation,
@@ -216,10 +218,7 @@ function SignUpPage() {
     }
 
     setMobileNum(values.mobileNumber);
-    if (values != 0) {
 
-      setDataValue(1);
-    }
     const dataFomrs = new FormData();
     if (values.profilePhoto) {
       dataFomrs.append("profile", values?.profilePhoto);
@@ -229,15 +228,20 @@ function SignUpPage() {
     }
     dataFomrs.append("profileData", JSON.stringify(payload));
 
-    dispatch(getUsers(dataFomrs));
+    dispatch(getUsers(dataFomrs))
+      .then(res => {
+        if (res.payload.data.success) {
+          setDataValue(1);
+        } else {
+          toast.info(res.payload.data.message)
+        }
+      });
   };
 
   const memoizedInitialValue = (e) => {
     if (e && Object.keys(e).length > 0) {
       return e;
     } else {
-
-
       if (usertype !== "College") {
         return initialValuesStudent;
       }
@@ -247,19 +251,11 @@ function SignUpPage() {
       if (usertype === "organization") {
         return initialValuesOrganization;
       }
-
-      // const initialFieldValues = Object.keys(initialValuesStudent).reduce((acc, key) => {
-      //   acc[key] = initialValuesStudent[key];
-      //   return acc;
-      // }, {});
-
-      // return initialFieldValues;
     }
   }
 
   const handleCityDropdown = ({ target: { value } }) => {
     dispatch(cityDropdown({ stateId: value }))
-
   }
 
   return (
@@ -273,7 +269,7 @@ function SignUpPage() {
             </div>
           </Col>
         </Row>
-
+        {isRegistering && <LoaderPage />}
         <Row>
           <ul className="nav ps-2 pe-2">
             {FormSteps &&
@@ -308,6 +304,7 @@ function SignUpPage() {
                         value={otp}
                         onChange={(e) => setOtp(e)}
                         numInputs={6}
+     
                         separator={<span></span>}
                       />
                     </div>
@@ -471,10 +468,10 @@ function SignUpPage() {
                                     placeholder="Enter Mobile No."
                                   />
                                   {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error.fieldError}
-                                      </span>
-                                    )}
+                                    <span className="text-danger">
+                                      {meta.error.fieldError}
+                                    </span>
+                                  )}
                                 </div>
                               )}
                             </Field>
@@ -1810,10 +1807,10 @@ function SignUpPage() {
                                     placeholder="Enter Mobile Number"
                                   />
                                   {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error.fieldError}
-                                      </span>
-                                    )}
+                                    <span className="text-danger">
+                                      {meta.error.fieldError}
+                                    </span>
+                                  )}
                                 </div>
                               )}
                             </Field>

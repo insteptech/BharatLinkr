@@ -12,6 +12,7 @@ import {
   getlistSector,
 } from "../../../redux/actions/organisation/addsector";
 import { toast } from "react-toastify";
+import LoaderPage from "../../common-components/loader";
 
 const NewIndusty = () => {
   const dispatch = useDispatch();
@@ -22,12 +23,14 @@ const NewIndusty = () => {
   const getIndustryList = useSelector(
     (state) => state?.sectorData?.industryBylist
   );
+  const isLoading = useSelector(
+    (state) => state?.sectorData?.isLoading
+  );
 
   // for getting all sector list
   useEffect(() => {
     dispatch(getlistSector());
   }, []);
-
   const getSectorList = useSelector((state) => state?.sectorData?.sectorlist);
 
   const handleSubmit = (values) => {
@@ -42,7 +45,7 @@ const NewIndusty = () => {
       // creating/adding new industry action
       dispatch(
         createNewIndustry({
-          industryData: obj, 
+          industryData: obj,
         })
       ).then((res) => {
         if (res?.payload?.data?.success) {
@@ -81,9 +84,9 @@ const NewIndusty = () => {
     let initialValue = {};
     if (Id) {
       initialValue = {
+        sectorId: getIndustryList[0]?.Sector?.id,
         industryData: [
           {
-            sectorId: getIndustryList[0]?.Sector?.id,
             name: getIndustryList[0]?.name,
           },
         ],
@@ -128,6 +131,7 @@ const NewIndusty = () => {
           <hr></hr>
         </Col>
       </Row>
+      {isLoading && <LoaderPage />}
 
       <Row>
         <Col>

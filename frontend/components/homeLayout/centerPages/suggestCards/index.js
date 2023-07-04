@@ -5,37 +5,38 @@ import { Card, Col, Image, Row } from "react-bootstrap";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
-
-const SuggestedCardData = [
-  {
-    id: 1,
-    cardImg: "/images/mdi_pro.png",
-    cardName: "Bharat",
-    text: "Student | Lyallpur college of Technology",
-  },
-  {
-    id: 2,
-    cardImg: "/images/cover-bg.jpg",
-    cardName: "India",
-    text: "Student | Lyallpur college of Technology",
-  },
-  {
-    id: 2,
-    cardImg: "/images/mdi_pro.png",
-    cardName: "India",
-    text: "Student | Lyallpur college of Technology",
-  },
-  {
-    id: 2,
-    cardImg: "/images/mdi_pro.png",
-    cardName: "India",
-    text: "Student | Lyallpur college of Technology",
-  },
-];
-
-
+import { useDispatch, useSelector } from "react-redux";
+import { addFriend } from "../../../../redux/actions/user/userActions";
+import { toast } from "react-toastify";
 
 const SuggestCards = () => {
+  const dispatch = useDispatch()
+  const loginStatus = useSelector((state) => state.userSlice.loginStatus);
+  const allUserList = useSelector((state) => state.userSlice.allUserList);
+  const myFriendsList = useSelector((state) => state.userSlice.myFriendsList);
+  const currentUser = useSelector((state) => state.userSlice.currentUser);
+  const handleRequest = (userObject) => {
+    let data = {
+      Friends: [{
+        recieverId: userObject.id,
+        senderId: currentUser?.id
+      }]
+    }
+    if (loginStatus) dispatch(addFriend(data))
+    if (!loginStatus) toast.info("Login First")
+  }
+  const isFriend = (id) => {
+    if (id) {
+      let friendStatus = myFriendsList.find(item => item.senderId === id)
+      if (!friendStatus) {
+        return "Link"
+      } else if (friendStatus.status) {
+        return "Accepted"
+      } else if (!friendStatus.status) {
+        return "Sent"
+      }
+    }
+  }
   return (
     <>
       {" "}
@@ -58,47 +59,49 @@ const SuggestCards = () => {
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
       >
-        {SuggestedCardData &&
-          SuggestedCardData?.map((item, index) => {
-            return (
-              <>
-                <SwiperSlide className="">
-                  <div key={index} className="suggested_card">
-                    <Row>
-                      <Col xs={2}>
-                        <div className="mid_comment_left">
-                          <img
-                            className="suggested_card_profile card_pro_img"
-                            src={item.cardImg}
-                          />
-                        </div>
-                      </Col>
-                      <Col xs={10}>
-                        <div className="text-start ps-2">
-                          <h6 className="suggested_card_heading">
-                            {item.cardName}
-                          </h6>
-                          <Image
-                            className="close_btn"
-                            src="/images/close-card-icon.svg"
-                          />
-                          <p className="suggested_card_text">{item.text}</p>
-                          <button
-                            className=" suggested_card_btn suggested_card_link_btn"
-                            type="button"
-                          >
-                            Link
-                          </button>
-                          <button className=" suggested_card_btn" type="button">
-                            Post
-                          </button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </div>
-                </SwiperSlide>
-              </>
-            );
+        {allUserList &&
+          allUserList?.map((userObject, userIndex) => {
+            if (currentUser?.id !== userObject.id)
+              return (
+                <>
+                  <SwiperSlide className="">
+                    <div key={userIndex} className="suggested_card">
+                      <Row>
+                        <Col xs={2}>
+                          <div className="mid_comment_left">
+                            <img
+                              className="suggested_card_profile card_pro_img"
+                              src={userObject.cardImg}
+                            />
+                          </div>
+                        </Col>
+                        <Col xs={10}>
+                          <div className="text-start ps-2">
+                            <h6 className="suggested_card_heading">
+                              {userObject.name}
+                            </h6>
+                            <Image
+                              className="close_btn"
+                              src="/images/close-card-icon.svg"
+                            />
+                            <p className="suggested_card_text">{userObject.designation} | {userObject.areaOfExpertise} </p>
+                            <button
+                              className=" suggested_card_btn suggested_card_link_btn"
+                              type="button"
+                              onClick={() => handleRequest(userObject, true)}
+                            >
+                              {isFriend(userObject.id)}
+                            </button>
+                            <button className=" suggested_card_btn" type="button">
+                              Post
+                            </button>
+                          </div>
+                        </Col>
+                      </Row>
+                    </div>
+                  </SwiperSlide>
+                </>
+              );
           })}
       </Swiper>
     </>

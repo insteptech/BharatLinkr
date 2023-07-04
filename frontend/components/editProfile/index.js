@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import { Button, Col, Container, Row } from "react-bootstrap";
+import { Accordion, Button, Col, Container, Row } from "react-bootstrap";
 import { Field, Form } from "react-final-form";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../../redux/actions/auth";
@@ -11,20 +11,34 @@ import { apibasePath } from "../../config";
 import { useEffect } from "react";
 import { getToken } from "../utils";
 import { useRouter } from "next/router";
+import {
+  friendRequestStatus,
+  getPendingFriendRequest,
+} from "../../redux/actions/user/userActions";
+import NoDataPage from "../common-components/NoDataPage/NoDataPage";
+import LoaderPage from "../common-components/loader";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const userDetials = useSelector((item) => item?.userSlice.currentUser);
+  const loginStatus = useSelector((state) => state?.userSlice.loginStatus);
+  const currentUser = useSelector((state) => state?.userSlice.currentUser);
+  const friendList = useSelector((state) => state?.userSlice.friendList);
+  const freindCount = useSelector((state) => state?.userSlice.freindCount);
+  const isFriendListLoading = useSelector(
+    (state) => state?.userSlice.isFriendListLoading
+  );
   useEffect(() => {
     if (!getToken() && router.pathname.includes("editprofile")) {
       router.push("/"); // redirect to the home page when user not logged in
     }
-  }, [dispatch]);
+    if (loginStatus && currentUser)
+      dispatch(getPendingFriendRequest({ recieverId: currentUser.id }));
+  }, [dispatch, currentUser]);
 
   const onSubmit = (values) => {
     const payload = {
-      id: userDetials.id,
+      id: currentUser.id,
       name: values.name,
       areaOfExpertise: values.area,
       designation: values.Designation,
@@ -36,6 +50,12 @@ const EditProfile = () => {
       summary: values.Summary,
     };
     const formData = new FormData();
+    if (values.profilePhoto) {
+      dataFomrs.append("profile", values?.profilePhoto);
+    }
+    if (values.coverPhoto) {
+      dataFomrs.append("cover", values?.coverPhoto);
+    }
     formData.append("profileData", JSON.stringify(payload));
     dispatch(getUsers(formData)).then((res) => {
       if (res.payload?.success === true) {
@@ -43,23 +63,42 @@ const EditProfile = () => {
       }
     });
   };
+
+  const handleRequestStatus = (userObject, status) => {
+    let requestData = {
+      FriendRequest: [
+        {
+          recieverId: userObject.recieverId,
+          senderId: userObject.senderId,
+          status: status,
+        },
+      ],
+    };
+    if (loginStatus)
+      dispatch(friendRequestStatus(requestData)).then((res) => {
+        if (res.payload[0]) {
+          toast.success(res.payload[0].status);
+          dispatch(getPendingFriendRequest({ recieverId: currentUser.id }));
+        }
+      });
+  };
   return (
     <>
       <Form
         onSubmit={onSubmit}
         initialValues={
-          userDetials
-            ? userDetials && {
-              name: userDetials.name,
-              area: userDetials.areaOfExpertise,
-              Designation: userDetials.designation,
-              Email: userDetials.email,
-              number: userDetials.mobileNumber,
-              Expirence: userDetials.totalExperience,
-              Accomplishments: userDetials.accomplishments,
-              education: userDetials.highestEducation,
-              Summary: userDetials.summary,
-            }
+          currentUser
+            ? currentUser && {
+                name: currentUser.name,
+                area: currentUser.areaOfExpertise,
+                Designation: currentUser.designation,
+                Email: currentUser.email,
+                number: currentUser.mobileNumber,
+                Expirence: currentUser.totalExperience,
+                Accomplishments: currentUser.accomplishments,
+                education: currentUser.highestEducation,
+                Summary: currentUser.summary,
+              }
             : ""
         }
         render={({ handleSubmit, pristine }) => {
@@ -76,14 +115,14 @@ const EditProfile = () => {
                         height={1080}
                         width={1080}
                         className={
-                          userDetials?.coverPhoto
+                          currentUser?.coverPhoto
                             ? "img-fluid user_profile_cover_img"
                             : "user_profile_cover_img_dammy"
                         }
-                        // src={`${apibasePath}documents/userProfile/${userDetials?.coverPhoto}`}
+                        // src={`${apibasePath}documents/userProfile/${currentUser?.coverPhoto}`}
                         src={
-                          userDetials?.coverPhoto
-                            ? `${apibasePath}documents/userProfile/${userDetials?.coverPhoto}`
+                          currentUser?.coverPhoto
+                            ? `${apibasePath}documents/userProfile/${currentUser?.coverPhoto}`
                             : "/images/dammy-cover-1.svg"
                         }
                       />
@@ -93,21 +132,26 @@ const EditProfile = () => {
                             height={1080}
                             width={1080}
                             className="profile_hero_img"
-                            // src={`${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`}
                             src={
-                              userDetials?.profilePhoto
-                                ? `${apibasePath}documents/userProfile/${userDetials?.profilePhoto}`
+                              currentUser?.profilePhoto
+                                ? `${apibasePath}documents/userProfile/${currentUser?.profilePhoto}`
                                 : "/images/dammy.svg"
                             }
                           />
-                          <div className="profile_pen_bg logo_pen">
-                            <img className="pen" src="/images/pen.png" />
-                          </div>
+                          <label className="" for="actual-btn">
+                            <div className="profile_pen_bg logo_pen">
+                              <img className="pen" src="/images/pen.png" />
+                            </div>
+                          </label>
+                          <input type="file" id="actual-btn" hidden />
                         </div>
                         <div className="edit_pen_col">
-                          <div className="profile_pen_bg">
-                            <img src="/images/pen.png" />
-                          </div>
+                          <label className="" for="actual-btn">
+                            <div className="profile_pen_bg">
+                              <img src="/images/pen.png" />
+                            </div>
+                          </label>
+                          <input type="file" id="actual-btn" hidden />
                         </div>
                       </div>
                     </div>
@@ -351,11 +395,87 @@ const EditProfile = () => {
                     </Col>
                   </Row>
                   <Row>
+                    <Accordion className="pending_frnd_acc">
+                      <Accordion.Item eventKey={"friend"}>
+                        <Accordion.Header>
+                          <p className="friend_request">
+                          <span className="friend_request_count">
+                              {freindCount ? freindCount : ""}
+                            </span>
+                            Pending Friend Request{" "}
+                            
+                          </p>
+                        </Accordion.Header>
+                        <Accordion.Body className="friend_request_acc_body">
+                          {isFriendListLoading ? (
+                            <LoaderPage />
+                          ) : friendList && friendList.length > 0 ? (
+                            friendList.map((listItem, listIndex) => (
+                              <div className="acc_body_div">
+                                <div className="name_img_div">
+                                  <p className="s_no">{listIndex + 1}.</p>
+                                  <img
+                                    className="friend_request_img"
+                                    src={
+                                      listItem?.profilePhoto
+                                        ? `${apibasePath}documents/userProfile/${listItem?.profilePhoto}`
+                                        : "/images/dammy.svg"
+                                    }
+                                  />
+                                  <div>
+                                    <p className="friend_request_title">
+                                      {listItem.FriendsDetail.name}
+                                    </p>
+                                    <p className="friend_request_sub_title">
+                                      {listItem.FriendsDetail.userType.toUpperCase()}{" "}
+                                      |{" "}
+                                      {listItem.FriendsDetail.designation.toUpperCase()}
+                                    </p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <button
+                                    className="suggested_card_btn suggested_card_link_btn friend_request_btn green_hover"
+                                    type="button"
+                                    onClick={() =>
+                                      handleRequestStatus(listItem, true)
+                                    }
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    className=" suggested_card_btn friend_request_btn red_hover"
+                                    onClick={() =>
+                                      handleRequestStatus(listItem, false)
+                                    }
+                                    type="button"
+                                  >
+                                    Decline
+                                  </button>
+                                </div>
+                              </div>
+                            ))
+                          ) : (
+                            <NoDataPage name="Friends" />
+                          )}
+                        </Accordion.Body>
+                      </Accordion.Item>
+                    </Accordion>
+                  </Row>
+                  <Row>
                     <Col lg={12} className="text-center">
-                      <Button className="admin_signup_btn me-4" type="btn" disabled={pristine}>
+                      <Button
+                        className="admin_signup_btn me-4"
+                        type="btn"
+                        disabled={pristine}
+                      >
                         Save Changes
                       </Button>
-                      <Button className="admin_signup_btn" type="btn" disabled={pristine}>
+                      <Button
+                        className="admin_signup_btn"
+                        type="btn"
+                        disabled={pristine}
+                      >
                         Account Activate
                       </Button>
                     </Col>

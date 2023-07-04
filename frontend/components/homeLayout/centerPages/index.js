@@ -26,6 +26,7 @@ import SuggestCards from "./suggestCards";
 import PostedCards from "../postedCards";
 import MobileMenus from "./mobileMenus";
 import CollegePost from "../postedCards/collegePost";
+import { useSelector } from "react-redux";
 // Import Swiper styles
 
 const postImg = [
@@ -45,9 +46,8 @@ const postImg = [
 
 const CenterPage = () => {
   const router = useRouter();
-  // const swiper = useSwiper();
+  const loginStatus = useSelector((state) => state.userSlice.loginStatus);
 
-  // --------read-more-start----------------
   const [num, setNum] = useState(140);
 
   const [title, setTitle] = useState("...Read More");
@@ -68,77 +68,9 @@ const CenterPage = () => {
         <div className="col">
           <div className="social_sec_main">
             <div className="top_input">
-              {/* <form className="form_border">
-                <input type="search" placeholder="Search..." />
-                <button className="type_submit" type="submit">Search</button>
-              </form> */}
-              {/* ---------post-card-start-------------- */}
               <StoryCard />
-              {/* ---------post-card-end-------------- */}
-
-              {/* -----------post-bar-start-------------- */}
-              {/* <div className="dropdown_row mobile_post_filters">
-                <img className="p_filter_btn" src="/images/p-filter.svg" />
-                <ScrollingCarousel show={5.5} slide={4} swiping={true}>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/script-icon.png"
-                    />
-                    Script
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/announcement-icon.png"
-                    />
-                    Announcement
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/job-icon.png"
-                    />
-                    Job
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/intern.png"
-                    />
-                    Intern
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/more-icon.png"
-                    />
-                    More..
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/job-icon.png"
-                    />
-                    Job
-                  </Button>
-                  <Button className="view_and_apply_btn post_card_icons_btn hide_filter font_12">
-                    <Image
-                      className="post_card_icons"
-                      src="/images/more-icon.png"
-                    />
-                    More..
-                  </Button>
-                </ScrollingCarousel>
-              </div> */}
               <PostBaar />
-              {/* -----------post-bar-end-------------- */}
-
-              {/* -----------Suggested Links start-------------- */}
-
-              <SuggestCards />
-
-              {/* -----------Suggested Links end-------------- */}
+              {loginStatus && <SuggestCards />}
               <PostedCards />
               <CollegePost />
             </div>
@@ -146,7 +78,7 @@ const CenterPage = () => {
           {/* <MobileMenus /> */}
         </div>
       </div>
-      
+
     </>
   );
 };
