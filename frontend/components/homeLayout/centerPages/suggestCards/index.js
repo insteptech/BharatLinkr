@@ -22,7 +22,17 @@ const SuggestCards = () => {
         senderId: currentUser?.id
       }]
     }
-    if (loginStatus) dispatch(addFriend(data))
+    if (loginStatus) {
+      dispatch(addFriend(data))
+        .then((res) => {
+          if (!res?.payload?.data[0]?.status) {
+            toast.success("Friend Request sent", { autoClose: 1000 })
+          } else {
+            let statuss = res?.payload?.data[0]?.status
+            toast.info(statuss, { autoClose: 1000 })
+          }
+        })
+    }
     if (!loginStatus) toast.info("Login First")
   }
   const isFriend = (id) => {
@@ -64,42 +74,44 @@ const SuggestCards = () => {
             if (currentUser?.id !== userObject.id)
               return (
                 <>
-                  <SwiperSlide className="">
-                    <div key={userIndex} className="suggested_card">
-                      <Row>
-                        <Col xs={2}>
-                          <div className="mid_comment_left">
-                            <img
-                              className="suggested_card_profile card_pro_img"
-                              src={userObject.cardImg}
-                            />
-                          </div>
-                        </Col>
-                        <Col xs={10}>
-                          <div className="text-start ps-2">
-                            <h6 className="suggested_card_heading">
-                              {userObject.name}
-                            </h6>
-                            <Image
-                              className="close_btn"
-                              src="/images/close-card-icon.svg"
-                            />
-                            <p className="suggested_card_text">{userObject.designation} | {userObject.areaOfExpertise} </p>
-                            <button
-                              className=" suggested_card_btn suggested_card_link_btn"
-                              type="button"
-                              onClick={() => handleRequest(userObject, true)}
-                            >
-                              {isFriend(userObject.id)}
-                            </button>
-                            <button className=" suggested_card_btn" type="button">
-                              Post
-                            </button>
-                          </div>
-                        </Col>
-                      </Row>
-                    </div>
-                  </SwiperSlide>
+                  {isFriend(userObject.id) === "Link" && (
+                    <SwiperSlide className="">
+                      <div key={userIndex} className="suggested_card">
+                        <Row>
+                          <Col xs={2}>
+                            <div className="mid_comment_left">
+                              <img
+                                className="suggested_card_profile card_pro_img"
+                                src={userObject.cardImg}
+                              />
+                            </div>
+                          </Col>
+                          <Col xs={10}>
+                            <div className="text-start ps-2">
+                              <h6 className="suggested_card_heading">
+                                {userObject.name}
+                              </h6>
+                              <Image
+                                className="close_btn"
+                                src="/images/close-card-icon.svg"
+                              />
+                              <p className="suggested_card_text">{userObject.designation} | {userObject.areaOfExpertise} </p>
+                              <button
+                                className=" suggested_card_btn suggested_card_link_btn"
+                                type="button"
+                                onClick={() => handleRequest(userObject, true)}
+                              >
+                                {isFriend(userObject.id)}
+                              </button>
+                              <button className=" suggested_card_btn" type="button">
+                                Post
+                              </button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </div>
+                    </SwiperSlide>
+                  )}
                 </>
               );
           })}
