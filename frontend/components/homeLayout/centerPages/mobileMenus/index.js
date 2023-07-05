@@ -447,7 +447,7 @@ function MobileMenus() {
           </Offcanvas.Header>
           <Offcanvas.Body className="p-0">
             <div className="card_sec">
-              <Accordion defaultActiveKey="0">
+              <Accordion>
                 {quickLinksData &&
                   quickLinksData?.map((item, index) => (
                     <>

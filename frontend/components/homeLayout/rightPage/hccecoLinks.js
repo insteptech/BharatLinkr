@@ -3,7 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Accordion, Button, Col, Image, Row } from "react-bootstrap";
 import LoaderPage from "../../common-components/loader";
 import { useDispatch, useSelector } from "react-redux";
-import { friendRequestStatus, getPendingFriendRequest } from "../../../redux/actions/user/userActions";
+import {
+  friendRequestStatus,
+  getPendingFriendRequest,
+} from "../../../redux/actions/user/userActions";
 import { toast } from "react-toastify";
 import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
 import { getToken } from "../../utils";
@@ -117,7 +120,7 @@ const HccecoLinks = () => {
     (state) => state?.userSlice.isFriendListLoading
   );
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const handleTab = (key, index) => {
     setActive(key);
@@ -175,7 +178,6 @@ const HccecoLinks = () => {
       });
   };
 
-
   return (
     <div>
       <div className="card_sec hide_box">
@@ -192,8 +194,9 @@ const HccecoLinks = () => {
                 json?.map((steps, stepsIndex) => (
                   <li className="nav-item chatbox_tabs" key={stepsIndex}>
                     <h6
-                      className={`nav-link user_tabs_name ${dataValue === stepsIndex && "user_tabs_active"
-                        }`}
+                      className={`nav-link user_tabs_name ${
+                        dataValue === stepsIndex && "user_tabs_active"
+                      }`}
                       active={true}
                       onClick={() => handleTab(steps.key, stepsIndex)}
                     >
@@ -278,7 +281,10 @@ const HccecoLinks = () => {
                         return (
                           <>
                             <div className="message_text_end_div">
-                              <h5 key={ind} className="message_text message_text_end">
+                              <h5
+                                key={ind}
+                                className="message_text message_text_end"
+                              >
                                 {item.name}
                               </h5>
                             </div>
@@ -341,7 +347,7 @@ const HccecoLinks = () => {
                           <Row>
                             <Col xs={2}>
                               <div className="mid_comment_left">
-                                <p className="s_no">{listIndex + 1}.</p>
+                                {/* <p className="s_no">{listIndex + 1}.</p> */}
                                 <Image
                                   className="suggested_card_profile"
                                   src={
@@ -354,9 +360,9 @@ const HccecoLinks = () => {
                             </Col>
                             <Col xs={10}>
                               <div className="text-start ps-2">
-                                <h6 className="suggested_card_heading">
+                                <h5 className="suggested_card_heading">
                                   {listItem.FriendsDetail.name}
-                                </h6>
+                                </h5>
                                 <p className="suggested_card_text">
                                   {listItem.FriendsDetail.userType.toUpperCase()}{" "}
                                   |{" "}
@@ -364,7 +370,7 @@ const HccecoLinks = () => {
                                 </p>
                                 <div className="d-flex">
                                   <button
-                                    className=" suggested_card_btn suggested_card_link_btn"
+                                    className=" suggested_card_btn suggested_card_link_btn green_hover"
                                     type="button"
                                     onClick={() =>
                                       handleRequestStatus(listItem, true)
@@ -373,7 +379,7 @@ const HccecoLinks = () => {
                                     Accept
                                   </button>
                                   <button
-                                    className=" suggested_card_btn"
+                                    className=" suggested_card_btn red_hover"
                                     onClick={() =>
                                       handleRequestStatus(listItem, false)
                                     }
@@ -387,9 +393,9 @@ const HccecoLinks = () => {
                           </Row>
                         </div>
                       </>
-                    )
-                  }
-                  )) : (
+                    );
+                  })
+                ) : (
                   <NoDataPage name="Friends" />
                 )}
               </>

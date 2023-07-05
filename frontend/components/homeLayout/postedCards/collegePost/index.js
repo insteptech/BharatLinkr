@@ -135,13 +135,13 @@ const CollegePost = () => {
                     </div>
 
                     <div className="req_p">
-                      <p>
+                      <p className="mb-0">
                         {item.postPaira.slice(0, num)}
                         <span onClick={() => handleSeeMore(item)}>{title}</span>
                       </p>
                     </div>
                     {/* ---------slider-image-start-------------- */}
-                    <div>
+                    <div className={item.postImg ? "show_div" : "hide_div"}>
                       <Swiper
                         className=""
                         navigation
