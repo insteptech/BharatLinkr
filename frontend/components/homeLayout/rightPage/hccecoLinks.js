@@ -120,7 +120,6 @@ const HccecoLinks = () => {
   const dispatch = useDispatch()
 
   const handleTab = (key, index) => {
-    console.log(activeTab, "key");
     setActive(key);
     setActiveTab(json.find((ele) => ele.key === active));
     setDataValue(index);
@@ -142,13 +141,10 @@ const HccecoLinks = () => {
       ...message,
       [e.target.name]: e.target.value,
     });
-    console.log("massege", message);
   };
   let { name } = message;
   const handleSubmit = () => {
     setInputArr([...inputarr, { name }]);
-    console.log("clicked", message);
-    console.log("clicked", inputarr);
     setMessage({ name: "" });
   };
 
@@ -179,7 +175,6 @@ const HccecoLinks = () => {
       });
   };
 
-  // ---------------chat-box-end-------------------
 
   return (
     <div>
@@ -325,7 +320,6 @@ const HccecoLinks = () => {
                   className="form-control link_request_search_bar"
                 />
                 <div>
-
                   {/* <p className="friend_request">
                     <span className="friend_request_count">
                       {freindCount ? freindCount : ""}
@@ -333,7 +327,6 @@ const HccecoLinks = () => {
                     Pending Friend Request{" "}
 
                   </p> */}
-
                 </div>
                 {isFriendListLoading ? (
                   <LoaderPage />
