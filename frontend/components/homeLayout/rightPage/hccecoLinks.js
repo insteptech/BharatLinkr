@@ -1,6 +1,12 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { Col, Image, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Accordion, Button, Col, Image, Row } from "react-bootstrap";
+import LoaderPage from "../../common-components/loader";
+import { useDispatch, useSelector } from "react-redux";
+import { friendRequestStatus, getPendingFriendRequest } from "../../../redux/actions/user/userActions";
+import { toast } from "react-toastify";
+import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
+import { getToken } from "../../utils";
 
 const json = [
   {
@@ -103,6 +109,15 @@ const HccecoLinks = () => {
   const [dataValue, setDataValue] = React.useState(0);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState(json[0]);
+  const friendList = useSelector((state) => state?.userSlice.friendList);
+  const loginStatus = useSelector((state) => state?.userSlice.loginStatus);
+  const currentUser = useSelector((state) => state?.userSlice.currentUser);
+  const freindCount = useSelector((state) => state?.userSlice.freindCount);
+  const isFriendListLoading = useSelector(
+    (state) => state?.userSlice.isFriendListLoading
+  );
+
+  const dispatch = useDispatch()
 
   const handleTab = (key, index) => {
     console.log(activeTab, "key");
@@ -137,6 +152,33 @@ const HccecoLinks = () => {
     setMessage({ name: "" });
   };
 
+  useEffect(() => {
+    if (!getToken() && router.pathname.includes("editprofile")) {
+      router.push("/"); // redirect to the home page when user not logged in
+    }
+    if (loginStatus && currentUser)
+      dispatch(getPendingFriendRequest({ recieverId: currentUser.id }));
+  }, [dispatch, currentUser]);
+
+  const handleRequestStatus = (userObject, status) => {
+    let requestData = {
+      FriendRequest: [
+        {
+          recieverId: userObject.recieverId,
+          senderId: userObject.senderId,
+          status: status,
+        },
+      ],
+    };
+    if (loginStatus)
+      dispatch(friendRequestStatus(requestData)).then((res) => {
+        if (res.payload[0]) {
+          toast.success(res.payload[0].status);
+          dispatch(getPendingFriendRequest({ recieverId: currentUser.id }));
+        }
+      });
+  };
+
   // ---------------chat-box-end-------------------
 
   return (
@@ -155,9 +197,8 @@ const HccecoLinks = () => {
                 json?.map((steps, stepsIndex) => (
                   <li className="nav-item chatbox_tabs" key={stepsIndex}>
                     <h6
-                      className={`nav-link user_tabs_name ${
-                        dataValue === stepsIndex && "user_tabs_active"
-                      }`}
+                      className={`nav-link user_tabs_name ${dataValue === stepsIndex && "user_tabs_active"
+                        }`}
                       active={true}
                       onClick={() => handleTab(steps.key, stepsIndex)}
                     >
@@ -283,50 +324,81 @@ const HccecoLinks = () => {
                   name=""
                   className="form-control link_request_search_bar"
                 />
-                {SuggestedCardData &&
-                  SuggestedCardData?.map((item, index) => {
+                <div>
+
+                  {/* <p className="friend_request">
+                    <span className="friend_request_count">
+                      {freindCount ? freindCount : ""}
+                    </span>
+                    Pending Friend Request{" "}
+
+                  </p> */}
+
+                </div>
+                {isFriendListLoading ? (
+                  <LoaderPage />
+                ) : friendList && friendList.length > 0 ? (
+                  friendList?.map((listItem, listIndex) => {
                     return (
                       <>
                         <div
-                          key={index}
+                          key={listIndex}
                           className="suggested_card mt-3 mx-auto"
                         >
                           <Row>
                             <Col xs={2}>
                               <div className="mid_comment_left">
+                                <p className="s_no">{listIndex + 1}.</p>
                                 <Image
                                   className="suggested_card_profile"
-                                  src={item.cardImg}
+                                  src={
+                                    listItem?.profilePhoto
+                                      ? `${apibasePath}documents/userProfile/${listItem?.profilePhoto}`
+                                      : "/images/dammy.svg"
+                                  }
                                 />
                               </div>
                             </Col>
                             <Col xs={10}>
                               <div className="text-start ps-2">
                                 <h6 className="suggested_card_heading">
-                                  {item.cardName}
+                                  {listItem.FriendsDetail.name}
                                 </h6>
                                 <p className="suggested_card_text">
-                                  {item.text}
+                                  {listItem.FriendsDetail.userType.toUpperCase()}{" "}
+                                  |{" "}
+                                  {listItem.FriendsDetail.designation.toUpperCase()}
                                 </p>
-                                <button
-                                  className=" suggested_card_btn suggested_card_link_btn"
-                                  type="button"
-                                >
-                                  Accept
-                                </button>
-                                <button
-                                  className=" suggested_card_btn"
-                                  type="button"
-                                >
-                                  Delete
-                                </button>
+                                <div className="d-flex">
+                                  <button
+                                    className=" suggested_card_btn suggested_card_link_btn"
+                                    type="button"
+                                    onClick={() =>
+                                      handleRequestStatus(listItem, true)
+                                    }
+                                  >
+                                    Accept
+                                  </button>
+                                  <button
+                                    className=" suggested_card_btn"
+                                    onClick={() =>
+                                      handleRequestStatus(listItem, false)
+                                    }
+                                    type="button"
+                                  >
+                                    Decline
+                                  </button>
+                                </div>
                               </div>
                             </Col>
                           </Row>
                         </div>
                       </>
-                    );
-                  })}
+                    )
+                  }
+                  )) : (
+                  <NoDataPage name="Friends" />
+                )}
               </>
             )}
           </section>

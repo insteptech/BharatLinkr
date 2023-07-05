@@ -23,11 +23,7 @@ const EditProfile = () => {
   const router = useRouter();
   const loginStatus = useSelector((state) => state?.userSlice.loginStatus);
   const currentUser = useSelector((state) => state?.userSlice.currentUser);
-  const friendList = useSelector((state) => state?.userSlice.friendList);
-  const freindCount = useSelector((state) => state?.userSlice.freindCount);
-  const isFriendListLoading = useSelector(
-    (state) => state?.userSlice.isFriendListLoading
-  );
+
   useEffect(() => {
     if (!getToken() && router.pathname.includes("editprofile")) {
       router.push("/"); // redirect to the home page when user not logged in
@@ -64,24 +60,6 @@ const EditProfile = () => {
     });
   };
 
-  const handleRequestStatus = (userObject, status) => {
-    let requestData = {
-      FriendRequest: [
-        {
-          recieverId: userObject.recieverId,
-          senderId: userObject.senderId,
-          status: status,
-        },
-      ],
-    };
-    if (loginStatus)
-      dispatch(friendRequestStatus(requestData)).then((res) => {
-        if (res.payload[0]) {
-          toast.success(res.payload[0].status);
-          dispatch(getPendingFriendRequest({ recieverId: currentUser.id }));
-        }
-      });
-  };
   return (
     <>
       <Form
@@ -89,16 +67,16 @@ const EditProfile = () => {
         initialValues={
           currentUser
             ? currentUser && {
-                name: currentUser.name,
-                area: currentUser.areaOfExpertise,
-                Designation: currentUser.designation,
-                Email: currentUser.email,
-                number: currentUser.mobileNumber,
-                Expirence: currentUser.totalExperience,
-                Accomplishments: currentUser.accomplishments,
-                education: currentUser.highestEducation,
-                Summary: currentUser.summary,
-              }
+              name: currentUser.name,
+              area: currentUser.areaOfExpertise,
+              Designation: currentUser.designation,
+              Email: currentUser.email,
+              number: currentUser.mobileNumber,
+              Expirence: currentUser.totalExperience,
+              Accomplishments: currentUser.accomplishments,
+              education: currentUser.highestEducation,
+              Summary: currentUser.summary,
+            }
             : ""
         }
         render={({ handleSubmit, pristine }) => {
@@ -161,7 +139,7 @@ const EditProfile = () => {
                   <Row>
                     <Col Col lg="6" md="12">
                       <div>
-                        <label className="signup_form_label">Name </label>
+                        <label className="signup_form_label">Name</label>
                         <Field name="name">
                           {({ input, meta }) => (
                             <div className="position-relative">
@@ -395,72 +373,7 @@ const EditProfile = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Accordion className="pending_frnd_acc">
-                      <Accordion.Item eventKey={"friend"}>
-                        <Accordion.Header>
-                          <p className="friend_request">
-                          <span className="friend_request_count">
-                              {freindCount ? freindCount : ""}
-                            </span>
-                            Pending Friend Request{" "}
-                            
-                          </p>
-                        </Accordion.Header>
-                        <Accordion.Body className="friend_request_acc_body">
-                          {isFriendListLoading ? (
-                            <LoaderPage />
-                          ) : friendList && friendList.length > 0 ? (
-                            friendList.map((listItem, listIndex) => (
-                              <div className="acc_body_div">
-                                <div className="name_img_div">
-                                  <p className="s_no">{listIndex + 1}.</p>
-                                  <img
-                                    className="friend_request_img"
-                                    src={
-                                      listItem?.profilePhoto
-                                        ? `${apibasePath}documents/userProfile/${listItem?.profilePhoto}`
-                                        : "/images/dammy.svg"
-                                    }
-                                  />
-                                  <div>
-                                    <p className="friend_request_title">
-                                      {listItem.FriendsDetail.name}
-                                    </p>
-                                    <p className="friend_request_sub_title">
-                                      {listItem.FriendsDetail.userType.toUpperCase()}{" "}
-                                      |{" "}
-                                      {listItem.FriendsDetail.designation.toUpperCase()}
-                                    </p>
-                                  </div>
-                                </div>
-                                <div>
-                                  <button
-                                    className="suggested_card_btn suggested_card_link_btn friend_request_btn green_hover"
-                                    type="button"
-                                    onClick={() =>
-                                      handleRequestStatus(listItem, true)
-                                    }
-                                  >
-                                    Accept
-                                  </button>
-                                  <button
-                                    className=" suggested_card_btn friend_request_btn red_hover"
-                                    onClick={() =>
-                                      handleRequestStatus(listItem, false)
-                                    }
-                                    type="button"
-                                  >
-                                    Decline
-                                  </button>
-                                </div>
-                              </div>
-                            ))
-                          ) : (
-                            <NoDataPage name="Friends" />
-                          )}
-                        </Accordion.Body>
-                      </Accordion.Item>
-                    </Accordion>
+                   
                   </Row>
                   <Row>
                     <Col lg={12} className="text-center">

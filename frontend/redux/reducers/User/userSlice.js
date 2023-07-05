@@ -71,6 +71,13 @@ const userSlice = createSlice({
         });
         builder.addCase(friendRequestStatus.fulfilled, (state, action) => {
             state.requestStatus = action.payload
+            state.isFriendListLoading = false
+        });
+        builder.addCase(friendRequestStatus.pending, (state, action) => {
+            state.isFriendListLoading = true
+        });
+        builder.addCase(friendRequestStatus.rejected, (state, action) => {
+            state.isFriendListLoading = false
         });
     }
 })
