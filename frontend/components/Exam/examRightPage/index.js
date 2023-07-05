@@ -277,7 +277,7 @@ const ExamRightPage = (props) => {
               </button>
             </Offcanvas.Header>
             <Offcanvas.Body>
-              <ExamLeftPage />
+              <ExamLeftPage  />
             </Offcanvas.Body>
           </Offcanvas>
         </div>

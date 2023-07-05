@@ -169,7 +169,7 @@ const ExamLeftPage = (props) => {
                         deleteSelectedfilter(item.types, item?.id);
                         handleFilter(index, item);
                       }}
-                      checked={props.clear.examtype === item?.id}
+                      checked={props?.clear?.examtype === item?.id}
                     />
                     <label className="check_input_label">{item?.name}</label>
                   </div>
@@ -208,7 +208,7 @@ const ExamLeftPage = (props) => {
                       deleteSelectedfilter(item.types, item?.id);
                       handleFilterApplication(index, item);
                     }}
-                    checked={props.clear.applicationmode === item?.id}
+                    checked={props.clear?.applicationmode === item?.id}
                   />
                   <label className="check_input_label">{item.name}</label>
                 </div>

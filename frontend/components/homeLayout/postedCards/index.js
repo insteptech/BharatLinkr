@@ -101,11 +101,12 @@ const PostedCards = () => {
             <div key={item.id} className="profile_sec_c">
               <Row>
                 <Col md={12}>
-                  <div className="mid_comment">
-                    <Row className="mid_comment_profile">
-                      <Col
-                        sm={1}
-                        xs={2}
+                  <div className="">
+                    <div className="mid_comment_profile">
+                      <div className="post_card_header_detail">
+                      <div
+                        // sm={1}
+                        // xs={2}
                         onClick={() => router.push("/editprofile")}
                         className="mid_comment_left"
                       >
@@ -113,37 +114,37 @@ const PostedCards = () => {
                           className="suggested_card_profile post_card_profile"
                           src={item.profileImg}
                         />
-                      </Col>
+                      </div>
 
-                      <Col xs={9} sm={6} className="mid_comment_mid">
+                      <div  className="mid_comment_mid m-0">
                         <h1>
                           {item.userName}
                           <span className="orange_text">{item.userTitle}</span>
                         </h1>
                         <div>
-                          <img src={item.subImg} />
+                          <img className="post_card_icon" src={item.subImg} />
                           <span>{item.subTitle}</span>
                         </div>
-                      </Col>
+                      </div>
 
-                      <Col xs={8} sm={3} className="mid_comment_end pt-1 m-0">
+                      <div className="mid_comment_end pt-1 m-0">
                         <span>
-                          <img src={item.timeImg} />
+                          <img className="post_card_icon" src={item.timeImg} />
                           {item.postTime}
                         </span>
                         <span>
-                          <img src={item.tagImg} />
+                          <img className="post_card_icon" src={item.tagImg} />
                           {item.postTag}
                         </span>
-                      </Col>
-                      <Col
-                        sm={1}
-                        xs={4}
+                      </div>
+                      </div>
+                      <div
+                        
                         className="text-end post_card_three_dot m-0"
                       >
                         <Dropdown className="edit_delete_drop">
                           <Dropdown.Toggle
-                            className="three_dot_btn"
+                            className="three_dot_btn m-0"
                             variant="success"
                             id="dropdown-basic"
                           >
@@ -159,8 +160,8 @@ const PostedCards = () => {
                             </Dropdown.Item>
                           </Dropdown.Menu>
                         </Dropdown>
-                      </Col>
-                    </Row>
+                      </div>
+                    </div>
 
                     <div className="req post_heading_apply">
                       <p>{item.postHeading}</p>
@@ -175,13 +176,13 @@ const PostedCards = () => {
                     </div>
 
                     <div className="req_p">
-                      <p>
+                      <p className="mb-0">
                         {item.postPaira.slice(0, num)}
                         <span onClick={() => handleSeeMore(item)}>{title}</span>
                       </p>
                     </div>
                     {/* ---------slider-image-start-------------- */}
-                    <div>
+                    <div className={item.postImg ? "show_div" : "hide_div"}>
                       <Swiper
                         className=""
                         navigation
@@ -250,9 +251,7 @@ const PostedCards = () => {
                               <div className="mid_comment_mid">
                                 <h1 className="font_11">{item.userName}</h1>
                                 <div className="img_student_line">
-                                  <span className="font_11">
-                                    {item?.text}
-                                  </span>
+                                  <span className="font_11">{item?.text}</span>
                                 </div>
                               </div>
 

@@ -2231,6 +2231,18 @@ input::-webkit-inner-spin-button {
   .disclaimer-modal .modal-body {
     padding: 20px 16px;
   }
+  .mid_comment_mid span{
+font-size: 9px !important;
+  }
+  .mid_comment_mid h1{
+    font-size: 10px !important;
+  }
+  .mid_comment_end span{
+    font-size: 8px !important;
+  }
+  .post_card_icon{
+    width: 12px;
+  }
 }
 
 @media screen and (max-width: 360px) {
@@ -3253,7 +3265,7 @@ input::-webkit-inner-spin-button {
   color: #463196;
   opacity: 0.9;
   text-align: center;
-  padding: 1.25rem;
+  padding: 10px;
 }
 
 .suggested_card {
@@ -3308,6 +3320,11 @@ input::-webkit-inner-spin-button {
   font-size: 0.75rem;
   line-height: 1.125rem;
   color: #0f0c1a;
+  text-transform: capitalize;
+  margin-bottom: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .suggested_card_text {
@@ -3317,6 +3334,7 @@ input::-webkit-inner-spin-button {
   line-height: 0.9375rem;
   color: #7a7880;
   opacity: 0.76;
+  margin-bottom: 5px;
 }
 
 .suggested_card_btn {
@@ -3824,13 +3842,15 @@ input::-webkit-inner-spin-button {
 
 .story_image_content_text {
   font-size: 11px;
+  max-width: 70px;
   color: #fff;
-  padding: 7px;
+  padding: 4px;
   border-radius: 5px;
-  background-color: #0f0c1a46;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 0;
+  text-shadow: 1px 0px 3px rgba(9, 0, 0, 0.942);
 }
 
 /* ---------------------------------user-center-page-card-end--------------------------- */
@@ -3845,6 +3865,13 @@ input::-webkit-inner-spin-button {
   cursor: pointer;
   margin: 0;
   color: #0f0c1a !important;
+}
+
+.hide_div{
+  display: none;
+}
+.show_div{
+  display: block;
 }
 
 /* ---------------------------------user-center-page-end--------------------------- */
@@ -6605,7 +6632,12 @@ a:hover {
 
 .mid_comment_profile {
   display: flex;
-  /* justify-content: space-between; */
+  /* align-items: center; */
+  justify-content: space-between;
+}
+.post_card_header_detail{
+  display: flex;
+  gap: 12px;
 }
 
 .mid_comment_end span {

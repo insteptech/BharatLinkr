@@ -230,7 +230,7 @@ const CollegeCard = ({ handleLikes, item, isliked, stateLike }) => {
                           }
                         }
                       }}
-                      src={stateLike.length > 0 ?
+                      src={stateLike?.length > 0 ?
                         stateLike[0].state === 'likes'
                           ? "/images/blue-like.png"
                           : "/images/border-like.svg"
@@ -242,7 +242,7 @@ const CollegeCard = ({ handleLikes, item, isliked, stateLike }) => {
                     />
 
                     <h6 className="course_detail_name ">
-                      {stateLike.length > 0
+                      {stateLike?.length > 0
                         ? stateLike[0].state === 'likes'
                         && item?.CountLikesShare[0]?.likes + 1 ||
                         stateLike[0].state === "dislikes"
