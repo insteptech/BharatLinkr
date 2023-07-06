@@ -31,7 +31,6 @@ const CourseLeftPage = (props) => {
       height: window.innerHeight,
     });
   }
-
   useEffect(() => {
     window.addEventListener("resize", handleResize, false);
   }, []);
