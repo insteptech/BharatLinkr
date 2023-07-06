@@ -246,7 +246,7 @@ const ExamLeftPage = (props) => {
                       deleteSelectedfilter(item.types, item?.id);
                       handleFilterExamination(index, item);
                     }}
-                    checked={props.clear.exammode === item?.id}
+                    checked={props?.clear?.exammode === item?.id}
                   />
                   <label className="check_input_label">{item?.name}</label>
                 </div>

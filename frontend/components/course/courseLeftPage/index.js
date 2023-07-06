@@ -20,12 +20,30 @@ const CourseLeftPage = (props) => {
     (data) => data?.courseList?.courselist?.data
   );
 
+  const [dimensions, setDimensions] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  const handleResize = () => {
+    setDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  }
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize, false);
+  }, []);
+
   useEffect(() => {
     if (filteredId.length > 0) {
       dispatch(filterMainstreamCourse({ mainStreamId: filteredId }));
       setShow(true);
     } else {
-      setShow(null);
+      if (dimensions.width > 990, dimensions.height > 660) {
+        setShow(null);
+      }
     }
   }, [JSON.stringify(filteredId)]);
 
@@ -61,7 +79,6 @@ const CourseLeftPage = (props) => {
   const courseData = useSelector(
     (state) => state?.courseList?.courselist?.data?.rows
   );
- 
 
   const handleSubmit = (e) => {
     // e.preventDefault();
@@ -153,16 +170,16 @@ const CourseLeftPage = (props) => {
                 }
               });
               return (
-                  <div className="check_input_label_div" key={listIndex}>
-                    <input
-                      className="college_box_check_input"
-                      type="checkbox"
-                      onChange={() => handleStateSelect(listItem.id, listItem)}
-                    />
-                    <label className="check_input_label">
-                      {listItem?.mainStreamName}- {`${count}`}
-                    </label>
-                  </div>
+                <div className="check_input_label_div" key={listIndex}>
+                  <input
+                    className="college_box_check_input"
+                    type="checkbox"
+                    onChange={() => handleStateSelect(listItem.id, listItem)}
+                  />
+                  <label className="check_input_label">
+                    {listItem?.mainStreamName}- {`${count}`}
+                  </label>
+                </div>
               );
             })}
         </div>

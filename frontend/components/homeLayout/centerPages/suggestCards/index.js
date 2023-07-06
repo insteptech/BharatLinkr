@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation } from "swiper";
 import { Card, Col, Image, Row, Spinner } from "react-bootstrap";
@@ -28,10 +28,10 @@ const SuggestCards = () => {
     if (loginStatus) {
       dispatch(addFriend(data)).then((res) => {
         if (!res?.payload?.data[0]?.status) {
-          toast.success("Friend Request sent", { autoClose: 1000 });
+          toast.success("Friend Request sent");
         } else {
           let statuss = res?.payload?.data[0]?.status;
-          toast.info(statuss, { autoClose: 1000 });
+          toast.info(statuss);
         }
       });
     }
@@ -39,7 +39,7 @@ const SuggestCards = () => {
   };
   const isFriend = (id) => {
     if (id) {
-      let friendStatus = myFriendsList.find((item) => item.senderId === id);
+      let friendStatus = myFriendsList?.find((item) => item.senderId === id);
       if (!friendStatus) {
         return "Link";
       } else if (friendStatus.status) {
@@ -49,6 +49,13 @@ const SuggestCards = () => {
       }
     }
   };
+  const [suggestedUser, setSuggestedUser] = useState(allUserList)
+
+  const handleCancelSuggestedLink=(index)=> {
+    let updatedSuggestedlist = [...suggestedUser]
+    updatedSuggestedlist.splice(index,1)
+     setSuggestedUser(updatedSuggestedlist)
+  }
   return (
     <>
       {" "}
@@ -113,6 +120,7 @@ const SuggestCards = () => {
                               <Image
                                 className="close_btn"
                                 src="/images/close-card-icon.svg"
+                                onClick={()=> handleCancelSuggestedLink(userIndex)}
                               />
                               <p className="suggested_card_text">
                                 {userObject.designation} |{" "}

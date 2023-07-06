@@ -17,7 +17,7 @@ function MyApp({ Component, pageProps }) {
       <SSRProvider>
         <Wrapper>
           <Component {...pageProps} />
-          <ToastContainer />
+          <ToastContainer  autoClose={1000}/>
         </Wrapper>
       </SSRProvider>
     </Provider>

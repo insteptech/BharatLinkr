@@ -187,6 +187,16 @@ const PostBaar = () => {
     if (activeKey) dispatch(commonFilterForPost());
   }, [activeKey]);
 
+  const [isAccordianOpen, setAccordianOpen] = useState(false)
+
+  const handleAccordianItemClick = () => {
+    setAccordianOpen(!isAccordianOpen)
+  }
+
+  const handleImageClick=(e)=> {
+   e.stopPropagation()
+  }
+
   return (
     <>
       <Accordion
@@ -194,7 +204,7 @@ const PostBaar = () => {
         activeKey={activeKey}
         onSelect={(key) => setActiveKey(key)}
       >
-        <Accordion.Item className="w-100" eventKey="1">
+        <Accordion.Item className="w-100" eventKey="1" onClick={handleAccordianItemClick}>
           <Accordion.Header>
             <div className="acc_bar">
               <div className="post_bar_col_left">
@@ -213,6 +223,7 @@ const PostBaar = () => {
                   <Image
                     className="ms-3 post_bar_icon"
                     src="/images/attach-pin.svg"
+                    onClick={(e)=>handleImageClick(e)}
                   />
                 </label>
                 <input type="file" id="actual-btn" hidden />
