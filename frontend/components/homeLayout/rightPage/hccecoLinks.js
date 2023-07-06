@@ -184,7 +184,7 @@ const HccecoLinks = () => {
         <div className="card_top">
           <h1>
             <img src="/images/h_links.png" />
-            HCCECO LINKS
+            Bharat LINKS
           </h1>
         </div>
         <div className="card_mid chat_box_position">

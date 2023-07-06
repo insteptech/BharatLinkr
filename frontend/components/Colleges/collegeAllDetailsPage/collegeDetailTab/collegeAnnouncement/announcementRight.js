@@ -3,10 +3,10 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 
 const AnnouncementBars = [
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
 ];
 
 function AnnouncementRight(props) {
