@@ -5,7 +5,7 @@ import {
   Button,
   Col,
   Form as Bootform,
-  Image,
+  Image as ImageBoot,
   Row,
 } from "react-bootstrap";
 import Select from "react-select";
@@ -31,6 +31,8 @@ import {
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { Form as Formboot } from "react-bootstrap";
 import { toast } from "react-toastify";
+import Image from "next/Image";
+import { apibasePath } from "../../../../config";
 
 const PostBaar = () => {
   const dispatch = useDispatch();
@@ -38,6 +40,9 @@ const PostBaar = () => {
   const filterListForPost = useSelector(
     (state) => state.postSlice.postFilterList
   );
+  const currentUserDetails = useSelector((item) => item?.userSlice.currentUser);
+
+  console.log(currentUserDetails, "sdfsdfsdfsdfsdfsdf");
 
   const actionCallByPostCategory = {
     jobs: (types) => {
@@ -187,15 +192,15 @@ const PostBaar = () => {
     if (activeKey) dispatch(commonFilterForPost());
   }, [activeKey]);
 
-  const [isAccordianOpen, setAccordianOpen] = useState(false)
+  const [isAccordianOpen, setAccordianOpen] = useState(false);
 
   const handleAccordianItemClick = () => {
-    setAccordianOpen(!isAccordianOpen)
-  }
+    setAccordianOpen(!isAccordianOpen);
+  };
 
-  const handleImageClick=(e)=> {
-   e.stopPropagation()
-  }
+  const handleImageClick = (e) => {
+    e.stopPropagation();
+  };
 
   return (
     <>
@@ -204,14 +209,26 @@ const PostBaar = () => {
         activeKey={activeKey}
         onSelect={(key) => setActiveKey(key)}
       >
-        <Accordion.Item className="w-100" eventKey="1" onClick={handleAccordianItemClick}>
+        <Accordion.Item
+          className="w-100"
+          eventKey="1"
+          onClick={handleAccordianItemClick}
+        >
           <Accordion.Header>
             <div className="acc_bar">
               <div className="post_bar_col_left">
                 <div className="mid_comment_left">
-                  <img
+                  <Image
+                    width={25}
+                    height={25}
+                    onClick={() => router.push("/editprofile")}
                     className="suggested_card_profile post_card_profile"
-                    src="/images/mdi_pro.png"
+                    src={
+                      currentUserDetails?.profilePhoto
+                        ? `${apibasePath}documents/userProfile/${currentUserDetails?.profilePhoto}`
+                        : "/images/dammy.svg"
+                    }
+                    alt="profile pic"
                   />
                 </div>
                 <h2 className="post_bar_heading">
@@ -220,14 +237,14 @@ const PostBaar = () => {
               </div>
               <div className="post_bar_col_right ms-0">
                 <label className="" for="actual-btn">
-                  <Image
+                  <ImageBoot
                     className="ms-3 post_bar_icon"
                     src="/images/attach-pin.svg"
-                    onClick={(e)=>handleImageClick(e)}
+                    onClick={(e) => handleImageClick(e)}
                   />
                 </label>
                 <input type="file" id="actual-btn" hidden />
-                <Image
+                <ImageBoot
                   className="ms-3 post_bar_icon"
                   src="/images/addimg-post-icon.svg"
                 />

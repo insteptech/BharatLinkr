@@ -132,7 +132,7 @@ const LevelCard = (props) => {
                       </div>
                     ))}
 
-                  <Card.Body>
+                  <Card.Body className="padding_10">
                     <>
                       <div className="selected_filters_subbox ">
                         {courseLevelList.length > 0 ? (

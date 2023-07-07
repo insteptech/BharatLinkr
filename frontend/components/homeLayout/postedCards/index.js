@@ -11,7 +11,7 @@ import { useState } from "react";
 const userPostData = [
   {
     id: 1,
-    profileImg: "/images/cover-bg.jpg",
+    profileImg: "/images/story-2.JPG",
     subImg: "/images/user-graduate.png",
     timeImg: "/images/ios-time.png",
     tagImg: "/images/metro-tag.png",
