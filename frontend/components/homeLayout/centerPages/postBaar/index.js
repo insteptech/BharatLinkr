@@ -296,7 +296,7 @@ const PostBaar = () => {
                             <>
                               <Bootform.Control
                                 {...input}
-                                className="form-control  input_padding post_summary_input margin_bottom"
+                                className="form-control  input_padding post_summary_input mb-2"
                                 as="textarea"
                                 placeholder="Write Description here.."
                                 aria-label="With textarea"
