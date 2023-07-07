@@ -6,6 +6,7 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import { useSelector } from "react-redux";
 
 const postCard = [
   {
@@ -48,6 +49,95 @@ const postCard = [
 ];
 
 const StoryCard = () => {
+
+  const loginStatus = useSelector((state) => state.userSlice.loginStatus);
+
+  return (
+    <>
+      {
+        loginStatus ? (<>
+          <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+            {postCard &&
+              postCard?.map((item, index) => (
+                <Card key={index} className="user_post_card text-center">
+                  <Card.Body className="user_post_card_body">
+                    {item?.img ? (
+                      <>
+                        <div className="image_cover_content_base blur_none ">
+                          <img className="story_photo img-fluid" src={item.img} />
+                        </div>
+                        <div className="story_image_cover_content hide_box">
+                          <h6 className="story_image_content_text ">{item.Name}</h6>
+                          <h6 className="story_image_content_text b_r_100">
+                            {item.count > 5 ? `+5` : `${item.count}`}
+                          </h6>
+                        </div>
+                        <p className="story_bottom_name ">{item.Name}</p>
+                      </>
+                    ) : (
+                      <>
+                        <label
+                          className="plus_btn_box  story_photo"
+                          for="actual-btn"
+                        >
+                          <img className="user_post_card_btn " src={item.icon} />
+                          <h2 className="user_post_card_title hide_img">
+                            {item.title}
+                          </h2>
+                        </label>
+                        <input type="file" id="actual-btn" hidden />
+                        <p className="story_bottom_name post_title">{item.title}</p>
+                      </>
+                    )}
+                  </Card.Body>
+                </Card>
+              ))}
+          </ScrollingCarousel>
+        </>)
+
+          : (<div style={{ filter: 'blur(4px)', pointerEvents: 'none' }}>
+            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+              {postCard &&
+                postCard?.map((item, index) => (
+                  <Card key={index} className="user_post_card text-center">
+                    <Card.Body className="user_post_card_body">
+                      {item?.img ? (
+                        <>
+                          <div className="image_cover_content_base blur_none ">
+                            <img className="story_photo img-fluid" src={item.img} />
+                          </div>
+                          <div className="story_image_cover_content hide_box">
+                            <h6 className="story_image_content_text ">{item.Name}</h6>
+                            <h6 className="story_image_content_text b_r_100">
+                              {item.count > 5 ? `+5` : `${item.count}`}
+                            </h6>
+                          </div>
+                          <p className="story_bottom_name ">{item.Name}</p>
+                        </>
+                      ) : (
+                        <>
+                          <label
+                            className="plus_btn_box  story_photo"
+                            for="actual-btn"
+                          >
+                            <img className="user_post_card_btn " src={item.icon} />
+                            <h2 className="user_post_card_title hide_img">
+                              {item.title}
+                            </h2>
+                          </label>
+                          <input type="file" id="actual-btn" hidden />
+                          <p className="story_bottom_name post_title">{item.title}</p>
+                        </>
+                      )}
+                    </Card.Body>
+                  </Card>
+                ))}
+            </ScrollingCarousel>
+          </div>)
+      }
+
+
+
   const [showStory, setShowStory] = useState(false);
 
   const handleCloseStory = () => setShowStory(false);
@@ -94,6 +184,7 @@ const StoryCard = () => {
             </Card>
           ))}
       </ScrollingCarousel>
+
 
       <Modal show={showStory} onHide={handleCloseStory} centered>
         <Modal.Header closeButton>
