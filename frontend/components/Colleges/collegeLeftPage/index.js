@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourse } from "../../../redux/actions/course/addcourse";
-import { cityDropdown } from "../../../redux/actions/location/createCity";
+import { cityDropdown, getCityList, searchCity } from "../../../redux/actions/location/createCity";
 import {
   getState,
   searchState,
@@ -52,11 +52,16 @@ const CollegeLeftPage = (props) => {
     dispatch(searchState(statedata));
   };
 
+  const citySearch = (e) => {
+    let citydata = {search : e.target.value}
+    dispatch(cityDropdown(citydata))
+  }
+
   const searchMainstream = (e) => {
     let streamdata = { search: e.target.value };
     dispatch(getMainStream(streamdata));
   };
-  const searchCourse = (e) => {
+  const searchCourse = (e) => {examlist
     let coursedata = { search: e.target.value };
     dispatch(getCourse(coursedata));
   };
@@ -139,6 +144,7 @@ const CollegeLeftPage = (props) => {
   }, [JSON.stringify(query)]);
 
   const handleFilters = (e, itemId, itemName) => {
+    console.log(itemId, itemName, "aasdasdas234234234234")
     const refinedName = refined(itemName);
     const { name, checked } = e.target;
 
@@ -238,14 +244,18 @@ const CollegeLeftPage = (props) => {
     dispatch(getAllExams());
   }, []);
 
-  // useEffect(() => {
-  //   dispatch(getColleges());
-  // }, []);
-
   const handleSearchCollege = debounce((e) => {
     const searchText = e.target.value
     dispatch(getColleges({ search: searchText }))
   }, 500)
+
+  const handleRemoveState =(index) => {
+      // let removeItem = [...queryFilterObject.collegeStateId]
+      // removeItem.splice(index, 1)
+      // setQueryFilterObject(removeItem)
+      console.log(index, "czxczxczxczxc12312")
+  }
+
 
   return (
     <>
@@ -255,9 +265,7 @@ const CollegeLeftPage = (props) => {
           <input
             type="text"
             placeholder="Search by name..."
-            name=""
-            // onChange={(e) => props?.handleSearch(e)}
-             onChange={handleSearchCollege}
+            onChange={handleSearchCollege}
             className="form-control chat_box_weite_bar"
           />
           <button type="submit">
@@ -279,19 +287,99 @@ const CollegeLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading mb-0">Selected Filters</p>
         <div className="selected_filters_subbox">
-          {props?.selectedFilter &&
-            props?.selectedFilter?.length > 0 &&
-            props?.selectedFilter?.map((item, index) => {
-              return (
-                <div className="selected_filters" key={index}>
-                  {item} <div className="filter_dot"></div>
+         {queryFilterObject &&
+          queryFilterObject?.collegeStateId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                   <div className="filter_dot"  onClick={handleRemoveState(index)}/>
                 </div>
-              );
-            })}
+               );
+             })} 
+              {queryFilterObject &&
+          queryFilterObject?.collegeCityId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+              {queryFilterObject &&
+          queryFilterObject?.mainStreamId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+              {queryFilterObject &&
+          queryFilterObject?.courseId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+              {queryFilterObject &&
+          queryFilterObject?.programTypeId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+               {queryFilterObject &&
+          queryFilterObject?.chooseAffiliationId
+          ?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+               {queryFilterObject &&
+          queryFilterObject?.collegeAgencyId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+               {queryFilterObject &&
+          queryFilterObject?.courseTypeId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+               {queryFilterObject &&
+          queryFilterObject?.collegeTypeId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
+               {queryFilterObject &&
+          queryFilterObject?.chooseExamAcceptedId?.map((item, index) => {
+              return ( 
+                <div className="selected_filters" >
+                  {item} 
+                  {/* <div className="filter_dot"></div> */}
+                </div>
+               );
+             })} 
         </div>
       </div>
-
-      {/*-------------------------------master filter bar end----------------------------------*/}
 
       {/*............................... STATE.............................. */}
 
@@ -332,14 +420,14 @@ const CollegeLeftPage = (props) => {
         <p className="college_box_heading">CITY</p>
 
         {/*Search */}
-        {/* <div>
+         <div>
           <input
             className="college_box_searchbar"
             type="text"
             placeholder="search"
             onChange={(e) => citySearch(e)}
           />
-        </div> */}
+        </div> 
 
         {/*Checkbox */}
         <div className="box_data">
@@ -382,7 +470,7 @@ const CollegeLeftPage = (props) => {
                   className="college_box_check_input"
                   type="checkbox"
                   name="mainStreamId"
-                  onChange={(e) => handleFilters(e, item.id, item.name)}
+                  onChange={(e) => handleFilters(e, item.id, item.mainStreamName)}
                   checked={selectedStateCheck("mainStreamId", item?.id)}
                 />
                 <label className="check_input_label">
@@ -630,10 +718,10 @@ const CollegeLeftPage = (props) => {
                   className="college_box_check_input"
                   type="checkbox"
                   name="chooseExamAcceptedId"
-                  onChange={(e) => handleFilters(e, item.id, item.name)}
+                  onChange={(e) => handleFilters(e, item?.id, item?.examName)}
                   checked={selectedStateCheck("chooseExamAcceptedId", item?.id)}
                 />
-                <label className="check_input_label">{item.examName}</label>
+                <label className="check_input_label">{item?.examName}</label>
               </div>
             );
           })}

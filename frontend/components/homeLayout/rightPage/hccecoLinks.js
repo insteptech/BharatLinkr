@@ -364,9 +364,9 @@ const HccecoLinks = () => {
                                   {listItem.FriendsDetail.name}
                                 </h5>
                                 <p className="suggested_card_text">
-                                  {listItem.FriendsDetail.userType.toUpperCase()}{" "}
-                                  |{" "}
-                                  {listItem.FriendsDetail.designation.toUpperCase()}
+                                  {listItem?.FriendsDetail?.userType?.toUpperCase()}
+                                  |
+                                  {listItem?.FriendsDetail?.designation?.toUpperCase()}
                                 </p>
                                 <div className="d-flex">
                                   <button
