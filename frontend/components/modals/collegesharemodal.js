@@ -26,18 +26,18 @@ function CollegeShareModal(props) {
             className="close-icon position-absolute chat_box_close_btn"
             onClick={props.onHide}
           />
-          <h3 className="edit_profile_h2 mobile_font_18 py-3 mb-0">
+          <h3 className="edit_profile_h2 mobile_font_18 py-2 mb-0">
             Share This College
           </h3>
           <h5 className="mobile_font_14">
             Share this college with your friends
           </h5>
-          <div className="py-4 d-flex justify-content-center gap-4">
+          <div className="py-3 d-flex justify-content-center gap-4">
             <Image width={44} height={44} src="/images/Whatsapp-icon.png" />
             <Image width={44} height={44} src="/images/Telegram-icon.png" />
           </div>
           <div className="w-100 px-3 pb-3 text-start">
-            <p className="mobile_font_16 college_left_page_master_heading pt-3">
+            <p className="mobile_font_16 college_left_page_master_heading">
               Page Link
             </p>
             <div className="d-flex">

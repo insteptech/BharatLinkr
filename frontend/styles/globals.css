@@ -934,7 +934,8 @@ input::-webkit-inner-spin-button {
   border-radius: 1.875rem;
   margin-left: 14px;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  /* object-fit: cover; */
   cursor: pointer;
 }
 
@@ -2481,7 +2482,7 @@ font-size: 9px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.9375rem;
+  /* padding-top: 0.9375rem; */
 }
 
 .user_header_btn_div {
@@ -3156,6 +3157,7 @@ font-size: 9px !important;
 .max_height_overflow {
   max-height: 150px;
   overflow: auto;
+  padding: 0 10px;
 }
 
 .input_padding {
@@ -3179,8 +3181,8 @@ font-size: 9px !important;
 .post_bar_post_btn {
   padding: 0.625rem 1.875rem !important;
   margin-left: 0%;
-  margin-bottom: 1rem;
-  margin-top: 0.625rem;
+  margin-bottom: 10px;
+  margin-top: 8px;
 }
 
 .dropdown_row {
@@ -3917,7 +3919,7 @@ font-size: 9px !important;
 }
 
 .side_tabs {
-  padding: 0.25rem 2.1875rem;
+  padding: 0.25rem 20px;
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
@@ -4235,7 +4237,7 @@ img {
 /* ----------------college-card--start-------------------- */
 .college_name_container {
   background: #ebebeb;
-  padding: 10px 20px;
+  padding: 14px 20px;
   cursor: pointer;
 }
 
@@ -4287,7 +4289,7 @@ img {
   color: #0f0c1a;
   opacity: 0.9;
   margin: 0;
-  padding: 10px 5px;
+  /* padding: 5px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4304,7 +4306,7 @@ img {
 }
 
 .college_card_detail_box {
-  padding: 0.3125rem 1.25rem;
+  padding: 5px 12px;
   /* background: #ffffff; */
 }
 
@@ -4322,7 +4324,7 @@ img {
 }
 
 .card_location {
-  padding: 0.75rem 0;
+  padding: 8px 0;
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: space-between; */
@@ -6114,7 +6116,7 @@ ul {
 }
 
 .left_sec {
-  margin: 5rem 0;
+  margin: 1.875rem 0;
 }
 
 .card_mid ul li img {
@@ -6213,10 +6215,10 @@ a:hover {
 .top_input form {
   color: #555;
   display: flex;
-  padding: 0.125rem;
+  /* padding: 0.125rem; */
   /* border: 0.0625rem solid currentColor; */
   border-radius: 0.3125rem;
-  margin: 0 0 1.875rem;
+  /* margin: 0 0 1.875rem; */
 }
 .top_input .form_border{
    border: 0.0625rem solid currentColor;
@@ -6617,7 +6619,7 @@ a:hover {
   border: 0.0625rem solid #c8c1df;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(70, 49, 150, 0.109804);
   border-radius: 0.3125rem;
-  padding: 1.5625rem;
+  padding: 0.9375rem;
 }
 
 .req p {
