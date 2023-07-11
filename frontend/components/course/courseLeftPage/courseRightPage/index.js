@@ -92,10 +92,6 @@ const CourseRightPage = (props) => {
     (state) => state?.courseList?.filterMainstreamlist?.data?.data?.rows
   );
 
-  const loadingFilterlist = useSelector(
-    (state) => state?.courseList?.isLoading
-  );
-   
   const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
   return (
@@ -131,7 +127,7 @@ const CourseRightPage = (props) => {
                 </div>
               </div>
             </Col>
-          </Row>        
+          </Row>
           <div className="mobile_margin_bottom">
             <LevelCard
               showList={showList}
@@ -162,7 +158,7 @@ const CourseRightPage = (props) => {
       )}
 
       {/* ----------------------search filter----------------------- */}
-      {show && loading ? <LoaderPage/> : (
+      {/* {show && loading ? <LoaderPage /> : (
         <div className="">
           {searchCourseList &&
             searchCourseList?.map((item, index) => {
@@ -261,11 +257,11 @@ const CourseRightPage = (props) => {
               );
             })}
         </div>
-      )}
+      )} */}
 
       {/* ----------------------choose by dream----------------------- */}
       <div>
-        {show && loadingFilterlist ? (
+        {show ? loading ? (
           <LoaderPage />
         ) : (
           filterMainStreamDetails &&
@@ -278,7 +274,7 @@ const CourseRightPage = (props) => {
                       <Col md={6}>
                         <h6 className="p_c_card_master_heading align_center">
                           {item &&
-                          item?.MainStream?.mainStreamName === undefined ? (
+                            item?.MainStream?.mainStreamName === undefined ? (
                             <p>No data-found</p>
                           ) : (
                             item?.courseName
@@ -364,7 +360,8 @@ const CourseRightPage = (props) => {
               </>
             );
           })
-        )}
+        ) : ""}
+
       </div>
       <div className="">
         {/* <button

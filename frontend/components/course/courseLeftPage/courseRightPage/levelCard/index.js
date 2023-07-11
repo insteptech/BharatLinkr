@@ -67,10 +67,10 @@ const LevelCard = (props) => {
 
     if (item?.mainStreamName === "") {
       setShowList(false);
-      setCardLevelShow(false);
+      // setCardLevelShow(false);
     } else {
-      setShowList(true);
-      setCardLevelShow(false);
+      setShowList(null);
+      // setCardLevelShow(false);
     }
   };
 
@@ -86,9 +86,9 @@ const LevelCard = (props) => {
     dispatch(cardlevelIdDetails({ courseLevelId: item?.id }));
     if (item?.mainStreamCourseId === "") {
       setShowList(false);
-      setCardLevelShow(null);
+      // setCardLevelShow(null);
     } else {
-      setCardLevelShow(true);
+      // setCardLevelShow(true);
       setShowList(false);
     }
   };
