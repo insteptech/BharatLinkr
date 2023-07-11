@@ -63,3 +63,17 @@ export const updatePassword = createAsyncThunk("updatePassword/auth/userPassword
     .then(res => res)
     .catch(err => err)
 })
+
+export const collegeApprovalList = createAsyncThunk("collegeApprovalList/auth/collegeRegisterPendingList", async () => {
+  return apiRequest
+    .post(`auth/collegeRegisterPendingList`)
+    .then(res => res)
+    .catch(err => err)
+})
+
+export const collegeApprovalByAdmin = createAsyncThunk("collegeApprovalByAdmin/auth/approveCollegeRegisterByAdmin", async (body) => {
+  return apiRequest
+    .post(`auth/approveCollegeRegisterByAdmin`,body)
+    .then(res => res)
+    .catch(err => err)
+})
