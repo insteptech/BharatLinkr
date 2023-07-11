@@ -21,11 +21,10 @@ const PopularCourseCard = (props) => {
 
   const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
-
   return (
     <>
       {/* {courseData && courseData.length === 0 ? ( */}
-      { loading ? (
+      {loading ? (
         <LoaderPage />
       ) : (
         courseData &&
@@ -35,16 +34,19 @@ const PopularCourseCard = (props) => {
               <Card key={item.id} className="p_c_card mobile_card_padding">
                 <Row>
                   <Col md={6}>
-                    <h6 className="p_c_card_master_heading align_center mobile_blue_text mobile_font_18">
+                    <h6
+                      onClick={() => router.push(`/courses/${item.id}`)}
+                      className="p_c_card_master_heading align_center mobile_blue_text mobile_font_18"
+                    >
                       {item?.courseName}
                     </h6>
                     <div className="experience_row align_center">
-                      <p className="time_experience">
-                        <Image src="/images/green-squre.svg" />
+                      <p className="time_experience px-0">
+                        <Image className="me-1" src="/images/green-squre.svg" />
                         {item?.courseDuration}
                       </p>
                       <p className="time_experience">
-                        <Image src="/images/green-squre.svg" />
+                        <Image className="me-1" src="/images/green-squre.svg" />
                         {item?.CourseType?.name}
                       </p>
                     </div>
@@ -84,7 +86,11 @@ const PopularCourseCard = (props) => {
                     <Row className="long_card_date_row">
                       <Col md={6} xs={6} className="mobile_right_border">
                         <h6 className="p_c_card_fees_heading mobile_font_13">
-                          <Image src="/images/green-squre.svg" /> Average Fees
+                          <Image
+                            className="me-1 green_red_squre"
+                            src="/images/green-squre.svg"
+                          />{" "}
+                          Average Fees
                         </h6>
                         <p className="p_c_card_fees_value margin_bottom_0">
                           ₹ {item?.averageFees}
@@ -92,8 +98,11 @@ const PopularCourseCard = (props) => {
                       </Col>
                       <Col md={6} xs={6}>
                         <h6 className="p_c_card_fees_heading mobile_font_13">
-                          <Image src="/images/orange-squre.svg" /> Average
-                          Salary
+                          <Image
+                            className="me-1 green_red_squre"
+                            src="/images/orange-squre.svg"
+                          />{" "}
+                          Average Salary
                         </h6>
                         <p className="p_c_card_fees_value margin_bottom_0">
                           ₹ {item?.averageSalary}
@@ -102,7 +111,10 @@ const PopularCourseCard = (props) => {
                     </Row>
                     <Row>
                       <Col md={12}>
-                        <div className="offer_heading_col">
+                        <div
+                          onClick={() => router.push("/college")}
+                          className="offer_heading_col"
+                        >
                           <h6 className="offer_heading hover_link mobile_font_12">
                             {item.offer || "12 Colleges Offering This Course"}
                           </h6>
@@ -130,7 +142,7 @@ const PopularCourseCard = (props) => {
                       <Col md={6}>
                         <h6 className="p_c_card_master_heading align_center">
                           {item &&
-                            item?.MainStream?.mainStreamName === undefined ? (
+                          item?.MainStream?.mainStreamName === undefined ? (
                             <p>No data found</p>
                           ) : (
                             item?.courseName

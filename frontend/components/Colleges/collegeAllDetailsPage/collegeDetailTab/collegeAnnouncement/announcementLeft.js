@@ -1,9 +1,9 @@
 import React from "react";
 const AnnouncementBars = [
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
-  "gRAphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
+  "graphic Designer required...",
 ];
 function AnnouncementLeft(props) {
   const { dataValue, setDataValue } = props;

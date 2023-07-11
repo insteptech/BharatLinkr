@@ -405,6 +405,42 @@ const userList = async (req) => {
             },
           ]
         },
+        {
+          model:userFriendList,
+          required:false,
+          as:'FriendsSent',
+          where:{status:false},
+          include:[
+            {
+              model:User,
+              required: false,
+              as:'SentReqFriendsDetails',
+              attributes: [
+        
+                'id',
+              'isNumberVerified',
+              'userType',
+              'name',
+              'designation',
+              'email',
+              'mobileNumber',
+              'stateId',
+              'cityId',
+              'school_college_company',
+              'highestEducation',
+              'summary',
+              'areaOfExpertise',
+              'accomplishments',
+              'totalExperience',
+              'profilePhoto',
+              'coverPhoto',
+              'collegeWebsite',
+              'collegeId',
+              'roleId'
+            ],
+            },
+          ]
+        },
   
       ],
       attributes: [
@@ -571,6 +607,7 @@ const userPendingFriendRequest = async (req) => {
     if (req.body.recieverId) {
       whereCondition ={recieverId: req.body.recieverId, status:false};
     }
+
     const result = await userFriendList.findAndCountAll({
       where: whereCondition,
       include: [

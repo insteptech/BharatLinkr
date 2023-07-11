@@ -557,7 +557,7 @@ optgroup {
 }
 
 .cant_find_div {
-  margin-top: 45px;
+  margin-top: 40px;
 }
 
 .cant_find {
@@ -571,8 +571,8 @@ optgroup {
   font-size: 30px;
   text-decoration-line: underline;
   color: #463196;
-  margin-bottom: 40px;
-  margin-top: 10px;
+  margin-bottom: 10px;
+  /* margin-top: 10px; */
 }
 
 .select_down_icon_second {
@@ -636,7 +636,7 @@ optgroup {
   max-width: 14.625rem;
   border-radius: 0.3125rem;
   padding: 0.6875rem 1.875rem;
-  margin-top: 60px;
+  margin-top: 50px;
   margin-bottom: 70px;
   font-weight: 500;
   font-size: 1.0625rem;
@@ -934,7 +934,8 @@ input::-webkit-inner-spin-button {
   border-radius: 1.875rem;
   margin-left: 14px;
   background-position: center;
-  background-size: cover;
+  background-size: contain;
+  /* object-fit: cover; */
   cursor: pointer;
 }
 
@@ -1339,6 +1340,12 @@ input::-webkit-inner-spin-button {
   .card_btn {
     margin-bottom: 0px !important;
   }
+  .colleges_left_boxes{
+    padding: 10px 15px !important;
+  }
+  .college_box_check_input{
+    margin-left: 5px !important;
+  }
 }
 
 @media only screen and (max-width: 1140px) {
@@ -1413,6 +1420,12 @@ input::-webkit-inner-spin-button {
   }
   .edit_profile_h2{
     font-size: 20px !important;
+  }
+  .colleges_left_boxes{
+    padding: 8px 10px !important;
+  }
+  .college_box_check_input{
+    margin-left: 4px !important;
   }
 }
 
@@ -2009,7 +2022,7 @@ input::-webkit-inner-spin-button {
   }
 
   .mobile_card_padding {
-    padding: 15px 10px !important;
+    padding: 10px 8px !important;
   }
 
   .p_c_card_master_heading,
@@ -2058,7 +2071,7 @@ input::-webkit-inner-spin-button {
 
   .long_card_btn {
     justify-content: center !important;
-    margin-top: 15px !important;
+    margin-top: 10px !important;
   }
 
   .date_center {
@@ -2481,7 +2494,7 @@ font-size: 9px !important;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 0.9375rem;
+  /* padding-top: 0.9375rem; */
 }
 
 .user_header_btn_div {
@@ -3048,7 +3061,7 @@ font-size: 9px !important;
 
 /* ------------------------post bar start------------ */
 .post_bar {
-  padding: 0.625rem 1.25rem;
+  padding: 0.625rem 15px;
   margin: 1rem 0;
   background: #ffffff;
   border: 0.0625rem solid #c8c1df;
@@ -3156,6 +3169,7 @@ font-size: 9px !important;
 .max_height_overflow {
   max-height: 150px;
   overflow: auto;
+  padding: 0 10px;
 }
 
 .input_padding {
@@ -3179,8 +3193,8 @@ font-size: 9px !important;
 .post_bar_post_btn {
   padding: 0.625rem 1.875rem !important;
   margin-left: 0%;
-  margin-bottom: 1rem;
-  margin-top: 0.625rem;
+  margin-bottom: 10px;
+  margin-top: 8px;
 }
 
 .dropdown_row {
@@ -3284,7 +3298,7 @@ font-size: 9px !important;
   width: 1.9375rem;
   height: 1.9375rem;
   background-position: center;
-  background-size: cover;
+  /* background-size: cover; */
   object-fit: cover !important;
   border-radius: 1.875rem !important;
   cursor: pointer;
@@ -3293,6 +3307,8 @@ font-size: 9px !important;
 .post_card_profile {
   width: 2.625rem;
   height: 2.625rem;
+  background-position: center;
+  object-fit: contain;
 }
 
 .card_pro_img {
@@ -3853,6 +3869,19 @@ font-size: 9px !important;
   text-shadow: 1px 0px 3px rgba(9, 0, 0, 0.942);
 }
 
+.story_view_page{
+  width: 100%;
+  /* height: 00px; */
+  /* background-position: center; */
+  /* background-size: cover; */
+  object-fit: contain;
+}
+.story_name_heading{
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--admin-btn-bg);
+}
+
 /* ---------------------------------user-center-page-card-end--------------------------- */
 .user_tabs_active {
   background: var(--admin-bg);
@@ -3917,7 +3946,7 @@ font-size: 9px !important;
 }
 
 .side_tabs {
-  padding: 0.25rem 2.1875rem;
+  padding: 0.25rem 20px;
   white-space: nowrap;
   width: 100%;
   overflow: hidden;
@@ -4235,7 +4264,7 @@ img {
 /* ----------------college-card--start-------------------- */
 .college_name_container {
   background: #ebebeb;
-  padding: 10px 20px;
+  padding: 14px 20px;
   cursor: pointer;
 }
 
@@ -4287,7 +4316,7 @@ img {
   color: #0f0c1a;
   opacity: 0.9;
   margin: 0;
-  padding: 10px 5px;
+  /* padding: 5px; */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -4304,7 +4333,7 @@ img {
 }
 
 .college_card_detail_box {
-  padding: 0.3125rem 1.25rem;
+  padding: 5px 12px;
   /* background: #ffffff; */
 }
 
@@ -4319,10 +4348,11 @@ img {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-transform: capitalize;
 }
 
 .card_location {
-  padding: 0.75rem 0;
+  padding: 8px 0;
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: space-between; */
@@ -4360,6 +4390,7 @@ img {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-transform: capitalize;
 }
 
 .media_icon_num_pair {
@@ -5384,6 +5415,9 @@ img {
   opacity: 0.9;
   margin: 0%;
 }
+.padding_10{
+  padding: 10px;
+}
 
 /* ---------------------------------user-course-page-end--------------------------- */
 /* ---------------------------------user-exam-page-start--------------------------- */
@@ -5396,7 +5430,7 @@ img {
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
     rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   border-radius: 0.3125rem;
-  padding: 25px;
+  padding: 0.9375rem;
   margin-bottom: 1.875rem;
   /* border: 2px solid transparent !important; */
 }
@@ -5410,26 +5444,28 @@ img {
 .p_c_card_master_heading {
   font-style: normal;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 20px;
   /* line-height: 1.5rem; */
   color: #0f0c1a;
   opacity: 0.9;
   margin-bottom: 2px;
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .long_card_sub_heading {
   font-style: normal;
   font-weight: 500;
   font-size: 14px;
-  line-height: 21px;
+  line-height: 25px;
   color: #0f0c1a;
   opacity: 0.9;
   margin: 0;
   cursor: pointer;
+  text-transform: capitalize;
 }
 
-.long_card_sub_heading:hover {
+.long_card_sub_heading:hover, .p_c_card_master_heading:hover {
   text-decoration: underline;
 }
 
@@ -5476,12 +5512,13 @@ img {
   padding: 0.3125rem;
   margin: 0;
   margin-right: 0.625rem;
+  gap: 6px;
 }
 
 .p_c_card_three_link {
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.125rem;
   text-decoration-line: underline;
   color: #463196;
@@ -5489,6 +5526,8 @@ img {
   cursor: pointer;
   margin-bottom: 0.5rem;
   transition: all 0.2s ease-in-out;
+  margin-right: 10px;
+  white-space: nowrap;
 }
 
 .three_link_row {
@@ -5547,7 +5586,11 @@ img {
   display: flex;
   flex-wrap: wrap;
 }
-
+.green_red_squre{
+  width: 12px;
+  height: 12px;
+  background-size: cover;
+}
 .date_row_name {
   font-weight: 600;
   font-size: 14px;
@@ -5565,7 +5608,7 @@ img {
   justify-content: flex-end;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .update_btn {
@@ -6114,7 +6157,7 @@ ul {
 }
 
 .left_sec {
-  margin: 5rem 0;
+  margin: 2rem 0;
 }
 
 .card_mid ul li img {
@@ -6213,10 +6256,10 @@ a:hover {
 .top_input form {
   color: #555;
   display: flex;
-  padding: 0.125rem;
+  /* padding: 0.125rem; */
   /* border: 0.0625rem solid currentColor; */
   border-radius: 0.3125rem;
-  margin: 0 0 1.875rem;
+  /* margin: 0 0 1.875rem; */
 }
 .top_input .form_border{
    border: 0.0625rem solid currentColor;
@@ -6617,7 +6660,7 @@ a:hover {
   border: 0.0625rem solid #c8c1df;
   box-shadow: 0rem 0.375rem 0.4063rem rgba(70, 49, 150, 0.109804);
   border-radius: 0.3125rem;
-  padding: 1.5625rem;
+  padding: 0.9375rem;
 }
 
 .req p {

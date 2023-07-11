@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation } from "swiper";
 import { Card, Col, Image, Row, Spinner } from "react-bootstrap";
@@ -16,6 +16,7 @@ const SuggestCards = () => {
   const myFriendsList = useSelector((state) => state.userSlice.myFriendsList);
   const currentUser = useSelector((state) => state.userSlice.currentUser);
   const gettingAllList = useSelector((state) => state.userSlice.gettingAllList);
+
   const handleRequest = (userObject) => {
     let data = {
       Friends: [
@@ -28,27 +29,34 @@ const SuggestCards = () => {
     if (loginStatus) {
       dispatch(addFriend(data)).then((res) => {
         if (!res?.payload?.data[0]?.status) {
-          toast.success("Friend Request sent", { autoClose: 1000 });
+          toast.success("Friend Request sent");
         } else {
           let statuss = res?.payload?.data[0]?.status;
-          toast.info(statuss, { autoClose: 1000 });
+          toast.info(statuss);
         }
       });
     }
     if (!loginStatus) toast.info("Login First");
   };
+
   const isFriend = (id) => {
     if (id) {
-      let friendStatus = myFriendsList.find((item) => item.senderId === id);
-      if (!friendStatus) {
-        return "Link";
-      } else if (friendStatus.status) {
-        return "Accepted";
-      } else if (!friendStatus.status) {
-        return "Sent";
+      let friendStatus = myFriendsList?.find((item) => item.senderId === id);
+      if(friendStatus?.status === true){
+        return "Link"
+      }else{
+        return "Sent"
       }
     }
   };
+  const [suggestedUser, setSuggestedUser] = useState(allUserList)
+
+  const handleCancelSuggestedLink = (index) => {
+    let updatedSuggestedlist = [...suggestedUser]
+    updatedSuggestedlist.splice(index, 1)
+    setSuggestedUser(updatedSuggestedlist)
+  }
+
   return (
     <>
       {" "}
@@ -74,7 +82,7 @@ const SuggestCards = () => {
         {gettingAllList ? (
           <div className="item_center">
             <Spinner
-            className="blue_color"
+              className="blue_color"
               as="span"
               animation="grow"
               size="sm"
@@ -86,10 +94,11 @@ const SuggestCards = () => {
         ) : (
           allUserList &&
           allUserList?.map((userObject, userIndex) => {
+            console.log(userObject,"userObject")
             if (currentUser?.id !== userObject.id)
               return (
                 <>
-                  {isFriend(userObject.id) === "Link" && (
+                  {(isFriend(userObject.id) === "Link" || isFriend(userObject.id) === "Sent") && (
                     <SwiperSlide className="">
                       <div key={userIndex} className="suggested_card">
                         <Row>
@@ -113,6 +122,7 @@ const SuggestCards = () => {
                               <Image
                                 className="close_btn"
                                 src="/images/close-card-icon.svg"
+                                onClick={() => handleCancelSuggestedLink(userIndex)}
                               />
                               <p className="suggested_card_text">
                                 {userObject.designation} |{" "}
@@ -122,6 +132,7 @@ const SuggestCards = () => {
                                 className=" suggested_card_btn suggested_card_link_btn"
                                 type="button"
                                 onClick={() => handleRequest(userObject, true)}
+                                disabled={(isFriend(userObject.id) === "Sent")}
                               >
                                 {isFriend(userObject.id)}
                               </button>
