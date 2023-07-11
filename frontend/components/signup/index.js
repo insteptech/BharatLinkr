@@ -89,22 +89,22 @@ function SignUpPage() {
     if (!values.userType) {
       errors["userType"] = " Select A User Type";
     }
-    if (!values.name || values?.usertype === "Student") {
-      errors.name = "*";
+    if (values?.userType === "Student" && !values.name) {
+        errors.name = "*";
     }
     if (
-      !values.email ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.email &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors.email = "*";
     }
     if (
-      !values.mobileNumber ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.mobileNumber &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors.mobileNumber = { ...errors.mobileNumber, required: "*" };
     }
@@ -113,10 +113,9 @@ function SignUpPage() {
       errors.mobileNumber = { ...errors.mobileNumber, fieldError: "Mobile Number should be of 10 digits" };
     }
     if (
-      !values.state ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.state &&
+      (values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["state"] = "*";
     }
@@ -132,29 +131,29 @@ function SignUpPage() {
     // if (!values.highestEducation && values?.usertype === "Student") {
     //   errors["highestEducation"] = "*";
     // }
-    if (!values.city || (values?.usertype === "College" || values?.usertype === "Organization")) {
+    if (!values.city && (values?.userType === "College" || values?.userType === "Organization")) {
       errors["city"] = "*";
     }
-    if (!values.website || values?.usertype === "College") {
+    if (!values.website && values?.userType === "College") {
       errors["website"] = "*";
     }
-    if (!values.college || values?.usertype === "College") {
+    if (!values.college && values?.userType === "College") {
       errors["college"] = "*";
     }
 
     if (
-      !values.password ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.password &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["password"] = "*";
     }
     if (
-      !values.confirmPassword ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.confirmPassword &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["confirmPassword"] = "*";
     } else if (
@@ -167,7 +166,6 @@ function SignUpPage() {
 
     if (dataValue === 1) {
     }
-    console.log(errors,'rrrrrrrrrrrrrr')
 
     return errors;
   };
@@ -295,7 +293,6 @@ function SignUpPage() {
         selectcompany: "",
         headorregofc: "",
       };
-      console.log(initialValues,'initialValues')
       return initialValues
 
       // if (usertype !== "College") {
@@ -578,7 +575,6 @@ function SignUpPage() {
                       {values.userType == "College" && (
                         <>
                           <Col md={12} lg={6}>
-                            {console.log(values?.college,'llllllllllll')}
                             <Field name="email">
                               {({ input, meta }) => (
                                 <div>
