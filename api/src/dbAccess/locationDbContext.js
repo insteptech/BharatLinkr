@@ -846,6 +846,60 @@ const getCityExcel = async (req, res) => {
   }
 };
 
+
+const getCitesByStateId = async (req) => {
+  try {
+    let state = {};
+    if (req.body.stateId) {
+      state = {
+        id: req.body.stateId,
+      };
+    }
+    const result = await State.findAll({
+      where: { [Op.and]: [state] },
+      attributes: ['state', 'id'],
+      include: [
+        {
+          model: City,
+          required: false,
+          as: 'city',
+          attributes: ['name', 'id'],
+        },
+      ],
+    });
+    return { result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
+////////////////////// Excel Sheet Functionality////////////////////
+
+const getCountrySampleFile = async (req, res) => {
+  try {
+    const workbook = new excelJS.Workbook();
+    const workSheet = workbook.addWorksheet('CountriesData');
+    workSheet.columns = [{ header: 'Country Name', key: 'name', width: 20 }];
+
+    workSheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+    const filename = `Countries${Date.now()}.xlsx`;
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+     await workbook.xlsx.writeFile('CountriesSampleData.xlsx');
+    // res.send('done');
+    return workbook.xlsx.write(res).then(() => {
+      res.status(200).end();
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
 const getStateSampleFile = async (req, res) => {
   try {
     const countryData = await Countries.findAll({
@@ -930,51 +984,8 @@ const getCitySampleFile = async (req, res) => {
   }
 };
 
-const getCountrySampleFile = async (req, res) => {
-  try {
-    const workbook = new excelJS.Workbook();
-    const workSheet = workbook.addWorksheet('MasterTypeData');
-    workSheet.columns = [{ header: 'CountryName', key: 'CountryName', width: 20 }];
+////////////////////// Excel Sheet Functionality////////////////////
 
-    workSheet.getRow(1).eachCell((cell) => {
-      cell.font = { bold: true };
-    });
-    const filename = `Countries${Date.now()}.xlsx`;
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
-    return workbook.xlsx.write(res).then(() => {
-      res.status(200).end();
-    });
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-const getCitesByStateId = async (req) => {
-  try {
-    let state = {};
-    if (req.body.stateId) {
-      state = {
-        id: req.body.stateId,
-      };
-    }
-    const result = await State.findAll({
-      where: { [Op.and]: [state] },
-      attributes: ['state', 'id'],
-      include: [
-        {
-          model: City,
-          required: false,
-          as: 'city',
-          attributes: ['name', 'id'],
-        },
-      ],
-    });
-    return { result, success: true };
-  } catch (error) {
-    throw new Error(error);
-  }
-};
 
 module.exports = {
   createCountry,

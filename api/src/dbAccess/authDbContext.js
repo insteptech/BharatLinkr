@@ -32,8 +32,6 @@ var transporter = nodemailer.createTransport({
 });
 
 
-
-
 const writeFiles = async ({ files, profile, cover }) => {
   const baseDir = path.join(__dirname, '../../');
 

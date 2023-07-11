@@ -185,8 +185,6 @@ const getMasterFilterById = async (req) => {
     }
   };
 
-
-
   const updateMasterFilter = async (req) => {
     try {
       const result = [];
@@ -375,6 +373,133 @@ const getMasterFilterById = async (req) => {
     }
   };
 
+  const getMasterFilterSampleFile = async (req, res) => {
+    try {
+      const workbook = new excelJS.Workbook();
+      const workSheet = workbook.addWorksheet('MasterTypeData');
+      workSheet.columns = [
+        { header: 'Name', key: 'name', width: 20 },
+        { header: 'Description', key: 'description', width: 20 },
+      ];
+  
+      workSheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true };
+      });
+      const filename = `MasterFilter${Date.now()}.xlsx`;
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+      await workbook.xlsx.writeFile('MasterFilterSampleData.xlsx');
+      // res.send('done');
+      return workbook.xlsx.write(res).then(() => {
+        res.status(200).end();
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+
+  const getMasterFilterDataExcelByType = async (req, res) => {
+    try {
+      const masterData = await masterFilter.findAll({
+        where: { types: req.query.types, deleted: false },
+  
+        include: [
+          {
+            model: Status,
+            required: false,
+            as: 'Status',
+            attributes: ['name'],
+          },
+       
+        ],
+      });
+      const workbook = new excelJS.Workbook();
+      const workSheet = workbook.addWorksheet('MasterFilterData');
+      workSheet.columns = [
+        { header: 'S.no', key: 's_no', width: 20 },
+        { header: 'Name', key: 'name', width: 20 },
+        { header: 'OrderNo', key: 'order', width: 20 },
+        { header: 'Description', key: 'description', width: 20 },
+        { header: 'Types', key: 'types', width: 20 },
+        { header: 'Status', key: 'Status', width: 20 },
+      ];
+  
+      let count = 1;
+      masterData.forEach((master) => {
+        master.s_no = count;
+        master.Status = master.Status.name;
+        // master.Status = master.Status.name;
+  
+        workSheet.addRow(master);
+        count += 1;
+      });
+      workSheet.getRow(1).eachCell((cell) => {
+        cell.font = { bold: true };
+      });
+      const filename = `MasterFilter${Date.now()}.xlsx`;
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+      await workbook.xlsx.writeFile('MasterFilterData.xlsx');
+      // res.send('done');
+      return workbook.xlsx.write(res).then(() => {
+        res.status(200).end();
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  const addMasterFilterDataByExcel = async (req) => {
+    try {
+      const data1 = [];
+      const status1 = await Status.findOne({
+        where: { name: status[0] },
+      });
+  
+      const { files } = req;
+      if (files && files.datafile && files.datafile.length > 0) {
+        const file = files.datafile[0];
+        const workbook = XLSX.read(file.buffer, {
+          type: 'buffer',
+        });
+        const wsname = workbook.SheetNames[0];
+        const ws = workbook.Sheets[wsname];
+        const data = XLSX.utils.sheet_to_json(ws);
+        await Promise.all(
+          data.map(async (item) => {
+            const prg = await masterFilter.findOne({
+              where: {
+                [Op.and]: [
+                  {name: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('name')), Sequelize.fn('lower', item.Name))},
+                { types:  req.body.types},
+                ],
+                deleted: false,
+              },
+            });
+            if (!prg) {
+              const result = await masterFilter.create({
+                name: item.Name,
+                description: item.Description,
+                types: req.body.types,
+                statusId: status1.id,
+                returning: true,
+              });
+              return result;
+            }
+            data1.push({ name: item.Name,types:req.body.types, status: 'duplicate' });
+          })
+        );
+      }
+  
+      return { data: data1, success: true };
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+
+  
 
 
 module.exports = {
@@ -384,6 +509,9 @@ module.exports = {
     getMasterFilterDropDown,
     updateMasterFilter,
     masterFilterDelete,
-    getMasterFilterByCourseLevel
+    getMasterFilterByCourseLevel,
+    getMasterFilterSampleFile,
+    getMasterFilterDataExcelByType,
+    addMasterFilterDataByExcel
 
 };
