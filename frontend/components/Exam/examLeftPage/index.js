@@ -9,13 +9,26 @@ const ExamLeftPage = (props) => {
   const [selectedItems, setSelectedItems] = useState([]);
   const [selectApplicationItem, setSelectedApplication] = useState([]);
   const [selectexammodeItem, setSelectedExammode] = useState([]);
- 
+  const [searchData, setSearchData] = useState({ examtype: "", applicationmode: "", exammode: "" })
 
   const filterData = useSelector(
     (data) => data?.allMasterFilterList?.masterfilterlist?.data?.data
   );
 
+  const examData = useSelector((data) => data?.examList?.examlist?.data?.data);
+
   const masterfiltertypes = "exammode,applicationmode,examtype";
+
+  const filteredMastertype = {
+    examtype: filterData?.examtype?.filter((elem, index) =>
+      elem.name.toLowerCase().includes(searchData.examtype.toLowerCase())),
+
+    applicationmode: filterData?.applicationmode?.filter((elem, index) =>
+      elem.name.toLowerCase().includes(searchData.applicationmode.toLowerCase())),
+
+    exammode: filterData?.exammode?.filter((elem, index) =>
+      elem.name.toLowerCase().includes(searchData.exammode.toLowerCase()))
+  }
 
   const dispatch = useDispatch();
 
@@ -56,6 +69,13 @@ const ExamLeftPage = (props) => {
     }
   };
 
+  const handleSearchMastertype = (e, type) => {
+    setSearchData((prev) => ({
+      ...prev,
+      [type]: e.target.value
+    }))
+  }
+
   return (
     <>
       {/* -----------------------master search bar start--------------------- */}
@@ -78,30 +98,16 @@ const ExamLeftPage = (props) => {
       {/* ----------------------master search bar end----------------------- */}
       <div className="master_heading_manager_div">
         <h3 className="college_left_page_master_heading">
-          Found {props?.examDataLength} Exams
+          Found {examData?.count} Exams
         </h3>
-        <p
+        {/* <p
           className="college_left_page_master_text"
           onClick={props?.handleSetDefault}
         >
           Set Default
-        </p>
+        </p> */}
       </div>
 
-      {/* <div className="colleges_left_boxes">
-        <p className="college_box_heading">Selected Filters</p>
-        <div className="selected_filters_subbox">
-          {Object ||
-            Object?.keys(props?.filterkeys).map((item, index) => {
-              console.log(item, "sdfasdfsdfs")
-              return (
-                <div className="selected_filters" key={index}>
-                  {item.name} <div className="filter_dot"></div>
-                </div>
-              );
-            })}
-        </div>
-      </div> */}
 
       {/* ----------------------master filter bar start (selected filter)----------------------- */}
 
@@ -113,7 +119,7 @@ const ExamLeftPage = (props) => {
               return (
                 <div className="selected_filters" key={index}>
                   {item}
-                  <div className="filter_dot"></div>
+                  {/* <div className="filter_dot"></div> */}
                 </div>
               );
             })}
@@ -122,7 +128,7 @@ const ExamLeftPage = (props) => {
               return (
                 <div className="selected_filters" key={index}>
                   {item}
-                  <div className="filter_dot"></div>
+                  {/* <div className="filter_dot"></div> */}
                 </div>
               );
             })}
@@ -132,7 +138,7 @@ const ExamLeftPage = (props) => {
               return (
                 <div className="selected_filters" key={index}>
                   {item}
-                  <div className="filter_dot"></div>
+                  {/* <div className="filter_dot"></div> */}
                 </div>
               );
             })}
@@ -141,6 +147,18 @@ const ExamLeftPage = (props) => {
 
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Examination Type</p>
+        {/* search for examination type */}
+        <div>
+          <input
+            className="college_box_searchbar"
+            type="text"
+            placeholder="search"
+            value={searchData.examtype}
+            onChange={(e) => handleSearchMastertype(e, "examtype")}
+          />
+        </div>
+
+
         <p
           className="college_left_page_master_text"
           onClick={() => {
@@ -155,8 +173,8 @@ const ExamLeftPage = (props) => {
         </p>
         <form>
           <div className="box_data">
-            {filterData?.examtype &&
-              filterData?.examtype?.map((item, index) => {
+            {filteredMastertype?.examtype &&
+              filteredMastertype?.examtype?.map((item, index) => {
                 return (
                   <div key={index} className="check_input_label_div">
                     <input
@@ -181,6 +199,17 @@ const ExamLeftPage = (props) => {
 
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Application Mode</p>
+
+        <div>
+          <input
+            className="college_box_searchbar"
+            type="text"
+            placeholder="search"
+            value={searchData.applicationmode}
+            onChange={(e) => handleSearchMastertype(e, "applicationmode")}
+          />
+        </div>
+
         <p
           className="college_left_page_master_text"
           onClick={() => {
@@ -194,8 +223,8 @@ const ExamLeftPage = (props) => {
           clear
         </p>
         <div className="box_data">
-          {filterData?.applicationmode &&
-            filterData?.applicationmode?.map((item, index) => {
+          {filteredMastertype?.applicationmode &&
+            filteredMastertype?.applicationmode?.map((item, index) => {
               return (
                 <div key={item?.id} className="check_input_label_div">
                   <input
@@ -218,6 +247,16 @@ const ExamLeftPage = (props) => {
       </div>
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Examination Mode</p>
+
+        <div>
+          <input
+            className="college_box_searchbar"
+            type="text"
+            placeholder="search"
+            value={searchData.exammode}
+            onChange={(e) => handleSearchMastertype(e, "exammode")}
+          />
+        </div>
         <p
           className="college_left_page_master_text"
           onClick={() => {
@@ -232,8 +271,8 @@ const ExamLeftPage = (props) => {
         </p>
 
         <div className="box_data">
-          {filterData?.exammode &&
-            filterData?.exammode?.map((item, index) => {
+          {filteredMastertype?.exammode &&
+            filteredMastertype?.exammode?.map((item, index) => {
               return (
                 <div key={item?.id} className="check_input_label_div">
                   <input
