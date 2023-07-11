@@ -3,7 +3,7 @@ import React from "react";
 import { Card, Col, Image as BsImage, Row } from "react-bootstrap";
 import { apibasePath } from "../../../../config";
 import { useSelector } from "react-redux";
-import Image from "next/Image";
+import Image from "next/image";
 
 const ExamLongCard = ({ item }, props) => {
   const {

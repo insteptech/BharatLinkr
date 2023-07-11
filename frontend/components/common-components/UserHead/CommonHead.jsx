@@ -39,7 +39,7 @@ import {
   setActiveNav,
   setLoginStatus,
 } from "../../../redux/reducers/User/userSlice";
-import Image from "next/Image";
+import Image from "next/image";
 
 const notificationData = [
   {

@@ -7,8 +7,7 @@ import { useEffect } from "react";
 import { getCourse } from "../../redux/actions/course/addcourse";
 import { getCityList } from "../../redux/actions/location/createCity";
 import { getState } from "../../redux/actions/location/createState";
-import { components } from "react-select";
-import Image from "next/Image";
+import Image from "next/image";
 
 function Reviews() {
   const dispatch = useDispatch();

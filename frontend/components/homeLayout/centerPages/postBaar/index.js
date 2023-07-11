@@ -31,7 +31,7 @@ import {
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
 import { Form as Formboot } from "react-bootstrap";
 import { toast } from "react-toastify";
-import Image from "next/Image";
+import Image from "next/image";
 import { apibasePath } from "../../../../config";
 
 const PostBaar = () => {
