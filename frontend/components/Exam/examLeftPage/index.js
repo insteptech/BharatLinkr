@@ -142,7 +142,7 @@ const ExamLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Examination Type</p>
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedItems("");
             let obj = { ...props.clear };
@@ -182,7 +182,7 @@ const ExamLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Application Mode</p>
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedApplication("");
             let obj = { ...props.clear };
@@ -219,7 +219,7 @@ const ExamLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Examination Mode</p>
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedExammode("");
             let obj = { ...props.clear };

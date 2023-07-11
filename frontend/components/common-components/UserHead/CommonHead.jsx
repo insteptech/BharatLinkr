@@ -28,7 +28,6 @@ import SubmitForm from "../../Forms/submitResume";
 import ClientForm from "../../Forms/clientForm";
 import AdmisstionForm from "../../Forms/admisstionForm";
 import MobileMenus from "../../homeLayout/centerPages/mobileMenus";
-import Image from "next/image";
 import { getUserDetails, login } from "../../../redux/actions/auth";
 import { apibasePath } from "../../../config";
 import {
@@ -40,6 +39,7 @@ import {
   setActiveNav,
   setLoginStatus,
 } from "../../../redux/reducers/User/userSlice";
+import Image from "next/Image";
 
 const notificationData = [
   {

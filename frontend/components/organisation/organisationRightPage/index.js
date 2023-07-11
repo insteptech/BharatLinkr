@@ -109,7 +109,7 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
             </div>
           </Col>
 
-          {dataValue == 1 ? (
+          {dataValue == 0 ? (
             <Col xs={6} lg={7} className="ps-0 profession_drop_col">
               <div className="company_jobs_select margin_bottom w-50">
                 <Form.Select
@@ -161,7 +161,7 @@ function OrganisationRightPage({ dataValue, setDataValue }) {
           <Col
             xs={12}
             lg={5}
-            className={`"pading_left_0" ${dataValue == 1 ? "click_hide" : "pading_left_0"
+            className={`"pading_left_0" ${dataValue == 0 ? "click_hide" : "pading_left_0"
               }`}
           >
             <div className="d-flex pe-1">
