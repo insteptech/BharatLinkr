@@ -8,15 +8,15 @@ import StudyGols from "./studyGols";
 const LeftPage = () => {
   return (
     <>
-      <div className="user_left_page_bg">
-        <div className="col">
-          <div className="left_sec">
-            <StudyGols />
-            <LearningLinks />
-            <QuickLinks />
-          </div>
-        </div>
+      {/* <div className="user_left_page_bg"> */}
+      {/* <div className="col"> */}
+      <div className="left_sec">
+        <StudyGols />
+        <LearningLinks />
+        <QuickLinks />
       </div>
+      {/* </div> */}
+      {/* </div> */}
     </>
   );
 };
