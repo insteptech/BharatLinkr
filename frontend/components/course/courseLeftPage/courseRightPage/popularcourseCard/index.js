@@ -22,7 +22,7 @@ const PopularCourseCard = (props) => {
   const loadingFilterlist = useSelector(
     (state) => state?.courseList?.isLoading
   );
-
+  
 const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
   return (
@@ -127,7 +127,7 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                       <Col md={6}>
                         <h6 className="p_c_card_master_heading align_center">
                           {item &&
-                            item?.MainStream?.mainStreamName === undefined ? (
+                          item?.MainStream?.mainStreamName === undefined ? (
                             <p>No data found</p>
                           ) : (
                             item?.courseName

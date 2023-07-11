@@ -160,7 +160,7 @@ const ExamLeftPage = (props) => {
 
 
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedItems("");
             let obj = { ...props.clear };
@@ -211,7 +211,7 @@ const ExamLeftPage = (props) => {
         </div>
 
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedApplication("");
             let obj = { ...props.clear };
@@ -258,7 +258,7 @@ const ExamLeftPage = (props) => {
           />
         </div>
         <p
-          className="college_left_page_master_text"
+          className="college_left_page_master_text mb-0"
           onClick={() => {
             setSelectedExammode("");
             let obj = { ...props.clear };

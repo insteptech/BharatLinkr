@@ -17,6 +17,7 @@ export default function Wrapper({ children, responseData }) {
     useEffect(() => {
         async function fetchLayout() {
             const response = await fetch('https://bharat-linkr.vercel.app/layout');
+            // const response = await fetch('http://localhost:3000/layout');
             const data = await response.json();
             dispatch(setLayoutByRole(data.role))
             if (!router.pathname.startsWith('/admin') && data.role === userRoles.admin) {
@@ -28,10 +29,11 @@ export default function Wrapper({ children, responseData }) {
     return (
         <div>
             {['/forget', '/signup', '/login'].includes(router.pathname) ? children :
-                layoutByRole ? layoutByRole === userRoles.user ?
-                    <UserLayout> {children} </UserLayout>
+                layoutByRole ? layoutByRole === userRoles.admin ?
+                    <AdminLayout> {children} </AdminLayout>
                     :
-                    <AdminLayout> {children} </AdminLayout> : ""
+                    <UserLayout> {children} </UserLayout>
+                    : ""
             }
         </div>
     )

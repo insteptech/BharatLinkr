@@ -29,6 +29,7 @@ import corporateMocktestReducer from "./reducers/corporate/mocktestcorporateSlic
 import sectorReducer from "./reducers/organisation/sectorBySlice"
 import userSlice from "./reducers/User/userSlice";
 import postSlice from "./reducers/organisation/postSlice";
+import adminReducer from "./reducers/admin/adminSlice"
 
 const store = configureStore({
   reducer: {
@@ -60,7 +61,8 @@ const store = configureStore({
     corporateCategory: corporateListReducer,
     corporateSubCategory: corporatesubcategoryReducer,
     corporateMocktest: corporateMocktestReducer,
-    sectorData: sectorReducer
+    sectorData: sectorReducer,
+    adminData: adminReducer
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

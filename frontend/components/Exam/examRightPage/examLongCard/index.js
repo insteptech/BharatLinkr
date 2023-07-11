@@ -37,16 +37,13 @@ const ExamLongCard = ({ item }, props) => {
     }
   };
 
-
-
-  let x = item?.examName.split("(")
-  let longName
-  let shortName
-  if (x.length > 1) { 
-     shortName = x[0]
-     longName = x[1].split(")")[0]
+  let x = item?.examName.split("(");
+  let longName;
+  let shortName;
+  if (x.length > 1) {
+    shortName = x[0];
+    longName = x[1].split(")")[0];
   }
-
 
   return (
     <Card
@@ -68,22 +65,30 @@ const ExamLongCard = ({ item }, props) => {
         <Card.Body className="pt-0 pb-0">
           <Row>
             <Col md={5} xs={12} className="exam_card_m_p">
-              <h4
+              <h6
+                onClick={() =>
+                  router.push(`/exams/overview/${item?.id}/?active=about`)
+                }
                 className="p_c_card_master_heading mobile_blue_text mobile_font_18"
+              >
+                {x.length > 1 ? longName : item?.examName}
+              </h6>
+              <h4
+                className="long_card_sub_heading mobile_font_12"
                 onClick={() => handleMainStreamExamName(item)}
               >
-                {x.length>1 ? shortName : item?.examName}
+                {x.length > 1 ? shortName : item?.examName}
               </h4>
-              <h6 className="long_card_sub_heading mobile_font_12">
-                {x.length>1 ? longName : item?.examName}
-              </h6>
+
               <h6 className="long_card_sub_heading blue_font mobile_font_12">
                 {item?.CollegeCount} Colleges Accepting this Exam
               </h6>
               <div className="long_card_arrow_links">
                 <p
                   className="arrow_links_name mobile_font_13 mobile_right_border mobile_blue_text"
-                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=about`)}
+                  onClick={() =>
+                    router.push(`/exams/overview/${item?.id}/?active=about`)
+                  }
                 >
                   Overview
                   <BsImage
@@ -93,7 +98,9 @@ const ExamLongCard = ({ item }, props) => {
                 </p>
                 <p
                   className="arrow_links_name mobile_font_13 mobile_right_border mobile_blue_text text-center"
-                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=syllabus`)}
+                  onClick={() =>
+                    router.push(`/exams/overview/${item?.id}/?active=syllabus`)
+                  }
                 >
                   Syllabus
                   <BsImage
@@ -103,7 +110,11 @@ const ExamLongCard = ({ item }, props) => {
                 </p>
                 <p
                   className="arrow_links_name mobile_font_13 mobile_blue_text text-end"
-                  onClick={() => router.push(`/exams/overview/${item?.id}/?active=exampattern`)}
+                  onClick={() =>
+                    router.push(
+                      `/exams/overview/${item?.id}/?active=exampattern`
+                    )
+                  }
                 >
                   Exam Pattern
                   <BsImage

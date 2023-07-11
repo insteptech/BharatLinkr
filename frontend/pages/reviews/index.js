@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { getCourse } from "../../redux/actions/course/addcourse";
 import { getCityList } from "../../redux/actions/location/createCity";
 import { getState } from "../../redux/actions/location/createState";
-import { components } from "react-select";
 import Image from "next/image";
 
 function Reviews() {
@@ -557,7 +556,7 @@ function Reviews() {
               </Row>
               {values.selectTab === "ChooseOrganisation" ? (
                 <>
-                  <h3>Company Info</h3>
+                  <h3 className="basic_heading">Company Info</h3>
                   <Row>
                     <Col lg="6" md="12">
                       <Field name="company info">
@@ -686,7 +685,7 @@ function Reviews() {
                       </h6>
                     </Col>
                     <Col lg={12} className="">
-                      <div className="mb-5 mt-2">
+                      <div className="mb-4 mt-2">
                         <Image
                           alt="img"
                           width={40}

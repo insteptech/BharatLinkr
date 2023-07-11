@@ -13,7 +13,8 @@ import { FieldTypes, inputFieldTypes } from "../../utils/helper";
 import FormGenerator from "../common-components/Form/FormGenerator";
 import { cityDropdown } from "../../redux/actions/location/createCity";
 import Image from "next/image";
-import LoaderPage from "../common-components/loader";
+import { getColleges } from "../../redux/actions/college/college";
+import { getOrganisationlist } from "../../redux/actions/organisation/addorganisation";
 
 function SignUpPage() {
   const [dataValue, setDataValue] = useState(0);
@@ -26,10 +27,12 @@ function SignUpPage() {
 
   let otpCall = useSelector((state) => state);
   const dispatch = useDispatch();
-
+  const router = useRouter();
 
   useEffect(() => {
     dispatch(getState());
+    dispatch(getColleges())
+    dispatch(getOrganisationlist())
   }, []);
   const initialValuesStudent = {
     userType: "",
@@ -77,7 +80,8 @@ function SignUpPage() {
 
   const stateList = useSelector((state) => state?.stateList?.stateList?.data?.data?.rows);
   const cityListByState = useSelector(state => state.cityList?.cityList?.data?.result)
-  const isRegistering = useSelector(state => state.signUp.isRegistering)
+  const collegeList = useSelector((state) => state?.collegelist?.collegelist?.rows)
+  const companyList = useSelector((state) => state?.sectorData?.organisationList?.rows)
 
   const validate = (values) => {
     const errors = {};
@@ -85,26 +89,22 @@ function SignUpPage() {
     if (!values.userType) {
       errors["userType"] = " Select A User Type";
     }
-
-    if (!values.name && values?.usertype === "Student") {
-      errors.name = "*";
-    }
-    if (!values.designation && values?.usertype === "Student") {
-      errors["designation"] = "*";
+    if (values?.userType === "Student" && !values.name) {
+        errors.name = "*";
     }
     if (
-      !values.email ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.email &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors.email = "*";
     }
     if (
-      !values.mobileNumber ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.mobileNumber &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors.mobileNumber = { ...errors.mobileNumber, required: "*" };
     }
@@ -113,51 +113,47 @@ function SignUpPage() {
       errors.mobileNumber = { ...errors.mobileNumber, fieldError: "Mobile Number should be of 10 digits" };
     }
     if (
-      !values.state ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.state &&
+      (values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["state"] = "*";
     }
-    if (!values.profilePhoto && values?.usertype === "Student") {
-      errors.profilePhoto = "*";
-    }
-    if (!values.coverPhoto && values?.usertype === "Student") {
-      errors.coverPhoto = "*";
-    }
-    if (!values.school_college_company && values?.usertype === "Student") {
-      errors["school_college_company"] = "*";
-    }
-    if (!values.highestEducation && values?.usertype === "Student") {
-      errors["highestEducation"] = "*";
-    }
-    if (
-      !values.city &&
-      (values?.usertype === "College" || values?.usertype === "Organization")
-    ) {
+    // if (!values.profilePhoto && values?.usertype === "Student") {
+    //   errors.profilePhoto = "*";
+    // }
+    // if (!values.coverPhoto && values?.usertype === "Student") {
+    //   errors.coverPhoto = "*";
+    // }
+    // if (!values.school_college_company && values?.usertype === "Student") {
+    //   errors["school_college_company"] = "*";
+    // }
+    // if (!values.highestEducation && values?.usertype === "Student") {
+    //   errors["highestEducation"] = "*";
+    // }
+    if (!values.city && (values?.userType === "College" || values?.userType === "Organization")) {
       errors["city"] = "*";
     }
-    if (!values.website && values?.usertype === "College") {
+    if (!values.website && values?.userType === "College") {
       errors["website"] = "*";
     }
-    if (!values.college && values?.usertype === "College") {
+    if (!values.college && values?.userType === "College") {
       errors["college"] = "*";
     }
 
     if (
-      !values.password ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.password &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["password"] = "*";
     }
     if (
-      !values.confirmPassword ||
-      values?.usertype === "Student" ||
-      values?.usertype === "College" ||
-      values?.usertype === "Organization"
+      !values.confirmPassword &&
+      (values?.userType === "Student" ||
+      values?.userType === "College" ||
+      values?.userType === "Organization")
     ) {
       errors["confirmPassword"] = "*";
     } else if (
@@ -174,51 +170,97 @@ function SignUpPage() {
     return errors;
   };
 
-  const router = useRouter();
   const handleOtp = (values) => {
     let newVal = JSON.stringify(values);
     newVal = { mobileNumber: mobileNum, otp: Number(values) };
     dispatch(verifyOtp(newVal)).then((res) => {
       if (res?.payload?.success) {
-        toast.success("Otp Verified");
+        toast.success("otp verified");
         router.push("/login");
       } else {
-        toast.error(res?.payload?.message);
+        toast.error("wrong otp");
       }
     });
   };
 
   const handleSubmit = (values) => {
 
-    const payload = {
-      accomplishments: values.accomplishments,
-      designation: values.designation,
-      email: values.email.toLowerCase(),
-      totalExperience: values.experience,
-      areaOfExpertise: values.expertise,
-      highestEducation: values.highestEducation,
-      mobileNumber: values.mobileNumber,
-      name: values.name,
-      password: values.password,
-      school_college_company: values.school_college_company,
-      stateId: Number(values.state),
-      cityId: Number(values.city),
-      summary: values.summary,
-      userType: values.userType,
+    let payload = {}
 
-      // college values
-      website: values.website,
-      college: values.college,
-
-      //organization values
-      company: values.company,
-      orgcategory: values.orgcategory,
-      headregofc: values.headregofc,
-
+    if (values.userType === "Student") {
+      payload = {
+        accomplishments: values.accomplishments,
+        designation: values.designation,
+        email: values.email,
+        totalExperience: values.experience,
+        areaOfExpertise: values.expertise,
+        highestEducation: values.highestEducation,
+        mobileNumber: values.mobileNumber,
+        name: values.name,
+        password: values.password,
+        school_college_company: values.school_college_company,
+        stateId: Number(values.state),
+        cityId: Number(values.city),
+        summary: values.summary,
+        userType: values.userType,
+      }
+    } if (values.userType === "College") {
+      payload = {
+        userType: values?.userType,
+        email: values?.email,
+        mobileNumber: values?.mobileNumber,
+        stateId: Number(values.state),
+        cityId: Number(values.city),
+        collegeWebsite: values?.website,
+        collegeId: values?.college?.value,
+        password: values?.password,
+        // confirmPassword: values?.confirmPassword,
+      }
+    } if (values.userType === "Organisation") {
+      payload = {
+        userType: values?.userType,
+        email: values?.email,
+        mobileNumber: values?.mobileNumber,
+        stateId: Number(values.state),
+        cityId: Number(values.city),
+        orgcategory: values?.orgcategory,
+        selectcompany: values?.selectcompany,
+        headorregofc: values?.headorregofc,
+        password: values?.password
+      }
     }
 
-    setMobileNum(values.mobileNumber);
+    // const payload = {
+    //   accomplishments: values.accomplishments,
+    //   designation: values.designation,
+    //   email: values.email,
+    //   totalExperience: values.experience,
+    //   areaOfExpertise: values.expertise,
+    //   highestEducation: values.highestEducation,
+    //   mobileNumber: values.mobileNumber,
+    //   name: values.name,
+    //   password: values.password,
+    //   school_college_company: values.school_college_company,
+    //   stateId: Number(values.state),
+    //   cityId: Number(values.city),
+    //   summary: values.summary,
+    //   userType: values.userType,
 
+    //   // college values
+    //   website: values.website,
+    //   college: values.college,
+
+    //   //organization values
+    //   company: values.company,
+    //   orgcategory: values.orgcategory,
+    //   headregofc: values.headregofc,
+
+    // }
+
+    setMobileNum(values.mobileNumber);
+    if (values != 0) {
+      setDataValue(1);
+    }
     const dataFomrs = new FormData();
     if (values.profilePhoto) {
       dataFomrs.append("profile", values?.profilePhoto);
@@ -228,29 +270,47 @@ function SignUpPage() {
     }
     dataFomrs.append("profileData", JSON.stringify(payload));
 
-    dispatch(getUsers(dataFomrs))
-      .then(res => {
-        if (res.payload.data.success) {
-          setDataValue(1);
-        } else {
-          toast.info(res.payload.data.message)
-        }
-      });
+    dispatch(getUsers(dataFomrs));
   };
 
   const memoizedInitialValue = (e) => {
     if (e && Object.keys(e).length > 0) {
       return e;
     } else {
-      if (usertype !== "College") {
-        return initialValuesStudent;
-      }
-      if (usertype === "College") {
-        return initialValuesCollege;
-      }
-      if (usertype === "organization") {
-        return initialValuesOrganization;
-      }
+      const initialValues = {
+        userType: "Student",
+        name: "",
+        mobileNumber: "",
+        password: "",
+        confirmPassword: "",
+        email: "",
+        mobileNumber: "",
+        state: "",
+        city: "",
+        website: "",
+        college: "",
+        orgcategory: "",
+        selectcompany: "",
+        headorregofc: "",
+      };
+      return initialValues
+
+      // if (usertype !== "College") {
+      //   return initialValuesStudent;
+      // }
+      // if (usertype === "College") {
+      //   return initialValuesCollege;
+      // }
+      // if (usertype === "organization") {
+      //   return initialValuesOrganization;
+      // }
+
+      // const initialFieldValues = Object.keys(initialValuesStudent).reduce((acc, key) => {
+      //   acc[key] = initialValuesStudent[key];
+      //   return acc;
+      // }, {});
+
+      // return initialFieldValues;
     }
   }
 
@@ -269,7 +329,7 @@ function SignUpPage() {
             </div>
           </Col>
         </Row>
-        {isRegistering && <LoaderPage />}
+
         <Row>
           <ul className="nav ps-2 pe-2">
             {FormSteps &&
@@ -304,7 +364,6 @@ function SignUpPage() {
                         value={otp}
                         onChange={(e) => setOtp(e)}
                         numInputs={6}
-     
                         separator={<span></span>}
                       />
                     </div>
@@ -332,9 +391,7 @@ function SignUpPage() {
                   <>
                     <Row>
                       <Col lg={6} md={12}>
-                        <label className="signup_form_label">
-                          Select User Type
-                        </label>
+                        <label className="signup_form_label">Select User Type</label>
                         <Field name="userType">
                           {({ input, meta }) => (
                             <>
@@ -347,7 +404,6 @@ function SignUpPage() {
                                 {...input}
                                 className="form-control select-style signup_form_input"
                               >
-                                <option value="">--Select Usertype--</option>
                                 <option>Student</option>
                                 <option>College</option>
                                 <option>Organization</option>
@@ -362,457 +418,6 @@ function SignUpPage() {
                           )}
                         </Field>
                       </Col>
-                      {values.userType == "" && (
-                        <>
-                          <Col md={12} lg={6}>
-                            <Field name="name">
-                              {({ input, meta }) => (
-                                <div>
-                                  <label className="signup_form_label">
-                                    Name
-                                  </label>
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter Full Name"
-                                  />
-                                  {meta.error && meta.touched && (
-                                    <span className="text-danger">
-                                      {meta.error}
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="designation">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Designation
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Designation"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="email">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Email
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="email"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter Your Email"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="mobileNumber">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Mobile Number
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error.required}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="number"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter Mobile No."
-                                  />
-                                  {meta.error && meta.touched && (
-                                    <span className="text-danger">
-                                      {meta.error.fieldError}
-                                    </span>
-                                  )}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="state">
-                              {({ input, meta }) => (
-                                <>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      State
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <select
-                                    {...input}
-                                    className="form-control select-style signup_form_input "
-                                  >
-                                    <option value="">Choose State</option>
-                                    {stateList &&
-                                      stateList?.map((item) => {
-                                        return (
-                                          <option
-                                            key={item.id}
-                                            value={item?.countryId}
-                                          >
-                                            {item?.state}{" "}
-                                          </option>
-                                        );
-                                      })}
-                                  </select>
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  <div className="text-end">
-                                    <img
-                                      className="select_down_icon"
-                                      src="/images/down.png"
-                                    />
-                                  </div>
-                                </>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="school_college_company_college_company">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      School/College/Company
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="School/College/Company"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="highestEducation">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Highest Education
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter your Highest Qualification"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={12}>
-                            <Field name="summary">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Summary
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Summary"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="expertise">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Area of Expertise
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Expertise area in comma separated value"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="accomplishments">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Accomplishments
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Accomplishments in comma separated value"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="experience">
-                              {({ input, meta }) => (
-                                <div>
-                                  <label className="signup_form_label">
-                                    Total Experience
-                                  </label>
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter your total experience"
-                                  />
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}></Col>
-                          <Col md={12} lg={6}>
-                            <Field name="profilePhoto">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Profile Photo
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="file"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Choose File"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span>{meta.error}</span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="coverPhoto">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Cover Photo
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="file"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Choose File"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="password">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Password
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="password"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Password"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="confirmPassword">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Confirm Password
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="password"
-                                    className="form-control signup_form_input margin_bottom margin_bottomd"
-                                    placeholder="Re-Enter Password"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                        </>
-                      )}
                       {values.userType == "Student" && (
                         <>
                           <Col md={12} lg={6}>
@@ -846,36 +451,6 @@ function SignUpPage() {
                             </Field>
                           </Col>
                           <Col md={12} lg={6}>
-                            <Field name="designation">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Designation
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Designation"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
                             <Field name="email">
                               {({ input, meta }) => (
                                 <div>
@@ -931,302 +506,6 @@ function SignUpPage() {
                                       {meta.error.fieldError}
                                     </span>
                                   )}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="state">
-                              {({ input, meta }) => (
-                                <>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      State
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-                                  <select
-                                    {...input}
-                                    className="form-control select-style signup_form_input "
-                                  >
-                                    <option value="">Choose State</option>
-                                    {stateList &&
-                                      stateList?.map((item) => {
-                                        return (
-                                          <option
-                                            key={item.id}
-                                            value={item?.countryId}
-                                          >
-                                            {item?.state}{" "}
-                                          </option>
-                                        );
-                                      })}
-                                  </select>
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                  <div className="text-end">
-                                    <img
-                                      className="select_down_icon"
-                                      src="/images/down.png"
-                                    />
-                                  </div>
-                                </>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="school_college_company">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      School/College/Company
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="School/College/Company"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="highestEducation">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Highest Education
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter your Highest Qualification"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={12}>
-                            <Field name="summary">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Summary
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Summary"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="expertise">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Area of Expertise
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Expertise area in comma separated value"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="accomplishments">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Accomplishments
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <textarea
-                                    {...input}
-                                    type="textarea"
-                                    rows="4"
-                                    className="form-control signup_form_input summary_input margin_bottom"
-                                    placeholder="Accomplishments in comma separated value"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="experience">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Total Experience
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    {...input}
-                                    type="text"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Enter your total experience"
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}></Col>
-                          <Col md={12} lg={6}>
-                            <Field name="profilePhoto">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Profile Photo
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    // {...input}
-                                    type="file"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Choose File"
-                                    onChange={(event) =>
-                                      input?.onChange(event.target.files[0])
-                                    }
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
-                                </div>
-                              )}
-                            </Field>
-                          </Col>
-                          <Col md={12} lg={6}>
-                            <Field name="coverPhoto">
-                              {({ input, meta }) => (
-                                <div>
-                                  <div className="d-flex">
-                                    <label className="signup_form_label">
-                                      Cover Photo
-                                    </label>
-                                    {meta.error && meta.touched && (
-                                      <span className="text-danger required_msg">
-                                        {meta.error}
-                                      </span>
-                                    )}
-                                  </div>
-
-                                  <input
-                                    // {...input}
-                                    type="file"
-                                    className="form-control signup_form_input margin_bottom"
-                                    placeholder="Choose File"
-                                    onChange={(event) =>
-                                      input.onChange(event.target.files[0])
-                                    }
-                                  />
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
                                 </div>
                               )}
                             </Field>
@@ -1487,13 +766,44 @@ function SignUpPage() {
                                       </span>
                                     )}
                                   </div>
+                                  {/* <select {...input}
+                                    className="form-control select-style signup_form_input">
+                                    {collegeList?.map((item, index) => {
+                                      return <option key={index} value={item?.id}>{item?.collegeName}</option>
+                                    })}
+                                  </select> */}
+                                  <Select
+                                    {...input}
+                                    options={
+                                      collegeList?.map((item) => {
+                                        return ({
+                                          value: item?.id,
+                                          label: item?.collegeName
+                                        })
+                                      })
+                                    }
+                                    isSearchable={true}
+                                    onInputChange={(e) => {
+                                      if (e === "") {
+                                        dispatch(getColleges())
+                                      } else {
+                                        dispatch(getColleges({ search: e }))
+                                      }
+                                    }}
+                                  />
+                                  <div className="text-end">
+                                    <img
+                                      className="select_down_icon"
+                                      src="/images/down.png"
+                                    />
+                                  </div>
 
-                                  <input
+                                  {/* <input
                                     {...input}
                                     type="text"
                                     className="form-control signup_form_input margin_bottom"
                                     placeholder="Choose College"
-                                  />
+                                  /> */}
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
                                         {meta.error}
@@ -1586,7 +896,6 @@ function SignUpPage() {
                                     className="form-control select-style signup_form_input"
                                   >
                                     <option value="">--Select--</option>
-
                                     <option>Organization 1</option>
                                     <option>Organization 2</option>
                                   </select>
@@ -1626,15 +935,10 @@ function SignUpPage() {
                                     <option value="">
                                       --Select Company--
                                     </option>
-
-                                    <option>Company 1</option>
-                                    <option>Company 2</option>
+                                    {companyList?.map((item, index) => {
+                                      return (<option key={index} value={item?.id}>{item?.OrganisationCompany?.companyName}</option>)
+                                     })}
                                   </select>
-                                  {/* {meta.error && meta.touched && (
-                                      <span className="text-danger">
-                                        {meta.error}
-                                      </span>
-                                    )} */}
                                   <div className="text-end">
                                     <img
                                       className="select_down_icon"
@@ -1700,9 +1004,23 @@ function SignUpPage() {
                                   <select
                                     {...input}
                                     className="form-control select-style signup_form_input"
+                                    onChange={(e) => {
+                                      input.onChange(e)
+                                      change('city', "")
+                                      handleCityDropdown(e)
+                                    }}
                                   >
-                                    <option>state 1</option>
-                                    <option>state 2</option>
+                                    <option value=" ">Select State</option>
+                                    {stateList &&
+                                      stateList?.map((item) => {
+                                        return (
+                                          <option
+                                            key={item.id}
+                                            value={item?.id}
+                                          >{item?.state}{" "}
+                                          </option>
+                                        );
+                                      })}
                                   </select>
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
@@ -1737,8 +1055,10 @@ function SignUpPage() {
                                     {...input}
                                     className="form-control select-style signup_form_input"
                                   >
-                                    <option>city 1</option>
-                                    <option>city 2</option>
+                                    <option value="">Select City</option>
+                                    {cityListByState &&
+                                      cityListByState?.map((item) => <option key={`CityItem_${item.id}`} value={item?.id} > {item?.name}</option>
+                                      )}
                                   </select>
                                   {/* {meta.error && meta.touched && (
                                       <span className="text-danger">
@@ -1815,7 +1135,6 @@ function SignUpPage() {
                               )}
                             </Field>
                           </Col>
-
                           <Col md={12} lg={6}>
                             <Field name="password">
                               {({ input, meta }) => (
