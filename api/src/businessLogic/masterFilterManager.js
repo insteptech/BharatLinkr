@@ -52,6 +52,24 @@ const getMasterFilterByCourseLevel = async function (req) {
   return result;
 };
 
+const getMasterFilterSampleFile = async function (req,res) {
+  const result = await masterFilterDbContext.getMasterFilterSampleFile(req,res);
+  return result;
+};
+
+const getMasterFilterDataExcelByType = async function (req,res) {
+  const result = await masterFilterDbContext.getMasterFilterDataExcelByType(req,res);
+  return result;
+};
+
+const addMasterFilterDataByExcel = async function (req,res) {
+  const result = await masterFilterDbContext.addMasterFilterDataByExcel(req,res);
+  return result;
+};
+
+
+
+
 
 module.exports = {
     addMasterFilter,
@@ -60,6 +78,9 @@ module.exports = {
     getMasterFilterDropDown,
     updateMasterFilter,
     masterFilterDelete,
-    getMasterFilterByCourseLevel
+    getMasterFilterByCourseLevel,
+    getMasterFilterSampleFile,
+    getMasterFilterDataExcelByType,
+    addMasterFilterDataByExcel
 
 }  
