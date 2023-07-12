@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import ExamLeftPage from "./examLeftPage";
 import ExamRightPage from "./examRightPage";
 import { getAllExams, searchExams } from "../../redux/actions/exams/createExam";
-import { filterExamByStreamCourse } from "../../redux/actions/exams/createExam";
 import { debounce } from "debounce";
 
 function ExamPage() {
@@ -67,7 +66,6 @@ function ExamPage() {
                 <ExamLeftPage
                   handleClear={handleClear}
                   searchExam={searchExam}
-                  examDataLength={examData?.length}
                   handleSetDefault={handleSetDefault}
                   searchText={searchText}
                   setSearchText={setSearchText}

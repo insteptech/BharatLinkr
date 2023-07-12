@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  cardlevelIdDetails,
   filterMainstreamCourse,
   getCourse,
   searchCourse,
@@ -10,7 +11,8 @@ import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
 import { debounce } from "debounce";
 
 const CourseLeftPage = (props) => {
-  const { show, setShow } = props;
+  const { show, setShow, showList, setShowList } = props;
+
   const dispatch = useDispatch();
 
   const [filteredId, setFilteredId] = useState([]);
@@ -37,10 +39,13 @@ const CourseLeftPage = (props) => {
 
   useEffect(() => {
     if (filteredId.length > 0) {
-      dispatch(filterMainstreamCourse({ mainStreamId: filteredId }));
-      setShow(true);
+      dispatch(filterMainstreamCourse({ mainStreamId: filteredId })).then((res) => {
+        if (res?.payload?.data?.success) {
+          setShow(true);
+        }
+      })
     } else {
-      if (dimensions.width > 990, dimensions.height > 660) {
+      if (dimensions.width > 990 && dimensions.height > 660) {
         setShow(null);
       }
     }
@@ -70,14 +75,6 @@ const CourseLeftPage = (props) => {
   useEffect(() => {
     dispatch(getMainStream());
   }, []);
-
-  const searchCourseList = useSelector(
-    (state) => state?.courseList?.searchCourseList?.data?.data?.rows
-  );
-
-  const courseData = useSelector(
-    (state) => state?.courseList?.courselist?.data?.rows
-  );
 
   const handleSubmit = (e) => {
     // e.preventDefault();
@@ -121,7 +118,7 @@ const CourseLeftPage = (props) => {
       {/* ----------------------master search bar end----------------------- */}
       <div className="master_heading_manager_div">
         <h3 className="college_left_page_master_heading">Found {courseList?.count} Courses</h3>
-        <p className="college_left_page_master_text">Set Default</p>
+        {/* <p className="college_left_page_master_text">Set Default</p> */}
       </div>
 
       {/* ----------------------master filter bar start (selected filter)----------------------- */}
@@ -161,7 +158,7 @@ const CourseLeftPage = (props) => {
         <p className="college_box_heading">Choose By Your DREAM</p>
         <div className="course_box_data">
           {mainStreamData &&
-            mainStreamData.map((listItem, listIndex) => {
+            mainStreamData?.map((listItem, listIndex) => {
               let count = 0;
               courseList?.rows?.map((item) => {
                 if (item?.mainStreamId === listItem?.id) {
@@ -176,7 +173,7 @@ const CourseLeftPage = (props) => {
                     onChange={() => handleStateSelect(listItem.id, listItem)}
                   />
                   <label className="check_input_label">
-                    {listItem?.mainStreamName}- {`${count}`}
+                    {listItem?.mainStreamName}-{`${count}`}
                   </label>
                 </div>
               );

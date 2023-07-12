@@ -5,7 +5,7 @@ const nodemailer = require("nodemailer")
 
 
 
-const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes, userFriendList } = require('../../models');
+const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes, userFriendList,college } = require('../../models');
 const { roles } = require('../../config/roles');
 
 function generateOTP() {
@@ -30,8 +30,6 @@ var transporter = nodemailer.createTransport({
     rejectUnauthorized: false
 }
 });
-
-
 
 
 const writeFiles = async ({ files, profile, cover }) => {
@@ -682,7 +680,43 @@ const collegeRegisterPendingList = async (req) => {
   
       const result = await User.findAndCountAll({
         where:   whrCondition ,
-     
+        include:[
+          {
+            model: State,
+            required: false,
+            as: 'States',
+          },
+          {
+            model: City,
+            required: false,
+            as: 'Cities',
+          },
+          {
+            model: college,
+            required: false,
+            as: 'CollegeDetails',
+          },
+        ],
+        attributes:[  'id',
+        'isNumberVerified',
+        'userType',
+        'name',
+        'designation',
+        'email',
+        'mobileNumber',
+        'stateId',
+        'cityId',
+        'school_college_company',
+        'highestEducation',
+        'summary',
+        'areaOfExpertise',
+        'accomplishments',
+        'totalExperience',
+        'profilePhoto',
+        'coverPhoto',
+        'collegeWebsite',
+        'collegeId',
+        'roleId'],
         offset: (pageNo - 1) * size,
         limit: size,
         distinct:true

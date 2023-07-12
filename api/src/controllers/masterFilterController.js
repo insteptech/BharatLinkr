@@ -87,7 +87,39 @@ const getMasterFilterByCourseLevel = async function (req, res) {
     });
 };
 
+const getMasterFilterSampleFile = async function (req, res) {
+  await masterFilterManager
+    .getMasterFilterSampleFile(req, res)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
+const getMasterFilterDataExcelByType = async function (req, res) {
+  await masterFilterManager
+    .getMasterFilterDataExcelByType(req, res)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+
+const addMasterFilterDataByExcel = async function (req, res) {
+  await masterFilterManager
+    .addMasterFilterDataByExcel(req, res)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 module.exports = {
     addMasterFilter,
@@ -96,6 +128,9 @@ module.exports = {
     getMasterFilterDropDown,
     updateMasterFilter,
     masterFilterDelete,
-    getMasterFilterByCourseLevel
+    getMasterFilterByCourseLevel,
+    getMasterFilterSampleFile,
+    getMasterFilterDataExcelByType,
+    addMasterFilterDataByExcel
    
   };

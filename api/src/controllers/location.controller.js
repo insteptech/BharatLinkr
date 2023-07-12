@@ -224,7 +224,7 @@ const getCityById = async function (req, res) {
 
 const addContentByExcelCountry = async function (req, res) {
   await countryManager
-    .addContentByExcelCountry(req)
+    .addContentByExcelCountry(req,res)
     .then((response) => {
       res.status(httpStatus.OK).send(response);
     })
@@ -232,6 +232,9 @@ const addContentByExcelCountry = async function (req, res) {
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
     });
 };
+
+
+
 const addContentByExcelState = async function (req, res) {
   await countryManager
     .addContentByExcelState(req)

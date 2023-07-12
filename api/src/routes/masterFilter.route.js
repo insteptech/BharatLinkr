@@ -46,6 +46,24 @@ router.post(
 router.delete('/masterFilterDelete/:id', masterFilterController.masterFilterDelete);
 router.get('/masterFilterByCourseLevel', masterFilterController.getMasterFilterByCourseLevel);
 
+router.get('/masterFilterSampleFileDownLoad', masterFilterController.getMasterFilterSampleFile);
+router.get('/masterFilterDataFileDownLoad', masterFilterController.getMasterFilterDataExcelByType);
+
+router.post(
+  '/addMasterFilterDataExcel',
+  fileUpload.fields([
+    {
+      name: 'datafile',
+      maxCount: 10,
+    },
+
+  ]),
+  masterFilterController.addMasterFilterDataByExcel
+);
+
+
+
+
 
 
 

@@ -53,7 +53,7 @@ const CollegeLeftPage = (props) => {
   };
 
   const citySearch = (e) => {
-    let citydata = {search : e.target.value}
+    let citydata = { search: e.target.value }
     dispatch(cityDropdown(citydata))
   }
 
@@ -61,7 +61,8 @@ const CollegeLeftPage = (props) => {
     let streamdata = { search: e.target.value };
     dispatch(getMainStream(streamdata));
   };
-  const searchCourse = (e) => {examlist
+  const searchCourse = (e) => {
+    examlist
     let coursedata = { search: e.target.value };
     dispatch(getCourse(coursedata));
   };
@@ -144,7 +145,6 @@ const CollegeLeftPage = (props) => {
   }, [JSON.stringify(query)]);
 
   const handleFilters = (e, itemId, itemName) => {
-    console.log(itemId, itemName, "aasdasdas234234234234")
     const refinedName = refined(itemName);
     const { name, checked } = e.target;
 
@@ -249,13 +249,115 @@ const CollegeLeftPage = (props) => {
     dispatch(getColleges({ search: searchText }))
   }, 500)
 
-  const handleRemoveState =(index) => {
-      // let removeItem = [...queryFilterObject.collegeStateId]
-      // removeItem.splice(index, 1)
-      // setQueryFilterObject(removeItem)
-      console.log(index, "czxczxczxczxc12312")
+  const handleRemoveState = (item) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter };
+      const stateIdIndex = updatedFilter.collegeStateId.indexOf(item);
+      if (stateIdIndex !== -1) {
+        updatedFilter.collegeStateId.splice(stateIdIndex, 1);
+      }
+      return updatedFilter;
+    });
+  };
+
+  const handleRemoveCity = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const cityIdIndex = updatedFilter.collegeCityId.indexOf(item)
+      if (cityIdIndex !== -1) {
+        updatedFilter.collegeCityId.splice(cityIdIndex, 1)
+      }
+      return updatedFilter
+    })
   }
 
+  const handleRemoveMaintream = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const mainstreamIdIndex = updatedFilter.mainStreamId.indexOf(item)
+      if (mainstreamIdIndex !== -1) {
+        updatedFilter.mainStreamId.splice(mainstreamIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveCourse = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const courseIdIndex = updatedFilter.courseId.indexOf(item)
+      if (courseIdIndex !== -1) {
+        updatedFilter.courseId.splice(courseIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveProgramType = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const prograntypeIdIndex = updatedFilter.programTypeId.indexOf(item)
+      if (prograntypeIdIndex !== -1) {
+        updatedFilter.programTypeId.splice(prograntypeIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveChooseAffiliation = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const chooseaffiliationIdIndex = updatedFilter.chooseAffiliationId.indexOf(item)
+      if (chooseaffiliationIdIndex !== -1) {
+        updatedFilter.chooseAffiliationId.splice(chooseaffiliationIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveCollegeAgency = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const collegeagencyIdIndex = updatedFilter.collegeAgencyId.indexOf(item)
+      if (collegeagencyIdIndex !== -1) {
+        updatedFilter.collegeAgencyId.splice(collegeagencyIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveCourseType = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const coursetypeIdIndex = updatedFilter.courseTypeId.indexOf(item)
+      if (coursetypeIdIndex !== -1) {
+        updatedFilter.courseTypeId.splice(coursetypeIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveCollegeType = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const collegetypeIdIndex = updatedFilter.collegeTypeId.indexOf(item)
+      if (collegetypeIdIndex !== -1) {
+        updatedFilter.collegeTypeId.splice(collegetypeIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
+
+  const handleRemoveChooseExamAccepted = (item, index) => {
+    setQueryFilterObject(prevFilter => {
+      const updatedFilter = { ...prevFilter }
+      const chooseexamIdIndex = updatedFilter.chooseExamAcceptedId.indexOf(item)
+      if (chooseexamIdIndex !== -1) {
+        updatedFilter.chooseExamAcceptedId.splice(chooseexamIdIndex, 1)
+      }
+      return updatedFilter
+    })
+  }
 
   return (
     <>
@@ -279,7 +381,7 @@ const CollegeLeftPage = (props) => {
         <h3 className="college_left_page_master_heading">
           Found {props.collegelistcount} Colleges
         </h3>
-        <p className="college_left_page_master_text">Set Default</p>
+        {/* <p className="college_left_page_master_text">Set Default</p> */}
       </div>
 
       {/* ----------------------master filter bar start----------------------- */}
@@ -287,97 +389,97 @@ const CollegeLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading mb-0">Selected Filters</p>
         <div className="selected_filters_subbox">
-         {queryFilterObject &&
-          queryFilterObject?.collegeStateId?.map((item, index) => {
-              return ( 
+          {queryFilterObject &&
+            queryFilterObject?.collegeStateId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                   <div className="filter_dot"  onClick={handleRemoveState(index)}/>
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveState(item, index)} />
                 </div>
-               );
-             })} 
-              {queryFilterObject &&
-          queryFilterObject?.collegeCityId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.collegeCityId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveCity(item, index)}></div>
                 </div>
-               );
-             })} 
-              {queryFilterObject &&
-          queryFilterObject?.mainStreamId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.mainStreamId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveMaintream(item, index)}></div>
                 </div>
-               );
-             })} 
-              {queryFilterObject &&
-          queryFilterObject?.courseId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.courseId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveCourse(item, index)}></div>
                 </div>
-               );
-             })} 
-              {queryFilterObject &&
-          queryFilterObject?.programTypeId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.programTypeId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveProgramType(item, index)}></div>
                 </div>
-               );
-             })} 
-               {queryFilterObject &&
-          queryFilterObject?.chooseAffiliationId
-          ?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.chooseAffiliationId
+              ?.map((item, index) => {
+                return (
+                  <div className="selected_filters" >
+                    {item}
+                    <div className="filter_dot" onClick={() => handleRemoveChooseAffiliation(item, index)}></div>
+                  </div>
+                );
+              })}
+          {queryFilterObject &&
+            queryFilterObject?.collegeAgencyId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveCollegeAgency(item, index)}></div>
                 </div>
-               );
-             })} 
-               {queryFilterObject &&
-          queryFilterObject?.collegeAgencyId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.courseTypeId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveCourseType(item, index)}></div>
                 </div>
-               );
-             })} 
-               {queryFilterObject &&
-          queryFilterObject?.courseTypeId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.collegeTypeId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveCollegeType(item, index)}></div>
                 </div>
-               );
-             })} 
-               {queryFilterObject &&
-          queryFilterObject?.collegeTypeId?.map((item, index) => {
-              return ( 
+              );
+            })}
+          {queryFilterObject &&
+            queryFilterObject?.chooseExamAcceptedId?.map((item, index) => {
+              return (
                 <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
+                  {item}
+                  <div className="filter_dot" onClick={() => handleRemoveChooseExamAccepted(item, index)}></div>
                 </div>
-               );
-             })} 
-               {queryFilterObject &&
-          queryFilterObject?.chooseExamAcceptedId?.map((item, index) => {
-              return ( 
-                <div className="selected_filters" >
-                  {item} 
-                  {/* <div className="filter_dot"></div> */}
-                </div>
-               );
-             })} 
+              );
+            })}
         </div>
       </div>
 
@@ -420,14 +522,14 @@ const CollegeLeftPage = (props) => {
         <p className="college_box_heading">CITY</p>
 
         {/*Search */}
-         <div>
+        <div>
           <input
             className="college_box_searchbar"
             type="text"
             placeholder="search"
             onChange={(e) => citySearch(e)}
           />
-        </div> 
+        </div>
 
         {/*Checkbox */}
         <div className="box_data">
