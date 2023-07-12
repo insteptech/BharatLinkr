@@ -189,18 +189,9 @@ function SignUpPage() {
 
     if (values.userType === "Student") {
       payload = {
-        accomplishments: values.accomplishments,
-        designation: values.designation,
-        email: values.email,
-        totalExperience: values.experience,
-        areaOfExpertise: values.expertise,
-        highestEducation: values.highestEducation,
         mobileNumber: values.mobileNumber,
         name: values.name,
         password: values.password,
-        school_college_company: values.school_college_company,
-        stateId: Number(values.state),
-        cityId: Number(values.city),
         summary: values.summary,
         userType: values.userType,
       }
