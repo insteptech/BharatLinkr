@@ -134,14 +134,11 @@ const register = async (req) => {
     let roleDetail;
     ////// roles differentiating
     if (profileData.userType === "Organisation") {
-      console.log(roles[6], "iffff")
       userObj.active = false;
       roleDetail = await Role.findOne({ where: { key: roles[6] } });
-      console.log(roleDetail.id, "1111")
     } else if (profileData.userType === "College") {
       userObj.active = false;
       roleDetail = await Role.findOne({ where: { key: roles[4] } });
-      console.log(roleDetail, 'iffffffffffffffffff')
     }
     // this for confirmation from bharatlinker after it will active true 
     else {
@@ -152,7 +149,6 @@ const register = async (req) => {
     if (roleDetail.id) {
       userObj.roleId = await roleDetail.id;
     }
-    console.log(roleDetail.id, "2222")
 
     const otp = generateOTP();
     userObj.otp = otp;
