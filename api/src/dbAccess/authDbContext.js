@@ -217,7 +217,8 @@ if(result.id){
     'coverPhoto',
     'collegeWebsite',
     'collegeId',
-    'roleId'
+    'roleId',
+    'organisationId'
   ],
   })
 }
