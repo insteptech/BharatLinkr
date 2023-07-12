@@ -35,7 +35,9 @@ table.admin_table.table.table-bordered.table-hover {
   border-radius: 0.75rem;
   overflow: hidden;
 }
-
+.Home_container__d256j{
+  padding: 0;
+}
 .master_heading {
   color: #0f0c1a;
   font-size: 1.25rem;
@@ -5085,7 +5087,12 @@ img {
   align-items: center;
   padding-top: 0.625rem;
 }
-
+.college_header_btn_row{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
 /* ---------------------------------user-college-about-page-start--------------------------- */
 
 .about_college_hero_banner {
