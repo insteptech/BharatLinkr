@@ -218,6 +218,9 @@ db.userFriendList.belongsTo(db.User, { as: "FriendsDetail", foreignKey: 'senderI
 
 db.User.hasMany(db.userFriendList, { as: "FriendsSent", foreignKey: 'senderId' });
 db.userFriendList.belongsTo(db.User, { as: "SentReqFriendsDetails", foreignKey: 'senderId' });
+db.User.belongsTo(db.college, { as: "CollegeDetails", foreignKey: 'collegeId' });
+
+
 
 
 
