@@ -91,7 +91,7 @@ module.exports = {
         },
       },
          organisationId: {
-        type: DataTypes.INTEGER,
+        type: Sequelize.INTEGER,
         allowNull: true,
         references: {
           model: 'organisations',
