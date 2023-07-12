@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
 import { Navigation } from "swiper";
-import { Button, Card, Col, Image, Modal, Row } from "react-bootstrap";
+import {
+  Button,
+  Card,
+  Carousel,
+  Col,
+  Image,
+  Modal,
+  Row,
+} from "react-bootstrap";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
@@ -174,13 +182,98 @@ const StoryCard = () => {
         </div>
       )}
       <Modal show={showStory} onHide={handleCloseStory} centered size="lg">
-        <Modal.Header className="py-2" closeButton>
+        {/* <Modal.Header className="py-2" closeButton>
           <span className="story_name_heading">{showScreen?.Name}</span>
-        </Modal.Header>
+        </Modal.Header> */}
         {/* <Modal.Body> */}
         <Row>
           <Col>
-            <Image className="story_view_page" src={showScreen?.img} />
+            {/* <Image className="story_view_page" src={showScreen?.img} /> */}
+            <div>
+             <div className="item_end">
+             <button className="chat_box_close_btn" onClick={handleCloseStory}>
+                <img src="/images/cross-icon.svg" />
+              </button>
+             </div>
+              <Carousel className="story_carousel">
+                <Carousel.Item interval={1000}>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/story-3.jpg"
+                    alt="First slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>{showScreen?.Name}</h3>
+                    <p>
+                      Nulla vitae elit libero, a pharetra augue mollis interdum.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={500}>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/story-1.webp"
+                    alt="Second slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>Style for men</h3>
+                    <p>get 18% off*</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/company.jpg"
+                    alt="Third slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>Third slide label</h3>
+                    <p>
+                      Praesent commodo cursus magna, vel scelerisque nisl
+                      consectetur.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={1000}>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/story-2.jpg"
+                    alt="First slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>{showScreen?.Name}</h3>
+                    <p>
+                      Nulla vitae elit libero, a pharetra augue mollis interdum.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item interval={500}>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/story-1.webp"
+                    alt="Second slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>Style for men</h3>
+                    <p>get 18% off*</p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+                <Carousel.Item>
+                  <img
+                    className="story_carousel_img"
+                    src="/images/company.jpg"
+                    alt="Third slide"
+                  />
+                  <Carousel.Caption>
+                    <h3>Third slide label</h3>
+                    <p>
+                      Praesent commodo cursus magna, vel scelerisque nisl
+                      consectetur.
+                    </p>
+                  </Carousel.Caption>
+                </Carousel.Item>
+              </Carousel>
+            </div>
           </Col>
         </Row>
         {/* </Modal.Body> */}
