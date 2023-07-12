@@ -15,6 +15,7 @@ import { cityDropdown } from "../../redux/actions/location/createCity";
 import Image from "next/image";
 import { getColleges } from "../../redux/actions/college/college";
 import { getOrganisationlist } from "../../redux/actions/organisation/addorganisation";
+import LoaderPage from "../common-components/loader";
 
 function SignUpPage() {
   const [dataValue, setDataValue] = useState(0);
@@ -80,6 +81,7 @@ function SignUpPage() {
 
   const stateList = useSelector((state) => state?.stateList?.stateList?.data?.data?.rows);
   const cityListByState = useSelector(state => state.cityList?.cityList?.data?.result)
+  const isRegistering = useSelector(state => state.signUp.isRegistering)
   const collegeList = useSelector((state) => state?.collegelist?.collegelist?.rows)
   const companyList = useSelector((state) => state?.sectorData?.organisationList?.rows)
 
@@ -192,7 +194,7 @@ function SignUpPage() {
         mobileNumber: values.mobileNumber,
         name: values.name,
         password: values.password,
-        summary: values.summary,
+        email: values?.email,
         userType: values.userType,
       }
     } if (values.userType === "College") {
@@ -261,7 +263,14 @@ function SignUpPage() {
     }
     dataFomrs.append("profileData", JSON.stringify(payload));
 
-    dispatch(getUsers(dataFomrs));
+    dispatch(getUsers(dataFomrs))
+      .then(res => {
+        if (res.payload.data.success) {
+          setDataValue(1);
+        } else {
+          toast.info(res.payload.data.message)
+        }
+      });;
   };
 
   const memoizedInitialValue = (e) => {
@@ -320,6 +329,7 @@ function SignUpPage() {
             </div>
           </Col>
         </Row>
+        {isRegistering && <LoaderPage />}
 
         <Row>
           <ul className="nav ps-2 pe-2">
