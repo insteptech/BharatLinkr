@@ -36,7 +36,7 @@ table.admin_table.table.table-bordered.table-hover {
   overflow: hidden;
 }
 .Home_container__d256j{
-  padding: 0;
+  padding: 0 !important;
 }
 .master_heading {
   color: #0f0c1a;
