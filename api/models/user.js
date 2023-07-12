@@ -66,6 +66,14 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      organisationId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'organisation',
+          key: 'id',
+        },
+      },
       isNumberVerified: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

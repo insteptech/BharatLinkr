@@ -90,6 +90,14 @@ module.exports = {
           key: 'id',
         },
       },
+         organisationId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'organisations',
+          key: 'id',
+        },
+      },
       isNumberVerified: {
         type: Sequelize.BOOLEAN,
         defaultValue: false,
