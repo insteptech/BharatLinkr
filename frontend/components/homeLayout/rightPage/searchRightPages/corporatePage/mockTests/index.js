@@ -10,7 +10,7 @@ const MockTests = (props) => {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const mocktestlist = useSelector((state) => state?.corporateMocktest?.mocktestcorporatelist);
+  const mocktestlist = useSelector((state) => state?.corporateMocktest?.mocktestcorporatelist?.data);
   useEffect(() => {
     dispatch(getMockTestCorporatelist());
   }, []);
@@ -22,6 +22,8 @@ const MockTests = (props) => {
       toast.info("Login first!")
     }
   }
+
+  console.log(mocktestlist,'mocktestlist')
 
   return (
     <>
