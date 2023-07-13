@@ -41,12 +41,17 @@ const courseListSlice = createSlice({
       state.isLoading = false;
       state.courselist = action.payload.data;
     });
+    builder.addCase(getCoursebyId.pending, (state, action) => {
+      console.log(action.payload);
+      state.isLoading = true
+    });
     builder.addCase(getCoursebyId.rejected, (state, action) => {
       console.log(action.payload);
+      state.isLoading = false
     });
     builder.addCase(getCoursebyId.fulfilled, (state, action) => {
       state.courseData = action.payload;
-      state.status = "";
+      state.isLoading = false;
     });
     builder.addCase(searchCourse.rejected, (state, action) => {
       state.searchCourseList = [];

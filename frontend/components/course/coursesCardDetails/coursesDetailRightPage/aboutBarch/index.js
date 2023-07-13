@@ -3,20 +3,23 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-// import { getCoursebyId } from "../../redux/actions/course/addcourse";
 import DOMPurify from "dompurify";
 import { getCoursebyId } from "../../../../../redux/actions/course/addcourse";
 import { ScrollingCarousel } from "@trendyol-js/react-carousel";
+import LoaderPage from "../../../../common-components/loader";
 
 const AboutBarch = ({ props }) => {
   const dispatch = useDispatch();
   const { dataValue, setDataValue } = props;
+  const [courseData, setCourseData] = useState();
 
   const courseDetails = useSelector(
     (state) => state?.courseList?.courseData?.data?.data?.rows
   );
 
-  const [courseData, setCourseData] = useState();
+  const loadingFilterlist = useSelector(
+    (state) => state?.courseList?.isLoading
+  );
 
   useEffect(() => {
     courseDetails?.map((course) => setCourseData(course));
@@ -24,6 +27,7 @@ const AboutBarch = ({ props }) => {
 
   const router = useRouter();
   const Id = router.query.pageNo;
+  const query = router.query
 
   useEffect(() => {
     if (Id) {
@@ -34,6 +38,12 @@ const AboutBarch = ({ props }) => {
       );
     }
   }, [Id]);
+
+  useEffect(() => {
+    if (query.active) {
+      setDataValue(4)
+    }
+  }, [])
 
   const coursetabs = [
     {
@@ -49,10 +59,7 @@ const AboutBarch = ({ props }) => {
       tabsName: `Course after ${courseData?.courseName}`,
     },
     {
-      tabsName: `Carrer after ${courseData?.courseName}`,
-    },
-    {
-      // tabsName: "IMPORTANT EXAM BOOKS",
+      tabsName: `Career after ${courseData?.courseName}`,
     },
     {
       tabsName: "Average fee",
@@ -60,25 +67,21 @@ const AboutBarch = ({ props }) => {
     {
       tabsName: "Salary Trends",
     },
-    {
-      // tabsName: "Top recruiters",
-    },
   ];
 
   return (
     <>
+     {loadingFilterlist ? <LoaderPage/> :  (<>   
       <div className="admin_home_tabs_row top_padding_none big_screen_none">
         <Row>
           <Col lg={12} className="p-0">
-            <ScrollingCarousel show={5.5} slide={4} swiping={true}>
+         <ScrollingCarousel show={5.5} slide={4} swiping={true} >
               <ul className="nav ">
                 {coursetabs &&
                   coursetabs?.map((steps, stepsIndex) => (
                     <li className="nav-item " key={stepsIndex}>
                       <a
-                        className={`nav-link admin_tabs_name ${
-                          dataValue === stepsIndex && "head-active"
-                        }`}
+                        className={`nav-link admin_tabs_name ${dataValue === stepsIndex && "head-active"}`}
                         active={true}
                         onClick={() => setDataValue(stepsIndex)}
                       >
@@ -92,7 +95,7 @@ const AboutBarch = ({ props }) => {
         </Row>
       </div>
       <div>
-        {props?.dataValue === 0 &&
+        {dataValue === 0 &&
           courseDetails &&
           courseDetails?.map((item, index) => {
             return (
@@ -104,7 +107,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 0 &&
+        {dataValue === 0 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -121,7 +124,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 1 &&
+        {dataValue === 1 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -138,7 +141,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 2 &&
+        {dataValue === 2 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -155,7 +158,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 3 &&
+        {dataValue === 3 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -172,7 +175,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 4 &&
+        {dataValue === 4 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -188,25 +191,8 @@ const AboutBarch = ({ props }) => {
           })}
       </div>
 
-      {/* <div>
-        {props.dataValue === 5 &&
-          courseDetails &&
-          courseDetails[0]?.CMS?.map((item, index) => {
-            return (
-              <>
-                <div
-                  key={index}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize("<p>hardcoded</p>"),
-                  }}
-                />
-              </>
-            );
-          })}
-      </div> */}
-
       <div>
-        {props.dataValue === 5 &&
+        {dataValue === 5 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -223,7 +209,7 @@ const AboutBarch = ({ props }) => {
       </div>
 
       <div>
-        {props.dataValue === 6 &&
+        {dataValue === 6 &&
           courseDetails &&
           courseDetails[0]?.CMS?.map((item, index) => {
             return (
@@ -238,23 +224,7 @@ const AboutBarch = ({ props }) => {
             );
           })}
       </div>
-
-      {/* <div>
-        {props.dataValue === 8 &&
-          courseDetails &&
-          courseDetails[0]?.CMS?.map((item, index) => {
-            return (
-              <>
-                <div
-                  key={index}
-                  dangerouslySetInnerHTML={{
-                    __html: DOMPurify.sanitize("<p>hardcoded</p>"),
-                  }}
-                />
-              </>
-            );
-          })}
-      </div> */}
+      </>)}  
     </>
   );
 };

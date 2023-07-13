@@ -1,38 +1,15 @@
+import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
-// const coursetabs = [
-//   {
-//     tabsName: "ABOUT B.ARCH",
-//   },
-//   {
-//     tabsName: "Specialization",
-//   },
-//   {
-//     tabsName: "Eligibility",
-//   },
-//   {
-//     tabsName: "Course after B.Arch",
-//   },
-//   {
-//     tabsName: "Carrer after B.Arch",
-//   },
-//   {
-//     tabsName: "IMPORTANT EXAM BOOKS",
-//   },
-//   {
-//     tabsName: "Average fee",
-//   },
-//   {
-//     tabsName: "Salary Trends",
-//   },
-//   {
-//     tabsName: "Top recruiters",
-//   },
-// ];
 
 const CoursesDetailsLeft = (props) => {
+
+ const router = useRouter()
+
+ const { query} = router.query
+
   const courseDetails = useSelector(
     (state) => state?.courseList?.courseData?.data?.data?.rows
   );
@@ -57,22 +34,19 @@ const CoursesDetailsLeft = (props) => {
       tabsName: `Course after ${courseData?.courseName}`,
     },
     {
-      tabsName: `Carrer after ${courseData?.courseName}`,
+      tabsName: `Career after ${courseData?.courseName}`,
     },
-    {
-      // tabsName: "IMPORTANT EXAM BOOKS",
-    },
+
     {
       tabsName: "Average fee",
     },
     {
       tabsName: "Salary Trends",
     },
-    {
-      // tabsName: "Top recruiters",
-    },
+
   ];
   const { dataValue, setDataValue } = props;
+
 
   return (
     <>
@@ -86,9 +60,8 @@ const CoursesDetailsLeft = (props) => {
                   key={stepsIndex}
                 >
                   <a
-                    className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${
-                      dataValue === stepsIndex && "active_bar"
-                    }`}
+                    className={`nav-link admin_tabs_name no_wrap side_tabs w-100 ${dataValue === stepsIndex && "active_bar"
+                      }`}
                     active={true}
                     onClick={() => setDataValue(stepsIndex)}
                   >

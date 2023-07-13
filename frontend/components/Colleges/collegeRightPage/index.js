@@ -24,6 +24,8 @@ import LoaderPage from "../../common-components/loader";
 import Swiper from "swiper";
 import { getTokenDecode, isUserLogined } from "../../utils";
 import NoDataPage from "../../common-components/NoDataPage/NoDataPage";
+import SignupModal from "../../modals/signupmodal";
+import CollegeShareModal from "../../modals/collegesharemodal";
 
 const streamData = [
   {
@@ -94,6 +96,8 @@ const CollegeRightPage = (props) => {
   const [likesHandler, setLikesHandler] = useState([]);
   const handleClose1 = () => setShow1(false);
   const handleShow1 = () => setShow1(true);
+  const [modalShow1, setModalShow1] = useState(false);
+
 
   const mainData = useSelector(
     (data) => data?.mainStreamList?.mainStreamValue?.data?.data?.rows
@@ -174,6 +178,11 @@ const CollegeRightPage = (props) => {
     }
   };
 
+
+  const handleHide1 = () => {
+    setModalShow1(false)
+  }
+
   return (
     <>
       <div className="">
@@ -247,7 +256,7 @@ const CollegeRightPage = (props) => {
             </Col>
           </Row>
         </div>
-        {/* <div className="select_stream_row hide_box">
+        <div className="select_stream_row hide_box">
           <Row>
             <Col xs={3} sm={2} className="heading_col">
               <h6 className="select_row_heading mobile_font_12">
@@ -260,14 +269,14 @@ const CollegeRightPage = (props) => {
                   mainData?.map((item, index) => (
                     <p key={index} className="select_items mobile_font_10">
                       {item.mainStreamName}
-                      <span>({item.itemCount})</span>
+                      {/* <span>({item.itemCount})</span> */}
                     </p>
                   ))}
               </ScrollingCarousel>
             </Col>
           </Row>
-        </div> */}
-        {/* <div className="select_stream_row hide_box">
+        </div> 
+         <div className="select_stream_row hide_box">
           <Row>
             <Col xs={3} sm={2} className="heading_col">
               <h6 className="select_row_heading mobile_font_12">
@@ -289,7 +298,9 @@ const CollegeRightPage = (props) => {
               </ScrollingCarousel>
             </Col>
           </Row>
-        </div> */}
+        </div> 
+
+
         <div className="select_stream_row gray_row_max_width">
           <Row>
             <Col xs={3} sm={2} className="heading_col">
@@ -362,6 +373,11 @@ const CollegeRightPage = (props) => {
             )}
           </Row>
         </div>
+        <SignupModal
+          show={modalShow1}
+          // setModalShow={setModalShow}
+          onHide={() => handleHide1()}
+        />
       </div>
       {/* --------------------------mobile-screen------------------------- */}
       <div className="">
