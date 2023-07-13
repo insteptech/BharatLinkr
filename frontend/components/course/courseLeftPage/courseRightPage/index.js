@@ -68,8 +68,8 @@ const streamData = [
 ];
 
 const CourseRightPage = (props) => {
-  const { show, filteredId } = props;
-  const [showList, setShowList] = useState(null);
+  const { show, filteredId, showList, setShowList, updateShowlist, updateShowState } = props;
+  // const [showList, setShowList] = useState(null);
   const [cardLevelShow, setCardLevelShow] = useState(null);
   const [show1, setShow1] = useState(false);
   const handleClose1 = () => setShow1(false);
@@ -77,22 +77,11 @@ const CourseRightPage = (props) => {
 
   const dispatch = useDispatch();
 
-  const router = useRouter();
-
-  const searchCourseList = useSelector(
-    (state) => state?.courseList?.searchCourseList?.data?.data?.rows
-  );
-
   useEffect(() => {
     dispatch(getAllMasterFilter("courselevel"));
     dispatch(getCourse());
   }, []);
 
-  const filterMainStreamDetails = useSelector(
-    (state) => state?.courseList?.filterMainstreamlist?.data?.data?.rows
-  );
-
-  const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
   return (
     <>
@@ -132,7 +121,9 @@ const CourseRightPage = (props) => {
             <LevelCard
               showList={showList}
               setShowList={setShowList}
+              updateShowlist={updateShowlist}
               cardLevelShow={cardLevelShow}
+              updateShowState={updateShowState}
               setCardLevelShow={setCardLevelShow}
             />
           </div>
@@ -148,6 +139,7 @@ const CourseRightPage = (props) => {
               <PopularCourseCard
                 show={show}
                 showList={showList}
+                updateShowState={updateShowState}
                 setShowList={setShowList}
                 cardLevelShow={cardLevelShow}
                 setCardLevelShow={setCardLevelShow}
@@ -261,7 +253,7 @@ const CourseRightPage = (props) => {
 
       {/* ----------------------choose by dream----------------------- */}
       <div>
-        {show ? loading ? (
+         {/* {showList ? loading ? (
           <LoaderPage />
         ) : (
           filterMainStreamDetails &&
@@ -360,7 +352,7 @@ const CourseRightPage = (props) => {
               </>
             );
           })
-        ) : ""}
+        ) : ""}  */}
 
       </div>
       <div className="">
@@ -404,7 +396,7 @@ const CourseRightPage = (props) => {
             </button>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <CourseLeftPage />
+            <CourseLeftPage  />
           </Offcanvas.Body>
         </Offcanvas>
       </div>

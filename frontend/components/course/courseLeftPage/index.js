@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 import { getMainStream } from "../../../redux/actions/streams/addMainStreams";
 import { debounce } from "debounce";
 
-const CourseLeftPage = (props) => {
-  const { show, setShow, showList, setShowList } = props;
+const CourseLeftPage = ({ updateShowState, updateShowlist, showList }) => {
+  // const { show, setShow} = props;
 
   const dispatch = useDispatch();
 
@@ -39,17 +39,18 @@ const CourseLeftPage = (props) => {
 
   useEffect(() => {
     if (filteredId.length > 0) {
-      dispatch(filterMainstreamCourse({ mainStreamId: filteredId })).then((res) => {
+      dispatch(cardlevelIdDetails({ mainStreamId: filteredId })).then((res) => {
         if (res?.payload?.data?.success) {
-          setShow(true);
+          updateShowlist(true)
+          //  updateShowState(true);
         }
       })
     } else {
       if (dimensions.width > 990 && dimensions.height > 660) {
-        setShow(null);
+        updateShowlist(null);
       }
     }
-  }, [JSON.stringify(filteredId)]);
+  }, [JSON.stringify(filteredId), updateShowState, updateShowlist, dimensions.width, dimensions.height]);
 
   const handleStateSelect = (item, itemDetails) => {
     if (selectedItems.includes(itemDetails.mainStreamName)) {
@@ -89,6 +90,10 @@ const CourseLeftPage = (props) => {
     //   setShow(true);
     // }
   };
+
+  const courseData = useSelector(
+    (state) => state?.courseList?.courselist?.data?.rows
+  );
 
   return (
     <>
@@ -143,12 +148,15 @@ const CourseLeftPage = (props) => {
       <div className="colleges_left_boxes">
         <p className="college_box_heading">Trending Courses</p>
         <div className="selected_filters_subbox">
-          <div className="selected_filters">
-            hello <div className="filter_dot"></div>
+           <div className="selected_filters">
+            B.Tech
           </div>
           <div className="selected_filters">
-            notification <div className="filter_dot"></div>
+            M.B.A
           </div>
+          <div className="selected_filters">
+            M.CA
+          </div> 
         </div>
       </div>
 
