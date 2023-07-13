@@ -112,9 +112,9 @@ const CollegeCard = ({ handleLikes, item, isliked, stateLike }) => {
   const handleHide = () => {
     setModalShow(false);
   };
-  const handleHide1 = () => {
-    setModalShow1(false)
-  }
+  // const handleHide1 = () => {
+  //   setModalShow1(false)
+  // }
 
   return (
     <>
@@ -310,11 +310,11 @@ const CollegeCard = ({ handleLikes, item, isliked, stateLike }) => {
       </Card>
 
       <CollegeShareModal show={modalShow} onHide={() => handleHide()} />
-      <SignupModal
+      {/*   <SignupModal
         show={modalShow1}
         // setModalShow={setModalShow}
         onHide={() => handleHide1()}
-      />
+      /> */}
     </>
   );
 };

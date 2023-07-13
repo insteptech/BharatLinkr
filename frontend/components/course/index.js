@@ -10,6 +10,7 @@ import {
 
 const CoursePage = () => {
   const [show, setShow] = useState(null);
+  const [showList, setShowList] = useState(null);
 
   const dispatch = useDispatch();
   const searchCourse = (e) => {
@@ -20,6 +21,13 @@ const CoursePage = () => {
       dispatch(getCourse());
     }
   };
+  const updateShowState = (value) => {
+    setShow(value);
+  };
+
+  const updateShowlist=(value) => {
+    setShowList(value)
+  }
   return (
     <>
       <div className="user_dashboard_bg ">
@@ -30,19 +38,22 @@ const CoursePage = () => {
               <Row>
                 <Col lg={3} className="search_left_page_bg hide_box hide_box">
                   <CourseLeftPage
-                    show={show}
-                    setShow={setShow}
+                    // show={show}
+                    // setShow={setShow}
+                    showList={showList}
+                    updateShowlist={updateShowlist}
+                    updateShowState={updateShowState}
                     searchCourse={searchCourse}
                   />
                 </Col>
                 <Col lg={9} className="search_right_page_bg">
-                  <CourseRightPage show={show} setShow={setShow} />
+                  <CourseRightPage show={show} showList={showList} updateShowlist={updateShowlist} updateShowState={updateShowState}/>
                 </Col>
               </Row>
             </Col>
             <Col lg={1} className="p-0 white_bg hide_box"></Col>
           </Row>
-        </Container>
+        </Container>    
       </div>
     </>
   );

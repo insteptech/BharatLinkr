@@ -7,8 +7,6 @@ import LoaderPage from "../../../../common-components/loader";
 const PopularCourseCard = (props) => {
   const { showList, show, setShow, setShowList, cardLevelShow } = props;
 
-  const dispatch = useDispatch();
-
   const router = useRouter();
 
   const courseData = useSelector(
@@ -22,8 +20,8 @@ const PopularCourseCard = (props) => {
   const loadingFilterlist = useSelector(
     (state) => state?.courseList?.isLoading
   );
-  
-const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
+
+  const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
 
   return (
     <>
@@ -40,11 +38,11 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                       </h6>
                       <div className="experience_row align_center">
                         <p className="time_experience">
-                          <Image src="/images/green-squre.svg" />
+                          <Image className="me-1" src="/images/green-squre.svg" />
                           {item?.courseDuration}
                         </p>
                         <p className="time_experience">
-                          <Image src="/images/green-squre.svg" />
+                          <Image className="me-1" src="/images/green-squre.svg" />
                           {item?.CourseType?.name}
                         </p>
                       </div>
@@ -71,8 +69,8 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                           />
                         </p>
 
-                        <p className="p_c_card_three_link">
-                          Carrer Options
+                        <p className="p_c_card_three_link" onClick={() => { router.push(`/courses/${item.id}/?active=4`) }}>
+                          Career Options
                           <Image
                             className="ms-1 hide_box"
                             src="/images/right-arrow-svg.svg"
@@ -104,7 +102,7 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                         <Col md={12}>
                           <div className="offer_heading_col">
                             <h6 className="offer_heading hover_link mobile_font_12">
-                              {item.offer || "12 Colleges Offering This Course"}
+                              {item.offer || "Colleges Offering This Course"}
                             </h6>
                           </div>
                         </Col>
@@ -122,12 +120,12 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
             !showList && courselevelData && courselevelData.map((item, index) => (
               (
                 <div key={index}>
-                  <Card key={item.id} className="p_c_card">
+                  <Card key={item.id} className="p_c_card mobile_card_padding">
                     <Row>
                       <Col md={6}>
-                        <h6 className="p_c_card_master_heading align_center">
+                        <h6 className="p_c_card_master_heading align_center mobile_blue_text mobile_font_18">
                           {item &&
-                          item?.MainStream?.mainStreamName === undefined ? (
+                            item?.MainStream?.mainStreamName === undefined ? (
                             <p>No data found</p>
                           ) : (
                             item?.courseName
@@ -135,49 +133,45 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                         </h6>
                         <div className="experience_row align_center">
                           <p className="time_experience">
-                            <Image src="" />
+                            <Image className="me-1" src="/images/green-squre.svg" />
                             {item?.courseDuration}
                           </p>
                           <p className="time_experience">
                             {item.experienceType || "hardcoded data"}
                           </p>
                         </div>
-                        <div className="mt-3">
-                          <Row>
-                            <Col md={4} sm={4} className="align_center">
-                              <p
-                                className="p_c_card_three_link"
-                                onClick={() =>
-                                  router.push(`/courses/${item.id}`)
-                                }
-                              >
-                                Overview
-                                <Image className="ms-1" src="" />
-                              </p>
-                            </Col>
-                            <Col md={4} sm={4} className="align_center">
-                              <p
-                                className="p_c_card_three_link"
-                                onClick={() => router.push("/exams")}
-                              >
-                                Entrance Exam
-                                <Image className="ms-1" src="" />
-                              </p>
-                            </Col>
-                            <Col md={4} sm={4} className="align_center">
-                              <a className="">
-                                Carrer Options
-                                <Image className="ms-1" src="" />
-                              </a>
-                            </Col>
-                          </Row>
+                        <div className="three_link_row">
+                          <p
+                            className="p_c_card_three_link"
+                            onClick={() =>
+                              router.push(`/courses/${item.id}`)
+                            }
+                          >
+                            Overview
+                            <Image  className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </p>
+                          <p
+                            className="p_c_card_three_link"
+                            onClick={() => router.push("/exams")}
+                          >
+                            Entrance Exam
+                            <Image className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </p>
+                          <a className="p_c_card_three_link" onClick={() => { router.push(`/courses/${item.id}/?active=4`) }}>
+                            Career Options
+                            <Image  className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </a>
+
                         </div>
                       </Col>
                       <Col md={6}>
-                        <Row>
+                        <Row className="long_card_date_row">
                           <Col md={6} sm={6}>
                             <h6 className="p_c_card_fees_heading">
-                              <Image src="" />
+                              <Image src="/images/green-squre.svg" />
                               Average Fees
                             </h6>
                             <p className="p_c_card_fees_value">
@@ -186,7 +180,7 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                           </Col>
                           <Col md={6} sm={6}>
                             <h6 className="p_c_card_fees_heading">
-                              <Image src="" />
+                              <Image src="/images/orange-squre.svg"  />
                               Average Salary
                             </h6>
                             <p className="p_c_card_fees_value">
@@ -209,7 +203,93 @@ const loading = useSelector((state) => state?.allMasterFilterList?.isLoading);
                 </div>
               )
             ))}
+          {loadingFilterlist ? <LoaderPage /> :
+            showList && courselevelData && courselevelData.map((item, index) => (
+              (
+                <div key={index}>
+                  <Card key={item.id} className="p_c_card mobile_card_padding">
+                    <Row>
+                      <Col md={6}>
+                        <h6 className="p_c_card_master_heading align_center">
+                          {item &&
+                            item?.MainStream?.mainStreamName === undefined ? (
+                            <p>No data found</p>
+                          ) : (
+                            item?.courseName
+                          )}
+                        </h6>
+                        <div className="experience_row align_center">
+                          <p className="time_experience">
+                            <Image className="me-1" src="/images/green-squre.svg" />
+                            {item?.courseDuration}
+                          </p>
+                          <p className="time_experience">
+                            {item.experienceType || "hardcoded data"}
+                          </p>
+                        </div>
+                        <div className="three_link_row">
+                          <p
+                            className="p_c_card_three_link"
+                            onClick={() =>
+                              router.push(`/courses/${item.id}`)
+                            }
+                          >
+                            Overview
+                            <Image className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </p>
+                          <p
+                            className="p_c_card_three_link"
+                            onClick={() => router.push("/exams")}
+                          >
+                            Entrance Exam
+                            <Image className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </p>
+                          <p className="p_c_card_three_link" onClick={() => { router.push(`/courses/${item.id}/?active=4`) }}>
+                            Career Options
+                            <Image className="ms-1 hide_box"
+                            src="/images/right-arrow-svg.svg" />
+                          </p>
 
+                        </div>
+                      </Col>
+                      <Col md={6}>
+                        <Row>
+                          <Col md={6} sm={6}>
+                            <h6 className="p_c_card_fees_heading">
+                              <Image src="/images/green-squre.svg"/>
+                              Average Fees
+                            </h6>
+                            <p className="p_c_card_fees_value">
+                              ₹ {item?.averageFees}
+                            </p>
+                          </Col>
+                          <Col md={6} sm={6}>
+                            <h6 className="p_c_card_fees_heading">
+                              <Image src="/images/orange-squre.svg"  />
+                              Average Salary
+                            </h6>
+                            <p className="p_c_card_fees_value">
+                              ₹ {item?.averageSalary}
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <Col md={12}>
+                            <div className="offer_heading_col">
+                              <h6 className="offer_heading">
+                                {item.offer || "hardcoded data"}
+                              </h6>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Card>
+                </div>
+              )
+            ))}
         </>
       )}
     </>
