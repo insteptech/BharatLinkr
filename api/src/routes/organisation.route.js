@@ -62,33 +62,33 @@ router.post('/addOrganisationLikes', organisationController.organisationAddLikes
 
 
 
-router.post(
-  '/addOrganisationPost',
-  fileUpload.fields([
-    {
-      name: 'imageFile',
-      maxCount: 10,
-    },
+// router.post(
+//   '/addOrganisationPost',
+//   fileUpload.fields([
+//     {
+//       name: 'imageFile',
+//       maxCount: 10,
+//     },
 
-  ]),
-  organisationController.addOrganisationPosts
-);
+//   ]),
+//   organisationController.addOrganisationPosts
+// );
 
-router.post('/organisationPostList', organisationController.organisationPostList);
-router.delete('/organisationPostDelete/:id', organisationController.organisationPostDelete);
+// router.post('/organisationPostList', organisationController.organisationPostList);
+// router.delete('/organisationPostDelete/:id', organisationController.organisationPostDelete);
 
 
 
-router.post(
-  '/updateOrganisationPost',
-  fileUpload.fields([
-    {
-      name: 'imageFile',
-      maxCount: 10,
-    },
-  ]),
-  organisationController.updateOrganisationPost
-);
+// router.post(
+//   '/updateOrganisationPost',
+//   fileUpload.fields([
+//     {
+//       name: 'imageFile',
+//       maxCount: 10,
+//     },
+//   ]),
+//   organisationController.updateOrganisationPost
+// );
 
 router.post('/addOrganisationLinksData', organisationController.addOrganisationLinksData);
 router.post('/linksApproval', organisationController.organisationLinkApproval);
