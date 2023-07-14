@@ -189,7 +189,7 @@ function SignUpPage() {
 
     let payload = {}
 
-    if (values.userType === "Student") {
+    if (values?.userType === "Student") {
       payload = {
         mobileNumber: values.mobileNumber,
         name: values.name,
@@ -197,7 +197,7 @@ function SignUpPage() {
         email: values?.email,
         userType: values.userType,
       }
-    } if (values.userType === "College") {
+    } if (values?.userType === "College") {
       payload = {
         userType: values?.userType,
         email: values?.email,
@@ -265,10 +265,10 @@ function SignUpPage() {
 
     dispatch(getUsers(dataFomrs))
       .then(res => {
-        if (res.payload.data.success) {
+        if (res?.payload?.data?.success) {
           setDataValue(1);
         } else {
-          toast.info(res.payload.data.message)
+          toast.info(res?.payload?.data?.message)
         }
       });;
   };

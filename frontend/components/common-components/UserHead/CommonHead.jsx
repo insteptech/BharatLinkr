@@ -154,6 +154,9 @@ export default function CommonHead() {
     if (slectedValue == 4) {
       return <AdmisstionForm />;
     }
+    if (slectedValue == 5) {
+      return <SubmitForm />;
+    }
   };
 
   const handleShowModal = () => {
@@ -290,7 +293,7 @@ export default function CommonHead() {
                   <option className="form_select_inner" value="">
                     Forms
                   </option>
-                  <option className="form_select_inner" value="5">
+                  <option className="form_select_inner" value="1">
                     Counsling Form
                   </option>
                   <option className="form_select_inner" value="2">
@@ -446,7 +449,11 @@ export default function CommonHead() {
               <Offcanvas show={mobileScreen} onHide={handleMobileClose}>
                 <Offcanvas.Header className="filter_leftmenu_head">
                   <Offcanvas.Title>
-                    <Image width={110} height={20} src="/images/bharat-logo.svg"/>
+                    <Image
+                      width={110}
+                      height={20}
+                      src="/images/bharat-logo.svg"
+                    />
                   </Offcanvas.Title>
                   <button
                     className="chat_box_close_btn"
@@ -457,37 +464,37 @@ export default function CommonHead() {
                 </Offcanvas.Header>
                 <Offcanvas.Body className="ui_left_menu_body">
                   <div>
-                  <MobileMenus />
-                  <div className="mobile_sidebar_select">
-                    <Form.Select
-                      className="form_select"
-                      placeholder="Forms"
-                      aria-label="Default select example"
-                      onChange={(e) => {
-                        setSlectedValue(e.target.value);
-                        setModalShow(true);
-                      }}
-                    >
-                      <option className="form_select_inner" value="">
-                        Forms
-                      </option>
-                      <option className="form_select_inner" value="5">
-                        Counsling Form
-                      </option>
-                      <option className="form_select_inner" value="2">
-                        Submit Form
-                      </option>
-                      <option className="form_select_inner" value="3">
-                        Client Form
-                      </option>
-                      <option className="form_select_inner" value="4">
-                        Admisstion Form
-                      </option>
-                      <option className="form_select_inner" value="5">
-                        Submit Resume
-                      </option>
-                    </Form.Select>
-                  </div>
+                    <MobileMenus />
+                    <div className="mobile_sidebar_select">
+                      <Form.Select
+                        className="form_select"
+                        placeholder="Forms"
+                        aria-label="Default select example"
+                        onChange={(e) => {
+                          setSlectedValue(e.target.value);
+                          setModalShow(true);
+                        }}
+                      >
+                        <option className="form_select_inner" value="">
+                          Forms
+                        </option>
+                        <option className="form_select_inner" value="5">
+                          Counsling Form
+                        </option>
+                        <option className="form_select_inner" value="2">
+                          Submit Form
+                        </option>
+                        <option className="form_select_inner" value="3">
+                          Client Form
+                        </option>
+                        <option className="form_select_inner" value="4">
+                          Admisstion Form
+                        </option>
+                        <option className="form_select_inner" value="5">
+                          Submit Resume
+                        </option>
+                      </Form.Select>
+                    </div>
                   </div>
                   {!loginStatus ? (
                     <Button
