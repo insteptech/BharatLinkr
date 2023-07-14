@@ -24,7 +24,7 @@ const { sector,
   exam,
   corporateRegister,
   Status,
-course } = require('../../models');
+  course } = require('../../models');
 const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const path = require('path');
@@ -451,7 +451,10 @@ const organisationList = async (req) => {
     let levelComapany;
     let search;
 
-    if (req.body.search || req.body.id || req.body.typeOfCompany || req.body.natureOfBusiness || req.body.establishedYear || req.body.stateId || req.body.cityId || req.body.companyLevel) {
+    if (req.body.search || req.body.id
+      || req.body.typeOfCompany || req.body.natureOfBusiness ||
+      req.body.establishedYear || req.body.stateId ||
+      req.body.cityId || req.body.companyLevel || req.body.companyId) {
 
       if (req.body.id) {
         whrCondition = { id: req.body.id, deleted: false }
@@ -487,6 +490,10 @@ const organisationList = async (req) => {
         levelComapany = { ['$CompanyLevel.companyLevel$']: req.body.companyLevel, deleted: false }
       }
 
+      if (req.body.companyId && req.body.companyId.length > 0) {
+        company = { companyId: req.body.companyId, deleted: false }
+      }
+
     }
 
     result = await organisation.findAndCountAll({
@@ -498,27 +505,32 @@ const organisationList = async (req) => {
           state,
           city,
           levelComapany,
-          search]
+          search,company]
       },
 
       subQuery: false,
       include: [
         {
-          model: organisationLikesCount,
+          model: organisationCompany,
           required: false,
-          as: 'LikesCount'
+          as: 'Companies',
         },
+        // {
+        //   model: organisationLikesCount,
+        //   required: false,
+        //   as: 'LikesCount'
+        // },
         {
           model: organisationLinksData,
           required: false,
           where: { approval: true },
           as: 'Followers',
         },
-        {
-          model: organisationPost,
-          required: false,
-          as: 'Posts',
-        },
+        // {
+        //   model: organisationPost,
+        //   required: false,
+        //   as: 'Posts',
+        // },
         {
 
           model: organisationSector,
@@ -602,13 +614,13 @@ const organisationList = async (req) => {
       distinct: true,
     });
 
-    result["rows"] = result["rows"].map((row) => {
-      row = row.toJSON();
-      row["FollowerCount"] = row["Followers"].length;
-      row["PostCount"] = row["Posts"].length;
+    // result["rows"] = result["rows"].map((row) => {
+    //   row = row.toJSON();
+    //   row["FollowerCount"] = row["Followers"].length;
+    //   row["PostCount"] = row["Posts"].length;
 
-      return row;
-    });
+    //   return row;
+    // });
 
 
 
@@ -808,13 +820,13 @@ const organisationAddLikesAndViews = async (req) => {
   try {
     let result;
     const likesCount = await organisationLikesCount.findOne({
-      where: { organisationId: req.body.organisationId }
+      where: { organisationPostId: req.body.organisationPostId }
     })
 
     if (likesCount) {
 
       let obj = {
-        organisationId: likesCount.organisationId,
+        organisationPostId: likesCount.organisationPostId,
         userId: req.body.userId
       }
       if (req.body.update == "likes") {
@@ -829,14 +841,14 @@ const organisationAddLikesAndViews = async (req) => {
       }
       result = await organisationLikesCount.update(obj, { where: { id: likesCount.id } });
       const likeUser = await listOfUsersLikes.findOne({
-        where: { userId: req.body.userId, categoryId: req.body.organisationId, categoryTypes: 'organisation' }
+        where: { userId: req.body.userId, categoryId: req.body.organisationPostId, categoryTypes: 'organisation' }
       })
       if (likeUser && !req.body.update == "sahre" || req.body.update == "dislikes") {
-        await listOfUsersLikes.destroy({ where: { categoryTypes: 'organisation', userId: req.body.userId, categoryId: req.body.organisationId, } })
+        await listOfUsersLikes.destroy({ where: { categoryTypes: 'organisation', userId: req.body.userId, categoryId: req.body.organisationPostId, } })
       } else {
         let userObj = {
           userId: req.body.userId,
-          categoryId: obj.organisationId,
+          categoryId: obj.organisationPostId,
           categoryTypes: 'organisation'
         };
         if (req.body.update == "likes") {
@@ -845,13 +857,13 @@ const organisationAddLikesAndViews = async (req) => {
       }
     } else {
       let obj = {
-        organisationId: req.body.organisationId,
+        organisationPostId: req.body.organisationPostId,
         likes: 0,
         share: 0
       }
       let userObj = {
         userId: req.body.userId,
-        categoryId: obj.organisationId,
+        categoryId: obj.organisationPostId,
         categoryTypes: 'organisation'
       };
 
@@ -866,7 +878,6 @@ const organisationAddLikesAndViews = async (req) => {
       await listOfUsersLikes.create(userObj)
 
     }
-
 
     return { data: result, success: true };
   } catch (error) {
@@ -889,7 +900,6 @@ const addOrganisationPosts = async (req) => {
 
         let objOrganisationPost = {
           userId: item.userId,
-          organisationId: item.organisationId,
           postTypes: item.postTypes,
           title: item.title,
           description: item.description,
@@ -908,9 +918,6 @@ const addOrganisationPosts = async (req) => {
           status: item.status,
         }
 
-
-
-
         let jR = item.jobRole
         if (typeof jR === 'string') {
           jobName = await masterFilter.create({ name: jR, types: 'jobrole', statusId: 1 })
@@ -921,25 +928,13 @@ const addOrganisationPosts = async (req) => {
             objOrganisationPost.jobRole = jobRoleId.id
           }
         }
-
-
-        7
-
         if (imageFile && imageFile.length > 0) {
           const fileExist = imageFile.find((image1) => image1.originalname);
           if (fileExist) {
             objOrganisationPost.image = fileExist.originalname;
           }
         }
-
-
-
         result = await organisationPost.create(objOrganisationPost, { returning: true });
-
-
-
-
-
 
         return result;
       })
@@ -990,7 +985,7 @@ const organisationPostList = async (req) => {
   try {
     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
     const size = req.body.pageSize ? req.body.pageSize : 10;
-    let whrCondition = { deleted: false, status:1 };
+    let whrCondition = { deleted: false, status: 1 };
     if (req.body.search) {
       const obj = {
         title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
@@ -998,7 +993,7 @@ const organisationPostList = async (req) => {
       whrCondition = { ...obj, ...whrCondition };
     }
     if (req.body.id) {
-      whrCondition = { id: req.body.id, deleted: false,status:1 }
+      whrCondition = { id: req.body.id, deleted: false, status: 1 }
     }
 
     const result = await organisationPost.findAndCountAll({

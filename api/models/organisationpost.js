@@ -24,14 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
     
-    organisationId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-      references: {
-        model: 'organisation',
-        key: 'id',
-      },
-    },
     postTypes: {
       type: DataTypes.ENUM(
             'script',
