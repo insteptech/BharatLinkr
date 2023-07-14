@@ -5,7 +5,17 @@ const nodemailer = require("nodemailer")
 
 
 
-const { User, Role, AuthToken, RolePermission, Permission, State, City, listOfUsersLikes, userFriendList, college } = require('../../models');
+const { User,
+  Role,
+  AuthToken,
+  RolePermission,
+  Permission, State,
+  City,
+  listOfUsersLikes,
+  userFriendList,
+  college,
+  organisationPost,
+  organisationLikesCount } = require('../../models');
 const { roles } = require('../../config/roles');
 
 function generateOTP() {
@@ -400,7 +410,9 @@ const userList = async (req) => {
                 'collegeId',
                 'roleId'
               ],
-            },
+
+            }
+
           ]
         },
         {
@@ -439,6 +451,8 @@ const userList = async (req) => {
             },
           ]
         },
+
+
 
       ],
       attributes: [
@@ -758,6 +772,74 @@ const approveCollegeRegisterByAdmin = async (req) => {
   }
 };
 
+
+
+const userPostList = async (req) => {
+  try {
+    let whereCondition = { roleId: [3, 4] };
+    if (req.body.id) {
+      whereCondition = req.body.id;
+    }
+    const result = await User.findAndCountAll({
+      where: whereCondition,
+      attributes: ['name', 'userType'],
+      include: [
+
+        {
+          model: userFriendList,
+          required: false,
+          as: 'Friends',
+          where: { status: true },
+          include: [
+            {
+              model: User,
+              required: false,
+              as: 'Approved Friends',
+              attributes: [
+
+                'id',
+                'userType',
+                'name',
+
+              ],
+              include: [
+                {
+                  model: organisationPost,
+                  required: false,
+                  as: 'UserPost',
+                  include:[
+                    
+                      {
+                        model: organisationLikesCount,
+                        required: false,
+                        as: 'Post Likes Counts',
+                      }
+                    
+                  ]
+                },
+              
+              ]
+
+            }
+
+          ]
+        },
+
+
+
+
+      ],
+
+      distinct: true
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
 module.exports = {
   register,
   login,
@@ -775,5 +857,6 @@ module.exports = {
   userPendingFriendRequest,
   approveFriendRequest,
   collegeRegisterPendingList,
-  approveCollegeRegisterByAdmin
+  approveCollegeRegisterByAdmin,
+  userPostList
 };

@@ -174,10 +174,10 @@ db.organisation.hasMany(db.organisationCompanyLevel,{as:"CompanyLevel", foreignK
 
 db.collegeLinksData.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
 db.organisationLinksData.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
-db.organisation.hasMany(db.organisationLikesCount,{as:"LikesCount", foreignKey: "organisationId"})
+// db.organisation.hasMany(db.organisationLikesCount,{as:"LikesCount", foreignKey: "organisationId"})
 db.organisation.hasMany(db.organisationLinksData,{as:"Followers", foreignKey: "organisationId"})
 db.organisationLinksData.belongsTo(db.organisation,{as:"organisationss", foreignKey: "organisationId"})
-db.organisation.hasMany(db.organisationPost,{as:"Posts", foreignKey: "organisationId"})
+// db.organisation.hasMany(db.organisationPost,{as:"Posts", foreignKey: "organisationId"})
 
 db.organisation.belongsTo(db.organisationCompany,{as:"OrganisationCompany", foreignKey: "companyId"})
 db.organisation.belongsTo(db.organisationBrand,{as:"OrganisationBrand", foreignKey: "brandId"})
@@ -191,7 +191,7 @@ db.professionRegister.belongsTo(db.course,{as:"Courses", foreignKey:"courseId"})
 db.professionRegister.hasMany(db.professionCMS,{as:"CMS", foreignKey:"professionRegisterId"})
 
 
-db.organisationPost.belongsTo(db.organisation,{as:"Organisation", foreignKey: "organisationId"})
+// db.organisationPost.belongsTo(db.organisation,{as:"Organisation", foreignKey: "organisationId"})
 db.organisationPost.belongsTo(db.mainStream,{as:"DepartMent", foreignKey: "department"})
 db.organisationPost.belongsTo(db.subStream,{as:"SubDepartment", foreignKey: "subDepartment"})
 db.organisationPost.belongsTo(db.State,{as:"States", foreignKey: "state"})
@@ -219,6 +219,11 @@ db.userFriendList.belongsTo(db.User, { as: "FriendsDetail", foreignKey: 'senderI
 db.User.hasMany(db.userFriendList, { as: "FriendsSent", foreignKey: 'senderId' });
 db.userFriendList.belongsTo(db.User, { as: "SentReqFriendsDetails", foreignKey: 'senderId' });
 db.User.belongsTo(db.college, { as: "CollegeDetails", foreignKey: 'collegeId' });
+db.User.hasMany(db.organisationPost, { as: "UserPost", foreignKey: 'userId' });
+
+db.organisationPost.hasMany(db.organisationLikesCount,{as:"Post Likes Counts", foreignKey: "organisationPostId"})
+db.organisation.belongsTo(db.organisationCompany,{as:"Companies", foreignKey: "companyId"})
+
 
 
 

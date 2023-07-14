@@ -170,6 +170,18 @@ const approveCollegeRegisterByAdmin = async function (req, res) {
     });
 };
 
+const userPostList = async function (req, res) {
+  await authManager
+    .userPostList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+
 
 
 
@@ -190,5 +202,6 @@ module.exports = {
   userPendingFriendRequest,
   approveFriendRequest,
   collegeRegisterPendingList,
-  approveCollegeRegisterByAdmin
+  approveCollegeRegisterByAdmin,
+  userPostList
 };

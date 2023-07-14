@@ -134,6 +134,11 @@ const approveCollegeRegisterByAdmin = async function (req) {
   return result;
 };
 
+const userPostList = async function (req) {
+  const result = await authDbContext.userPostList(req);
+  return result;
+};
+
 
 
 
@@ -156,5 +161,6 @@ module.exports = {
   userPendingFriendRequest,
   approveFriendRequest,
   collegeRegisterPendingList,
-  approveCollegeRegisterByAdmin
+  approveCollegeRegisterByAdmin,
+  userPostList
 };
