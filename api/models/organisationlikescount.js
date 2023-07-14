@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   organisationLikesCount.init({
-    organisationId: {
+    organisationPostId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: 'organisation',
+        model: 'organisationPost',
         key: 'id',
       },
     },

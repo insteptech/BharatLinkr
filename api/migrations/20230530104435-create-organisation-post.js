@@ -18,14 +18,6 @@ module.exports = {
         },
       },
 
-      organisationId: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'organisations',
-          key: 'id',
-        },
-      },
       postTypes: {
         type: Sequelize.ENUM(
           'script',
