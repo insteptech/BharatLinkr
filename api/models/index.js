@@ -192,18 +192,18 @@ db.professionRegister.hasMany(db.professionCMS,{as:"CMS", foreignKey:"profession
 
 
 // db.organisationPost.belongsTo(db.organisation,{as:"Organisation", foreignKey: "organisationId"})
-db.organisationPost.belongsTo(db.mainStream,{as:"DepartMent", foreignKey: "department"})
-db.organisationPost.belongsTo(db.subStream,{as:"SubDepartment", foreignKey: "subDepartment"})
-db.organisationPost.belongsTo(db.State,{as:"States", foreignKey: "state"})
-db.organisationPost.belongsTo(db.City,{as:"Cities", foreignKey: "city"})
-db.organisationPost.belongsTo(db.masterFilter,{as:"JobRole", foreignKey: "jobRole"})
-db.organisationPost.belongsTo(db.masterFilter,{as:"Eligibility", foreignKey: "eligibility"})
-db.organisationPost.belongsTo(db.college,{as:"College", foreignKey: "college"})
-db.organisationPost.belongsTo(db.exam,{as:"Exams", foreignKey: "exam"})
-db.organisationPost.belongsTo(db.course,{as:"Course", foreignKey: "course"})
-db.organisationPost.belongsTo(db.corporateRegister,{as:"Corporate", foreignKey: "corporate"})
-db.organisationPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
-db.organisationPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
+db.userPost.belongsTo(db.mainStream,{as:"DepartMent", foreignKey: "department"})
+db.userPost.belongsTo(db.subStream,{as:"SubDepartment", foreignKey: "subDepartment"})
+db.userPost.belongsTo(db.State,{as:"States", foreignKey: "state"})
+db.userPost.belongsTo(db.City,{as:"Cities", foreignKey: "city"})
+db.userPost.belongsTo(db.masterFilter,{as:"JobRole", foreignKey: "jobRole"})
+db.userPost.belongsTo(db.masterFilter,{as:"Eligibility", foreignKey: "eligibility"})
+db.userPost.belongsTo(db.college,{as:"College", foreignKey: "college"})
+db.userPost.belongsTo(db.exam,{as:"Exams", foreignKey: "exam"})
+db.userPost.belongsTo(db.course,{as:"Course", foreignKey: "course"})
+db.userPost.belongsTo(db.corporateRegister,{as:"Corporate", foreignKey: "corporate"})
+db.userPost.belongsTo(db.Status,{as:"Status", foreignKey: "status"})
+db.userPost.belongsTo(db.User,{as:"Users", foreignKey: "userId"})
 
 db.mockTestScore.belongsTo(db.mockTest,{as:"MockTest", foreignKey: "mockTestId"})
 
@@ -219,9 +219,9 @@ db.userFriendList.belongsTo(db.User, { as: "FriendsDetail", foreignKey: 'senderI
 db.User.hasMany(db.userFriendList, { as: "FriendsSent", foreignKey: 'senderId' });
 db.userFriendList.belongsTo(db.User, { as: "SentReqFriendsDetails", foreignKey: 'senderId' });
 db.User.belongsTo(db.college, { as: "CollegeDetails", foreignKey: 'collegeId' });
-db.User.hasMany(db.organisationPost, { as: "UserPost", foreignKey: 'userId' });
+db.User.hasMany(db.userPost, { as: "UserPost", foreignKey: 'userId' });
 
-db.organisationPost.hasMany(db.organisationLikesCount,{as:"Post Likes Counts", foreignKey: "organisationPostId"})
+db.userPost.hasMany(db.organisationLikesCount,{as:"Post Likes Counts", foreignKey: "userPostId"})
 db.organisation.belongsTo(db.organisationCompany,{as:"Companies", foreignKey: "companyId"})
 
 

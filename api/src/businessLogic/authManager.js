@@ -141,6 +141,38 @@ const userPostList = async function (req) {
 
 
 
+const addUserPosts = async function (req) {
+  let org = null;
+  const result = await authDbContext.addUserPosts(req);
+  if (result.success) {
+    org = result.data;
+    return { data: { org }, success: true };
+  }
+};
+
+const userFullPostList = async function (req) {
+  const result = await authDbContext.userFullPostList(req);
+  return result;
+};
+
+const userPostDelete = async function (req) {
+  const result = await authDbContext.userPostDelete(req);
+
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+const updateUserPost = async function (req) {
+  const result = await authDbContext.updateUserPost(req);
+  if (result.success) {
+    return { data: { result }, success: true };
+  }
+  return result;
+};
+
+
 
 
 
@@ -162,5 +194,9 @@ module.exports = {
   approveFriendRequest,
   collegeRegisterPendingList,
   approveCollegeRegisterByAdmin,
-  userPostList
+  userPostList,
+  addUserPosts,
+  userPostDelete,
+  userFullPostList,
+  updateUserPost
 };

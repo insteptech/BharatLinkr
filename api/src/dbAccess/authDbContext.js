@@ -15,7 +15,11 @@ const { User,
   userFriendList,
   college,
   organisationPost,
-  organisationLikesCount } = require('../../models');
+  organisationLikesCount,
+  userPost,
+  masterFilter,
+  organisation,
+  mainStream,subStream,course,exam,corporateRegister,Status } = require('../../models');
 const { roles } = require('../../config/roles');
 
 function generateOTP() {
@@ -42,7 +46,7 @@ var transporter = nodemailer.createTransport({
 });
 
 
-const writeFiles = async ({ files, profile, cover }) => {
+const writeFiles = async ({ files, profile, cover,imageFile }) => {
   const baseDir = path.join(__dirname, '../../');
 
   const dir = `${baseDir}/documents/userProfile`;
@@ -70,6 +74,14 @@ const writeFiles = async ({ files, profile, cover }) => {
     await Promise.all(
       cover.map((file) => {
         fs.writeFile(path.resolve(dir, `${file.originalname}`), file.buffer, () => console.log('image downloaded3'));
+      })
+    );
+  }
+
+  if (imageFile && imageFile.length > 0) {
+    await Promise.all(
+      imageFile.map((file) => {
+        fs.writeFile(path.resolve(dir, `${file.originalname}`), file.buffer, () => console.log('image downloaded2'));
       })
     );
   }
@@ -807,17 +819,17 @@ const userPostList = async (req) => {
                   model: organisationPost,
                   required: false,
                   as: 'UserPost',
-                  include:[
-                    
-                      {
-                        model: organisationLikesCount,
-                        required: false,
-                        as: 'Post Likes Counts',
-                      }
-                    
+                  include: [
+
+                    {
+                      model: organisationLikesCount,
+                      required: false,
+                      as: 'Post Likes Counts',
+                    }
+
                   ]
                 },
-              
+
               ]
 
             }
@@ -839,6 +851,207 @@ const userPostList = async (req) => {
 };
 
 
+const addUserPosts = async (req) => {
+  try {
+    const userPostData = JSON.parse(req.body.userPostData);
+
+    const { imageFile } = req.files;
+
+    await writeFiles({ imageFile });
+    let result;
+
+    await Promise.all(
+      userPostData.payload.map(async (item) => {
+
+        let objUserPost = {
+          userId: item.userId,
+          postTypes: item.postTypes,
+          title: item.title,
+          description: item.description,
+          department: item.department,
+          subDepartment: item.subDepartment,
+          state: item.state,
+          city: item.city,
+          workMode: item.workMode,
+          jobType: item.jobType,
+          jobRole: item.jobRole,
+          eligibility: item.eligibility,
+          college: item.college,
+          course: item.course,
+          exam: item.exam,
+          corporate: item.corporate,
+          status: item.status,
+        }
+
+        let jR = item.jobRole
+        if (typeof jR === 'string') {
+          jobName = await masterFilter.create({ name: jR, types: 'jobrole', statusId: 1 })
+          const jobRoleId = await masterFilter.findOne({
+            where: { name: jR }
+          })
+          if (jobRoleId.id) {
+            objUserPost.jobRole = jobRoleId.id
+          }
+        }
+        if (imageFile && imageFile.length > 0) {
+          const fileExist = imageFile.find((image1) => image1.originalname);
+          if (fileExist) {
+            objUserPost.image = fileExist.originalname;
+          }
+        }
+        result = await userPost.create(objUserPost, { returning: true });
+
+        return result;
+      })
+    );
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
+const updateUserPost = async (req) => {
+  try {
+
+
+    const userPostData = JSON.parse(req.body.userPostData);
+    const { imageFile } = req.files;
+    await writeFiles(req.files);
+
+    if (imageFile && imageFile.length > 0) {
+      const fileExist = imageFile.find(
+        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == userPostData.uniqueId
+      );
+      if (fileExist) {
+        if (imageFile && imageFile.image)
+          if (fs.existsSync(path.resolve(dir, `${imageFile.image}`))) {
+            fs.unlinkSync(path.resolve(dir, `${imageFile.image}`));
+          }
+
+        userPostData.image = fileExist.originalname;
+      }
+    }
+
+    const updateData = await userPost.update(userPostData, { where: { id: userPostData.id }, returning: true });
+
+
+
+    return { data: updateData, success: true };
+  } catch (error) {
+    return { data: null, message: error.message, success: false };
+  }
+};
+
+
+
+const userFullPostList = async (req) => {
+  try {
+    const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+    const size = req.body.pageSize ? req.body.pageSize : 10;
+    let whrCondition = { deleted: false, status: 1 };
+    if (req.body.search) {
+      const obj = {
+        title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+      };
+      whrCondition = { ...obj, ...whrCondition };
+    }
+    if (req.body.id) {
+      whrCondition = { id: req.body.id, deleted: false, status: 1 }
+    }
+
+    const result = await userPost.findAndCountAll({
+      where: whrCondition,
+      include: [
+        {
+          model: User,
+          required: false,
+          as: 'Users'
+        },
+     
+        {
+          model: mainStream,
+          required: false,
+          as: 'DepartMent'
+        },
+        {
+          model: subStream,
+          required: false,
+          as: 'SubDepartment'
+        },
+        {
+          model: State,
+          required: false,
+          as: 'States'
+        },
+        {
+          model: City,
+          required: false,
+          as: 'Cities'
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'JobRole'
+        },
+        {
+          model: masterFilter,
+          required: false,
+          as: 'Eligibility'
+        },
+        {
+          model: college,
+          required: false,
+          as: 'College'
+        },
+        {
+          model: course,
+          required: false,
+          as: 'Course'
+        },
+        {
+          model: exam,
+          required: false,
+          as: 'Exams'
+        },
+        {
+          model: corporateRegister,
+          required: false,
+          as: 'Corporate'
+        },
+        {
+          model: Status,
+          required: false,
+          as: 'Status'
+        },
+      ],
+
+      offset: (pageNo - 1) * size,
+      limit: size,
+      distinct: true,
+    });
+    return { data: result, success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+
+
+const userPostDelete = async (req) => {
+  try {
+    const collg = await userPost.findOne({
+      where: { id: req.id },
+    });
+
+    await collg.update({ deleted: true });
+    return { success: true };
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 
 module.exports = {
   register,
@@ -858,5 +1071,9 @@ module.exports = {
   approveFriendRequest,
   collegeRegisterPendingList,
   approveCollegeRegisterByAdmin,
-  userPostList
+  userPostList,
+  addUserPosts,
+  updateUserPost,
+  userFullPostList,
+  userPostDelete
 };

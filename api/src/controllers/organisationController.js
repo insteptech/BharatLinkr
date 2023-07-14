@@ -152,50 +152,50 @@ const organisationAddLikesAndViews = async function (req, res) {
 };
 
 
-const addOrganisationPosts = async function (req, res) {
-  await organisationManager
-    .addOrganisationPosts(req)
-    .then((response) => {
-      res.status(httpStatus.OK).send(response);
-    })
-    .catch((err) => {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
-    });
-};
+// const addOrganisationPosts = async function (req, res) {
+//   await organisationManager
+//     .addOrganisationPosts(req)
+//     .then((response) => {
+//       res.status(httpStatus.OK).send(response);
+//     })
+//     .catch((err) => {
+//       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+//     });
+// };
 
-const organisationPostList = async function (req, res) {
-  await organisationManager
-    .organisationPostList(req)
-    .then((response) => {
-      res.status(httpStatus.OK).send(response);
-    })
-    .catch((error) => {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
-    });
-};
+// const organisationPostList = async function (req, res) {
+//   await organisationManager
+//     .organisationPostList(req)
+//     .then((response) => {
+//       res.status(httpStatus.OK).send(response);
+//     })
+//     .catch((error) => {
+//       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+//     });
+// };
 
-const organisationPostDelete = async function (req, res) {
-  await organisationManager
-    .organisationPostDelete(req.params)
-    .then((response) => {
-      res.status(httpStatus.OK).send(response);
-    })
-    .catch((error) => {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
-    });
-};
+// const organisationPostDelete = async function (req, res) {
+//   await organisationManager
+//     .organisationPostDelete(req.params)
+//     .then((response) => {
+//       res.status(httpStatus.OK).send(response);
+//     })
+//     .catch((error) => {
+//       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+//     });
+// };
 
 
-const updateOrganisationPost = async function (req, res) {
-  await organisationManager
-    .updateOrganisationPost(req)
-    .then((response) => {
-      res.status(httpStatus.OK).send(response);
-    })
-    .catch((error) => {
-      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
-    });
-};
+// const updateOrganisationPost = async function (req, res) {
+//   await organisationManager
+//     .updateOrganisationPost(req)
+//     .then((response) => {
+//       res.status(httpStatus.OK).send(response);
+//     })
+//     .catch((error) => {
+//       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+//     });
+// };
 
 
 const addOrganisationLinksData = async function (req, res) {
@@ -425,10 +425,10 @@ module.exports = {
   organisationDelete,
   updateOrgaisation,
   organisationAddLikesAndViews,
-  addOrganisationPosts,
-  updateOrganisationPost,
-  organisationPostList,
-  organisationPostDelete,
+  // addOrganisationPosts,
+  // updateOrganisationPost,
+  // organisationPostList,
+  // organisationPostDelete,
   addOrganisationLinksData,
   organisationLinkApproval,
   organisationPendingRequestList,
