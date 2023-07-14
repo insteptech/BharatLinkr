@@ -42,9 +42,9 @@ const SuggestCards = () => {
   const isFriend = (id) => {
     if (id) {
       let friendStatus = myFriendsList?.find((item) => item.senderId === id);
-      if(friendStatus?.status === true){
+      if (friendStatus?.status === true) {
         return "Link"
-      }else{
+      } else {
         return "Sent"
       }
     }
@@ -94,7 +94,6 @@ const SuggestCards = () => {
         ) : (
           allUserList &&
           allUserList?.map((userObject, userIndex) => {
-            console.log(userObject,"userObject")
             if (currentUser?.id !== userObject.id)
               return (
                 <>

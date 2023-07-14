@@ -205,8 +205,10 @@ function SignUpPage() {
   const handleSubmit = (values) => {
     console.log(values, 'eeeeeeeeeeeeeeeeeeeeeee')
     let payload = {}
-    if (values.userType === "Student") {
-      console.log('student')
+
+
+    if (values?.userType === "Student") {
+
       payload = {
         mobileNumber: values.mobileNumber,
         name: values.name,
@@ -214,8 +216,9 @@ function SignUpPage() {
         email: values?.email,
         userType: values.userType,
       }
-    } if (values.userType === "College") {
-      console.log('college')
+
+    } if (values?.userType === "College") {
+
       payload = {
         userType: values?.userType,
         email: values?.email,

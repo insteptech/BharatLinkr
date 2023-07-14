@@ -159,7 +159,7 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'organisationPost',
+    modelName: 'userPost',
     paranoid: false,
     timestamps: true,
   });

@@ -97,7 +97,7 @@ function Organisation() {
     if (subHeader) tabData[subHeader].forList()
   }, [subHeader, pagination])
 
-  const handleDelete = (type, item) => {
+  const handleDelete = ( item,type) => {
     switch (type) {
       case 'sector': {
         dispatch(deleteSector(item.id)).then((res) => {

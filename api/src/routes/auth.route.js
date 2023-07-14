@@ -48,6 +48,34 @@ router.post('/collegeRegisterPendingList', authController.collegeRegisterPending
 router.post('/approveCollegeRegisterByAdmin', authController.approveCollegeRegisterByAdmin);
 router.post('/userPostList', authController.userPostList);
 
+router.post(
+  '/addUserPost',
+  fileUpload.fields([
+    {
+      name: 'imageFile',
+      maxCount: 10,
+    },
+
+  ]),
+  authController.addUserPosts
+);
+
+router.post('/userFullPostList', authController.userFullPostList);
+router.delete('/userPostDelete/:id', authController.userPostDelete);
+
+
+
+router.post(
+  '/updateUserPost',
+  fileUpload.fields([
+    {
+      name: 'imageFile',
+      maxCount: 10,
+    },
+  ]),
+  authController.updateUserPost
+);
+
 
 
 
