@@ -286,23 +286,6 @@ function CorporateTable() {
             </div>
           </Row>
           <div className="admin_table_footer">
-            {/* <Row>
-              <Col md={6} className="table_footer_start">
-                <h6>Showing {corporateRegisterlist?.length} enteries</h6>
-              </Col>
-              <Col md={6}>
-                <div className="table_footer_end">
-                  <Button className="border_btn green">Previous</Button>
-
-                  <Button
-                    className="border_btn green"
-                  // onClick={handlePagenation}
-                  >
-                    Next
-                  </Button>
-                </div>
-              </Col>
-            </Row> */}
           </div>
         </div>
       )}
