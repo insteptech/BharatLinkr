@@ -11,7 +11,6 @@ const { sector,
   organisationIndustry,
   organisationCompanyLevel,
   listOfUsersLikes,
-  organisationPost,
   organisationLinksData,
   User,
   organisationCompany,
@@ -527,7 +526,7 @@ const organisationList = async (req) => {
           as: 'Followers',
         },
         // {
-        //   model: organisationPost,
+        //   model: userPost,
         //   required: false,
         //   as: 'Posts',
         // },
@@ -886,210 +885,210 @@ const organisationAddLikesAndViews = async (req) => {
 };
 
 
-const addOrganisationPosts = async (req) => {
-  try {
-    const organisationPostData = JSON.parse(req.body.organisationPostData);
+// const addOrganisationPosts = async (req) => {
+//   try {
+//     const organisationPostData = JSON.parse(req.body.organisationPostData);
 
-    const { imageFile } = req.files;
+//     const { imageFile } = req.files;
 
-    await writeFiles({ imageFile });
-    let result;
+//     await writeFiles({ imageFile });
+//     let result;
 
-    await Promise.all(
-      organisationPostData.payload.map(async (item) => {
+//     await Promise.all(
+//       organisationPostData.payload.map(async (item) => {
 
-        let objOrganisationPost = {
-          userId: item.userId,
-          postTypes: item.postTypes,
-          title: item.title,
-          description: item.description,
-          department: item.department,
-          subDepartment: item.subDepartment,
-          state: item.state,
-          city: item.city,
-          workMode: item.workMode,
-          jobType: item.jobType,
-          jobRole: item.jobRole,
-          eligibility: item.eligibility,
-          college: item.college,
-          course: item.course,
-          exam: item.exam,
-          corporate: item.corporate,
-          status: item.status,
-        }
+//         let objOrganisationPost = {
+//           userId: item.userId,
+//           postTypes: item.postTypes,
+//           title: item.title,
+//           description: item.description,
+//           department: item.department,
+//           subDepartment: item.subDepartment,
+//           state: item.state,
+//           city: item.city,
+//           workMode: item.workMode,
+//           jobType: item.jobType,
+//           jobRole: item.jobRole,
+//           eligibility: item.eligibility,
+//           college: item.college,
+//           course: item.course,
+//           exam: item.exam,
+//           corporate: item.corporate,
+//           status: item.status,
+//         }
 
-        let jR = item.jobRole
-        if (typeof jR === 'string') {
-          jobName = await masterFilter.create({ name: jR, types: 'jobrole', statusId: 1 })
-          const jobRoleId = await masterFilter.findOne({
-            where: { name: jR }
-          })
-          if (jobRoleId.id) {
-            objOrganisationPost.jobRole = jobRoleId.id
-          }
-        }
-        if (imageFile && imageFile.length > 0) {
-          const fileExist = imageFile.find((image1) => image1.originalname);
-          if (fileExist) {
-            objOrganisationPost.image = fileExist.originalname;
-          }
-        }
-        result = await organisationPost.create(objOrganisationPost, { returning: true });
+//         let jR = item.jobRole
+//         if (typeof jR === 'string') {
+//           jobName = await masterFilter.create({ name: jR, types: 'jobrole', statusId: 1 })
+//           const jobRoleId = await masterFilter.findOne({
+//             where: { name: jR }
+//           })
+//           if (jobRoleId.id) {
+//             objOrganisationPost.jobRole = jobRoleId.id
+//           }
+//         }
+//         if (imageFile && imageFile.length > 0) {
+//           const fileExist = imageFile.find((image1) => image1.originalname);
+//           if (fileExist) {
+//             objOrganisationPost.image = fileExist.originalname;
+//           }
+//         }
+//         result = await userPost.create(objOrganisationPost, { returning: true });
 
-        return result;
-      })
-    );
-    return { data: result, success: true };
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-
-
-const updateOrganisationPost = async (req) => {
-  try {
-
-
-    const organisationPostData = JSON.parse(req.body.organisationPostData);
-    const { imageFile } = req.files;
-    await writeFiles(req.files);
-
-    if (imageFile && imageFile.length > 0) {
-      const fileExist = imageFile.find(
-        (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == organisationPostData.uniqueId
-      );
-      if (fileExist) {
-        if (imageFile && imageFile.image)
-          if (fs.existsSync(path.resolve(dir, `${imageFile.image}`))) {
-            fs.unlinkSync(path.resolve(dir, `${imageFile.image}`));
-          }
-
-        organisationPostData.image = fileExist.originalname;
-      }
-    }
-
-    const updateData = await organisationPost.update(organisationPostData, { where: { id: organisationPostData.id }, returning: true });
+//         return result;
+//       })
+//     );
+//     return { data: result, success: true };
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 
 
 
-    return { data: updateData, success: true };
-  } catch (error) {
-    return { data: null, message: error.message, success: false };
-  }
-};
+// const updateOrganisationPost = async (req) => {
+//   try {
+
+
+//     const organisationPostData = JSON.parse(req.body.organisationPostData);
+//     const { imageFile } = req.files;
+//     await writeFiles(req.files);
+
+//     if (imageFile && imageFile.length > 0) {
+//       const fileExist = imageFile.find(
+//         (file) => file.originalname.split('_')[0].replace(/\.[^/.]+$/, '') == organisationPostData.uniqueId
+//       );
+//       if (fileExist) {
+//         if (imageFile && imageFile.image)
+//           if (fs.existsSync(path.resolve(dir, `${imageFile.image}`))) {
+//             fs.unlinkSync(path.resolve(dir, `${imageFile.image}`));
+//           }
+
+//         organisationPostData.image = fileExist.originalname;
+//       }
+//     }
+
+//     const updateData = await userPost.update(organisationPostData, { where: { id: organisationPostData.id }, returning: true });
 
 
 
-const organisationPostList = async (req) => {
-  try {
-    const pageNo = req.body.pageNo ? req.body.pageNo : 1;
-    const size = req.body.pageSize ? req.body.pageSize : 10;
-    let whrCondition = { deleted: false, status: 1 };
-    if (req.body.search) {
-      const obj = {
-        title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
-      };
-      whrCondition = { ...obj, ...whrCondition };
-    }
-    if (req.body.id) {
-      whrCondition = { id: req.body.id, deleted: false, status: 1 }
-    }
-
-    const result = await organisationPost.findAndCountAll({
-      where: whrCondition,
-      include: [
-        {
-          model: User,
-          required: false,
-          as: 'Users'
-        },
-        {
-          model: organisation,
-          required: false,
-          as: 'Organisation'
-        },
-        {
-          model: mainStream,
-          required: false,
-          as: 'DepartMent'
-        },
-        {
-          model: subStream,
-          required: false,
-          as: 'SubDepartment'
-        },
-        {
-          model: State,
-          required: false,
-          as: 'States'
-        },
-        {
-          model: City,
-          required: false,
-          as: 'Cities'
-        },
-        {
-          model: masterFilter,
-          required: false,
-          as: 'JobRole'
-        },
-        {
-          model: masterFilter,
-          required: false,
-          as: 'Eligibility'
-        },
-        {
-          model: college,
-          required: false,
-          as: 'College'
-        },
-        {
-          model: course,
-          required: false,
-          as: 'Course'
-        },
-        {
-          model: exam,
-          required: false,
-          as: 'Exams'
-        },
-        {
-          model: corporateRegister,
-          required: false,
-          as: 'Corporate'
-        },
-        {
-          model: Status,
-          required: false,
-          as: 'Status'
-        },
-      ],
-
-      offset: (pageNo - 1) * size,
-      limit: size,
-      distinct: true,
-    });
-    return { data: result, success: true };
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+//     return { data: updateData, success: true };
+//   } catch (error) {
+//     return { data: null, message: error.message, success: false };
+//   }
+// };
 
 
 
-const organisationPostDelete = async (req) => {
-  try {
-    const collg = await organisationPost.findOne({
-      where: { id: req.id },
-    });
+// const organisationPostList = async (req) => {
+//   try {
+//     const pageNo = req.body.pageNo ? req.body.pageNo : 1;
+//     const size = req.body.pageSize ? req.body.pageSize : 10;
+//     let whrCondition = { deleted: false, status: 1 };
+//     if (req.body.search) {
+//       const obj = {
+//         title: Sequelize.where(Sequelize.fn('LOWER', Sequelize.col('title')), 'LIKE', `%${req.body.search.toLowerCase()}%`),
+//       };
+//       whrCondition = { ...obj, ...whrCondition };
+//     }
+//     if (req.body.id) {
+//       whrCondition = { id: req.body.id, deleted: false, status: 1 }
+//     }
 
-    await collg.update({ deleted: true });
-    return { success: true };
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+//     const result = await userPost.findAndCountAll({
+//       where: whrCondition,
+//       include: [
+//         {
+//           model: User,
+//           required: false,
+//           as: 'Users'
+//         },
+//         {
+//           model: organisation,
+//           required: false,
+//           as: 'Organisation'
+//         },
+//         {
+//           model: mainStream,
+//           required: false,
+//           as: 'DepartMent'
+//         },
+//         {
+//           model: subStream,
+//           required: false,
+//           as: 'SubDepartment'
+//         },
+//         {
+//           model: State,
+//           required: false,
+//           as: 'States'
+//         },
+//         {
+//           model: City,
+//           required: false,
+//           as: 'Cities'
+//         },
+//         {
+//           model: masterFilter,
+//           required: false,
+//           as: 'JobRole'
+//         },
+//         {
+//           model: masterFilter,
+//           required: false,
+//           as: 'Eligibility'
+//         },
+//         {
+//           model: college,
+//           required: false,
+//           as: 'College'
+//         },
+//         {
+//           model: course,
+//           required: false,
+//           as: 'Course'
+//         },
+//         {
+//           model: exam,
+//           required: false,
+//           as: 'Exams'
+//         },
+//         {
+//           model: corporateRegister,
+//           required: false,
+//           as: 'Corporate'
+//         },
+//         {
+//           model: Status,
+//           required: false,
+//           as: 'Status'
+//         },
+//       ],
+
+//       offset: (pageNo - 1) * size,
+//       limit: size,
+//       distinct: true,
+//     });
+//     return { data: result, success: true };
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
+
+
+
+// const organisationPostDelete = async (req) => {
+//   try {
+//     const collg = await userPost.findOne({
+//       where: { id: req.id },
+//     });
+
+//     await collg.update({ deleted: true });
+//     return { success: true };
+//   } catch (error) {
+//     throw new Error(error);
+//   }
+// };
 
 
 const addOrganisationLinksData = async (req) => {
@@ -1506,10 +1505,10 @@ module.exports = {
   organisationDelete,
   updateOrgaisation,
   organisationAddLikesAndViews,
-  addOrganisationPosts,
-  updateOrganisationPost,
-  organisationPostList,
-  organisationPostDelete,
+  // addOrganisationPosts,
+  // updateOrganisationPost,
+  // organisationPostList,
+  // organisationPostDelete,
   addOrganisationLinksData,
   organisationLinkApproval,
   organisationPendingRequestList,

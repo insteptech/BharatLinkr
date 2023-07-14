@@ -205,8 +205,8 @@ function SignUpPage() {
   const handleSubmit = (values) => {
     console.log(values, 'eeeeeeeeeeeeeeeeeeeeeee')
     let payload = {}
+
     if (values.userType === "Student") {
-      console.log('student')
       payload = {
         mobileNumber: values.mobileNumber,
         name: values.name,
@@ -215,7 +215,6 @@ function SignUpPage() {
         userType: values.userType,
       }
     } if (values.userType === "College") {
-      console.log('college')
       payload = {
         userType: values?.userType,
         email: values?.email,
@@ -345,15 +344,14 @@ function SignUpPage() {
       const dataFomrs = new FormData();
       dataFomrs.append("profileData", JSON.stringify(payload));
 
-      dispatch(getUsers(dataFomrs))
-        .then(res => {
-          if (res.payload.data.success) {
-            setDataValue(1);
-          } else {
-            toast.info(res.payload.data.message)
-          }
-        });;
-    }
+    dispatch(getUsers(dataFomrs))
+      .then(res => {
+        if (res.payload.data.success) {
+          setDataValue(1);
+        } else {
+          toast.info(res.payload.data.message)
+        }
+      });;
   };
 
   const memoizedInitialValue = (e) => {

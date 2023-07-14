@@ -5,7 +5,7 @@ const roleAccess = {
   operator: [],
   college: [],
   student: [],
-  orgaisation: [],
+  organisation: [],
   mentor: [],
   workingProfessional: [],
 

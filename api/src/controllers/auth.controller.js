@@ -181,10 +181,50 @@ const userPostList = async function (req, res) {
     });
 };
 
+const addUserPosts = async function (req, res) {
+  await authManager
+    .addUserPosts(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((err) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: err.message });
+    });
+};
+
+const userFullPostList = async function (req, res) {
+  await authManager
+    .userFullPostList(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
+
+const userPostDelete = async function (req, res) {
+  await authManager
+    .userPostDelete(req.params)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 
-
-
+const updateUserPost = async function (req, res) {
+  await authManager
+    .updateUserPost(req)
+    .then((response) => {
+      res.status(httpStatus.OK).send(response);
+    })
+    .catch((error) => {
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ message: error.message });
+    });
+};
 
 
 module.exports = {
@@ -203,5 +243,9 @@ module.exports = {
   approveFriendRequest,
   collegeRegisterPendingList,
   approveCollegeRegisterByAdmin,
-  userPostList
+  userPostList,
+  addUserPosts,
+  userFullPostList,
+  userPostDelete,
+  updateUserPost
 };
